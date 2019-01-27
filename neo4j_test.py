@@ -20,5 +20,5 @@ class neo4j_test(object):
         return result.single()[0]
 
 
-test = neo4j_test("bolt://localhost:7687", "neo4j", "graph")
-test.print_greeting("Hello World")
+# test = neo4j_test("bolt://localhost:7687", "neo4j", "graph")
+# test.print_greeting("Hello World")
