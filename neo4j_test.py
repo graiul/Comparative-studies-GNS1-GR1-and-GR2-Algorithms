@@ -1,4 +1,5 @@
 from neo4j.v1 import GraphDatabase
+import networkx as nx
 
 class neo4j_test(object):
     def __init__(self, uri, user, password):
@@ -19,6 +20,11 @@ class neo4j_test(object):
                         "RETURN a.message + ', from node ' + id(a)", message=message)
         return result.single()[0]
 
+    def insert_graph_in_db(self, graph):
+        with self._driver.session() as session:
+            session.write_transaction(self.create_neo4j_graph_node, graph)
 
-# test = neo4j_test("bolt://localhost:7687", "neo4j", "graph")
-# test.print_greeting("Hello World")
+    @staticmethod
+    def create_neo4j_graph_node(tx, graph):
+        for node in list(graph.nodes(data=True)):
+            tx.run("CREATE (a:Node {id: $id, label: $label})", id=node[0], label=list(list(node[1].values())))
