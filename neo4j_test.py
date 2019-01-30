@@ -26,16 +26,28 @@ class neo4j_test(object):
 
     @staticmethod
     def create_neo4j_graph_node(tx, graph):
-        for node in list(graph.nodes(data=True)):
+        # for node in list(graph.nodes(data=True)):
             # tx.run("CREATE (a:Node {id: $id, label: $label})", id=node[0], label=list(list(node[1].values())))
             # print(str(list(list(node[1].values()))[0]))
-            cqlQuery = "CREATE (a:`" + str(list(list(node[1].values()))[0]) + "` {id: " + str(node[0]) + "})"
-            tx.run(cqlQuery)
+            # cqlQuery = "CREATE (a:`" + str(list(list(node[1].values()))[0]) + "` {id: " + str(node[0]) + "})"
+            # tx.run(cqlQuery)
+
+        for edge in graph.edges():
+            cqlQuery = "MATCH(a:`" + str(graph.node[edge[0]]['label']) + "`), (b:`" + str(graph.node[edge[1]]['label']) \
+                       + "`) WHERE a.id=" + str(edge[0]) + " AND b.id=" + str(edge[1]) + " CREATE(a)-[:PPI]->(b)" # Se blocheaza la inserarea unui arc anume: MATCH(a:`32`), (b:`15`) WHERE a.id=12036 AND b.id=12174 CREATE(a)-[:PPI]->(b)
+            # print(cqlQuery)
+            try:
+                tx.run(cqlQuery)
+                print("Inserare arc cu succes!")
+                print(cqlQuery)
+            except:
+                print("Nu a fost inserat arcul!")
 
     @staticmethod
-    def create_neo4j_graph_edges(tx, graph):
-        for edge in graph.edges():
-            cqlQuery = "MATCH(a:`" + str(graph.node[edge[0]]['label']) + "`), (b:`" + str(graph.node[edge[1]]['label']) + "`) WHERE a.id=" + str(edge[0]) + " AND b." + str(edge[1]) + " CREATE(a)-[:PPI]->(b)"
-            print(cqlQuery)
-            tx.run(cqlQuery)
-            # MATCH(a:`29`), (b:`25`) WHERE a.id=0 AND b.id=1773 CREATE(a)-[:PPI]->(b)
+    def Cloud_Load(tx, id): # Pot rula inca o metoda?
+        cqlQuery = "MATCH (n) WHERE n.id = " + str(id) + " RETURN n" # Merge cautarea unui nod dupa id.
+        result = tx.run(cqlQuery)
+        nodes_loaded = []
+        nodes_loaded.append(result)
+        cqlQuery = "match(n:`1`{id:825})--(c) return c" # ??? https://maxdemarzi.com/2018/10/01/finding-your-neighbors-using-neo4j/
+        return result
