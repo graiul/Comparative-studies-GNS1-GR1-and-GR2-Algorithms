@@ -24,6 +24,10 @@ class neo4j_test(object):
         with self._driver.session() as session:
             session.write_transaction(self.create_neo4j_graph_node, graph)
 
+    def init_session(self, label):
+        with self._driver.session() as session:
+            session.write_transaction(self.Index_getID, str(label))
+
     @staticmethod
     def create_neo4j_graph_node(tx, graph):
         # for node in list(graph.nodes(data=True)):
@@ -50,4 +54,11 @@ class neo4j_test(object):
         nodes_loaded = []
         nodes_loaded.append(result)
         cqlQuery = "match(n:`1`{id:825})--(c) return c" # ??? https://maxdemarzi.com/2018/10/01/finding-your-neighbors-using-neo4j/
+        return result
+
+    @staticmethod
+    def Index_getID(tx, label):
+        l = str(label)
+        cqlQuery = "MATCH (n:`" + l + "`) RETURN n.id"
+        result = tx.run(cqlQuery)
         return result

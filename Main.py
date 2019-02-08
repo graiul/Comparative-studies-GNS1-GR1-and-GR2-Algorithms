@@ -36,8 +36,10 @@ print(list(graph.nodes(data=True))[0][0])
 # for edge in graph.edges:
 #     print(edge)
 test = neo4j_test("bolt://localhost:7687", "neo4j", "graph")
-test.insert_graph_in_db(graph)
+# test.insert_graph_in_db(graph)
 # test.create_neo4j_graph_edges(graph)
+test.init_session(1)
+print(test.Index_getID(1))
 
 # Sterge tot:
 # Cypher: MATCH (n) DETACH DELETE n
@@ -48,11 +50,16 @@ test.insert_graph_in_db(graph)
 # Sterge toate arcele:
 # MATCH ()-[r:PPI]-() DELETE r
 
+# Arcul defect:
+# MATCH(a:`32`), (b:`15`) WHERE a.RI_id=12036 AND b.RI_id=12174 CREATE(a)-[:PPI]->(b)
+
+
 # Incercare de returnare noduri adiacente unui nod dat - pt Cloud.Load din p788.zhaosun.
 # call apoc.neighbors.tohop(call apoc.node.id(1431), 'PPI', 1)
 # call apoc.nodes.get(1431), neo4j id...
 
-# Pot rula inca o metoda in care am acces prin tranzactia tx.run la baza de date? Nu puteam crea o metoda noua care sa poata rula, spunand ca are un parametru lipsa, dar cealalta functiona...
+# Pot rula inca o metoda in care am acces prin tranzactia tx.run la baza de date? Nu puteam crea o metoda noua care sa poata rula, spunand ca are un parametru lipsa, dar cealalta functiona... RASPUNS: SESSION
 # La un moment dat nu mai adauga arce in timpul rularii
 # Incerc sa returnez nodurile adiacente, dar deocamdata pot returna doar un nod cautand id-ul RI - Cloud.Load din p788.zhaosun. A nu se face confuzie intre id-uri ale nodurilor grafului RI si id-urile date nodurilor de catre Neo4j la inserare.
 #   Aici am incercat si cu biblioteca APOC - call apoc.neighbors.tohop()
+# Pentru despartirea pe masini in STwigs al unui graf query am putea folosi PROFILE? Este nevoie de mai multe masini.
