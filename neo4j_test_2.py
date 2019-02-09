@@ -39,8 +39,15 @@ class neo4j_test_2(object):
             nodes_loaded.append(r[0])
         return nodes_loaded
 
-
-
+    def Index_hasLabel(self, RI_id, label):
+        tx = self.neograph.begin()
+        cqlQuery = "MATCH (n:`" + str(label) + "`) WHERE n.RI_id=" + str(RI_id) + " RETURN n"
+        print(cqlQuery)
+        result = tx.run(cqlQuery).to_ndarray()
+        if len(list(result)) > 0:
+            return True
+        else:
+            return False
 
 #############################################
 with open('Homo_sapiens_udistr_32.gfd') as f:
@@ -98,4 +105,5 @@ nx.set_node_attributes(graph, node_attr_dict, 'label')
 test2 = neo4j_test_2()
 print(test2.Cloud_Load(1))
 print(test2.Index_getID(1))
+print(test2.Index_hasLabel(1, 3322))
 # MATCH (n) RETURN n LIMIT 25
