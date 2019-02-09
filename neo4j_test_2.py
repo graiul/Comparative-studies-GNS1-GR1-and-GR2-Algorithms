@@ -1,6 +1,7 @@
 from py2neo import Graph, Node, Relationship
 import networkx as nx
 import copy
+import numpy
 
 class neo4j_test_2(object):
 
@@ -28,6 +29,18 @@ class neo4j_test_2(object):
 
         # VARIANTA CORECTA VECINATATE DE ORDINUL 1 AL UNUI NOD: MATCH(n{RI_id: 1})--(m) return m
         return nodes_loaded
+
+    def Index_getID(self, label):
+        tx = self.neograph.begin()
+        cqlQuery = "MATCH (n:`" + str(label) + "`) RETURN n.RI_id"
+        result = tx.run(cqlQuery).to_ndarray()
+        nodes_loaded = []
+        for r in result:
+            nodes_loaded.append(r[0])
+        return nodes_loaded
+
+
+
 
 #############################################
 with open('Homo_sapiens_udistr_32.gfd') as f:
@@ -84,3 +97,5 @@ nx.set_node_attributes(graph, node_attr_dict, 'label')
 
 test2 = neo4j_test_2()
 print(test2.Cloud_Load(1))
+print(test2.Index_getID(1))
+# MATCH (n) RETURN n LIMIT 25
