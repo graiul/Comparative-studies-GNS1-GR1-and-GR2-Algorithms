@@ -11,42 +11,36 @@ class neo4j_test_2(object):
 
 
     def Cloud_Load(self, RI_id):  # Pot rula inca o metoda?
+        print("Cloud_Load:")
         tx = self.neograph.begin()
         # cqlQuery = "MATCH (n) WHERE n.RI_id = " + str(RI_id) + " RETURN n"  # Merge cautarea unui nod dupa id.
         cqlQuery = "MATCH (n) WHERE n.id = " + str(RI_id) + " RETURN n"  # Merge cautarea unui nod dupa id.
-        print(cqlQuery)
+        # print(cqlQuery)
         # Pentru Zhaosun:
         biglist = []
-        for id in RI_id:
-            cqlQuery = "MATCH (n) WHERE n.id = '" + str(id) + "' RETURN n"
-            print(cqlQuery)
-            result = tx.run(cqlQuery).to_subgraph()
-            nodes_loaded = []
-            nodes_loaded.append(result)
+        print("id=" + str(RI_id))
+        cqlQuery = "MATCH (n) WHERE n.id = '" + str(RI_id) + "' RETURN n"
+        # print(cqlQuery)
+        result = tx.run(cqlQuery).to_ndarray()
+        nodes_loaded = []
+        nodes_loaded.append(result)
         # cqlQuery2 = "MATCH(n{RI_id: " + str(RI_id) + "})--(m) return m"
-            cqlQuery2 = "MATCH(n{id: '" + str(id) + "'})--(m) return m"
-            print(cqlQuery2)
+        cqlQuery2 = "MATCH(n{id: '" + str(RI_id) + "'})--(m) return m"
+        # print(cqlQuery2)
 
         # result2 = list(tx.run(cqlQuery2).to_subgraph().nodes)
-            result2 = list(tx.run(cqlQuery2).to_ndarray())
-            print(result2) # Nu imi afiseaza vecinii.
+        result2 = list(tx.run(cqlQuery2).to_ndarray())
+        # print(result2) # Nu imi afiseaza vecinii.
 
-            nodes_loaded.append(result2)
-            biglist.append(nodes_loaded)
-
-        # cqlQuery = "match(n:`1`{id:825})--(c) return c"  # ??? https://maxdemarzi.com/2018/10/01/finding-your-neighbors-using-neo4j/
-        # Neighbors: MATCH (:`16` { RI_id: 17 })--(`16`)
-        #            RETURN `16`.RI_id
-
-        # MATCH(n: `16`)--({RI_id: 17}), asociaza nodul n cu label dat ca si input
-        # RETURN n
-
-        # MATCH(n: `1`{RI_id: 9377})-[:PPI]->(m) Return n
+        nodes_loaded.append(result2)
+        biglist.append(nodes_loaded)
 
         # VARIANTA CORECTA VECINATATE DE ORDINUL 1 AL UNUI NOD: MATCH(n{RI_id: 1})--(m) return m
-        print("b=")
-        for b in biglist:
-            print(b)
+        # print("Vecinatate, primul elem root=")
+        # for b in biglist:
+        #     for bb in b:
+        #         print(bb)
+        #     print("---")
         return biglist
 
     def Index_getID(self, label):
@@ -60,11 +54,16 @@ class neo4j_test_2(object):
             nodes_loaded.append(r[0])
         return nodes_loaded
 
-    def Index_hasLabel(self, RI_id, label):
+    # def Index_hasLabel(self, RI_id, label):
+    def Index_hasLabel(self, id, label):
         tx = self.neograph.begin()
-        cqlQuery = "MATCH (n:`" + str(label) + "`) WHERE n.RI_id=" + str(RI_id) + " RETURN n"
+        # cqlQuery = "MATCH (n:`" + str(label) + "`) WHERE n.RI_id=" + str(RI_id) + " RETURN n"
+        cqlQuery = "MATCH (n:`" + str(label) + "`) WHERE n.id='" + str(id) + "' RETURN n"
+
         print(cqlQuery)
         result = tx.run(cqlQuery).to_ndarray()
+        print("Index_hasLabel query result= ")
+        print(list(result))
         if len(list(result)) > 0:
             return True
         else:
@@ -77,23 +76,38 @@ class neo4j_test_2(object):
         L = [L1, L2] # Root children labels
         print("r=" + str(r))
         print("L=" + str(L))
-        Sr = [self.Index_getID(r)] # Aici trebuie obtinut ce trebuie pentru graful Zhaosun.
+        Sr = self.Index_getID(r) # Aici trebuie obtinut ce trebuie pentru graful Zhaosun.
         print("Sr=" + str(Sr))
         R = []
         Sli = []
         for n in Sr:
-            print("n=" + str(n))
+            print("---n=" + str(n))
             c = self.Cloud_Load(n)
             print("c=" + str(c))
-        #     for li in L:
-        #         children = []
-        #         children = copy.deepcopy(c)
-        #         children.remove(children[0])
-        #         for m in children:
-        #             if self.Index_hasLabel(m, li):
-        #                 Sli.append(m)
-        #     for elem in itertools.product():
-        #         R.append(elem)
+            # for li in L:
+            print("L1, trebuie sa fie 'b'= " + str(L1))
+            print("L2, trebuie sa fie 'c'= " + str(L2))
+
+            root = c[0][0]
+            children = c[0][1]
+            print("root=" + str(root))
+            print("children=" + str(children))
+
+            for m in children:
+                print("m= " + str(m))
+                aux = str(m).split("id: '")[1]
+                child_id = str(aux).split("'}")[0]
+                print("child_id= " + str(child_id))
+                aux2 = str(m).split(" {")[0]
+                child_label = str(aux2.split(":")[1])
+                print("child_label= " + child_label)
+                has_label = self.Index_hasLabel(child_id, child_label)
+                print(has_label)
+                if has_label:
+                    Sli.append(m)
+            print("Sli= " + str(Sli))
+    #     for elem in itertools.product():
+    #         R.append(elem)
 
 # #BIG DATA GRAPH FROM RI DB############################################
 # with open('Homo_sapiens_udistr_32.gfd') as f:
