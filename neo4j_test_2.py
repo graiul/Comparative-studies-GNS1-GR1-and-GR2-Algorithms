@@ -93,19 +93,36 @@ class neo4j_test_2(object):
             print("root=" + str(root))
             print("children=" + str(children))
 
-            for m in children:
-                print("m= " + str(m))
-                aux = str(m).split("id: '")[1]
-                child_id = str(aux).split("'}")[0]
-                print("child_id= " + str(child_id))
-                aux2 = str(m).split(" {")[0]
-                child_label = str(aux2.split(":")[1])
-                print("child_label= " + child_label)
-                has_label = self.Index_hasLabel(child_id, child_label)
-                print(has_label)
-                if has_label:
-                    Sli.append(m)
-            print("Sli= " + str(Sli))
+            # S = ["0" for i in range(len(L))]
+            S = []
+            print("S= " + str(S))
+            S_formatted_elems = []
+            S_child_lists = []
+
+            for li in L:
+                print("li= " + str(li))
+                print(type(li))
+                for m in children:
+                    if m not in S_child_lists:
+                        print("m= " + str(m)) # Child, sau vecinii de ordinul 1.
+                        aux = str(m).split("id: '")[1]
+                        child_id = str(aux).split("'}")[0]
+                        print("child_id= " + str(child_id))
+                        aux2 = str(m).split(" {")[0]
+                        child_label = str(aux2.split(":")[1])
+                        print("child_label= " + child_label)
+                        has_label = self.Index_hasLabel(child_id, child_label)
+                        print(has_label)
+                        if has_label:
+                            # S[S.index(li)] = m
+                            S_child_lists.append(child_id)
+                # print("S[li]= " + str(S[S.index(li)]))
+            print("S_child_lists= " + str(S_child_lists))
+            S.append(S_child_lists) # Sli, lista de children, pentru fiecare li care respecta conditia, adaugam in S
+            # S_child_lists = []
+            print("S= ")
+            for s in S:
+                print(s)
     #     for elem in itertools.product():
     #         R.append(elem)
 
