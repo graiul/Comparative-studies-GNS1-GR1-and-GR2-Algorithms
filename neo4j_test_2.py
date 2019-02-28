@@ -11,14 +11,14 @@ class neo4j_test_2(object):
 
 
     def Cloud_Load(self, RI_id):  # Pot rula inca o metoda?
-        print("Cloud_Load:")
+        # print("Cloud_Load:")
         tx = self.neograph.begin()
         # cqlQuery = "MATCH (n) WHERE n.RI_id = " + str(RI_id) + " RETURN n"  # Merge cautarea unui nod dupa id.
         cqlQuery = "MATCH (n) WHERE n.id = " + str(RI_id) + " RETURN n"  # Merge cautarea unui nod dupa id.
         # print(cqlQuery)
         # Pentru Zhaosun:
         biglist = []
-        print("id=" + str(RI_id))
+        # print("     id=" + str(RI_id))
         cqlQuery = "MATCH (n) WHERE n.id = '" + str(RI_id) + "' RETURN n"
         # print(cqlQuery)
         result = tx.run(cqlQuery).to_ndarray()
@@ -59,72 +59,79 @@ class neo4j_test_2(object):
         tx = self.neograph.begin()
         # cqlQuery = "MATCH (n:`" + str(label) + "`) WHERE n.RI_id=" + str(RI_id) + " RETURN n"
         cqlQuery = "MATCH (n:`" + str(label) + "`) WHERE n.id='" + str(id) + "' RETURN n"
-
-        print(cqlQuery)
+        # print(cqlQuery)
         result = tx.run(cqlQuery).to_ndarray()
-        print("Index_hasLabel query result= ")
-        print(list(result))
+        # print("Index_hasLabel query result= ")
+        # print(list(result))
         if len(list(result)) > 0:
             return True
         else:
             return False
 
     def MatchSTwig(self, q): # q 1 = (a,{b,c})
+        print("STwig query: " + str(q))
         r = str(q[0]) # Root node label
-        L1 = str(q[1][0])
-        L2 = str(q[1][1])
-        L = [L1, L2] # Root children labels
-        print("r=" + str(r))
-        print("L=" + str(L))
-        Sr = self.Index_getID(r) # Aici trebuie obtinut ce trebuie pentru graful Zhaosun.
-        print("Sr=" + str(Sr))
+        L = [q[1][0], q[1][1]] # Root children labels
+        print("Root node label: " + str(r))
+        print("Root children labels: " + str(L))
+
+        #  (1) Find the set of root nodes by calling Index.getID(r);
+        Sr = self.Index_getID(r)
+        print("Set of root nodes for label " + str(r) + ": " + str(Sr))
         R = []
         Sli = []
-        for n in Sr:
-            print("---n=" + str(n))
-            c = self.Cloud_Load(n)
-            print("c=" + str(c))
-            # for li in L:
-            print("L1, trebuie sa fie 'b'= " + str(L1))
-            print("L2, trebuie sa fie 'c'= " + str(L2))
 
-            root = c[0][0]
+        # (2) Foreach root node, find its child nodes using Cloud.Load();
+        for root_node in Sr:
+            print("---Root node: " + str(root_node))
+            c = self.Cloud_Load(root_node)
+            print("     Children for selected root, first elem is selected root: " + str(c))
+            # print("End Cloud_Load\n")
+            # root = c[0][0]
             children = c[0][1]
-            print("root=" + str(root))
-            print("children=" + str(children))
+            # print("root=" + str(root))
+            # print("children=" + str(children))
 
-            # S = ["0" for i in range(len(L))]
+            # (3) Find its child nodes that match the labels in L by calling Index.hasLabel()
             S = []
-            print("S= " + str(S))
-            S_formatted_elems = []
             S_child_lists = []
-
-            for li in L:
-                print("li= " + str(li))
-                print(type(li))
-                for m in children:
-                    if m not in S_child_lists:
-                        print("m= " + str(m)) # Child, sau vecinii de ordinul 1.
-                        aux = str(m).split("id: '")[1]
+            for root_child_label in L:
+                print("     Root_child_label: " + str(root_child_label))
+                # print("     " + str(type(root_child_label)))
+                for child in children:
+                    if child not in S_child_lists:
+                        # print("     child= " + str(child)) # Child, sau vecinii de ordinul 1.
+                        aux = str(child).split("id: '")[1]
                         child_id = str(aux).split("'}")[0]
-                        print("child_id= " + str(child_id))
-                        aux2 = str(m).split(" {")[0]
-                        child_label = str(aux2.split(":")[1])
-                        print("child_label= " + child_label)
-                        has_label = self.Index_hasLabel(child_id, child_label)
-                        print(has_label)
+                        print("     child_id= " + str(child_id))
+                        # aux2 = str(child).split(" {")[0]
+                        # child_label = str(aux2.split(":")[1])
+                        # print("     child_label= " + child_label)
+                        has_label = self.Index_hasLabel(child_id, root_child_label)
+                        # print(has_label)
                         if has_label:
-                            # S[S.index(li)] = m
+                            # S[S.index(li)] = child
                             S_child_lists.append(child_id)
                 # print("S[li]= " + str(S[S.index(li)]))
-            print("S_child_lists= " + str(S_child_lists))
-            S.append(S_child_lists) # Sli, lista de children, pentru fiecare li care respecta conditia, adaugam in S
-            # S_child_lists = []
-            print("S= ")
+                print("     S_child_lists= " + str(S_child_lists))
+                S.append(S_child_lists) # Sli, lista de children, pentru fiecare li care respecta conditia, adaugam in S
+                S_child_lists = []
+            print("     Sets of children(for selected root " + str(root_node) + ") with labels  " + str(L) + ": ")
+            S_one_elems = []
             for s in S:
-                print(s)
-    #     for elem in itertools.product():
-    #         R.append(elem)
+                print("     " + str(s))
+                for s_temp in s:
+                    S_one_elems.append(s_temp)
+            S_one_elems.insert(0, root_node)
+            print("Cartesian product: ")
+            for elem in itertools.combinations(S_one_elems, 3):
+                elem_labels = []
+                for el in elem:
+                    elem_labels.append(el[0])
+                for to_count in elem_labels:
+                    if elem_labels.count(to_count) > 1:
+                        print(elem)
+
 
 # #BIG DATA GRAPH FROM RI DB############################################
 # with open('Homo_sapiens_udistr_32.gfd') as f:
