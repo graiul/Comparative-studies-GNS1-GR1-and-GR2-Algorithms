@@ -123,14 +123,35 @@ class neo4j_test_2(object):
                 for s_temp in s:
                     S_one_elems.append(s_temp)
             S_one_elems.insert(0, root_node)
-            print("Cartesian product: ")
-            for elem in itertools.combinations(S_one_elems, 3):
-                elem_labels = []
+            # print("Cartesian product: ")
+            combinations = list(itertools.combinations(S_one_elems, 3))
+            elem_labels = []
+            elem_labels_total = []
+            for elem in combinations:
                 for el in elem:
                     elem_labels.append(el[0])
-                for to_count in elem_labels:
-                    if elem_labels.count(to_count) > 1:
-                        print(elem)
+                elem_labels_total.append(elem_labels)
+                elem_labels = []
+            combinations_dict = dict(zip(combinations, elem_labels_total))
+            combinations_dict_final = copy.deepcopy(combinations_dict)
+            # vals = list(combinations_dict.values())[0]
+            for val in combinations_dict.items():
+                # print(val[1])
+                for lb in val[1]:
+                    # print(lb)
+                    if val[1].count(lb) > 1:
+                        # print("More than once ^")
+                        combinations_dict_final.pop(val[0])
+                        break
+            for stwig in combinations_dict_final.keys():
+                # print(stwig)
+                R.append(stwig)
+        print("STWIGS: ")
+        for stwig in sorted(R):
+            print(stwig)
+        # Am schimbat graful astfel: am inlaturat muchia a3,b3: MATCH (n:a)-[r:RELTYPE]-(m:b) WHERE n.id = 'a3' AND m.id = 'b3' DELETE r
+        #                            am adaugat muchia a3,c3: # MATCH (n:a),(m:c) WHERE n.id = 'a3' AND m.id = 'c3' CREATE (n)-[r:RELTYPE]->(m)
+        # Astfel am obtinur rezultatele din p788_Zhaosun, pag 5, G(q1) = ...
 
 
 # #BIG DATA GRAPH FROM RI DB############################################
