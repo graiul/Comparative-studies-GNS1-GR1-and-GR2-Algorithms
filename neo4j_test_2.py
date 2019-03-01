@@ -154,6 +154,20 @@ class neo4j_test_2(object):
         # Astfel am obtinur rezultatele din p788_Zhaosun, pag 5, G(q1) = ...
 
 
+    def Query_Graph_Split(self, query_graph):
+        splits = []
+        for node in query_graph.nodes():
+            print("Selected node: " + str(node))
+            edges = list(query_graph.edges(node))
+            # if len(edges) == 2:
+            #     splits.append([node, edges])
+            print(edges)
+            for stop in range(2, len(edges)+1):
+                splits.append([node, edges[0:stop]])
+        print()
+        return splits
+
+
 # #BIG DATA GRAPH FROM RI DB############################################
 # with open('Homo_sapiens_udistr_32.gfd') as f:
 #     lines = f.readlines()
@@ -217,9 +231,23 @@ class neo4j_test_2(object):
 # SMALL DATA GRAPH FROM ZHAOSUN############################################
 
 test2 = neo4j_test_2()
-# print(test2.Cloud_Load(1)) # VECINTTATE DE GRADUL 1, toate nodurile indeg/outdeg?
+# print(test2.Cloud_Load(1)) # VECINATATE DE GRADUL 1, toate nodurile indeg/outdeg?
 # print(test2.Index_getID(1))
 # print(test2.Index_hasLabel(1, 3322))
-# MATCH (n) RETURN n LIMIT 25
-q = ['a', ['b','c']]
-test2.MatchSTwig(q)
+
+# q = ['a', ['b','c']]
+# test2.MatchSTwig(q)
+
+query_graph = nx.Graph()
+query_graph_edges = [["a1", "b1"], ["a1", "c1"], ["c1", "d1"], ["d1", "f1"], ["f1", "e1"], ["e1", "b1"], ["b1", "d1"], ["b1", "f1"]]
+query_graph.add_edges_from(query_graph_edges)
+node_attr = ["a", "b", "c", "d", "e", "f"]
+node_attr_dict = dict(zip(sorted(query_graph.nodes()), node_attr))
+nx.set_node_attributes(query_graph, node_attr_dict, 'label')
+print(query_graph.nodes(data=True))
+
+# for split in test2.Query_Graph_Split(query_graph):
+#     print(split)
+
+
+
