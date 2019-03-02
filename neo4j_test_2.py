@@ -1,3 +1,7 @@
+import threading
+from concurrent.futures.thread import ThreadPoolExecutor
+from multiprocessing.dummy import Pool as ThreadPool
+
 from py2neo import Graph, Node, Relationship
 import networkx as nx
 import copy
@@ -155,6 +159,7 @@ class neo4j_test_2(object):
 
 
     def Query_Graph_Split(self, query_graph):
+
         splits = []
         for node in query_graph.nodes():
             print("Selected node: " + str(node))
@@ -165,7 +170,23 @@ class neo4j_test_2(object):
             for stop in range(2, len(edges)+1):
                 splits.append([node, edges[0:stop]])
         print()
-        return splits
+        # return splits
+        print(splits)
+
+    def Query_Graph_Split_Parallel(self, nodes_chunk):
+
+        splits = []
+        for node in nodes_chunk:
+            print("Selected node: " + str(node))
+            edges = list(query_graph.edges(node))
+            # if len(edges) == 2:
+            #     splits.append([node, edges])
+            print(edges)
+            for stop in range(2, len(edges)+1):
+                splits.append([node, edges[0:stop]])
+        print("Splits: ")
+        print(splits)
+
 
 
 # #BIG DATA GRAPH FROM RI DB############################################
@@ -244,10 +265,37 @@ query_graph.add_edges_from(query_graph_edges)
 node_attr = ["a", "b", "c", "d", "e", "f"]
 node_attr_dict = dict(zip(sorted(query_graph.nodes()), node_attr))
 nx.set_node_attributes(query_graph, node_attr_dict, 'label')
-print(query_graph.nodes(data=True))
+# print(query_graph.nodes(data=True))
 
 # for split in test2.Query_Graph_Split(query_graph):
 #     print(split)
 
+# test2.Query_Graph_Split(query_graph)
+
+query_graph_nodes = list(query_graph.nodes())
+print(query_graph_nodes)
+start = 0
+nodes_chunk = 2
+chunks = []
+# for node in query_graph_nodes:
+while start<len(query_graph_nodes):
+    chunks.append(query_graph_nodes[start:nodes_chunk])
+    start = start + 2
+    nodes_chunk = nodes_chunk + 2
+print(chunks)
+threads = []
+for i in range(len(chunks)):
+    thread = threading.Thread(target=test2.Query_Graph_Split_Parallel, args=[chunks[i]], name="Thread " + str(i))
+    threads.append(thread)
+
+for thread in threads:
+    print()
+    print(thread.name)
+    thread.start()
+    thread.join()
 
 
+
+# th1 = threading.Thread(target=test2.Query_Graph_Split_Parallel, args=[query_graph_nodes, 0, len(query_graph.edges())], name="Thread 1")
+# print(th1.name)
+# th1.start()
