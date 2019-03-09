@@ -73,7 +73,7 @@ class neo4j_test_2(object):
         else:
             return False
 
-    def MatchSTwig(self, q): # q 1 = (a,{b,c})
+    def MatchSTwig(self, q): # q 1 = (a,{b,c}) din articol, [a, [b,c]] in py
         print("STwig query: " + str(q))
         r = str(q[0]) # Root node label
         L = [q[1][0], q[1][1]] # Root children labels
@@ -203,10 +203,33 @@ class neo4j_test_2(object):
         result = tx.run(cqlQuery).to_ndarray()
         return len(list(result))
 
+    def get_neo4j_stwig_root(self, Cloud_Load_Resulting_STIWGS):
+        # print("STwig: " + str(Cloud_Load_Resulting_STIWGS))
+        aux = str(Cloud_Load_Resulting_STIWGS).split("id: '")[1]
+        root_trimmed = str(aux).split("'}")[0]
+        return root_trimmed
+
+    def get_neo4j_stwig_node_trim(self, stwig_node_to_trim):
+        # print("STwig node to trim: " + str(stwig_node_to_trim))
+        aux = str(stwig_node_to_trim).split("id: '")[1]
+        node_trimmed = str(aux).split("'}")[0]
+        return node_trimmed
+
+    def get_neo4j_STwig_with_root(self, root, stwig): # Transforma un STwig din modul de reprezentare Neo4j in lista: [a, [b,c]]
+        # print("get_neo4j_STwig_with_root: ")
+        # print("root: " + str(root))
+        # print("stwig: " + str(stwig[0][1]))
+        trimmed_nodes = []
+        for node_to_trim in stwig[0][1]:
+            trimmed_nodes.append(self.get_neo4j_stwig_node_trim(node_to_trim))
+        trimmed_nodes.insert(0, root)
+        return trimmed_nodes
+
+
 
     def STwig_Order_Selection(self, query_graph):
         S = []
-        T = None
+        T = []
         dict_f_values_query_graph = {}
         picked_edge = None
         while len(query_graph.edges()) > 0:
@@ -215,11 +238,10 @@ class neo4j_test_2(object):
                 print("Sum: " + str(sum))
                 dict_f_values_query_graph[edge] = sum
             if len(S) == 0:
-
-                print(dict_f_values_query_graph.items())
+                # print(dict_f_values_query_graph.items())
                 index, value = max(enumerate(list(dict_f_values_query_graph.values())), key=operator.itemgetter(1))
-                print("Max val: " + str(value))
-                print("Max val index: " + str(index))
+                # print("Max val: " + str(value))
+                # print("Max val index: " + str(index))
                 picked_edge = list(dict_f_values_query_graph.keys())[index]
                 print("Picked edge: " + str(picked_edge))
             else:
@@ -230,9 +252,19 @@ class neo4j_test_2(object):
                         picked_edge = edge
                         print("Picked edge on 'else' branch: " + str(picked_edge))
                         break
-            q = self.Cloud_Load(picked_edge[0])
-            # Tv = self.MatchSTwig(q) # Aceasta este metoda?
+            Cloud_Load_Resulting_STIWG = self.Cloud_Load(picked_edge[0])
+            q_root = self.get_neo4j_stwig_root(Cloud_Load_Resulting_STIWG)
+            Tv = self.get_neo4j_STwig_with_root(q_root, Cloud_Load_Resulting_STIWG)
+            print("STWIG formatted also having the root at first elem: " + str(Tv))
+            T.append(Tv)
 
+
+            #     if st[0] is picked_edge[0]:
+            #         Tv = st
+            #         T.append(Tv)
+            #         break
+            # S.append(picked_edge[1])
+            # for st2 in
 
 # #BIG DATA GRAPH FROM RI DB############################################
 # with open('Homo_sapiens_udistr_32.gfd') as f:
