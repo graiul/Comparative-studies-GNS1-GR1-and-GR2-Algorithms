@@ -12,7 +12,7 @@ import itertools
 class neo4j_test_2(object):
 
     neograph_data = Graph(port="7687", user="neo4j", password="graph") # Data Graph Zhaosun
-    neograph_query = Graph(port="11001", user="neo4j", password="graph") # Query Graph Zhaosun
+    neograph_query = Graph(port="7687", user="neo4j", password="graph") # Query Graph Zhaosun
 
 
     def Cloud_Load(self, RI_id):  # Pot rula inca o metoda?
