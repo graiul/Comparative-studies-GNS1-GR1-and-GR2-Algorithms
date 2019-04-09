@@ -11,14 +11,14 @@ import itertools
 
 class neo4j_test_2(object):
 
-    neograph_data = Graph(port="7687", user="neo4j", password="graph") # Data Graph Zhaosun
-    neograph_query = Graph(port="7687", user="neo4j", password="graph") # Query Graph Zhaosun
-
+    # neograph_data = Graph(port="7687", user="neo4j", password="graph") # Data Graph Zhaosun
+    neograph_data = Graph("bolt://127.0.0.1:7693", auth=("neo4j", "changeme")) # Data Graph Zhaosun din READ_REPLICA
+    # neograph_query = Graph("bolt://127.0.0.1:7693", auth=("neo4j", "changeme")) # Query Graph Zhaosun din READ_REPLICA
 
     def Cloud_Load(self, RI_id):  # Pot rula inca o metoda?
         # print("Cloud_Load:")
-        # tx = self.neograph_data.begin() # Pentru graful data Zhaosun!
-        tx = self.neograph_query.begin() # Pentru graful query Zhaosun!
+        tx = self.neograph_data.begin() # Pentru graful data Zhaosun!
+        # tx = self.neograph_query.begin() # Pentru graful query Zhaosun!
 
         # cqlQuery = "MATCH (n) WHERE n.RI_id = " + str(RI_id) + " RETURN n"  # Merge cautarea unui nod dupa id.
         cqlQuery = "MATCH (n) WHERE n.id = " + str(RI_id) + " RETURN n"  # Merge cautarea unui nod dupa id.
@@ -177,19 +177,19 @@ class neo4j_test_2(object):
         # return splits
         print(splits)
 
-    def Query_Graph_Split_Parallel(self, nodes_chunk):
-
-        splits = []
-        for node in nodes_chunk:
-            print("Selected node: " + str(node))
-            edges = list(query_graph.edges(node))
-            # if len(edges) == 2:
-            #     splits.append([node, edges])
-            print(edges)
-            for stop in range(2, len(edges)+1):
-                splits.append([node, edges[0:stop]])
-        print("Splits: ")
-        print(splits)
+    # def Query_Graph_Split_Parallel(self, nodes_chunk):
+    #
+    #     splits = []
+    #     for node in nodes_chunk:
+    #         print("Selected node: " + str(node))
+    #         edges = list(query_graph.edges(node))
+    #         # if len(edges) == 2:
+    #         #     splits.append([node, edges])
+    #         print(edges)
+    #         for stop in range(2, len(edges)+1):
+    #             splits.append([node, edges[0:stop]])
+    #     print("Splits: ")
+    #     print(splits)
 
     def f_value(self, v_id, query_graph):
         deg = len(list(query_graph.neighbors(v_id)))
@@ -199,15 +199,15 @@ class neo4j_test_2(object):
         return deg / self.freq(query_graph.node[v_id]['label'])
 
     def freq(self, v_label):
-        # tx = self.neograph_data.begin() # Pentru graful data Zhaosun!
-        tx = self.neograph_query.begin() # Pentru graful query Zhaosun!
+        tx = self.neograph_data.begin() # Pentru graful data Zhaosun!
 
-        cqlQuery = "MATCH (n:`" + str(v_label) + "`) RETURN n"
+        # cqlQuery = "MATCH (n:`" + str(v_label) + "`) RETURN n"
+        cqlQuery = "MATCH (n) WHERE n.zhaosun_label='" + str(v_label) + "' return n"
         result = tx.run(cqlQuery).to_ndarray()
         return len(list(result))
 
     def get_neo4j_stwig_root(self, Cloud_Load_Resulting_STIWGS):
-        # print("STwig: " + str(Cloud_Load_Resulting_STIWGS))
+        print("STwig: " + str(Cloud_Load_Resulting_STIWGS))
         aux = str(Cloud_Load_Resulting_STIWGS).split("id: '")[1]
         root_trimmed = str(aux).split("'}")[0]
         return root_trimmed
@@ -405,20 +405,20 @@ class neo4j_test_2(object):
 # Mai ramane de adaugat M2 si M3 din graful de la fig 5
 # SMALL DATA GRAPH FROM ZHAOSUN############################################
 
-test2 = neo4j_test_2()
+# test2 = neo4j_test_2()
 # print(test2.Cloud_Load(1)) # VECINATATE DE GRADUL 1, toate nodurile indeg/outdeg?
 # print(test2.Index_getID(1))
 # print(test2.Index_hasLabel(1, 3322))
 
 
 
-query_graph = nx.Graph()
-query_graph_edges = [["a1", "b1"], ["a1", "c1"], ["c1", "d1"], ["c1", "f1"], ["f1", "d1"], ["d1", "b1"], ["d1", "e1"], ["e1", "b1"]]
-query_graph.add_edges_from(query_graph_edges)
-node_attr = ["a", "b", "c", "d", "e", "f"]
-node_attr_dict = dict(zip(sorted(query_graph.nodes()), node_attr))
-nx.set_node_attributes(query_graph, node_attr_dict, 'label')
-print(query_graph.nodes(data=True))
+# query_graph = nx.Graph()
+# query_graph_edges = [["a1", "b1"], ["a1", "c1"], ["c1", "d1"], ["c1", "f1"], ["f1", "d1"], ["d1", "b1"], ["d1", "e1"], ["e1", "b1"]]
+# query_graph.add_edges_from(query_graph_edges)
+# node_attr = ["a", "b", "c", "d", "e", "f"]
+# node_attr_dict = dict(zip(sorted(query_graph.nodes()), node_attr))
+# nx.set_node_attributes(query_graph, node_attr_dict, 'label')
+# print(query_graph.nodes(data=True))
 
 # Caching technique pentru accesul la baza de date?
 
@@ -461,5 +461,5 @@ print(query_graph.nodes(data=True))
 # print(test2.freq("a"))
 # print("f_value: ")
 # print(test2.f_value("a1", query_graph))
-print("STwig_Order_Selection: ")
-print(test2.STwig_Order_Selection(query_graph))
+# print("STwig_Order_Selection: ")
+# print(test2.STwig_Order_Selection(query_graph))
