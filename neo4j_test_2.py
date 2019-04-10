@@ -15,30 +15,22 @@ class neo4j_test_2(object):
     neograph_data = Graph("bolt://127.0.0.1:7693", auth=("neo4j", "changeme")) # Data Graph Zhaosun din READ_REPLICA
     # neograph_query = Graph("bolt://127.0.0.1:7693", auth=("neo4j", "changeme")) # Query Graph Zhaosun din READ_REPLICA
 
-    def Cloud_Load(self, RI_id):  # Pot rula inca o metoda?
+    def Cloud_Load(self, node_id):  # Pot rula inca o metoda?
         # print("Cloud_Load:")
-        tx = self.neograph_data.begin() # Pentru graful data Zhaosun!
-        # tx = self.neograph_query.begin() # Pentru graful query Zhaosun!
-
-        # cqlQuery = "MATCH (n) WHERE n.RI_id = " + str(RI_id) + " RETURN n"  # Merge cautarea unui nod dupa id.
-        cqlQuery = "MATCH (n) WHERE n.id = " + str(RI_id) + " RETURN n"  # Merge cautarea unui nod dupa id.
-        # print(cqlQuery)
-        # Pentru Zhaosun:
+        # Pentru Zhaosun Data Graph din cluster neo4j:
         biglist = []
-        # print("     id=" + str(RI_id))
-        cqlQuery = "MATCH (n) WHERE n.id = '" + str(RI_id) + "' RETURN n"
+        # print("     id=" + str(node_id))
+        cqlQuery = "MATCH (n) WHERE n.zhaosun_id = '" + str(node_id) + "' RETURN n"
         # print(cqlQuery)
-        result = tx.run(cqlQuery).to_ndarray()
+        result = self.neograph_data.run(cqlQuery).to_ndarray()
+        # print(result)
         nodes_loaded = []
         nodes_loaded.append(result)
-        # cqlQuery2 = "MATCH(n{RI_id: " + str(RI_id) + "})--(m) return m"
-        cqlQuery2 = "MATCH(n{id: '" + str(RI_id) + "'})--(m) return m"
+        cqlQuery2 = "MATCH(n{zhaosun_id: '" + str(node_id) + "'})--(m) return m"
+        # MATCH(n{zhaosun_id: 'a1'})--(m) return m
         # print(cqlQuery2)
-
-        # result2 = list(tx.run(cqlQuery2).to_subgraph().nodes)
-        result2 = list(tx.run(cqlQuery2).to_ndarray())
-        # print(result2) # Nu imi afiseaza vecinii.
-
+        result2 = list(self.neograph_data.run(cqlQuery2).to_ndarray())
+        # print(result2)
         nodes_loaded.append(result2)
         biglist.append(nodes_loaded)
 
@@ -48,39 +40,45 @@ class neo4j_test_2(object):
         #     for bb in b:
         #         print(bb)
         #     print("---")
+        # print("End Cloud_Load")
         return biglist
 
     def Index_getID(self, label):
-        tx = self.neograph_data.begin()
+        # tx = self.neograph_data.begin()
         # cqlQuery = "MATCH (n:`" + str(label) + "`) RETURN n.RI_id"
-        cqlQuery = "MATCH (n:`" + str(label) + "`) RETURN n.id" # IF a IN a1! Graf Zhaosun
-
-        result = tx.run(cqlQuery).to_ndarray()
+        cqlQuery = "MATCH (n) WHERE n.zhaosun_label='" + str(label) + "' RETURN n.zhaosun_id" # IF a IN a1! Graf Zhaosun
+        # result = tx.run(cqlQuery).to_ndarray()
+        result = self.neograph_data.run(cqlQuery).to_ndarray()
         nodes_loaded = []
         for r in result:
             nodes_loaded.append(r[0])
         return nodes_loaded
 
     # def Index_hasLabel(self, RI_id, label):
-    def Index_hasLabel(self, id, label):
-        tx = self.neograph_data.begin()
-        # cqlQuery = "MATCH (n:`" + str(label) + "`) WHERE n.RI_id=" + str(RI_id) + " RETURN n"
-        cqlQuery = "MATCH (n:`" + str(label) + "`) WHERE n.id='" + str(id) + "' RETURN n"
+    def Index_hasLabel(self, node_id, label):
+        # print("Index_hasLabel:")
+        # print("Node ID: " + str(node_id))
+        # print("Label: " + str(label))
+        cqlQuery = "MATCH (n) WHERE n.zhaosun_label='" + str(label) + "' AND n.zhaosun_id='" + str(node_id) + "' RETURN n"
+        # MATCH (n) WHERE n.zhaosun_label='a' AND n.zhaosun_id='a1' RETURN n
         # print(cqlQuery)
-        result = tx.run(cqlQuery).to_ndarray()
+        result = self.neograph_data.run(cqlQuery).to_ndarray()
         # print("Index_hasLabel query result= ")
         # print(list(result))
         if len(list(result)) > 0:
+            # print("End Index_hasLabel")
             return True
         else:
+            # print("End Index_hasLabel")
             return False
 
     def MatchSTwig(self, q): # q 1 = (a,{b,c}) din articol, [a, [b,c]] in py
-        print("STwig query: " + str(q))
+        # print("MatchSTwig: ")
+        # print("STwig query: " + str(q))
         r = str(q[0]) # Root node label
         L = [q[1][0], q[1][1]] # Root children labels
-        print("Root node label: " + str(r))
-        print("Root children labels: " + str(L))
+        # print("Root node label: " + str(r))
+        # print("Root children labels: " + str(L))
 
         #  (1) Find the set of root nodes by calling Index.getID(r);
         Sr = self.Index_getID(r)
@@ -90,10 +88,9 @@ class neo4j_test_2(object):
 
         # (2) Foreach root node, find its child nodes using Cloud.Load();
         for root_node in Sr:
-            print("---Root node: " + str(root_node))
+            # print("---Root node: " + str(root_node))
             c = self.Cloud_Load(root_node)
-            print("     Children for selected root, first elem is selected root: " + str(c))
-            # print("End Cloud_Load\n")
+            # print("     Children for selected root, first elem is selected root: " + str(c))
             # root = c[0][0]
             children = c[0][1]
             # print("root=" + str(root))
@@ -103,14 +100,14 @@ class neo4j_test_2(object):
             S = []
             S_child_lists = []
             for root_child_label in L:
-                print("     Root_child_label: " + str(root_child_label))
+                # print("     Root_child_label: " + str(root_child_label))
                 # print("     " + str(type(root_child_label)))
                 for child in children:
                     if child not in S_child_lists:
                         # print("     child= " + str(child)) # Child, sau vecinii de ordinul 1.
                         aux = str(child).split("id: '")[1]
-                        child_id = str(aux).split("'}")[0]
-                        print("     child_id= " + str(child_id))
+                        child_id = str(aux).split("',")[0]
+                        # print("     child_id= " + str(child_id))
                         # aux2 = str(child).split(" {")[0]
                         # child_label = str(aux2.split(":")[1])
                         # print("     child_label= " + child_label)
@@ -120,13 +117,13 @@ class neo4j_test_2(object):
                             # S[S.index(li)] = child
                             S_child_lists.append(child_id)
                 # print("S[li]= " + str(S[S.index(li)]))
-                print("     S_child_lists= " + str(S_child_lists))
+                # print("     S_child_lists= " + str(S_child_lists))
                 S.append(S_child_lists) # Sli, lista de children, pentru fiecare li care respecta conditia, adaugam in S
                 S_child_lists = []
-            print("     Sets of children(for selected root " + str(root_node) + ") with labels  " + str(L) + ": ")
+            # print("     Sets of children(for selected root " + str(root_node) + ") with labels  " + str(L) + ": ")
             S_one_elems = []
             for s in S:
-                print("     " + str(s))
+                # print("     " + str(s))
                 for s_temp in s:
                     S_one_elems.append(s_temp)
             S_one_elems.insert(0, root_node)
@@ -153,13 +150,14 @@ class neo4j_test_2(object):
             for stwig in combinations_dict_final.keys():
                 # print(stwig)
                 R.append(stwig)
-        print("STWIGS: ")
+        # print("STWIGS: ")
         STwigs = sorted(R)
-        for stwig in STwigs:
-            print(stwig)
+        # for stwig in STwigs:
+        #     print(stwig)
         # Am schimbat graful astfel: am inlaturat muchia a3,b3: MATCH (n:a)-[r:RELTYPE]-(m:b) WHERE n.id = 'a3' AND m.id = 'b3' DELETE r
         #                            am adaugat muchia a3,c3: # MATCH (n:a),(m:c) WHERE n.id = 'a3' AND m.id = 'c3' CREATE (n)-[r:RELTYPE]->(m)
         # Astfel am obtinur rezultatele din p788_Zhaosun, pag 5, G(q1) = ...
+        # print("End MatchSTwig")
         return STwigs
 
     def Query_Graph_Split(self, query_graph):
@@ -199,11 +197,12 @@ class neo4j_test_2(object):
         return deg / self.freq(query_graph.node[v_id]['label'])
 
     def freq(self, v_label):
-        tx = self.neograph_data.begin() # Pentru graful data Zhaosun!
+        # tx = self.neograph_data.begin() # Pentru graful data Zhaosun!
 
         # cqlQuery = "MATCH (n:`" + str(v_label) + "`) RETURN n"
         cqlQuery = "MATCH (n) WHERE n.zhaosun_label='" + str(v_label) + "' return n"
-        result = tx.run(cqlQuery).to_ndarray()
+        # result = tx.run(cqlQuery).to_ndarray()
+        result = self.neograph_data.run(cqlQuery)
         return len(list(result))
 
     def get_neo4j_stwig_root(self, Cloud_Load_Resulting_STIWGS):
@@ -215,7 +214,7 @@ class neo4j_test_2(object):
     def get_neo4j_stwig_node_trim(self, stwig_node_to_trim):
         # print("STwig node to trim: " + str(stwig_node_to_trim))
         aux = str(stwig_node_to_trim).split("id: '")[1]
-        node_trimmed = str(aux).split("'}")[0]
+        node_trimmed = str(aux).split("',")[0]
         return node_trimmed
 
     def get_neo4j_STwig_with_root(self, root, stwig): # Transforma un STwig din modul de reprezentare Neo4j in lista: [a, [b,c]]
@@ -256,14 +255,21 @@ class neo4j_test_2(object):
                 # print("Max val index: " + str(index))
                 picked_edge = list(dict_f_values_query_graph.keys())[index]
                 print("Picked edge: " + str(picked_edge))
-            else:
-                index2, value2 = max(enumerate(list(dict_f_values_query_graph.values())), key=operator.itemgetter(1))
-                for edge in query_graph.edges():
-                    sum2 = self.f_value(edge[0], query_graph) + self.f_value(edge[1], query_graph)
-                    if edge[0] in S and sum2 == value2:
-                        picked_edge = edge
-                        print("Picked edge on 'else' branch: " + str(picked_edge))
-                        break
+
+
+
+            # TREBUIE SA SCADA DEGREE, TREBUIE INLATURATI VECINII PUSI IN S DIN VECINII NODULUI SELECTAT.
+            # else:
+            #     index2, value2 = max(enumerate(list(dict_f_values_query_graph.values())), key=operator.itemgetter(1))
+            #     for edge in query_graph.edges():
+            #         sum2 = self.f_value(edge[0], query_graph) + self.f_value(edge[1], query_graph)
+            #         if edge[0] in S and sum2 == value2:
+            #             picked_edge = edge
+            #             print("Picked edge on 'else' branch: " + str(picked_edge))
+            #             break
+
+
+
             Cloud_Load_Resulting_STIWG = self.Cloud_Load(picked_edge[0])
             q_root = self.get_neo4j_stwig_root(Cloud_Load_Resulting_STIWG)
             Tv = self.get_neo4j_STwig_with_root(q_root, Cloud_Load_Resulting_STIWG)
@@ -286,6 +292,7 @@ class neo4j_test_2(object):
             print("Comparing of edges and removal: ")
             print("Nr of edges to be removed: " + str(len(Tv_edges)))
             print("Nr of edges total: " + str(len(query_graph.edges())))
+            query_graph_edges = query_graph.edges() # ???
             for tv_edge in Tv_edges:
                 for query_edge in query_graph.edges():
                     # print(set(tv_edge))
