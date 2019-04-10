@@ -206,9 +206,12 @@ class neo4j_test_2(object):
         return len(list(result))
 
     def get_neo4j_stwig_root(self, Cloud_Load_Resulting_STIWGS):
-        print("STwig: " + str(Cloud_Load_Resulting_STIWGS))
+        # print("get_neo4j_stwig_root: ")
+        # print("STwig: " + str(Cloud_Load_Resulting_STIWGS))
         aux = str(Cloud_Load_Resulting_STIWGS).split("id: '")[1]
-        root_trimmed = str(aux).split("'}")[0]
+        root_trimmed = str(aux).split("',")[0]
+        # print("root_trimmed: " + str(root_trimmed))
+        # print("End get_neo4j_stwig_root")
         return root_trimmed
 
     def get_neo4j_stwig_node_trim(self, stwig_node_to_trim):
@@ -224,7 +227,11 @@ class neo4j_test_2(object):
         trimmed_nodes = []
         for node_to_trim in stwig[0][1]:
             trimmed_nodes.append(self.get_neo4j_stwig_node_trim(node_to_trim))
+        # print("Root: " + str(root))
+        # trimmed_root = self.get_neo4j_stwig_node_trim(root)
+        # print("Trimmed root: " + trimmed_root)
         trimmed_nodes.insert(0, root)
+        # print("End get_neo4j_STwig_with_root")
         return trimmed_nodes
 
     def neighbors_of_node(self, node):
@@ -271,7 +278,8 @@ class neo4j_test_2(object):
 
 
             Cloud_Load_Resulting_STIWG = self.Cloud_Load(picked_edge[0])
-            q_root = self.get_neo4j_stwig_root(Cloud_Load_Resulting_STIWG)
+            # print("Cloud_Load_Resulting_STIWG: " + str(Cloud_Load_Resulting_STIWG))
+            q_root = self.get_neo4j_stwig_root(Cloud_Load_Resulting_STIWG) # DE FACUT TRIM SI LA SF!
             Tv = self.get_neo4j_STwig_with_root(q_root, Cloud_Load_Resulting_STIWG)
             print("STWIG formatted also having the root at first elem: " + str(Tv))
             T.append(Tv)
@@ -281,9 +289,14 @@ class neo4j_test_2(object):
             for n in neighbors[0][1]:
                 print(self.get_neo4j_stwig_node_trim(n))
                 S.append(self.get_neo4j_stwig_node_trim(n))
+                # Acum, vecinul adaugat in S ar trebui eliminat din multimea vecinilor nodului ales.
+                # Astfel, degree-ul scade, iar algoritmul se incheie.
+
+
             print("S: " + str(S))
             Tv_edges = []
             root = Tv[0]
+            # print("Root: " + root)
             Tv.remove(root)
             for tv_elem in Tv:
                 Tv_edges.append([root, tv_elem])
