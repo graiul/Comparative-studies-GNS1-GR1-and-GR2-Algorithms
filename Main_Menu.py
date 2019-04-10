@@ -18,8 +18,9 @@ menu = [
     ["3. Delete data from cluster"],
     ["4. View graph data"],
     ["5. Run parallel db access test"],
-    ["6. Run STwig Algorithm II"],
-    ["7. Configure cluster"],
+    ["6. Run MatchSTwig"],
+    ["7. Run STwig_Order_Selection"],
+    ["8. Configure cluster"],
     ["0. Exit"]
 ]
 print()
@@ -56,14 +57,25 @@ while(True):
         print()
         for m in menu:
             print(m)
+
     elif option == 6:
         print("\n================= Option 6 commencing... =================")
+        q = ['a', ['b', 'c']]  # De facut din fisier, nu hardcoded
+        test2 = neo4j_test_2()
+        print("STWIGS: ")
+        STwigs = test2.MatchSTwig(q)
+        for stwig in STwigs:
+            print(stwig)
+        print("\n============== End of Option 6 execution =================")
+
+    elif option == 7:
+        print("\n================= Option 7 commencing... =================")
         print("STwig_Order_Selection: ")
         test2 = neo4j_test_2()
         query_graph_gen = Graph_File_Generator()
         query_graph = query_graph_gen.gen_zhaosun_query_graph()
         print(test2.STwig_Order_Selection(query_graph))
-        print("\n============== End of Option 6 execution =================")
+        print("\n============== End of Option 7 execution =================")
         print()
         for m in menu:
             print(m)
