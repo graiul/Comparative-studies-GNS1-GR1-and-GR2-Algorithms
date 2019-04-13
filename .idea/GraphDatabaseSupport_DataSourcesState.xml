@@ -6,13 +6,13 @@
         <option name="dataSources">
           <list>
             <DataSourceV1>
-              <option name="uuid" value="d91d3fc8-a690-4a88-be82-b9f307b370ae" />
-              <option name="name" value="neo4j_graph_zhaosun" />
+              <option name="uuid" value="b1648f0e-4b46-457f-bcf5-d4ec95f396ad" />
+              <option name="name" value="neo4j_cluster_db" />
               <option name="dataSourceType" value="NEO4J_BOLT" />
               <option name="configuration">
                 <map>
                   <entry key="host" value="localhost" />
-                  <entry key="password" value="graph" />
+                  <entry key="password" value="changeme" />
                   <entry key="port" value="7687" />
                   <entry key="user" value="neo4j" />
                 </map>
