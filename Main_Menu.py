@@ -2,6 +2,7 @@ from Graph_File_Generator import Graph_File_Generator
 from Local_Cluster_Access_Test import Local_Cluster_Access_Test
 from Dataset_Operator import Dataset_Operator
 from neo4j_test_2 import neo4j_test_2
+import os
 
 print("   _____ _______       _                  _                  _ _   _                 _____ _____ ")
 print("  / ____|__   __|     (_)           /\   | |                (_) | | |               |_   _|_   _|")
@@ -62,8 +63,9 @@ while(True):
         print("\n================= Option 6 commencing... =================")
         q = ['a', ['b', 'c']]  # De facut din fisier, nu hardcoded
         test2 = neo4j_test_2()
-        print("STWIGS: ")
+        print("Searcing given STwigs from query graph in the data graph: ")
         STwigs = test2.MatchSTwig(q)
+        print("\nSTwigs from data graph corresponding to the query STwig given: ")
         for stwig in STwigs:
             print(stwig)
         print("\n============== End of Option 6 execution =================")
@@ -79,6 +81,10 @@ while(True):
         print()
         for m in menu:
             print(m)
+
+    elif option==8:
+        file = "notepad.exe neo4j_local_cluster_db\\docker-compose.yml"
+        os.system(file)
 
     elif option == 0:
         exit(code=0)
