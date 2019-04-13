@@ -74,7 +74,7 @@ class neo4j_test_2(object):
             # print("End Index_hasLabel")
             return False
 
-    def MatchSTwig(self, q): # q 1 = (a,{b,c}) din articol, [a, [b,c]] in py
+    def MatchSTwig(self, q): # q 1 = (a,{b,c}) din articol, [a, [b,c]] in py. Acest q1 (STwig din query graph)si altele vor fi date de STwigOrderSelection care lucreaza cu graful query.
         print("IF QUERY STWIG IS UNDIRECTED, THEN MULTIPLE RESULTS ARE GIVEN "
               "\nBECAUSE WE USE LABELS NOT NODE ID's WHICH ENCOMPASS MULTIPLE NODES")
         print("IF QUERY STWIG WOULD BE DIRECTED, THEN THE RESULTS "
