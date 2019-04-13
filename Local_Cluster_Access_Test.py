@@ -1,6 +1,6 @@
 import threading
-
 from py2neo import Graph, Node, Relationship
+from timeit import default_timer as timer
 
 class Local_Cluster_Access_Test(object):
     neograph_data = Graph("bolt://127.0.0.1:7693", auth=("neo4j", "changeme"))
@@ -13,6 +13,7 @@ class Local_Cluster_Access_Test(object):
         print(result)
 
     def run_test(self):
+        start_time = timer()
         thread_list = []
         queries = [["MATCH (n) WHERE n.name = 'Andy' RETURN n"], ["MATCH (n) RETURN n"]]
         for q in queries:
@@ -24,6 +25,11 @@ class Local_Cluster_Access_Test(object):
             print(thread.name)
             thread.start()
             thread.join()
+        total_time_sec = timer() - start_time
+        total_time_millis = total_time_sec * 1000
+
+        print("\nLocal_Cluster_Access_Test exec time -> sec: " + str(total_time_sec))
+        print("\nLocal_Cluster_Access_Test exec time -> millis: " + str(total_time_millis))
 
     # def get_overview(self):
     #     neograph_overview = Graph()
