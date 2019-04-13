@@ -188,14 +188,18 @@ class neo4j_test_2(object):
         for node in query_graph.nodes():
             print("Selected node: " + str(node))
             edges = list(query_graph.edges(node))
+
             # if len(edges) == 2:
             #     splits.append([node, edges])
+
+            # for stop in range(2, len(edges)+1):
+            #     splits.append([node, edges[0:stop]])
+
             print(edges)
-            for stop in range(2, len(edges)+1):
-                splits.append([node, edges[0:stop]])
+            splits.append([edges[0][0], edges])
         print()
-        # return splits
-        print(splits)
+        return splits
+        # print(splits)
 
     # def Query_Graph_Split_Parallel(self, nodes_chunk):
     #
