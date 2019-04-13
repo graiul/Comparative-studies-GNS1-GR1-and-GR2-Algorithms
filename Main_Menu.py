@@ -21,7 +21,8 @@ menu = [
     ["5. Run parallel db access test"],
     ["6. Run MatchSTwig"],
     ["7. Run STwig_Order_Selection"],
-    ["8. Configure cluster"],
+    ["8. Query graph zhaosun split prototype, single threaded"],
+    ["9. Configure cluster"],
     ["0. Exit"]
 ]
 print()
@@ -82,9 +83,23 @@ while(True):
         for m in menu:
             print(m)
 
-    elif option==8:
+
+    elif option == 8:
+        print("\n================= Option 8 commencing... =================")
+        print("Are these the query graph STWIGS?")
+        test2 = neo4j_test_2()
+        query_graph_gen = Graph_File_Generator()
+        query_graph = query_graph_gen.gen_zhaosun_query_graph()
+        splits = test2.Query_Graph_Split(query_graph)
+        for s in splits:
+            print(str(splits))
+        print("\n============== End of Option 8 execution =================")
+
+    elif option == 9:
         file = "notepad.exe neo4j_local_cluster_db\\docker-compose.yml"
         os.system(file)
+
+
 
     elif option == 0:
         exit(code=0)
