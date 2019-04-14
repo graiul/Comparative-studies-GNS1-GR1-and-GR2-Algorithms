@@ -19,7 +19,7 @@ class neo4j_test_2(object):
 
     def Cloud_Load(self, node_id):  # Pot rula inca o metoda?
         # print("Cloud_Load:")
-        # Pentru Zhaosun Data Graph din cluster neo4j:
+        # Pentru Zhaosun Data Graph din db neo4j:
         biglist = []
         # print("     id=" + str(node_id))
         cqlQuery = "MATCH (n) WHERE n.zhaosun_id = '" + str(node_id) + "' RETURN n"

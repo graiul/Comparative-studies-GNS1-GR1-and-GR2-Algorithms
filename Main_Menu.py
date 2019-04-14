@@ -1,5 +1,5 @@
 from Graph_File_Generator import Graph_File_Generator
-from Local_Cluster_Access_Test import Local_Cluster_Access_Test
+from DB_Access_Test import DB_Access_Test
 from Dataset_Operator import Dataset_Operator
 from neo4j_test_2 import neo4j_test_2
 import os
@@ -15,14 +15,14 @@ print("                         |___/              |___/                        
 
 menu = [
     ["\n\n1. Graph generator tool"],
-    ["2. Insert data into cluster"],
-    ["3. Delete data from cluster"],
+    ["2. Insert data into db"],
+    ["3. Delete data from db"],
     ["4. View graph data"],
     ["5. Run parallel db access test"],
     ["6. Run MatchSTwig"],
     ["7. Run STwig_Order_Selection"],
     ["8. Query graph zhaosun split prototype, single threaded"],
-    ["9. Configure cluster"],
+    ["9. Configure db"],
     ["0. Exit"]
 ]
 print()
@@ -47,13 +47,13 @@ while(True):
         username = str(input('\nUsername of core: '))
         passwd = str(input('\nPassword of core: '))
         dataset_operator = Dataset_Operator(None, None, leader_core_bolt_address, username, passwd)
-        dataset_operator.delete_data_from_cluster()
+        dataset_operator.delete_data_from_db()
         print()
         for m in menu:
             print(m)
     elif option == 5:
         print("\n================= Option 5 commencing... =================")
-        test = Local_Cluster_Access_Test()
+        test = DB_Access_Test()
         test.run_test()
         print("\n============== End of Option 5 execution =================")
         print()
@@ -96,7 +96,7 @@ while(True):
         print("\n============== End of Option 8 execution =================")
 
     elif option == 9:
-        file = "notepad.exe neo4j_local_cluster_db\\docker-compose.yml"
+        file = "notepad.exe neo4j_db\\docker-compose.yml"
         os.system(file)
 
 

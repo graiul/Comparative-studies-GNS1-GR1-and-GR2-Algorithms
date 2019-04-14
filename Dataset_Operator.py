@@ -15,7 +15,7 @@ class Dataset_Operator(object):
 
     def insert_nodes(self):
         neograph_data = Graph(self.leader_core_bolt_address, auth=(self.username, self.passwd))
-        # tx = neograph_data.begin() # LA VARIANTA CU NEO4J CA SI CLUSTER NU MERGE, NEO4j VER 3.3.1
+        # tx = neograph_data.begin() # LA VARIANTA CU NEO4J CA SI C NU MERGE, NEO4j VER 3.3.1
         cqlQuery = "LOAD CSV WITH HEADERS FROM '" + str(self.dataset_nodes_url) + "' AS line" \
                    " CREATE (:Node {  zhaosun_id: line.zhaosun_id, zhaosun_label: line.zhaosun_label})"
         # tx.run(cqlQuery)
@@ -31,7 +31,7 @@ class Dataset_Operator(object):
         # tx.run(cqlQuery)
         neograph_data.run(cqlQuery)
 
-    def delete_data_from_cluster(self):
+    def delete_data_from_db(self):
         neograph_data = Graph(self.leader_core_bolt_address, auth=(self.username, self.passwd))
         # tx = neograph_data.begin()
         cqlQuery = "MATCH (n) DETACH DELETE n"
