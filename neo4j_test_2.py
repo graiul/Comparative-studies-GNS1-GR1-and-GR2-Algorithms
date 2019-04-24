@@ -247,7 +247,7 @@ class neo4j_test_2(object):
         # print("deg: " + str(deg))
         # print("neighbors: " + str(list(query_graph.neighbors(v))))
         # print(query_graph.node[v_id]['label'])
-        return deg / self.freq(query_graph.node[v_id]['label'])
+        return deg / self.freq_NX(query_graph.node[v_id]['label'], query_graph)
 
     def freq(self, v_label):
         # tx = self.neograph_data.begin() # Pentru graful data Zhaosun!
@@ -258,14 +258,25 @@ class neo4j_test_2(object):
         result = self.neograph_data.run(cqlQuery)
         return len(list(result))
 
+    def freq_NX(self, label, query_graph_nx):
+        counter = 0
+        for node in query_graph_nx.nodes():
+            if query_graph_nx.node[node]['label'] is label:
+                counter += 1
+        return counter
+
+
     def get_neo4j_stwig_root(self, Cloud_Load_Resulting_STIWGS):
         # print("get_neo4j_stwig_root: ")
         # print("STwig: " + str(Cloud_Load_Resulting_STIWGS))
-        aux = str(Cloud_Load_Resulting_STIWGS).split("id: '")[1]
-        root_trimmed = str(aux).split("',")[0]
+        print("Cloud_Load_Resulting_STIWGS: " + str(Cloud_Load_Resulting_STIWGS))
+        # aux = str(Cloud_Load_Resulting_STIWGS).split("id: '")[1]
+        # root_trimmed = str(aux).split("',")[0]
         # print("root_trimmed: " + str(root_trimmed))
         # print("End get_neo4j_stwig_root")
-        return root_trimmed
+        # return root_trimmed
+        root = Cloud_Load_Resulting_STIWGS[0]
+        return root
 
     def get_neo4j_stwig_node_trim(self, stwig_node_to_trim):
         # print("STwig node to trim: " + str(stwig_node_to_trim))
@@ -287,14 +298,15 @@ class neo4j_test_2(object):
         # print("End get_neo4j_STwig_with_root")
         return trimmed_nodes
 
-    def neighbors_of_node(self, node):
+    def neighbors_of_node(self, node, query_graph_nx):
         # print("neighbors_of_node execution:")
-        Cloud_Load_Resulting_STIWG = self.Cloud_Load(node)[0][1]
+        # Cloud_Load_Resulting_STIWG = self.Cloud_Load(node)[0][1]
+        Cloud_Load_Resulting_STIWG = self.Cloud_Load_NX(node, query_graph_nx)
         # print(Cloud_Load_Resulting_STIWG)
         return Cloud_Load_Resulting_STIWG
 
-    def degree_of_node(self, node):
-        neighbors = self.neighbors_of_node(node)
+    def degree_of_node(self, node, query_graph_nx):
+        neighbors = self.neighbors_of_node(node, query_graph_nx)
         deg = len(neighbors)
         return deg
 
@@ -303,7 +315,8 @@ class neo4j_test_2(object):
         T = []
         dict_f_values_query_graph = {}
         picked_edge = None
-        while len(query_graph.edges()) > 0:
+        query_graph_edges = list(query_graph.edges())
+        while len(query_graph_edges) > 0:
             sum_start_time = timer()
 
             for edge in query_graph.edges():
@@ -340,18 +353,23 @@ class neo4j_test_2(object):
 
 
             print("Working on picked_edge[0] = " + str(picked_edge[0]))
-            Cloud_Load_Resulting_STIWG = self.Cloud_Load(picked_edge[0])
+            Cloud_Load_Resulting_STIWG = self.Cloud_Load_NX(picked_edge[0], query_graph)
             # print("Cloud_Load_Resulting_STIWG: " + str(Cloud_Load_Resulting_STIWG))
-            q_root = self.get_neo4j_stwig_root(Cloud_Load_Resulting_STIWG) # DE FACUT TRIM SI LA SF!
-            Tv = self.get_neo4j_STwig_with_root(q_root, Cloud_Load_Resulting_STIWG)
+            # q_root = self.get_neo4j_stwig_root(Cloud_Load_Resulting_STIWG)
+            q_root = Cloud_Load_Resulting_STIWG[0]
+            # Tv = self.get_neo4j_STwig_with_root(q_root, Cloud_Load_Resulting_STIWG)
+            Tv = Cloud_Load_Resulting_STIWG
             print("     STWIG formatted also having the root at first elem; Tv = " + str(Tv))
             T.append(Tv)
             # Neighbors of v
-            neighbors = self.Cloud_Load(picked_edge[0])
+            neighbors = self.Cloud_Load_NX(picked_edge[0], query_graph)
             print("     Neighbors of picked_edge[0] = " + str(picked_edge[0]) + ": ")
-            for n in neighbors[0][1]:
-                print("     " + str(self.get_neo4j_stwig_node_trim(n)))
-                S.append(self.get_neo4j_stwig_node_trim(n))
+            # for n in neighbors[0][1]:
+            for n in neighbors[1]:
+                # print("     " + str(self.get_neo4j_stwig_node_trim(n)))
+                print("     " + str(n))
+                # S.append(self.get_neo4j_stwig_node_trim(n))
+                S.append(n)
                 # Acum, vecinul adaugat in S ar trebui eliminat din multimea vecinilor nodului ales.
                 # Astfel, degree-ul scade, iar algoritmul se incheie.
 
@@ -361,22 +379,22 @@ class neo4j_test_2(object):
             root = Tv[0]
             # print("Root: " + root)
             Tv.remove(root)
-            for tv_elem in Tv:
+            for tv_elem in Tv[0]:
                 Tv_edges.append([root, tv_elem])
             print("     Edges in Tv: " + str(Tv_edges))
             print("     Query graph edges: " + str(query_graph.edges()))
             print("     Comparing of edges and removal: ")
-            print("     Nr of edges to be removed: " + str(len(Tv_edges)))
-            print("     Nr of edges total: " + str(len(query_graph.edges())))
-            query_graph_edges = list(query_graph.edges())
-            print("     Edges found that will be removed: ")
+            print("         Nr of edges to be removed: " + str(len(Tv_edges)))
+            print("         Nr of edges total: " + str(len(query_graph.edges())))
+            # query_graph_edges = list(query_graph.edges())
+            print("         Edges found that will be removed: ")
             for tv_edge in Tv_edges:
                 for query_edge in query_graph.edges():
                     # print(set(tv_edge))
                     # print(set(query_edge))
                     # print("-----------")
                     if set(tv_edge) == set(query_edge):
-                        print("     tv_edge == query_edge: " + str(tv_edge))
+                        print("         tv_edge == query_edge: " + str(tv_edge))
                         try:
                             query_graph_edges.remove(tuple(tv_edge))
                         except:
@@ -388,18 +406,19 @@ class neo4j_test_2(object):
             print("     Nr of edges total after removal: " + str(len(query_graph_edges)))
 
             print("\nWorking on picked_edge[1] = " + str(picked_edge[1]))
-            print("     Deg of node u, picked_edge[1]: " + str(self.degree_of_node(picked_edge[1])))
-            if self.degree_of_node(picked_edge[1]) > 0:
-                Cloud_Load_Resulting_STIWG = self.Cloud_Load(picked_edge[1])
-                q_root = self.get_neo4j_stwig_root(Cloud_Load_Resulting_STIWG)
-                Tu = self.get_neo4j_STwig_with_root(q_root, Cloud_Load_Resulting_STIWG)
+            print("     Deg of node u, picked_edge[1]: " + str(self.degree_of_node(picked_edge[1], query_graph)))
+            if self.degree_of_node(picked_edge[1], query_graph) > 0:
+                Cloud_Load_Resulting_STIWG = self.Cloud_Load_NX(picked_edge[1], query_graph)
+                # q_root = self.get_neo4j_stwig_root(Cloud_Load_Resulting_STIWG)
+                q_root = Cloud_Load_Resulting_STIWG[0]
+                # Tu = self.get_neo4j_STwig_with_root(q_root, Cloud_Load_Resulting_STIWG)
+                Tu = Cloud_Load_Resulting_STIWG
                 print("     STWIG formatted also having the root at first elem; Tu: " + str(Tu))
                 T.append(Tu)
-
                 Tu_edges = []
                 root = Tu[0]
                 Tu.remove(root)
-                for tu_elem in Tu:
+                for tu_elem in Tu[0]:
                     Tu_edges.append([root, tu_elem])
                 print("     Edges in Tu: " + str(Tu_edges))
                 print("     Query graph edges: " + str(query_graph.edges()))
@@ -420,14 +439,16 @@ class neo4j_test_2(object):
                                     query_graph_edges.remove(tu_edge[::-1])
                                 except:
                                     continue
-                neighbors = self.Cloud_Load(picked_edge[1])
+                neighbors = self.Cloud_Load_NX(picked_edge[1], query_graph)
                 print("     Neighbors of " + str(picked_edge[1]) + ": ")
-                for n in neighbors[0][1]:
-                    print(self.get_neo4j_stwig_node_trim(n))
-                    S.append(self.get_neo4j_stwig_node_trim(n))
+                for n in neighbors[1]:
+                    # print(self.get_neo4j_stwig_node_trim(n))
+                    # S.append(self.get_neo4j_stwig_node_trim(n))
+                    print("     " + str(n))
+                    S.append(n)
                 print("     S: " + str(S))
             for s in S:
-                print("     Degree of node " + str(s) + " from S:" + str(self.degree_of_node(s)))
+                print("     Degree of node " + str(s) + " from S:" + str(self.degree_of_node(s, query_graph)))
 
 
 # #BIG DATA GRAPH FROM RI DB############################################
