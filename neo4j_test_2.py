@@ -45,6 +45,18 @@ class neo4j_test_2(object):
         # print("End Cloud_Load")
         return biglist
 
+    def Cloud_Load_NX(self, node_ID, query_graph_nx):
+        result_node = None
+        for node in query_graph_nx.nodes():
+            if node is node_ID:
+                result_node = node
+        nodes_loaded = []
+        nodes_loaded.append(result_node)
+        result_neighbors = list(query_graph_nx.neighbors(node_ID))
+        nodes_loaded.append(result_neighbors)
+        return nodes_loaded
+
+
     def Index_getID(self, label):
         # tx = self.neograph_data.begin()
         # cqlQuery = "MATCH (n:`" + str(label) + "`) RETURN n.RI_id"
@@ -55,6 +67,13 @@ class neo4j_test_2(object):
         for r in result:
             nodes_loaded.append(r[0])
         return nodes_loaded
+
+    def Index_getID_NX(self, label, query_graph_nx):
+        result = []
+        for query_node in query_graph_nx.nodes():
+            if query_graph_nx.node[query_node]['label'] is label:
+                result.append(query_node)
+            return result
 
     # def Index_hasLabel(self, RI_id, label):
     def Index_hasLabel(self, node_id, label):
@@ -73,6 +92,14 @@ class neo4j_test_2(object):
         else:
             # print("End Index_hasLabel")
             return False
+
+    def Index_hasLabel_NX(self, node_id, label, query_graph_nx):
+        for query_node in query_graph_nx.nodes():
+            if query_node is node_id:
+                if query_graph_nx.node[query_node]['label'] is label:
+                    return True
+                else:
+                    return False
 
     def MatchSTwig(self, q): # q 1 = (a,{b,c}) din articol, [a, [b,c]] in py. Acest q1 (STwig din query graph)si altele vor fi date de STwigOrderSelection care lucreaza cu graful query.
         print("IF QUERY STWIG IS UNDIRECTED, THEN MULTIPLE RESULTS ARE GIVEN "
@@ -465,7 +492,7 @@ class neo4j_test_2(object):
 # Mai ramane de adaugat M2 si M3 din graful de la fig 5
 # SMALL DATA GRAPH FROM ZHAOSUN############################################
 
-# test2 = neo4j_test_2()
+test2 = neo4j_test_2()
 # print(test2.Cloud_Load(1)) # VECINATATE DE GRADUL 1, toate nodurile indeg/outdeg?
 # print(test2.Index_getID(1))
 # print(test2.Index_hasLabel(1, 3322))
@@ -478,7 +505,11 @@ class neo4j_test_2(object):
 # node_attr = ["a", "b", "c", "d", "e", "f"]
 # node_attr_dict = dict(zip(sorted(query_graph.nodes()), node_attr))
 # nx.set_node_attributes(query_graph, node_attr_dict, 'label')
-# print(query_graph.nodes(data=True))
+# print(query_graph.nodes())
+# print(test2.Cloud_Load_NX("a1", query_graph))
+# print(test2.Index_getID_NX("a", query_graph))
+# print(test2.Index_hasLabel_NX("a1", "a", query_graph))
+
 
 # Caching technique pentru accesul la baza de date?
 
