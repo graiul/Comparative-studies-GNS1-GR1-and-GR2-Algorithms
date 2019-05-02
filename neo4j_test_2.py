@@ -317,9 +317,12 @@ class neo4j_test_2(object):
 
     def STwig_Order_Selection(self):
         S = []
+        S_no_dup = []
+
         T = []
         dict_f_values_query_graph = {}
         dict_f_values_query_graph_2 = {}
+        dict_f_values_query_graph_in_S = {}
 
         picked_edge = None
         # query_graph_edges = list(self.query_graph.edges())
@@ -337,7 +340,7 @@ class neo4j_test_2(object):
                 print("Exec len(s) == 0")
                 for edge in list(self.query_graph.edges()):
                     sum = self.f_value(edge[0]) + self.f_value(edge[1])
-                    print("Sum: " + str(sum))
+                    # print("Sum: " + str(sum))
                     dict_f_values_query_graph[edge] = sum
 
                 print("Dict of edges and f_value sum of nodes of each edge: ")
@@ -363,9 +366,11 @@ class neo4j_test_2(object):
                 # the largest
                 print("Exec of elif: ")
                 print("S elif: " + str(S))
-
+                print("Query graph edges; must shrink: ")
+                # Trebuie resetat dictionarul:
+                dict_f_values_query_graph_2.clear()
                 for edge in list(self.query_graph.edges()):
-                    # print(str(edge))
+                    print(str(edge))
                     sum2 = self.f_value(edge[0]) + self.f_value(edge[1])
                     # print("     Sum2: " + str(sum2))
                     dict_f_values_query_graph_2[edge] = sum2
@@ -374,37 +379,42 @@ class neo4j_test_2(object):
                 for item in dict_f_values_query_graph_2.items():
                     print("     " + str(item))
 
+                # Trebuie resetat dictionarul care in care se afla muchiile care au primul nod in S:
+                dict_f_values_query_graph_in_S.clear()
+
                 for edge in list(self.query_graph.edges()):
-                    print("Edge in remaining query graph edges: " + str(edge))
+                    print("Edge selected from total remaining query graph edges: " + str(edge))
+
                     for elem in S:
+                        # pick an edge (v, u) such that v ∈ S
+                        print("     Elem in S: " + str(elem))
                         if edge[0] in elem:
+
+
                             print("     edge[0] = " + str(edge[0]) + str(" in S"))
-
-                            index2, value2 = max(enumerate(list(dict_f_values_query_graph_2.values())),
-                                                 key=operator.itemgetter(1))
-                            print("     Max val: " + str(value2))
-                            print("     Max val index: " + str(index2))
-
-                            picked_edge = list(dict_f_values_query_graph_2.keys())[index2]
-                            print("     Picked edge2: " + str(picked_edge))
-                        else:
-                            print("     edge[0] = " + str(edge[0]) + str(" not in S"))
+                            for key_for_S_dict, value_for_S_dict in dict_f_values_query_graph_2.items():
+                                if key_for_S_dict[0] == edge[0]:
+                                    dict_f_values_query_graph_in_S[edge] = self.f_value(edge[0]) + self.f_value(edge[1])
                             break
-                print("End exec elif.")
-                # print("Len S on elif: " + str(len(S)))
-                # index2, value2 = max(enumerate(list(dict_f_values_query_graph.values())), key=operator.itemgetter(1))
-                # print("Max val elif: " + str(value2))
-                # print("Max val index elif: " + str(index2))
-                # # for edge in query_graph_edges:
-                # #     sum2 = self.f_value(edge[0]) + self.f_value(edge[1])
-                # #     print("sum2: " + str(sum2))
-                # print("edge[0]: " + str(edge[0]))
-                # if edge[0] in S and sum2 == value2:
-                #     print("YES")
-                #     picked_edge = edge
-                #     print("Picked edge on 'else' branch: " + str(picked_edge))
-                #     break
+                        # else:
+                        #     print("     edge[0] = " + str(edge[0]) + str(" not in S elem"))
+                        #     continue
+                print("dict_f_values_query_graph_in_S: ")
+                for item in dict_f_values_query_graph_in_S.items():
+                    print("     " + str(item))
+                print("S end elif: " + str(S))
+                # and f(u) + f(v) is the largest
+                index_S, value_S = max(enumerate(list(dict_f_values_query_graph_in_S.values())),
+                                     key=operator.itemgetter(1))
+                print("     Max val: " + str(value_S))
+                print("     Max val index: " + str(index_S))
 
+                picked_edge_S = list(dict_f_values_query_graph_in_S.keys())[index_S]
+
+                print("     Picked edge_S: " + str(picked_edge_S))
+                picked_edge = picked_edge_S
+                print("Picked edge: " + str(picked_edge))
+                print("End exec elif.")
 
             print("Working on picked_edge[0] (v) = " + str(picked_edge[0]))
             # Tv ←the STwig rooted at v
@@ -423,7 +433,17 @@ class neo4j_test_2(object):
                 break
             S.append(neighbors)
             print("S: " + str(S))
+            # Scoaterea duplicatelor din S:
+            for elem in S:
+                for el in elem:
+                    if el not in S_no_dup:
+                        S_no_dup.append(el)
+            print("S, no duplicates: ")
+            print(S_no_dup)
             print("Length of query graph edge list: " + str(len(list(self.query_graph.edges()))))
+            print("T: ")
+            for tv in T:
+                print(tv)
             edges_to_remove = []
             for n in neighbors:
                 edges_to_remove.append([Tv[0], n])
@@ -431,8 +451,9 @@ class neo4j_test_2(object):
             for edge_to_rem in edges_to_remove:
                 self.query_graph.remove_edge(edge_to_rem[0], edge_to_rem[1])
             print("Length of query graph edge list after removal: " + str(len(list(self.query_graph.edges()))))
-            # Trebuie sa elimin si nodurile singulare ramase?
-            print()
+
+
+            # Trebuie sa elimin si nodurile singulare ramase? RASPUNS: Nu.
             # # Neighbors of v
             # neighbors = self.Cloud_Load_NX(picked_edge[0], self.query_graph)
             # print("     neighbors: " + str(neighbors[1]))
