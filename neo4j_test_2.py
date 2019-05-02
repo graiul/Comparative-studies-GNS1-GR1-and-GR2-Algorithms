@@ -2,6 +2,7 @@ import threading
 from concurrent.futures.thread import ThreadPoolExecutor
 from multiprocessing.dummy import Pool as ThreadPool
 
+from networkx import neighbors
 from py2neo import Graph, Node, Relationship
 import networkx as nx
 import copy
@@ -11,6 +12,10 @@ import itertools
 from timeit import default_timer as timer
 
 class neo4j_test_2(object):
+
+    query_graph = None
+    def __init__(self, query_graph):
+        self.query_graph = query_graph
 
     # neograph_data = Graph(port="7687", user="neo4j", password="graph") # Data Graph Zhaosun
     neograph_data = Graph("bolt://127.0.0.1:7693", auth=("neo4j", "changeme")) # Data Graph Zhaosun din READ_REPLICA
@@ -242,12 +247,12 @@ class neo4j_test_2(object):
     #     print("Splits: ")
     #     print(splits)
 
-    def f_value(self, v_id, query_graph):
-        deg = len(list(query_graph.neighbors(v_id)))
+    def f_value(self, v_id):
+        deg = len(list(self.query_graph.neighbors(v_id)))
         # print("deg: " + str(deg))
         # print("neighbors: " + str(list(query_graph.neighbors(v))))
         # print(query_graph.node[v_id]['label'])
-        return deg / self.freq_NX(query_graph.node[v_id]['label'], query_graph)
+        return deg / self.freq_NX(self.query_graph.node[v_id]['label'], self.query_graph)
 
     def freq(self, v_label):
         # tx = self.neograph_data.begin() # Pentru graful data Zhaosun!
@@ -310,145 +315,215 @@ class neo4j_test_2(object):
         deg = len(neighbors)
         return deg
 
-    def STwig_Order_Selection(self, query_graph):
+    def STwig_Order_Selection(self):
         S = []
         T = []
         dict_f_values_query_graph = {}
+        dict_f_values_query_graph_2 = {}
+
         picked_edge = None
-        query_graph_edges = list(query_graph.edges())
-        while len(query_graph_edges) > 0:
-            sum_start_time = timer()
-
-            for edge in query_graph.edges():
-                sum = self.f_value(edge[0], query_graph) + self.f_value(edge[1], query_graph)
-                print("Sum: " + str(sum))
-                dict_f_values_query_graph[edge] = sum
-
-            sum_total_time_sec = timer() - sum_start_time
-            sum_total_time_millis = sum_total_time_sec * 1000
-
-            print("\nSum exec time -> sec: " + str(sum_total_time_sec))
-            print("Sum exec time -> millis: " + str(sum_total_time_millis))
-            print()
+        # query_graph_edges = list(self.query_graph.edges())
+        while len(list(self.query_graph.edges())) > 0:
+            # sum_start_time = timer()
+            # sum_total_time_sec = timer() - sum_start_time
+            # sum_total_time_millis = sum_total_time_sec * 1000
+            # print("\nSum exec time -> sec: " + str(sum_total_time_sec))
+            # print("Sum exec time -> millis: " + str(sum_total_time_millis))
+            # print()
+            # print("----------------")
 
             if len(S) == 0:
-                # print(dict_f_values_query_graph.items())
+                # pick an edge (v, u) such that f(u) + f(v) is the largest
+                print("Exec len(s) == 0")
+                for edge in list(self.query_graph.edges()):
+                    sum = self.f_value(edge[0]) + self.f_value(edge[1])
+                    print("Sum: " + str(sum))
+                    dict_f_values_query_graph[edge] = sum
+
+                print("Dict of edges and f_value sum of nodes of each edge: ")
+                for item in dict_f_values_query_graph.items():
+                    print("     " + str(item))
+
                 index, value = max(enumerate(list(dict_f_values_query_graph.values())), key=operator.itemgetter(1))
-                # print("Max val: " + str(value))
-                # print("Max val index: " + str(index))
+                print("Max sum val for edge: " + str(value))
+                # In articol la liniile 5 si 7 din Alg 2 zice "pick AN edge", adica muchia cu val f cea mai
+                # mare, iar daca exista doua valori maxime egale aleg prima muchie cu val f maxima.
+                print("Max sum val, index of edge: " + str(index))
                 picked_edge = list(dict_f_values_query_graph.keys())[index]
+
                 print("Picked edge: " + str(picked_edge))
+                # del dict_f_values_query_graph[picked_edge]
+                print("End exec len(s) == 0")
 
 
 
             # TREBUIE SA SCADA DEGREE, TREBUIE INLATURATI VECINII PUSI IN S DIN VECINII NODULUI SELECTAT.
-            # else:
-            #     index2, value2 = max(enumerate(list(dict_f_values_query_graph.values())), key=operator.itemgetter(1))
-            #     for edge in query_graph.edges():
-            #         sum2 = self.f_value(edge[0], query_graph) + self.f_value(edge[1], query_graph)
-            #         if edge[0] in S and sum2 == value2:
-            #             picked_edge = edge
-            #             print("Picked edge on 'else' branch: " + str(picked_edge))
-            #             break
+            elif len(S) > 0:
+                # pick an edge (v, u) such that v ∈ S and f(u) + f(v) is
+                # the largest
+                print("Exec of elif: ")
+                print("S elif: " + str(S))
+
+                for edge in list(self.query_graph.edges()):
+                    # print(str(edge))
+                    sum2 = self.f_value(edge[0]) + self.f_value(edge[1])
+                    # print("     Sum2: " + str(sum2))
+                    dict_f_values_query_graph_2[edge] = sum2
+
+                print("Dict of edges and f_value sum of nodes of each edge: ")
+                for item in dict_f_values_query_graph_2.items():
+                    print("     " + str(item))
+
+                for edge in list(self.query_graph.edges()):
+                    print("Edge in remaining query graph edges: " + str(edge))
+                    for elem in S:
+                        if edge[0] in elem:
+                            print("     edge[0] = " + str(edge[0]) + str(" in S"))
+
+                            index2, value2 = max(enumerate(list(dict_f_values_query_graph_2.values())),
+                                                 key=operator.itemgetter(1))
+                            print("     Max val: " + str(value2))
+                            print("     Max val index: " + str(index2))
+
+                            picked_edge = list(dict_f_values_query_graph_2.keys())[index2]
+                            print("     Picked edge2: " + str(picked_edge))
+                        else:
+                            print("     edge[0] = " + str(edge[0]) + str(" not in S"))
+                            break
+                print("End exec elif.")
+                # print("Len S on elif: " + str(len(S)))
+                # index2, value2 = max(enumerate(list(dict_f_values_query_graph.values())), key=operator.itemgetter(1))
+                # print("Max val elif: " + str(value2))
+                # print("Max val index elif: " + str(index2))
+                # # for edge in query_graph_edges:
+                # #     sum2 = self.f_value(edge[0]) + self.f_value(edge[1])
+                # #     print("sum2: " + str(sum2))
+                # print("edge[0]: " + str(edge[0]))
+                # if edge[0] in S and sum2 == value2:
+                #     print("YES")
+                #     picked_edge = edge
+                #     print("Picked edge on 'else' branch: " + str(picked_edge))
+                #     break
 
 
-            print("Working on picked_edge[0] = " + str(picked_edge[0]))
-            Cloud_Load_Resulting_STIWG = self.Cloud_Load_NX(picked_edge[0], query_graph)
-            # print("Cloud_Load_Resulting_STIWG: " + str(Cloud_Load_Resulting_STIWG))
-            # q_root = self.get_neo4j_stwig_root(Cloud_Load_Resulting_STIWG)
-            q_root = Cloud_Load_Resulting_STIWG[0]
-            # Tv = self.get_neo4j_STwig_with_root(q_root, Cloud_Load_Resulting_STIWG)
-            Tv = Cloud_Load_Resulting_STIWG
+            print("Working on picked_edge[0] (v) = " + str(picked_edge[0]))
+            # Tv ←the STwig rooted at v
+            Tv = self.Cloud_Load_NX(picked_edge[0], self.query_graph)
+            # # print("Cloud_Load_Resulting_STIWG: " + str(Cloud_Load_Resulting_STIWG))
+            # # q_root = self.get_neo4j_stwig_root(Cloud_Load_Resulting_STIWG)
+            # q_root = Cloud_Load_Resulting_STIWG[0]
+            # # Tv = self.get_neo4j_STwig_with_root(q_root, Cloud_Load_Resulting_STIWG)
             print("     STWIG formatted also having the root at first elem; Tv = " + str(Tv))
+            # add Tv to T
             T.append(Tv)
-            # Neighbors of v
-            neighbors = self.Cloud_Load_NX(picked_edge[0], query_graph)
-            print("     Neighbors of picked_edge[0] = " + str(picked_edge[0]) + ": ")
-            # for n in neighbors[0][1]:
-            for n in neighbors[1]:
-                # print("     " + str(self.get_neo4j_stwig_node_trim(n)))
-                print("     " + str(n))
-                # S.append(self.get_neo4j_stwig_node_trim(n))
-                S.append(n)
-                # Acum, vecinul adaugat in S ar trebui eliminat din multimea vecinilor nodului ales.
-                # Astfel, degree-ul scade, iar algoritmul se incheie.
+            # S ← S∪ neighbor(v), v este picked_edge[0]
+            neighbors = self.Cloud_Load_NX(picked_edge[0], self.query_graph)[1]
+            if len(neighbors) == 0:
+                print("No neighbors left.")
+                break
+            S.append(neighbors)
+            print("S: " + str(S))
+            print("Length of query graph edge list: " + str(len(list(self.query_graph.edges()))))
+            edges_to_remove = []
+            for n in neighbors:
+                edges_to_remove.append([Tv[0], n])
+            print("Edges to remove: " + str(edges_to_remove))
+            for edge_to_rem in edges_to_remove:
+                self.query_graph.remove_edge(edge_to_rem[0], edge_to_rem[1])
+            print("Length of query graph edge list after removal: " + str(len(list(self.query_graph.edges()))))
+            # Trebuie sa elimin si nodurile singulare ramase?
+            print()
+            # # Neighbors of v
+            # neighbors = self.Cloud_Load_NX(picked_edge[0], self.query_graph)
+            # print("     neighbors: " + str(neighbors[1]))
+            # neighbors_copy_to_remove_from = copy.deepcopy(neighbors[1])
+            # print("     neighbors_copy_to_remove_from = " + str(neighbors_copy_to_remove_from))
+            # print("     Neighbors of picked_edge[0] = " + str(picked_edge[0]) + ": ")
+            # # for n in neighbors[0][1]:
+            # for n in neighbors[1]:
+            #     # print("     " + str(self.get_neo4j_stwig_node_trim(n)))
+            #     print("     " + str(n))
+            #     # S.append(self.get_neo4j_stwig_node_trim(n))
+            #     S.append(n)
+            #     # Acum, vecinul adaugat in S ar trebui eliminat din multimea vecinilor nodului ales.
+            #     # Astfel, degree-ul scade, iar algoritmul se incheie.
+            #     neighbors_copy_to_remove_from.remove(n)
+            # print("     neighbors_copy_to_remove_from = " + str(neighbors_copy_to_remove_from))
+            # print("     S: " + str(S))
+            # Tv_edges = []
+            # root = Tv[0]
+            # # print("Root: " + root)
+            # Tv.remove(root)
+            # for tv_elem in Tv[0]:
+            #     Tv_edges.append([root, tv_elem])
+            # print("     Edges in Tv: " + str(Tv_edges))
+            # print("     Query graph edges: " + str(self.query_graph.edges()))
+            # print("     Comparing of edges and removal: ")
+            # print("         Nr of edges to be removed: " + str(len(Tv_edges)))
+            # print("         Nr of edges total: " + str(len(query_graph_edges)))
+            # # query_graph_edges = list(query_graph.edges())
+            # print("         Edges found that will be removed: ")
+            # for tv_edge in Tv_edges:
+            #     for query_edge in query_graph_edges:
+            #         # print(set(tv_edge))
+            #         # print(set(query_edge))
+            #         # print("-----------")
+            #         if set(tv_edge) == set(query_edge):
+            #             print("         tv_edge == query_edge: " + str(tv_edge))
+            #             try:
+            #                 query_graph_edges.remove(tuple(tv_edge))
+            #             except:
+            #                 try:
+            #                     query_graph_edges.remove(tuple(tv_edge[::-1]))
+            #                 except:
+            #                     continue
+            # print("     List of edges after removal: " + str(query_graph_edges))
+            # print("     Nr of edges total after removal: " + str(len(query_graph_edges)))
 
-
-            print("     S: " + str(S))
-            Tv_edges = []
-            root = Tv[0]
-            # print("Root: " + root)
-            Tv.remove(root)
-            for tv_elem in Tv[0]:
-                Tv_edges.append([root, tv_elem])
-            print("     Edges in Tv: " + str(Tv_edges))
-            print("     Query graph edges: " + str(query_graph.edges()))
-            print("     Comparing of edges and removal: ")
-            print("         Nr of edges to be removed: " + str(len(Tv_edges)))
-            print("         Nr of edges total: " + str(len(query_graph.edges())))
-            # query_graph_edges = list(query_graph.edges())
-            print("         Edges found that will be removed: ")
-            for tv_edge in Tv_edges:
-                for query_edge in query_graph.edges():
-                    # print(set(tv_edge))
-                    # print(set(query_edge))
-                    # print("-----------")
-                    if set(tv_edge) == set(query_edge):
-                        print("         tv_edge == query_edge: " + str(tv_edge))
-                        try:
-                            query_graph_edges.remove(tuple(tv_edge))
-                        except:
-                            try:
-                                query_graph_edges.remove(tuple(tv_edge[::-1]))
-                            except:
-                                continue
-            print("     List of edges after removal: " + str(query_graph_edges))
-            print("     Nr of edges total after removal: " + str(len(query_graph_edges)))
-
-            print("\nWorking on picked_edge[1] = " + str(picked_edge[1]))
-            print("     Deg of node u, picked_edge[1]: " + str(self.degree_of_node(picked_edge[1], query_graph)))
-            if self.degree_of_node(picked_edge[1], query_graph) > 0:
-                Cloud_Load_Resulting_STIWG = self.Cloud_Load_NX(picked_edge[1], query_graph)
-                # q_root = self.get_neo4j_stwig_root(Cloud_Load_Resulting_STIWG)
-                q_root = Cloud_Load_Resulting_STIWG[0]
-                # Tu = self.get_neo4j_STwig_with_root(q_root, Cloud_Load_Resulting_STIWG)
-                Tu = Cloud_Load_Resulting_STIWG
-                print("     STWIG formatted also having the root at first elem; Tu: " + str(Tu))
-                T.append(Tu)
-                Tu_edges = []
-                root = Tu[0]
-                Tu.remove(root)
-                for tu_elem in Tu[0]:
-                    Tu_edges.append([root, tu_elem])
-                print("     Edges in Tu: " + str(Tu_edges))
-                print("     Query graph edges: " + str(query_graph.edges()))
-                print("     Comparing of edges and removal: ")
-                print("     Nr of edges to be removed: " + str(len(Tu_edges)))
-                print("     Nr of edges total: " + str(len(query_graph.edges())))
-                for tu_edge in Tu_edges:
-                    for query_edge in query_graph.edges():
-                        # print(set(tu_edge))
-                        # print(set(query_edge))
-                        # print("-----------")
-                        if set(tu_edge) == set(query_edge):
-                            print(tu_edge)
-                            try:
-                                query_graph_edges.remove(tu_edge)
-                            except:
-                                try:
-                                    query_graph_edges.remove(tu_edge[::-1])
-                                except:
-                                    continue
-                neighbors = self.Cloud_Load_NX(picked_edge[1], query_graph)
-                print("     Neighbors of " + str(picked_edge[1]) + ": ")
-                for n in neighbors[1]:
-                    # print(self.get_neo4j_stwig_node_trim(n))
-                    # S.append(self.get_neo4j_stwig_node_trim(n))
-                    print("     " + str(n))
-                    S.append(n)
-                print("     S: " + str(S))
-            for s in S:
-                print("     Degree of node " + str(s) + " from S:" + str(self.degree_of_node(s, query_graph)))
+            # print("\nWorking on picked_edge[1] = " + str(picked_edge[1]))
+            # print("     Deg of node u, picked_edge[1]: " + str(self.degree_of_node(picked_edge[1], query_graph)))
+            # if self.degree_of_node(picked_edge[1], query_graph) > 0:
+            #     Cloud_Load_Resulting_STIWG = self.Cloud_Load_NX(picked_edge[1], query_graph)
+            #     # q_root = self.get_neo4j_stwig_root(Cloud_Load_Resulting_STIWG)
+            #     q_root = Cloud_Load_Resulting_STIWG[0]
+            #     # Tu = self.get_neo4j_STwig_with_root(q_root, Cloud_Load_Resulting_STIWG)
+            #     Tu = Cloud_Load_Resulting_STIWG
+            #     print("     STWIG formatted also having the root at first elem; Tu: " + str(Tu))
+            #     T.append(Tu)
+            #     Tu_edges = []
+            #     root = Tu[0]
+            #     Tu.remove(root)
+            #     for tu_elem in Tu[0]:
+            #         Tu_edges.append([root, tu_elem])
+            #     print("     Edges in Tu: " + str(Tu_edges))
+            #     print("     Query graph edges: " + str(query_graph.edges()))
+            #     print("     Comparing of edges and removal: ")
+            #     print("     Nr of edges to be removed: " + str(len(Tu_edges)))
+            #     print("     Nr of edges total: " + str(len(query_graph.edges())))
+            #     for tu_edge in Tu_edges:
+            #         for query_edge in query_graph.edges():
+            #             # print(set(tu_edge))
+            #             # print(set(query_edge))
+            #             # print("-----------")
+            #             if set(tu_edge) == set(query_edge):
+            #                 print(tu_edge)
+            #                 try:
+            #                     query_graph_edges.remove(tu_edge)
+            #                 except:
+            #                     try:
+            #                         query_graph_edges.remove(tu_edge[::-1])
+            #                     except:
+            #                         continue
+            #     neighbors = self.Cloud_Load_NX(picked_edge[1], query_graph)
+            #     print("     Neighbors of " + str(picked_edge[1]) + ": ")
+            #     for n in neighbors[1]:
+            #         # print(self.get_neo4j_stwig_node_trim(n))
+            #         # S.append(self.get_neo4j_stwig_node_trim(n))
+            #         print("     " + str(n))
+            #         S.append(n)
+            #     print("     S: " + str(S))
+            # for s in S:
+            #     print("     Degree of node " + str(s) + " from S:" + str(self.degree_of_node(s, query_graph)))
 
 
 # #BIG DATA GRAPH FROM RI DB############################################
@@ -513,13 +588,15 @@ class neo4j_test_2(object):
 # Mai ramane de adaugat M2 si M3 din graful de la fig 5
 # SMALL DATA GRAPH FROM ZHAOSUN############################################
 
-test2 = neo4j_test_2()
+
+# Testare metode access graf query graf data RI
+# test2 = neo4j_test_2()
 # print(test2.Cloud_Load(1)) # VECINATATE DE GRADUL 1, toate nodurile indeg/outdeg?
 # print(test2.Index_getID(1))
 # print(test2.Index_hasLabel(1, 3322))
 
 
-
+# Testare metode access graf query graf data RI
 # query_graph = nx.Graph()
 # query_graph_edges = [["a1", "b1"], ["a1", "c1"], ["c1", "d1"], ["c1", "f1"], ["f1", "d1"], ["d1", "b1"], ["d1", "e1"], ["e1", "b1"]]
 # query_graph.add_edges_from(query_graph_edges)
@@ -527,24 +604,32 @@ test2 = neo4j_test_2()
 # node_attr_dict = dict(zip(sorted(query_graph.nodes()), node_attr))
 # nx.set_node_attributes(query_graph, node_attr_dict, 'label')
 # print(query_graph.nodes())
+# test2 = neo4j_test_2()
 # print(test2.Cloud_Load_NX("a1", query_graph))
 # print(test2.Index_getID_NX("a", query_graph))
 # print(test2.Index_hasLabel_NX("a1", "a", query_graph))
 
-
+# Propuneri BP
 # Caching technique pentru accesul la baza de date?
+# De citit din fisier, nu hardcoded
 
-# q = ['a', ['b','c']] # De facut din fisier, nu hardcoded
+# q = ['a', ['b','c']]# STwig. Denumit in codul meu de asemenea ca si un "split".
+                      # Mai multe dintre acestea vor fi returnate intr-o ordine eficienta de STwig_Order_Selection.
+                      # NUMAI PT GRAFUL QUERY.
 # test2.MatchSTwig(q)
 
+# Aici am scris eu o metoda pentru a desparti graful query in mai multe bucati.
+# Nu sunt formatate precum [root,[root_neighbors]]
 # for split in test2.Query_Graph_Split(query_graph):
 #     print(split)
-
 # test2.Query_Graph_Split(query_graph)
 
+# Afisare noduri graf query.
 # query_graph_nodes = list(query_graph.nodes())
 # print(query_graph_nodes)
 
+# Aici am scris eu o metoda pentru a desparti PARALELIZAT graful query in mai multe bucati.
+# Nu sunt formatate precum [root,[root_neighbors]]
 # start = 0
 # nodes_chunk = 2
 # chunks = []
@@ -558,17 +643,16 @@ test2 = neo4j_test_2()
 # for i in range(len(chunks)):
 #     thread = threading.Thread(target=test2.Query_Graph_Split_Parallel, args=[chunks[i]], name="Thread " + str(i))
 #     threads.append(thread)
-#
 # for thread in threads:
 #     print()
 #     print(thread.name)
 #     thread.start()
 #     thread.join()
-
 # number_of_threads = int(input("Scrieti numarul de thread-uri: "))
 # nodes_chunk2 = len(query_graph_nodes) / number_of_threads
 # print(nodes_chunk2)
 
+# Aici testez frecventa si f_value descrise in articolul ZhaoSun et.al.
 # print("Freq: ")
 # print(test2.freq("a"))
 # print("f_value: ")
