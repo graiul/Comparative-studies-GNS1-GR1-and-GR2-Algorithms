@@ -312,12 +312,18 @@ class neo4j_test_2(object):
 
     def degree_of_node(self, node, query_graph_nx):
         neighbors = self.neighbors_of_node(node, query_graph_nx)
-        deg = len(neighbors)
+        # print("Degree of node exec:----------------------------")
+        # print("Neighbors for degree of node:")
+        deg = len(neighbors[1])
+        # print(neighbors[1])
+        # print("Deg: " + str(len(neighbors[1])))
+        # print("End degree of node exec:----------------------------")
         return deg
 
     def STwig_Order_Selection(self):
         S = []
         S_no_dup = []
+        S_no_dup2 = []
 
         T = []
         dict_f_values_query_graph = {}
@@ -444,6 +450,7 @@ class neo4j_test_2(object):
             print("T: ")
             for tv in T:
                 print(tv)
+            # remove edges in Tv from q
             edges_to_remove = []
             for n in neighbors:
                 edges_to_remove.append([Tv[0], n])
@@ -501,51 +508,51 @@ class neo4j_test_2(object):
             # print("     List of edges after removal: " + str(query_graph_edges))
             # print("     Nr of edges total after removal: " + str(len(query_graph_edges)))
 
-            # print("\nWorking on picked_edge[1] = " + str(picked_edge[1]))
-            # print("     Deg of node u, picked_edge[1]: " + str(self.degree_of_node(picked_edge[1], query_graph)))
-            # if self.degree_of_node(picked_edge[1], query_graph) > 0:
-            #     Cloud_Load_Resulting_STIWG = self.Cloud_Load_NX(picked_edge[1], query_graph)
-            #     # q_root = self.get_neo4j_stwig_root(Cloud_Load_Resulting_STIWG)
-            #     q_root = Cloud_Load_Resulting_STIWG[0]
-            #     # Tu = self.get_neo4j_STwig_with_root(q_root, Cloud_Load_Resulting_STIWG)
-            #     Tu = Cloud_Load_Resulting_STIWG
-            #     print("     STWIG formatted also having the root at first elem; Tu: " + str(Tu))
-            #     T.append(Tu)
-            #     Tu_edges = []
-            #     root = Tu[0]
-            #     Tu.remove(root)
-            #     for tu_elem in Tu[0]:
-            #         Tu_edges.append([root, tu_elem])
-            #     print("     Edges in Tu: " + str(Tu_edges))
-            #     print("     Query graph edges: " + str(query_graph.edges()))
-            #     print("     Comparing of edges and removal: ")
-            #     print("     Nr of edges to be removed: " + str(len(Tu_edges)))
-            #     print("     Nr of edges total: " + str(len(query_graph.edges())))
-            #     for tu_edge in Tu_edges:
-            #         for query_edge in query_graph.edges():
-            #             # print(set(tu_edge))
-            #             # print(set(query_edge))
-            #             # print("-----------")
-            #             if set(tu_edge) == set(query_edge):
-            #                 print(tu_edge)
-            #                 try:
-            #                     query_graph_edges.remove(tu_edge)
-            #                 except:
-            #                     try:
-            #                         query_graph_edges.remove(tu_edge[::-1])
-            #                     except:
-            #                         continue
-            #     neighbors = self.Cloud_Load_NX(picked_edge[1], query_graph)
-            #     print("     Neighbors of " + str(picked_edge[1]) + ": ")
-            #     for n in neighbors[1]:
-            #         # print(self.get_neo4j_stwig_node_trim(n))
-            #         # S.append(self.get_neo4j_stwig_node_trim(n))
-            #         print("     " + str(n))
-            #         S.append(n)
-            #     print("     S: " + str(S))
-            # for s in S:
-            #     print("     Degree of node " + str(s) + " from S:" + str(self.degree_of_node(s, query_graph)))
+            print("\nTu-------------------------------------------------------")
+            print("Working on picked_edge[1] = " + str(picked_edge[1]))
+            print("     Deg of node u, picked_edge[1]: " + str(self.degree_of_node(picked_edge[1], self.query_graph)))
+            if self.degree_of_node(picked_edge[1], self.query_graph) > 0:
+                Tu = self.Cloud_Load_NX(picked_edge[1], self.query_graph)
+                print("     STWIG formatted also having the root at first elem; Tu: " + str(Tu))
+                T.append(Tu)
+                # remove edges in Tu from q
+                edges_to_remove2 = []
+                # Vecinii nodului u
+                neighbors2 = self.Cloud_Load_NX(picked_edge[1], self.query_graph)[1]
+                for n2 in neighbors2:
+                    edges_to_remove2.append([Tu[0], n2])
+                    if self.query_graph.has_edge(Tu[0], n2):
+                        print("     Edge " + str([Tu[0], n2]) + " exists in query graph and must be rem.")
+                print("     Edges to remove: " + str(edges_to_remove2))
+                for edge_to_rem2 in edges_to_remove2:
+                    self.query_graph.remove_edge(edge_to_rem2[0], edge_to_rem2[1])
+                print("     Length of query graph edge list after removal: " + str(len(list(self.query_graph.edges()))))
+                print("     Deg of node u, picked_edge[1]: " + str(self.degree_of_node(picked_edge[1], self.query_graph)))
 
+                S.append(neighbors2)
+                print("S: " + str(S))
+                for elem2 in S:
+                    for el2 in elem2:
+                        if el2 not in S_no_dup2:
+                            S_no_dup2.append(el2)
+                print("S, no duplicates: ")
+                print(S_no_dup2)
+                print("T: ")
+                for t2 in T:
+                    print(t2)
+            print("Degrees of each element in S: ")
+            S_no_dup2_for_removal = copy.deepcopy(S_no_dup2)
+            for s2 in S_no_dup2:
+                print("Element of S : " + str(s2) + " has degree value of: " + str(self.degree_of_node(s2, self.query_graph)))
+                if self.degree_of_node(s2, self.query_graph) == 0:
+                    S_no_dup2_for_removal.remove(s2)
+            print("Remaining elements in S: ")
+            print(S_no_dup2_for_removal)
+            print("End exec Tu-------------------------------------------------------\n")
+        # print("Final result T: ")
+        # for tt in T:
+        #     print(tt)
+        return T
 
 # #BIG DATA GRAPH FROM RI DB############################################
 # with open('Homo_sapiens_udistr_32.gfd') as f:
