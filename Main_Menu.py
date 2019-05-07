@@ -65,10 +65,11 @@ while(True):
     elif option == 7:
         print("\n================= Option 7 commencing... =================")
         print("STwig_Order_Selection: ")
-        test2 = neo4j_test_2()
         query_graph_gen = Graph_File_Generator()
         query_graph = query_graph_gen.gen_zhaosun_query_graph()
-        print(test2.STwig_Order_Selection(query_graph))
+        test2 = neo4j_test_2(query_graph)
+        for t in test2.STwig_Order_Selection():
+            print(t)
         print("\n============== End of Option 7 execution =================")
         print()
         for m in menu:
