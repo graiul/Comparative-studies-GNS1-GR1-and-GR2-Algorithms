@@ -9,7 +9,7 @@ menu = [
     ["2. Insert data into db"],
     ["3. Delete data from db"],
     ["4. View graph data"],
-    ["5. Run parallel db access test"],
+    ["5. View graph data - multi-threaded"],
     ["6. Run MatchSTwig"],
     ["7. Run STwig_Order_Selection"],
     ["8. Query graph zhaosun split prototype, single threaded"],
@@ -23,7 +23,9 @@ while(True):
     option = int(input('\nPlease choose option: '))
     if option == 2:
         node_dataset_url = str(input('\nDataset nodes URL: '))
+        # https://raw.githubusercontent.com/room229/graph_datasets/master/ZhaoSun_Data_Graph_Nodes.csv
         edge_dataset_url = str(input('\nDataset edges URL: '))
+        # https://raw.githubusercontent.com/room229/graph_datasets/master/ZhaoSun_Data_Graph_Edges.csv
         leader_core_bolt_address = str(input('\nLeader core bolt address: '))
         username = str(input('\nUsername of core: '))
         passwd = str(input('\nPassword of core: '))
@@ -53,8 +55,10 @@ while(True):
 
     elif option == 6:
         print("\n================= Option 6 commencing... =================")
-        q = ['a', ['b', 'c']]  # De facut din fisier, nu hardcoded
-        test2 = neo4j_test_2()
+        q = ['a', ['b', 'c']]
+        query_graph_gen = Graph_File_Generator()
+        query_graph = query_graph_gen.gen_zhaosun_query_graph()
+        test2 = neo4j_test_2(query_graph)
         print("Searcing given STwigs from query graph in the data graph: ")
         STwigs = test2.MatchSTwig(q)
         print("\nSTwigs from data graph corresponding to the query STwig given: ")
@@ -78,7 +82,9 @@ while(True):
 
     elif option == 8:
         print("\n================= Option 8 commencing... =================")
-        print("Are these the query graph STWIGS?")
+        # print("Are these the query graph STWIGS?")
+        query_graph_gen = Graph_File_Generator()
+        query_graph = query_graph_gen.gen_zhaosun_query_graph()
         test2 = neo4j_test_2()
         query_graph_gen = Graph_File_Generator()
         query_graph = query_graph_gen.gen_zhaosun_query_graph()
