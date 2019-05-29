@@ -30,7 +30,6 @@ class GraphGen_ZhaoSun(object):
 
     labelSet = []
     randomArray = np.random.rand(1,multiprocessing.cpu_count())
-    print(randomArray)
     usedAlphabet = []
 
     nodeCount = None
@@ -71,8 +70,14 @@ class GraphGen_ZhaoSun(object):
             y1 = self.nodeCount
             y2 = self.nodeCount
             probability = None
+            print("Probability: ")
             for timesIndex in range(0, times):
-                probability =
+                probability = self.randomArray[p.threadIndex]
+                print(probability)
 
 gg = GraphGen_ZhaoSun(5,5,5)
-print(gg.BuildRandomNumber())
+print("Random array: " + str(gg.randomArray))
+print("Build random number: " + str(gg.BuildRandomNumber()))
+print("Probability: ")
+par = EdgeCreationThreadObject(multiprocessing.cpu_count(), 0)
+gg.CreateEdgeThreadProc(par)
