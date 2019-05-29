@@ -18,7 +18,7 @@ class neo4j_test_2(object):
         self.query_graph = query_graph
 
     # neograph_data = Graph(port="7687", user="neo4j", password="graph") # Data Graph Zhaosun
-    neograph_data = Graph("bolt://127.0.0.1:7693", auth=("neo4j", "changeme")) # Data Graph Zhaosun din READ_REPLICA
+    neograph_data = Graph("bolt://127.0.0.1:7690", auth=("neo4j", "changeme")) # Data Graph Zhaosun din READ_REPLICA
     # neograph_query = Graph("bolt://127.0.0.1:7693", auth=("neo4j", "changeme")) # Query Graph Zhaosun din READ_REPLICA
 
 
