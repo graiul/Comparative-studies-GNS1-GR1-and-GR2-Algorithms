@@ -69,7 +69,6 @@ def main():
 
         elif option == 6:
             print("\n================= Option 6 commencing... =================")
-            start_time = timer()
             db = DB_Access_Test()
             queries = ["MATCH (n) RETURN n", "MATCH (n) RETURN n", "MATCH (n) RETURN n"]
             p = Pool(3)
@@ -101,10 +100,15 @@ def main():
             query_graph = query_graph_gen.gen_zhaosun_query_graph()
             test2 = neo4j_test_2(query_graph)
             print("Searcing given STwigs from query graph in the data graph: ")
+            start_time = timer()
             STwigs = test2.MatchSTwig(q)
+            total_time_sec = timer() - start_time
+            total_time_millis = total_time_sec * 1000
             print("\nSTwigs from data graph corresponding to the query STwig given: ")
             for stwig in STwigs:
                 print(stwig)
+            print('\x1b[0;30;45m' + 'Match STwig exec time: ' + str(
+                total_time_millis) + ' ms' + '\x1b[0m')
             print("\n============== End of Option 7 execution =================")
 
         elif option == 8:
@@ -112,9 +116,15 @@ def main():
             print("STwig_Order_Selection: ")
             query_graph_gen = Graph_File_Generator()
             query_graph = query_graph_gen.gen_zhaosun_query_graph()
+            start_time = timer()
             test2 = neo4j_test_2(query_graph)
+            total_time_sec = timer() - start_time
+            total_time_millis = total_time_sec * 1000
             for t in test2.STwig_Order_Selection():
                 print(t)
+            print()
+            print('\x1b[0;30;45m' + 'STwig Order Selection exec time: ' + str(
+                total_time_millis) + ' ms' + '\x1b[0m')
             print("\n============== End of Option 8 execution =================")
             print()
             for m in menu:
