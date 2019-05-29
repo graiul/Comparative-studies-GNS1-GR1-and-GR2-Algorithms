@@ -1,7 +1,9 @@
+import multiprocessing
 import sys
 import threading
-from multiprocessing import Process
-from py2neo import Graph, Node, Relationship
+# from multiprocessing import Pool
+from pathos.multiprocessing import ProcessingPool as Pool
+from py2neo import Graph
 from timeit import default_timer as timer
 
 class DB_Access_Test(object):
@@ -60,42 +62,31 @@ class DB_Access_Test(object):
         print('\x1b[0;30;45m' + 'DB_Access_Test multiple threads exec time: ' + str(total_time_millis) + ' ms' + '\x1b[0m')
 
     def multiple_processes_access_to_one_read_replica(self, query):
-        tx = self.neograph_data.begin()
-        # cqlQuery = "MATCH (n) WHERE n.name = 'Andy' RETURN n"
-        # cqlQuery = "MATCH (n) RETURN n"
+        from py2neo import Graph
+        neograph_data = Graph("bolt://127.0.0.1:7690", auth=("neo4j", "changeme"))
+        tx = neograph_data.begin()
         cqlQuery = query
+        # print(cqlQuery)
         result = tx.run(cqlQuery).to_ndarray()
-        print(result)
-        sys.stdout.flush()
+        string_result = []
+        for r in result:
+            string_result.append(str(r))
+        return string_result
+    #
+    # def run_test_multiple_processes(self):
+    #     # if __name__ == '__main__':
+    #     # foo = Foo()
+    #     queries = ["MATCH (n) RETURN n", "MATCH (n) RETURN n", "MATCH (n) RETURN n"]
+    #     p = Pool(3)
+    #     print("Pool result:")
+    #     res = p.map(self.multiple_processes_access_to_one_read_replica, queries)
+    #     # print(res)
+    #     for r in res:
+    #         for rr in r:
+    #             print(rr)
+    #         print()
+    #     p.close()
 
-    def run_test_multiple_processes(self):
-        print("Three processes, three processes: time test")
-        start_time = timer()
-        process_list = []
-        queries = [["MATCH (n) RETURN n"], ["MATCH (n) RETURN n"], ["MATCH (n) RETURN n"]]
-        for i in [i for i in enumerate(queries)]:
-            # print(i)
-            pos = i[0]
-            query = i[1][0]
-            # print(query)
-            process = Process(target=self.multiple_processes_access_to_one_read_replica, args=(query,))
-            process_list.append(process)
-            process.start()
-
-        map(lambda p: p.join(), process_list)
-
-        # print(process_list)
-        # process_list[0].start()
-        # process_list[0].join()
-
-        # for process in process_list:
-        #     print()
-        #     process.start()
-        #     process.join()
-
-        total_time_sec = timer() - start_time
-        total_time_millis = total_time_sec * 1000
-        print('\x1b[0;30;45m' + 'DB_Access_Test multiple processes exec time: ' + str(total_time_millis) + ' ms' + '\x1b[0m')
 
     # def get_overview(self):
     #     neograph_overview = Graph()
