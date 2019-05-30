@@ -123,6 +123,7 @@ class neo4j_test_2(object):
         # start_time = timer()
         # print("MatchSTwig: ")
         print("STwig query: " + str(q))
+        print(len(q[1]))
         #---HARDCODED
         # r = str(q[0]) # Root node label
         # L = [q[1][0], q[1][1]] # Root children labels
@@ -185,7 +186,9 @@ class neo4j_test_2(object):
                     S_one_elems.append(s_temp)
             S_one_elems.insert(0, root_node)
             # print("Cartesian product: ")
-            combinations = list(itertools.combinations(S_one_elems, 3))
+            # Aici len(q[1]) + 1) inseamna numarul etichetelor vecinilor + 1 care este radacina.
+            # Astfel pt [a, [b,c]] avem toate gasirile de forma asta, analog pt [b, [a,d,e]].
+            combinations = list(itertools.combinations(S_one_elems, len(q[1]) + 1))
             elem_labels = []
             elem_labels_total = []
             for elem in combinations:
