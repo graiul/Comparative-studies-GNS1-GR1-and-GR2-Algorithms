@@ -122,6 +122,12 @@ class neo4j_test_2(object):
         # print("STwig from zhaosun undirected query graph, STwig is undirected (Figure 4b from original article): " + str(q))
         # start_time = timer()
         # print("MatchSTwig: ")
+
+
+        # Pentru q1 cauta in tot graful
+        # Pentru q2 cauta doar in nodurile frunza corespunzatoare din G(q1)
+        # Pentru twig-ul q3 cauta doar in nodurile frunza corespunzatoare din G(q1) si G(q2)
+        # Se adauga filtrare in plus pentru Sr <- Index.getID(r), linia 1 din alg 1 - MatchSTwig.
         print("STwig query: " + str(q))
         print(len(q[1]))
         #---HARDCODED
