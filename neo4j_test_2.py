@@ -14,6 +14,7 @@ from timeit import default_timer as timer
 class neo4j_test_2(object):
 
     query_graph = None
+    matches = []
     def __init__(self, query_graph):
         self.query_graph = query_graph
 
@@ -61,17 +62,38 @@ class neo4j_test_2(object):
         nodes_loaded.append(result_neighbors)
         return nodes_loaded
 
+    # Return the IDs of nodes with a
+    # given label.
+    def Index_getID(self, label, iteration_number, matches):
+        if iteration_number == 0:
 
-    def Index_getID(self, label):
-        # tx = self.neograph_data.begin()
-        # cqlQuery = "MATCH (n:`" + str(label) + "`) RETURN n.RI_id"
-        cqlQuery = "MATCH (n) WHERE n.zhaosun_label='" + str(label) + "' RETURN n.zhaosun_id" # IF a IN a1! Graf Zhaosun
-        # result = tx.run(cqlQuery).to_ndarray()
-        result = self.neograph_data.run(cqlQuery).to_ndarray()
-        nodes_loaded = []
-        for r in result:
-            nodes_loaded.append(r[0])
-        return nodes_loaded
+            print("Initial matches must be empty list: " + str(matches))
+            # tx = self.neograph_data.begin()
+            # cqlQuery = "MATCH (n:`" + str(label) + "`) RETURN n.RI_id"
+            cqlQuery = "MATCH (n) WHERE n.zhaosun_label='" + str(label) + "' RETURN n.zhaosun_id" # IF a IN a1! Graf Zhaosun
+            # result = tx.run(cqlQuery).to_ndarray()
+            result = self.neograph_data.run(cqlQuery).to_ndarray()
+            nodes_loaded = []
+            for r in result:
+                nodes_loaded.append(r[0])
+            return nodes_loaded
+
+        elif iteration_number > 0:
+            print("Matches for previous iteration: ")
+            print(matches)
+            # Aici trebuie modificat.
+            # Frunzele unei radacini dintr-o iteratie
+            # devin radacini pentru noua iteratie.
+            # Pentru noile radacini verificam in graful data daca
+            # sunt frunze de acelasi tip precum in twig-ul noii iteratii.
+            # OBS: De schimbat formatul pentru matches.
+            # De exemplu: in loc de ('b1', 'a1', 'd1', 'e1'), ar fi ['b1', ['a1', 'd1', 'e1']]
+            cqlQuery = "MATCH (n) WHERE n.zhaosun_label='" + str(label) + "' RETURN n.zhaosun_id" # IF a IN a1! Graf Zhaosun
+            result = self.neograph_data.run(cqlQuery).to_ndarray()
+            nodes_loaded = []
+            for r in result:
+                nodes_loaded.append(r[0])
+            return nodes_loaded
 
     def Index_getID_NX(self, label, query_graph_nx):
         result = []
@@ -106,7 +128,7 @@ class neo4j_test_2(object):
                 else:
                     return False
 
-    def MatchSTwig(self, q): # q 1 = (a,{b,c}) din articol, [a, [b,c]] in py. Acest q1 (STwig din query graph)si altele vor fi date de STwigOrderSelection care lucreaza cu graful query.
+    def MatchSTwig(self, q, iteration_number): # q 1 = (a,{b,c}) din articol, [a, [b,c]] in py. Acest q1 (STwig din query graph)si altele vor fi date de STwigOrderSelection care lucreaza cu graful query.
         # print("IF QUERY STWIG IS UNDIRECTED, THEN MULTIPLE RESULTS ARE GIVEN "
         #       "\nBECAUSE WE USE LABELS NOT NODE ID's WHICH ENCOMPASS MULTIPLE NODES")
         # print("IF QUERY STWIG WOULD BE DIRECTED, THEN THE RESULTS "
@@ -145,7 +167,7 @@ class neo4j_test_2(object):
         #     L.append(str(self.query_graph.node[]))
 
         #  (1) Find the set of root nodes by calling Index.getID(r);
-        Sr = self.Index_getID(r)
+        Sr = self.Index_getID(r, iteration_number, self.matches)
         print("Set of root nodes for label " + str(r) + ": " + str(Sr))
         R = []
         Sli = []
@@ -229,7 +251,7 @@ class neo4j_test_2(object):
 
         # print("\nMatchSTwig exec time -> sec: " + str(total_time_sec))
         # print("\nMatchSTwig exec time -> millis: " + str(total_time_millis))
-
+        self.matches = STwigs
         return STwigs
 
     def Query_Graph_Split(self, query_graph):
