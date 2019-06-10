@@ -150,6 +150,7 @@ def main():
             for t in stwigs:
                 iteration_number = stwigs.index(t)
                 print("Iteration number: " + str(iteration_number))
+                test2.STwig_query_root = t[0]
                 # print("For STwig " + str(t) + " we have: ")
                 match = test2.MatchSTwig(t, iteration_number)
                 print("Matches found: ")

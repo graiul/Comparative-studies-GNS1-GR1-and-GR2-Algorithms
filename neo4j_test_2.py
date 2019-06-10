@@ -15,6 +15,7 @@ class neo4j_test_2(object):
 
     query_graph = None
     matches = []
+    STwig_query_root = None
     def __init__(self, query_graph):
         self.query_graph = query_graph
 
@@ -88,6 +89,36 @@ class neo4j_test_2(object):
             # sunt frunze de acelasi tip precum in twig-ul noii iteratii.
             # OBS: De schimbat formatul pentru matches.
             # De exemplu: in loc de ('b1', 'a1', 'd1', 'e1'), ar fi ['b1', ['a1', 'd1', 'e1']]
+            leafs_to_be_roots = []
+            if len(matches) > 0:
+                for m in matches:
+                    # Frunzele vor fi de la al doilea element al fiecarui match
+                    # deci de la elementul cu indexul = 1
+                    for item in m[1:]:
+                        if item not in leafs_to_be_roots:
+                            leafs_to_be_roots.append(item)
+            sorted_leafs_to_be_roots = sorted(leafs_to_be_roots)
+            print("Leafs to be roots: ")
+            print(sorted_leafs_to_be_roots)
+            # Trebuie returnate toate frunzele de tipul:
+            print("Current iteration STwig query root type: " + str(self.STwig_query_root))
+            new_roots = []
+            for leaf in sorted_leafs_to_be_roots:
+                if self.STwig_query_root in leaf:
+                    new_roots.append(leaf)
+            print("New roots: " + str(new_roots))
+            started_matches = []
+            for nr in new_roots:
+                st = [nr, []]
+                started_matches.append(st)
+            if len(started_matches) == 0:
+                print("Started matches: " + str(started_matches))
+            if len(started_matches) > 0:
+                print("Started matches: ")
+                for started_match in started_matches:
+                    print(started_match)
+
+
             cqlQuery = "MATCH (n) WHERE n.zhaosun_label='" + str(label) + "' RETURN n.zhaosun_id" # IF a IN a1! Graf Zhaosun
             result = self.neograph_data.run(cqlQuery).to_ndarray()
             nodes_loaded = []
