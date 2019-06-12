@@ -16,6 +16,7 @@ class neo4j_test_2(object):
     query_graph = None
     matches = []
     STwig_query_root = None
+    STwig_query_neighbor_labels = None
     def __init__(self, query_graph):
         self.query_graph = query_graph
 
@@ -35,6 +36,7 @@ class neo4j_test_2(object):
         # print(result)
         nodes_loaded = []
         nodes_loaded.append(result)
+        # Returnarea vecinilor nodului cautat.
         cqlQuery2 = "MATCH(n{zhaosun_id: '" + str(node_id) + "'})--(m) return m"
         # MATCH(n{zhaosun_id: 'a1'})--(m) return m
         # print(cqlQuery2)
@@ -114,10 +116,33 @@ class neo4j_test_2(object):
             if len(started_matches) == 0:
                 print("Started matches: " + str(started_matches))
             if len(started_matches) > 0:
-                print("Started matches: ")
+                print("Matches: ")
                 for started_match in started_matches:
-                    print(started_match)
-
+                    # print(started_match)
+                    # Vecinii trebuie sa fie de tipul indicat in STwig-ul query al iteratiei curente.
+                    for neighbor_label in self.STwig_query_neighbor_labels:
+                        # print("Neighbor label selected: " + str(neighbor_label))
+                        cqlQuery2 = "MATCH(n{zhaosun_id: '" + str(started_match[0]) + "'})--(m) WHERE m.zhaosun_label='" + str(neighbor_label) + "' return m"
+                        # print(cqlQuery2)
+                        result2 = list(self.neograph_data.run(cqlQuery2).to_ndarray())
+                        # if len(result2) > 0:
+                        #     print(result2)
+                        #     print(self.get_neo4j_stwig_node_trim(result2))
+                        #     started_match[1].append(self.get_neo4j_stwig_node_trim(result2))
+                        if len(result2) > 0:
+                            started_match[1].append(self.get_neo4j_stwig_node_trim(result2))
+                    if len(self.STwig_query_neighbor_labels) == len(started_match[1]):
+                        print(started_match)
+                    else:
+                        print("A complete match was not found: " + str(started_match))
+                # print("Finished matches: ")
+                # for finished_match in started_matches:
+                #     print(finished_match)
+                #     # if len(finished_match[1][0]) > 0:
+                #     for neighbor in finished_match[1][0]:
+                #         # print(neighbor)
+                #         print(self.get_neo4j_stwig_node_trim(neighbor))
+            print("----------------------------------")
 
             cqlQuery = "MATCH (n) WHERE n.zhaosun_label='" + str(label) + "' RETURN n.zhaosun_id" # IF a IN a1! Graf Zhaosun
             result = self.neograph_data.run(cqlQuery).to_ndarray()
@@ -357,7 +382,9 @@ class neo4j_test_2(object):
     def get_neo4j_stwig_node_trim(self, stwig_node_to_trim):
         # print("STwig node to trim: " + str(stwig_node_to_trim))
         aux = str(stwig_node_to_trim).split("id: '")[1]
+        # print("Aux: " + str(aux))
         node_trimmed = str(aux).split("',")[0]
+        # print("Node trimmed: " + str(node_trimmed))
         return node_trimmed
 
     def get_neo4j_STwig_with_root(self, root, stwig): # Transforma un STwig din modul de reprezentare Neo4j in lista: [a, [b,c]]

@@ -149,14 +149,15 @@ def main():
             total_time_millis = total_time_sec * 1000
             for t in stwigs:
                 iteration_number = stwigs.index(t)
-                print("Iteration number: " + str(iteration_number))
+                print("--------Iteration number: " + str(iteration_number) + str("-----------"))
                 test2.STwig_query_root = t[0]
+                test2.STwig_query_neighbor_labels = t[1]
                 # print("For STwig " + str(t) + " we have: ")
                 match = test2.MatchSTwig(t, iteration_number)
                 print("Matches found: ")
                 for m in match:
                     print(m)
-                print("----------------")
+                print("--------Iteration end-----------------")
             print()
             print('\x1b[0;30;45m' + 'STwig Order Selection exec time: ' + str(
                 total_time_millis) + ' ms' + '\x1b[0m')
