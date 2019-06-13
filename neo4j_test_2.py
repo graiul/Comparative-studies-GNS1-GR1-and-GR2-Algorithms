@@ -17,6 +17,7 @@ class neo4j_test_2(object):
     matches = []
     STwig_query_root = None
     STwig_query_neighbor_labels = None
+    matches_dict = {}
     def __init__(self, query_graph):
         self.query_graph = query_graph
 
@@ -67,7 +68,7 @@ class neo4j_test_2(object):
 
     # Return the IDs of nodes with a
     # given label.
-    def Index_getID(self, label, iteration_number, matches):
+    def Index_getID(self, label, iteration_number, matches, stwig_query):
         if iteration_number == 0:
 
             print("Initial matches must be empty list: " + str(matches))
@@ -82,8 +83,15 @@ class neo4j_test_2(object):
             return nodes_loaded
 
         elif iteration_number > 0:
-            print("Matches for previous iteration: ")
-            print(matches)
+            # print("Matches for previous iteration: ")
+            # print(matches)
+
+            print("Matches dictionary: ")
+            # print(list(self.matches_dict.keys())[iteration_number])
+            # print(list(self.matches_dict.values())[iteration_number])
+            for item in self.matches_dict.items():
+                print(item)
+
             # Aici trebuie modificat.
             # Frunzele unei radacini dintr-o iteratie
             # devin radacini pentru noua iteratie.
@@ -92,11 +100,16 @@ class neo4j_test_2(object):
             # OBS: De schimbat formatul pentru matches.
             # De exemplu: in loc de ('b1', 'a1', 'd1', 'e1'), ar fi ['b1', ['a1', 'd1', 'e1']]
             leafs_to_be_roots = []
-            if len(matches) > 0:
-                for m in matches:
-                    # Frunzele vor fi de la al doilea element al fiecarui match
-                    # deci de la elementul cu indexul = 1
-                    for item in m[1:]:
+            # Daca stwig-ul selectat, nu exista in dictionar,
+            # deci nu are nici un match in graful data
+            if self.matches_dict.get(repr(stwig_query), []) == []:
+                # Atunci preluam din matches pentru stwig-ul precedent,
+                # in dict fiind doar stwig-uri care au avut matches.
+                print("Last key in matches dict: ")
+                print(list(self.matches_dict.keys())[-1])
+                last_dict_key = list(self.matches_dict.keys())[-1]
+                for m in self.matches_dict[last_dict_key]:
+                    for item in m:
                         if item not in leafs_to_be_roots:
                             leafs_to_be_roots.append(item)
             sorted_leafs_to_be_roots = sorted(leafs_to_be_roots)
@@ -132,7 +145,8 @@ class neo4j_test_2(object):
                         if len(result2) > 0:
                             started_match[1].append(self.get_neo4j_stwig_node_trim(result2))
                     if len(self.STwig_query_neighbor_labels) == len(started_match[1]):
-                        print(started_match)
+                        print("Finished match: " + str(started_match))
+                        self.matches_dict[repr(stwig_query)] = started_match
                     else:
                         print("A complete match was not found: " + str(started_match))
                 # print("Finished matches: ")
@@ -207,7 +221,7 @@ class neo4j_test_2(object):
         # Pentru twig-ul q3 cauta doar in nodurile frunza corespunzatoare din G(q1) si G(q2)
         # Se adauga filtrare in plus pentru Sr <- Index.getID(r), linia 1 din alg 1 - MatchSTwig.
         print("STwig query: " + str(q))
-        print(len(q[1]))
+        # print("Number of leaf labels: " + str(len(q[1])))
         #---HARDCODED
         # r = str(q[0]) # Root node label
         # L = [q[1][0], q[1][1]] # Root children labels
@@ -216,14 +230,14 @@ class neo4j_test_2(object):
         #---HARDCODED
 
         r = str(self.query_graph.node[q[0]]['label'])
-        print("r: " + str(r))
+        # print("STwig root label: " + str(r))
         children_labels = q[1]
         L = q[1]
         # for l in children_labels:
         #     L.append(str(self.query_graph.node[]))
 
         #  (1) Find the set of root nodes by calling Index.getID(r);
-        Sr = self.Index_getID(r, iteration_number, self.matches)
+        Sr = self.Index_getID(r, iteration_number, self.matches, q)
         print("Set of root nodes for label " + str(r) + ": " + str(Sr))
         R = []
         Sli = []

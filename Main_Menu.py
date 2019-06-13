@@ -147,17 +147,28 @@ def main():
             stwigs = test2.STwig_Order_Selection()
             total_time_sec = timer() - start_time
             total_time_millis = total_time_sec * 1000
-            for t in stwigs:
+            # for t in stwigs:
+            iteration_number = stwigs.index(stwigs[0])
+            print("--------Iteration number: " + str(iteration_number) + str("-----------"))
+            test2.STwig_query_root = stwigs[0][0]
+            test2.STwig_query_neighbor_labels = stwigs[0][1]
+            matches = test2.MatchSTwig(stwigs[0], iteration_number)
+            test2.matches_dict[repr(stwigs[0])] = matches
+
+            print("Matches dictionary: ")
+            print(list(test2.matches_dict.keys())[0])
+            print(list(test2.matches_dict.values())[0])
+
+            for t in stwigs[1:]:
                 iteration_number = stwigs.index(t)
                 print("--------Iteration number: " + str(iteration_number) + str("-----------"))
                 test2.STwig_query_root = t[0]
                 test2.STwig_query_neighbor_labels = t[1]
-                # print("For STwig " + str(t) + " we have: ")
-                match = test2.MatchSTwig(t, iteration_number)
-                print("Matches found: ")
-                for m in match:
-                    print(m)
-                print("--------Iteration end-----------------")
+                matches = test2.MatchSTwig(t, iteration_number)
+                # test2.matches_dict[repr(t)] = matches
+
+
+            print("--------Iteration end-----------------")
             print()
             print('\x1b[0;30;45m' + 'STwig Order Selection exec time: ' + str(
                 total_time_millis) + ' ms' + '\x1b[0m')
