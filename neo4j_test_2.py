@@ -18,6 +18,7 @@ class neo4j_test_2(object):
     STwig_query_root = None
     STwig_query_neighbor_labels = None
     matches_dict = {}
+    used_stwig_list = []
     def __init__(self, query_graph):
         self.query_graph = query_graph
 
@@ -80,13 +81,14 @@ class neo4j_test_2(object):
             nodes_loaded = []
             for r in result:
                 nodes_loaded.append(r[0])
+            self.used_stwig_list.append(stwig_query)
             return nodes_loaded
 
         elif iteration_number > 0:
             # print("Matches for previous iteration: ")
             # print(matches)
 
-            print("Matches dictionary: ")
+            print("Matches dictionary - key,value pair: ")
             # print(list(self.matches_dict.keys())[iteration_number])
             # print(list(self.matches_dict.values())[iteration_number])
             for item in self.matches_dict.items():
@@ -100,18 +102,50 @@ class neo4j_test_2(object):
             # OBS: De schimbat formatul pentru matches.
             # De exemplu: in loc de ('b1', 'a1', 'd1', 'e1'), ar fi ['b1', ['a1', 'd1', 'e1']]
             leafs_to_be_roots = []
+
+
+
             # Daca stwig-ul selectat, nu exista in dictionar,
             # deci nu are nici un match in graful data
-            if self.matches_dict.get(repr(stwig_query), []) == []:
+            # if self.matches_dict.get(repr(stwig_query), []) == []:
+
+            # Daca stwig-ul selectat, nu exista in lista de stwig-uri folosite,
+            # deci nu are nici un match in graful data
+            if stwig_query not in self.used_stwig_list:
                 # Atunci preluam din matches pentru stwig-ul precedent,
                 # in dict fiind doar stwig-uri care au avut matches.
-                print("Last key in matches dict: ")
-                print(list(self.matches_dict.keys())[-1])
-                last_dict_key = list(self.matches_dict.keys())[-1]
-                for m in self.matches_dict[last_dict_key]:
-                    for item in m:
-                        if item not in leafs_to_be_roots:
-                            leafs_to_be_roots.append(item)
+
+                # Modificam astfel:
+                # Verificam daca stwig-ul curent are vreo legatura cu unul din
+                # stwigurile care au fost deja folosite.
+                # Pentru primul cu care are legatura initiem matches,
+                # adica pentru fiecare radacina, atasam o lista.
+                # Pentru fiecare astfel de lista vom cauta in graful data.
+
+                print("Used stwigs: ")
+                print(self.used_stwig_list)
+                for used_stwig in self.used_stwig_list:
+                    # Daca radacina stwig-ului actual selectat
+                    # este de tipul unei frunze al unui stwig deja prelucrat
+                    # atunci cautam in graful data id-ul fiecarui nod care
+                    # are tipul vreunei frunze al stwig-ului actual.
+                    # Trebuie sa gasim pentru fiecare match inceput cate
+                    # un nod care sa corespunda fiecarui tip de frunza.
+
+                    if stwig_query[0] in used_stwig[1]: # Daca tipul/labelul radacinii coincide cu una din frunze:
+                        # Atunci stwig-ul actual selectat este legat de unul din stwig-urile deja prelucrate
+
+                # print("Last key in matches dict: ")
+                # print(list(self.matches_dict.keys())[-1])
+                # last_dict_key = list(self.matches_dict.keys())[-1]
+
+                        print("Selected 'used stwig': ")
+                        print(used_stwig)
+                        if self.matches_dict.get(repr(stwig_query), []) == []:
+                            for m in self.matches_dict[repr(used_stwig)]:
+                                for item in m:
+                                    if item not in leafs_to_be_roots:
+                                        leafs_to_be_roots.append(item)
             sorted_leafs_to_be_roots = sorted(leafs_to_be_roots)
             print("Leafs to be roots: ")
             print(sorted_leafs_to_be_roots)
@@ -147,6 +181,8 @@ class neo4j_test_2(object):
                     if len(self.STwig_query_neighbor_labels) == len(started_match[1]):
                         print("Finished match: " + str(started_match))
                         self.matches_dict[repr(stwig_query)] = started_match
+                        if stwig_query not in self.used_stwig_list:
+                            self.used_stwig_list.append(stwig_query)
                     else:
                         print("A complete match was not found: " + str(started_match))
                 # print("Finished matches: ")
@@ -322,6 +358,8 @@ class neo4j_test_2(object):
         # print("\nMatchSTwig exec time -> sec: " + str(total_time_sec))
         # print("\nMatchSTwig exec time -> millis: " + str(total_time_millis))
         self.matches = STwigs
+        # self.stwig_list.append(q)
+
         return STwigs
 
     def Query_Graph_Split(self, query_graph):

@@ -156,7 +156,9 @@ def main():
             test2.matches_dict[repr(stwigs[0])] = matches
 
             print("Matches dictionary: ")
+            print("First key: ")
             print(list(test2.matches_dict.keys())[0])
+            print("First values attached to the first key: ")
             print(list(test2.matches_dict.values())[0])
 
             for t in stwigs[1:]:
@@ -166,9 +168,11 @@ def main():
                 test2.STwig_query_neighbor_labels = t[1]
                 matches = test2.MatchSTwig(t, iteration_number)
                 # test2.matches_dict[repr(t)] = matches
+                print("--------Iteration end-----------------")
 
+            # print("STwig list:")
+            # print(test2.stwig_list)
 
-            print("--------Iteration end-----------------")
             print()
             print('\x1b[0;30;45m' + 'STwig Order Selection exec time: ' + str(
                 total_time_millis) + ' ms' + '\x1b[0m')
