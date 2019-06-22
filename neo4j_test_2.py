@@ -15,8 +15,12 @@ class neo4j_test_2(object):
 
     query_graph = None
     matches = []
+
+
     STwig_query_root = None
     STwig_query_neighbor_labels = None
+
+
     matches_dict = {}
     used_stwig_list = []
     def __init__(self, query_graph):
@@ -71,22 +75,38 @@ class neo4j_test_2(object):
     # given label.
     def Index_getID(self, label, iteration_number, matches, stwig_query):
         if iteration_number == 0:
-
-            print("Initial matches must be empty list: " + str(matches))
+            print("***Index_getID output for Iteration 0")
+            print("STwig query: " + str(stwig_query))
+            print("Initial matches list - must be empty at the beginning of the Iteration 0: " + str(matches))
             # tx = self.neograph_data.begin()
             # cqlQuery = "MATCH (n:`" + str(label) + "`) RETURN n.RI_id"
             cqlQuery = "MATCH (n) WHERE n.zhaosun_label='" + str(label) + "' RETURN n.zhaosun_id" # IF a IN a1! Graf Zhaosun
             # result = tx.run(cqlQuery).to_ndarray()
             result = self.neograph_data.run(cqlQuery).to_ndarray()
+            # print("result:" + str(list(result)))
             nodes_loaded = []
             for r in result:
                 nodes_loaded.append(r[0])
+            # print("nodes loaded: " + str(nodes_loaded))
+
+            # # Label-urile primului stwig!
+            # print("Index_getID stwig query: " + str(stwig_query))
+            # q_labels_start = [self.query_graph.node[stwig_query[0]]['label'], []]
+            # # print(q_labels_start)
+            # for leaf_id in stwig_query[1]:
+            #     q_labels_start[1].append(self.query_graph.node[leaf_id]['label'])
+            # print("Index_getID, q_labels_start - first: " + str(q_labels_start))
+
             self.used_stwig_list.append(stwig_query)
+            print("***End of Index_getID output for Iteration 0")
             return nodes_loaded
 
         elif iteration_number > 0:
             # print("Matches for previous iteration: ")
             # print(matches)
+            print("***Index_getID output for Iteration " + str(iteration_number))
+
+            print("STwig query: " + str(stwig_query))
 
             print("Matches dictionary - key,value pair: ")
             # print(list(self.matches_dict.keys())[iteration_number])
@@ -139,24 +159,66 @@ class neo4j_test_2(object):
                 # print(list(self.matches_dict.keys())[-1])
                 # last_dict_key = list(self.matches_dict.keys())[-1]
 
+                        print("Current stwig: ")
+                        print(stwig_query)
+
                         print("Selected 'used stwig': ")
                         print(used_stwig)
+
+
                         if self.matches_dict.get(repr(stwig_query), []) == []:
-                            for m in self.matches_dict[repr(used_stwig)]:
-                                for item in m:
+                            # print("YES")
+                            # print(self.matches_dict.get(repr(used_stwig)))
+                            # print(len(self.matches_dict.get(repr(used_stwig))))
+                            # if len(list(self.matches_dict.values())) == 1:
+                            #     for item in list(self.matches_dict[repr(used_stwig)])[1]:
+                            #         if item not in leafs_to_be_roots:
+                            #             leafs_to_be_roots.append(item)
+                            #     print("leafs_to_be_roots on first if: " + str(leafs_to_be_roots))
+                            #
+                            # elif len(list(self.matches_dict.values())) > 1:
+                            for mm in self.matches_dict.get(repr(used_stwig)):
+                                # print("mm: " + str(mm))
+                                for item in mm[1]:
                                     if item not in leafs_to_be_roots:
                                         leafs_to_be_roots.append(item)
+
+
             sorted_leafs_to_be_roots = sorted(leafs_to_be_roots)
-            print("Leafs to be roots: ")
+            print("Leafs to be roots - taken from selected 'used stwig' matches dict values: ")
             print(sorted_leafs_to_be_roots)
-            # Trebuie returnate toate frunzele de tipul:
-            print("Current iteration STwig query root type: " + str(self.STwig_query_root))
+
+            # #Trebuie returnate toate frunzele de tipul:
+            # # Label-ul radacinii stwig-ului dat ca si parametru pentru Index.getID!
+            stwig_query_root_type = self.query_graph.node[stwig_query[0]]['label']
+
+            print("Current iteration STwig query root type: " + str(stwig_query_root_type))
             new_roots = []
             for leaf in sorted_leafs_to_be_roots:
-                if self.STwig_query_root in leaf:
+                # print("Leaf: " + str(leaf))
+                # If the leafs of the prev stwig/current 'used stwig'
+                # have the same type as the current stwig root type:
+
+                # Leaf types must be taken from the data graph
+                cqlQuery = "MATCH (n) WHERE n.zhaosun_id='" + str(leaf) + "' RETURN n.zhaosun_label"
+                result_label = self.neograph_data.run(cqlQuery).to_ndarray()[0][0]
+                # print("leaf type: " + str(result_label))
+
+                if stwig_query_root_type == result_label:
                     new_roots.append(leaf)
+
             print("New roots: " + str(new_roots))
+
+            current_stwig_childred_node_labels = []
+            for child in stwig_query[1]:
+                # print(child)
+                # print(self.query_graph.node[child]['label'])
+                child_node_label = self.query_graph.node[child]['label']
+                current_stwig_childred_node_labels.append(child_node_label)
+            print("current_stwig_childred_node_labels: " + str(current_stwig_childred_node_labels))
+
             started_matches = []
+            not_match = 0
             for nr in new_roots:
                 st = [nr, []]
                 started_matches.append(st)
@@ -164,11 +226,15 @@ class neo4j_test_2(object):
                 print("Started matches: " + str(started_matches))
             if len(started_matches) > 0:
                 print("Matches: ")
+                finished_matches = []
+
                 for started_match in started_matches:
                     # print(started_match)
                     # Vecinii trebuie sa fie de tipul indicat in STwig-ul query al iteratiei curente.
-                    for neighbor_label in self.STwig_query_neighbor_labels:
+                    for neighbor_label in current_stwig_childred_node_labels:
                         # print("Neighbor label selected: " + str(neighbor_label))
+
+                        # AICI DE MODIFICAT IN CAZUL GRAFURILOR ORIENTATE?
                         cqlQuery2 = "MATCH(n{zhaosun_id: '" + str(started_match[0]) + "'})--(m) WHERE m.zhaosun_label='" + str(neighbor_label) + "' return m"
                         # print(cqlQuery2)
                         result2 = list(self.neograph_data.run(cqlQuery2).to_ndarray())
@@ -179,12 +245,26 @@ class neo4j_test_2(object):
                         if len(result2) > 0:
                             started_match[1].append(self.get_neo4j_stwig_node_trim(result2))
                     if len(self.STwig_query_neighbor_labels) == len(started_match[1]):
-                        print("Finished match: " + str(started_match))
-                        self.matches_dict[repr(stwig_query)] = started_match
-                        if stwig_query not in self.used_stwig_list:
-                            self.used_stwig_list.append(stwig_query)
+                        print('\x1b[0;30;45m' + "Finished match: " + str(started_match) + '\x1b[0m')
+                        # Trebuie ca sa facem o lista de finished matches care
+                        # sa o adaugam cheii, altfel se inregistreaza in dict
+                        # doar ultimul finished match pentru o cheie.
+                        finished_matches.append(started_match)
+
                     else:
                         print("A complete match was not found: " + str(started_match))
+                        not_match = not_match + 1
+
+                if not_match == len(started_matches):
+                    print("No matches found for current query STwig!")
+                    option = str(input('Stop execution? (y/n)'))
+                    if option == "y":
+                        exit(code=0)
+
+                self.matches_dict[repr(stwig_query)] = finished_matches
+                if stwig_query not in self.used_stwig_list:
+                    self.used_stwig_list.append(stwig_query)
+
                 # print("Finished matches: ")
                 # for finished_match in started_matches:
                 #     print(finished_match)
@@ -199,6 +279,7 @@ class neo4j_test_2(object):
             nodes_loaded = []
             for r in result:
                 nodes_loaded.append(r[0])
+            print("***End of Index_getID output for Iteration 0")
             return nodes_loaded
 
     def Index_getID_NX(self, label, query_graph_nx):
@@ -256,8 +337,9 @@ class neo4j_test_2(object):
         # Pentru q2 cauta doar in nodurile frunza corespunzatoare din G(q1)
         # Pentru twig-ul q3 cauta doar in nodurile frunza corespunzatoare din G(q1) si G(q2)
         # Se adauga filtrare in plus pentru Sr <- Index.getID(r), linia 1 din alg 1 - MatchSTwig.
-        print("STwig query: " + str(q))
-        # print("Number of leaf labels: " + str(len(q[1])))
+        # print("###MatchSTwig output:")
+        # print("STwig query node id's: " + str(q))
+        # print(q[0])
         #---HARDCODED
         # r = str(q[0]) # Root node label
         # L = [q[1][0], q[1][1]] # Root children labels
@@ -265,16 +347,27 @@ class neo4j_test_2(object):
         # print("Root children labels: " + str(L))
         #---HARDCODED
 
+        # Aici transformam un stwig query ([b1, [a1, d1, e1]]) intr-unul generic,
+        # lasand doar label-urile: [b, [a, d, e]], in Sr intra doar cu label-uri, indiferent de nr iteratiei.
+        q_labels_start = [self.query_graph.node[q[0]]['label'], []]
+        # print(q_labels_start)
+        for leaf_id in q[1]:
+            q_labels_start[1].append(self.query_graph.node[leaf_id]['label'])
+        # print("Query STwig labels: " + str(q_labels_start))
+        # print("STwig query labels - must be only the labels: " + str(q_labels_start))
+        # print("Number of leaf labels: " + str(len(q[1])))
+
+
         r = str(self.query_graph.node[q[0]]['label'])
         # print("STwig root label: " + str(r))
-        children_labels = q[1]
-        L = q[1]
+        L = q_labels_start[1]
+        # print("Children labels: " + str(L))
         # for l in children_labels:
         #     L.append(str(self.query_graph.node[]))
 
         #  (1) Find the set of root nodes by calling Index.getID(r);
-        Sr = self.Index_getID(r, iteration_number, self.matches, q)
-        print("Set of root nodes for label " + str(r) + ": " + str(Sr))
+        Sr = self.Index_getID(r, iteration_number, self.matches, q) # AICI q ESTE FORMAT DIN LABEL-URI
+        # print("Sr, Set of root nodes for label " + str(r) + ": " + str(Sr))
         R = []
         Sli = []
 
@@ -283,7 +376,7 @@ class neo4j_test_2(object):
             # print("---Root node: " + str(root_node))
             c = self.Cloud_Load(root_node)
             # print("     Children for selected root, first elem is selected root: " + str(c))
-            # root = c[0][0]
+            root = c[0][0]
             children = c[0][1]
             # print("root=" + str(root))
             # print("children=" + str(children))
@@ -344,8 +437,8 @@ class neo4j_test_2(object):
             for stwig in combinations_dict_final.keys():
                 # print(stwig)
                 R.append(stwig)
-        # print("STWIGS: ")
-        STwigs = sorted(R)
+        # print("STWIG MATCHES: ")
+        STwig_matches = sorted(R)
         # for stwig in STwigs:
         #     print(stwig)
         # Am schimbat graful astfel: am inlaturat muchia a3,b3: MATCH (n:a)-[r:RELTYPE]-(m:b) WHERE n.id = 'a3' AND m.id = 'b3' DELETE r
@@ -357,10 +450,18 @@ class neo4j_test_2(object):
 
         # print("\nMatchSTwig exec time -> sec: " + str(total_time_sec))
         # print("\nMatchSTwig exec time -> millis: " + str(total_time_millis))
-        self.matches = STwigs
-        # self.stwig_list.append(q)
+        STwig_matches_formatted = []
+        for match in STwig_matches:
+            formatted_match = [match[0], []]
+            for child in match[1:]:
+                formatted_match[1].append(child)
+            STwig_matches_formatted.append(formatted_match)
 
-        return STwigs
+
+        self.matches = STwig_matches
+        # self.stwig_list.append(q)
+        # print("###End of MatchSTwig output")
+        return STwig_matches_formatted
 
     def Query_Graph_Split(self, query_graph):
 

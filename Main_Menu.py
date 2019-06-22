@@ -145,21 +145,34 @@ def main():
 
             start_time = timer()
             stwigs = test2.STwig_Order_Selection()
+            print("stwigs:")
+            print(stwigs)
+            print("labels of stwigs:")
+            print(query_graph.nodes(data=True))
             total_time_sec = timer() - start_time
             total_time_millis = total_time_sec * 1000
             # for t in stwigs:
             iteration_number = stwigs.index(stwigs[0])
             print("--------Iteration number: " + str(iteration_number) + str("-----------"))
-            test2.STwig_query_root = stwigs[0][0]
+
+
+            # test2.STwig_query_root = stwigs[0][0]
+
             test2.STwig_query_neighbor_labels = stwigs[0][1]
+
+            # print("stwigs[0]:" + str(stwigs[0]))
             matches = test2.MatchSTwig(stwigs[0], iteration_number)
             test2.matches_dict[repr(stwigs[0])] = matches
+            # print("matches for Iteration 0:")
+            # print(matches)
 
             print("Matches dictionary: ")
             print("First key: ")
             print(list(test2.matches_dict.keys())[0])
-            print("First values attached to the first key: ")
-            print(list(test2.matches_dict.values())[0])
+            print('\x1b[0;30;45m' + "First values attached to the first key; matches: " + '\x1b[0m')
+            for match in list(test2.matches_dict.values())[0]:
+                print('\x1b[0;30;45m' + str(match) + '\x1b[0m')
+            print("--------Iteration end-----------------")
 
             for t in stwigs[1:]:
                 iteration_number = stwigs.index(t)
