@@ -90,3 +90,25 @@ class DB_Access_Test(object):
 
     # def get_overview(self):
     #     neograph_overview = Graph()
+
+
+    def match_finding_process(self, query_stwig, return_dict):
+        # print("--------Iteration number: " + str(iteration_number) + str("-----------"))
+        from neo4j_test_2 import neo4j_test_2
+        from Graph_File_Generator import Graph_File_Generator
+        query_graph_gen = Graph_File_Generator()
+        query_graph = query_graph_gen.gen_zhaosun_query_graph()
+        test2 = neo4j_test_2(query_graph)
+        test2.STwig_query_neighbor_labels = query_stwig[1]
+        matches = test2.MatchSTwig(query_stwig, 0)
+        test2.matches_dict[repr(query_stwig)] = matches
+
+        print("Matches dictionary: ")
+        print("First key: ")
+        print(list(test2.matches_dict.keys())[0])
+        print('\x1b[0;30;45m' + "First values attached to the first key; matches: " + '\x1b[0m')
+        for match in list(test2.matches_dict.values())[0]:
+            print('\x1b[0;30;45m' + str(match) + '\x1b[0m')
+        return_dict[0] = list(test2.matches_dict.values())[0]
+        return list(test2.matches_dict.values())[0]
+        # print("--------Iteration end-----------------")
