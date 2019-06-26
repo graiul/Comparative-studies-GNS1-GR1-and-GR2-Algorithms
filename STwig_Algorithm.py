@@ -18,16 +18,18 @@ class STwig_Algorithm(object):
 
 
     STwig_query_root = None
-    STwig_query_neighbor_labels = None
+    STwig_query_neighbor_labels = []
 
 
     matches_dict = {}
 
 
     used_stwig_list = []
-    def __init__(self, query_graph, return_dict):
+    def __init__(self, query_graph, return_dict, used_stwigs, STwig_query_neighbor_labels):
         self.query_graph = query_graph
         self.matches_dict = return_dict
+        self.used_stwig_list = used_stwigs
+        self.STwig_query_neighbor_labels = STwig_query_neighbor_labels
 
     # neograph_data = Graph(port="7687", user="neo4j", password="graph") # Data Graph Zhaosun
     neograph_data = Graph("bolt://127.0.0.1:7690", auth=("neo4j", "changeme")) # Data Graph Zhaosun din READ_REPLICA
@@ -78,9 +80,11 @@ class STwig_Algorithm(object):
     # given label.
     def Index_getID(self, label, iteration_number, matches, stwig_query):
         if iteration_number == 0:
-            print("***Index_getID output for Iteration 0")
+            print("***Index_getID output for Process 0")
             print("STwig query: " + str(stwig_query))
             print("Initial matches list - must be empty at the beginning of the Iteration 0: " + str(matches))
+            print("Results for the first iteration will be seen in the printing of the shared dictionary "
+                  "\nfrom the second process onward.")
             # tx = self.neograph_data.begin()
             # cqlQuery = "MATCH (n:`" + str(label) + "`) RETURN n.RI_id"
             cqlQuery = "MATCH (n) WHERE n.zhaosun_label='" + str(label) + "' RETURN n.zhaosun_id" # IF a IN a1! Graf Zhaosun
@@ -101,13 +105,26 @@ class STwig_Algorithm(object):
             # print("Index_getID, q_labels_start - first: " + str(q_labels_start))
 
             self.used_stwig_list.append(stwig_query)
-            print("***End of Index_getID output for Iteration 0")
+
+            # Inainte de returnarea rezultatelor metodei, le vom si afisa pe ecran
+            # si le vom adauga in dictionarul comun.
+            # self.matches_dict[repr(stwig_query)] = self.matches
+            # print("Matches dictionary: ")
+            # print("First key: ")
+            # print(list(self.matches_dict.keys())[0])
+            # print('\x1b[0;30;45m' + "First values attached to the first key; matches: " + '\x1b[0m')
+            # for match in list(self.matches_dict.values())[0]:
+            #     print('\x1b[0;30;45m' + str(match) + '\x1b[0m')
+
+
+            print("***End of Index_getID output for Process 0")
+            print()
             return nodes_loaded
 
         elif iteration_number > 0:
             # print("Matches for previous iteration: ")
             # print(matches)
-            print("***Index_getID output for Iteration " + str(iteration_number))
+            print("***Index_getID output for Process " + str(iteration_number))
 
             print("STwig query: " + str(stwig_query))
 
@@ -249,6 +266,11 @@ class STwig_Algorithm(object):
                             started_match[1].append(self.get_neo4j_stwig_node_trim(result2))
                     if len(self.STwig_query_neighbor_labels) == len(started_match[1]):
                         print('\x1b[0;30;45m' + "Finished match: " + str(started_match) + '\x1b[0m')
+
+                        self.matches_dict[repr(stwig_query)] = started_match
+                        if stwig_query not in self.used_stwig_list:
+                            self.used_stwig_list.append(stwig_query)
+
                         # Trebuie ca sa facem o lista de finished matches care
                         # sa o adaugam cheii, altfel se inregistreaza in dict
                         # doar ultimul finished match pentru o cheie.
@@ -257,16 +279,21 @@ class STwig_Algorithm(object):
                     else:
                         print("A complete match was not found: " + str(started_match))
                         not_match = not_match + 1
+                        # print(self.STwig_query_neighbor_labels)
+                        # print(len(self.STwig_query_neighbor_labels))
+                        # print(len(started_match[1]))
 
                 if not_match == len(started_matches):
                     print("No matches found for current query STwig!")
-                    option = str(input('Stop execution? (y/n)'))
-                    if option == "y":
-                        exit(code=0)
-
-                self.matches_dict[repr(stwig_query)] = finished_matches
-                if stwig_query not in self.used_stwig_list:
-                    self.used_stwig_list.append(stwig_query)
+                    # option = str(input('Stop execution? (y/n)'))
+                    # if option == "y":
+                    #     exit(code=0)
+                # elif not_match < len(started_matches):
+                #
+                #     # Trebuie sa il puna in dictionarul comun doar daca exista cel putin un match pentru STwig-ul selectat.
+                #     self.matches_dict[repr(stwig_query)] = finished_matches
+                #     if stwig_query not in self.used_stwig_list:
+                #         self.used_stwig_list.append(stwig_query)
 
                 # print("Finished matches: ")
                 # for finished_match in started_matches:
@@ -282,7 +309,8 @@ class STwig_Algorithm(object):
             nodes_loaded = []
             for r in result:
                 nodes_loaded.append(r[0])
-            print("***End of Index_getID output for Iteration 0")
+            print("***End of Index_getID output for Process " + str(iteration_number))
+            print()
             return nodes_loaded
 
     def Index_getID_NX(self, label, query_graph_nx):

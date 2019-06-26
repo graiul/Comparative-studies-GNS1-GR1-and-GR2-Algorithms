@@ -265,11 +265,14 @@ def main():
             query_graph = query_graph_gen.gen_zhaosun_query_graph()
             manager = Manager()
             return_dict = manager.dict()
+            used_stwigs = manager.list()
+            STwig_query_neighbor_labels = manager.list()
 
-            STwig_algorithm = STwig_Algorithm(query_graph, return_dict)
+            STwig_algorithm = STwig_Algorithm(query_graph, return_dict, used_stwigs, STwig_query_neighbor_labels)
             stwigs = STwig_algorithm.STwig_Order_Selection()
             db = DB_Access_Test()
-            STwig_query_neighbor_labels = manager.list()
+
+
             # process = Process(target=db.match_finding_process_filtered, args=(stwigs[0], return_dict, STwig_query_neighbor_labels, query_graph, iter_num, ))
             # process.start()
             # process.join()
@@ -279,7 +282,7 @@ def main():
             # for t in stwigs[1:]:
             for t in stwigs:
                 iter_num = stwigs.index(t)
-                process = Process(target=db.match_finding_process_filtered, args=(t, return_dict, STwig_query_neighbor_labels, query_graph, iter_num, ))
+                process = Process(target=db.match_finding_process_filtered, args=(t, return_dict, STwig_query_neighbor_labels, query_graph, iter_num, used_stwigs, ))
                 jobs.append(process)
 
 
@@ -287,6 +290,7 @@ def main():
                 j.start()
                 j.join()
 
+            print("Results from multiprocessing: ")
             for item in return_dict.items():
                 print(item)
 
