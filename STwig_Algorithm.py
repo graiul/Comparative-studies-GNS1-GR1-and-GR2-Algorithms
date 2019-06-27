@@ -41,16 +41,28 @@ class STwig_Algorithm(object):
         # Pentru Zhaosun Data Graph din db neo4j:
         biglist = []
         # print("     id=" + str(node_id))
-        cqlQuery = "MATCH (n) WHERE n.zhaosun_id = '" + str(node_id) + "' RETURN n"
+
+        # PENTRU Zhao Sun data graph
+        # cqlQuery = "MATCH (n) WHERE n.zhaosun_id = '" + str(node_id) + "' RETURN n"
+
+        # PENTRU RI data graph
+        cqlQuery = "MATCH (n) WHERE n.RI_node_id = '" + str(node_id) + "' RETURN n"
+
+
         # print(cqlQuery)
         result = self.neograph_data.run(cqlQuery).to_ndarray()
         # print(result)
         nodes_loaded = []
         nodes_loaded.append(result)
+
         # Returnarea vecinilor nodului cautat.
-        cqlQuery2 = "MATCH(n{zhaosun_id: '" + str(node_id) + "'})--(m) return m"
+        # PENTRU Zhao Sun data graph
+        # cqlQuery2 = "MATCH(n{zhaosun_id: '" + str(node_id) + "'})--(m) return m"
         # MATCH(n{zhaosun_id: 'a1'})--(m) return m
         # print(cqlQuery2)
+        # PENTRU RI data graph
+        cqlQuery2 = "MATCH(n{RI_node_id: '" + str(node_id) + "'})--(m) return m"
+
         result2 = list(self.neograph_data.run(cqlQuery2).to_ndarray())
         # print(result2)
         nodes_loaded.append(result2)
@@ -87,12 +99,19 @@ class STwig_Algorithm(object):
                   "\nfrom the second process onward.")
             # tx = self.neograph_data.begin()
             # cqlQuery = "MATCH (n:`" + str(label) + "`) RETURN n.RI_id"
-            cqlQuery = "MATCH (n) WHERE n.zhaosun_label='" + str(label) + "' RETURN n.zhaosun_id" # IF a IN a1! Graf Zhaosun
+
+            # PENTRU Zhao Sun data graph
+            # cqlQuery = "MATCH (n) WHERE n.zhaosun_label='" + str(label) + "' RETURN n.zhaosun_id" # IF a IN a1! Graf Zhaosun
+
+            # PENTRU RI data graph
+            cqlQuery = "MATCH (n) WHERE n.RI_node_label='" + str(label) + "' RETURN n.RI_node_id"
+
             # result = tx.run(cqlQuery).to_ndarray()
             result = self.neograph_data.run(cqlQuery).to_ndarray()
             # print("result:" + str(list(result)))
             nodes_loaded = []
             for r in result:
+                print("r=" + str(r))
                 nodes_loaded.append(r[0])
             # print("nodes loaded: " + str(nodes_loaded))
 
@@ -220,7 +239,14 @@ class STwig_Algorithm(object):
                 # have the same type as the current stwig root type:
 
                 # Leaf types must be taken from the data graph
-                cqlQuery = "MATCH (n) WHERE n.zhaosun_id='" + str(leaf) + "' RETURN n.zhaosun_label"
+
+                # PENTRU Zhao Sun data graph
+                # cqlQuery = "MATCH (n) WHERE n.zhaosun_id='" + str(leaf) + "' RETURN n.zhaosun_label"
+
+                # PENTRU RI data graph
+                cqlQuery = "MATCH (n) WHERE n.RI_node_id='" + str(leaf) + "' RETURN n.RI_node_label"
+
+
                 result_label = self.neograph_data.run(cqlQuery).to_ndarray()[0][0]
                 # print("leaf type: " + str(result_label))
 
@@ -255,7 +281,13 @@ class STwig_Algorithm(object):
                         # print("Neighbor label selected: " + str(neighbor_label))
 
                         # AICI DE MODIFICAT IN CAZUL GRAFURILOR ORIENTATE?
-                        cqlQuery2 = "MATCH(n{zhaosun_id: '" + str(started_match[0]) + "'})--(m) WHERE m.zhaosun_label='" + str(neighbor_label) + "' return m"
+
+                        # PENTRU Zhao Sun data graph
+                        # cqlQuery2 = "MATCH(n{zhaosun_id: '" + str(started_match[0]) + "'})--(m) WHERE m.zhaosun_label='" + str(neighbor_label) + "' return m"
+
+                        # PENTRU RI data graph
+                        cqlQuery2 = "MATCH(n{RI_node_id: '" + str(started_match[0]) + "'})--(m) WHERE m.RI_node_label='" + str(neighbor_label) + "' return m"
+
                         # print(cqlQuery2)
                         result2 = list(self.neograph_data.run(cqlQuery2).to_ndarray())
                         # if len(result2) > 0:
@@ -304,10 +336,17 @@ class STwig_Algorithm(object):
                 #         print(self.get_neo4j_stwig_node_trim(neighbor))
             print("----------------------------------")
 
-            cqlQuery = "MATCH (n) WHERE n.zhaosun_label='" + str(label) + "' RETURN n.zhaosun_id" # IF a IN a1! Graf Zhaosun
+            # PENTRU Zhao Sun data graph
+            # cqlQuery = "MATCH (n) WHERE n.zhaosun_label='" + str(label) + "' RETURN n.zhaosun_id" # IF a IN a1! Graf Zhaosun
+
+            # PENTRU RI data graph
+            cqlQuery = "MATCH (n) WHERE n.RI_node_label='" + str(label) + "' RETURN n.RI_node_id" # IF a IN a1! Graf Zhaosun
+
+
             result = self.neograph_data.run(cqlQuery).to_ndarray()
             nodes_loaded = []
             for r in result:
+                print("r=" + str(r))
                 nodes_loaded.append(r[0])
             print("***End of Index_getID output for Process " + str(iteration_number))
             print()
@@ -325,9 +364,15 @@ class STwig_Algorithm(object):
         # print("Index_hasLabel:")
         # print("Node ID: " + str(node_id))
         # print("Label: " + str(label))
-        cqlQuery = "MATCH (n) WHERE n.zhaosun_label='" + str(label) + "' AND n.zhaosun_id='" + str(node_id) + "' RETURN n"
+
+        # PENTRU Zhao Sun data graph
+        # cqlQuery = "MATCH (n) WHERE n.zhaosun_label='" + str(label) + "' AND n.zhaosun_id='" + str(node_id) + "' RETURN n"
         # MATCH (n) WHERE n.zhaosun_label='a' AND n.zhaosun_id='a1' RETURN n
         # print(cqlQuery)
+
+        # PENTRU RI data graph
+        cqlQuery = "MATCH (n) WHERE n.RI_node_label='" + str(label) + "' AND n.RI_node_id='" + str(node_id) + "' RETURN n"
+
         result = self.neograph_data.run(cqlQuery).to_ndarray()
         # print("Index_hasLabel query result= ")
         # print(list(result))
@@ -368,8 +413,8 @@ class STwig_Algorithm(object):
         # Pentru q2 cauta doar in nodurile frunza corespunzatoare din G(q1)
         # Pentru twig-ul q3 cauta doar in nodurile frunza corespunzatoare din G(q1) si G(q2)
         # Se adauga filtrare in plus pentru Sr <- Index.getID(r), linia 1 din alg 1 - MatchSTwig.
-        # print("###MatchSTwig output:")
-        # print("STwig query node id's: " + str(q))
+        print("###MatchSTwig output:")
+        print("STwig query node id's: " + str(q))
         # print(q[0])
         #---HARDCODED
         # r = str(q[0]) # Root node label
@@ -384,29 +429,28 @@ class STwig_Algorithm(object):
         # print(q_labels_start)
         for leaf_id in q[1]:
             q_labels_start[1].append(self.query_graph.node[leaf_id]['label'])
-        # print("Query STwig labels: " + str(q_labels_start))
+        print("Query STwig labels: " + str(q_labels_start))
         # print("STwig query labels - must be only the labels: " + str(q_labels_start))
         # print("Number of leaf labels: " + str(len(q[1])))
-
 
         r = str(self.query_graph.node[q[0]]['label'])
         # print("STwig root label: " + str(r))
         L = q_labels_start[1]
-        # print("Children labels: " + str(L))
+        print("Children labels: " + str(L))
         # for l in children_labels:
         #     L.append(str(self.query_graph.node[]))
 
         #  (1) Find the set of root nodes by calling Index.getID(r);
         Sr = self.Index_getID(r, iteration_number, self.matches, q) # AICI q ESTE FORMAT DIN LABEL-URI
-        # print("Sr, Set of root nodes for label " + str(r) + ": " + str(Sr))
+        print("Sr, Set of root nodes for label " + str(r) + ": " + str(Sr))
         R = []
         Sli = []
 
         # (2) Foreach root node, find its child nodes using Cloud.Load();
         for root_node in Sr:
-            # print("---Root node: " + str(root_node))
+            print("---Root node: " + str(root_node))
             c = self.Cloud_Load(root_node)
-            # print("     Children for selected root, first elem is selected root: " + str(c))
+            print("     Children for selected root, first elem is selected root: " + str(c))
             root = c[0][0]
             children = c[0][1]
             # print("root=" + str(root))
@@ -416,8 +460,8 @@ class STwig_Algorithm(object):
             S = []
             S_child_lists = []
             for root_child_label in L:
-                # print("     Root_child_label: " + str(root_child_label))
-                # print("     " + str(type(root_child_label)))
+                print("     Root_child_label: " + str(root_child_label))
+                print("     " + str(type(root_child_label)))
                 for child in children:
                     if child not in S_child_lists:
                         # print("     child= " + str(child)) # Child, sau vecinii de ordinul 1.
@@ -491,7 +535,9 @@ class STwig_Algorithm(object):
 
         self.matches = STwig_matches
         # self.stwig_list.append(q)
-        # print("###End of MatchSTwig output")
+
+        # print("STwig_matches_formatted: " + str(STwig_matches_formatted))
+        print("###End of MatchSTwig output")
         return STwig_matches_formatted
 
     def Query_Graph_Split(self, query_graph):
@@ -535,18 +581,26 @@ class STwig_Algorithm(object):
         return deg / self.freq_NX(self.query_graph.node[v_id]['label'], self.query_graph)
 
     def freq(self, v_label):
-        # tx = self.neograph_data.begin() # Pentru graful data Zhaosun!
+        # tx = self.neograph_data.begin() # Pentru graful data Zhaosun, in cazul Neo4j single instance, not Neo4j cluster!
 
         # cqlQuery = "MATCH (n:`" + str(v_label) + "`) RETURN n"
-        cqlQuery = "MATCH (n) WHERE n.zhaosun_label='" + str(v_label) + "' return n"
+
+        # PENTRU Zhao Sun data graph
+        # cqlQuery = "MATCH (n) WHERE n.zhaosun_label='" + str(v_label) + "' return n"
+
+        # PENTRU RI data graph
+        cqlQuery = "MATCH (n) WHERE n.RI_node_label='" + str(v_label) + "' return n"
+
         # result = tx.run(cqlQuery).to_ndarray()
         result = self.neograph_data.run(cqlQuery)
         return len(list(result))
 
     def freq_NX(self, label, query_graph_nx):
         counter = 0
+        # print("label=" + str(label))
         for node in query_graph_nx.nodes():
-            if query_graph_nx.node[node]['label'] is label:
+            # print("query_graph_nx.node[node]['label']=" + str(query_graph_nx.node[node]['label']))
+            if query_graph_nx.node[node]['label'] is str(label):
                 counter += 1
         return counter
 

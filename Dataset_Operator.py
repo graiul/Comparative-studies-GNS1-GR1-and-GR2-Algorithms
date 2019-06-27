@@ -25,7 +25,10 @@ class Dataset_Operator(object):
         neograph_data = Graph(self.leader_core_bolt_address, auth=(self.username, self.passwd))
         cqlQuery = "LOAD CSV WITH HEADERS FROM '" + str(self.dataset_nodes_url) + "' AS line" \
                    " CREATE (:Node {  RI_node_id: line.RI_node_id, RI_node_label: line.RI_node_label})"
+        cqlQuery_create_nodes_index = "create index on :Node(RI_node_id)"
+
         neograph_data.run(cqlQuery)
+        neograph_data.run(cqlQuery_create_nodes_index)
 
     # Aici modificam pentru graf orientat.
     def insert_edges_zhao_sun(self):

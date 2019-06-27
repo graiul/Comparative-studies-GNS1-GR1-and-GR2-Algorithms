@@ -118,4 +118,5 @@ class DB_Access_Test(object):
         STwig_query_neighbor_labels = query_stwig[1]
         STwig_algorithm = STwig_Algorithm(query_graph, return_dict, used_stwigs, STwig_query_neighbor_labels)
         matches = STwig_algorithm.MatchSTwig(query_stwig, iter_num) # Ca filtrarea sa mearga, trebuie sa dam si numarul iteratiilor!
+        # print(matches)
         return_dict[repr(query_stwig)] = matches

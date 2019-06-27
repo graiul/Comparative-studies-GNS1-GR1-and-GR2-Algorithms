@@ -281,7 +281,10 @@ def main():
         elif option == 92:
             print("\n================= Option 92 commencing... =================")
             query_graph_gen = Graph_File_Generator()
-            query_graph = query_graph_gen.gen_zhaosun_query_graph()
+            # query_graph = query_graph_gen.gen_zhaosun_query_graph()
+            query_graph = query_graph_gen.gen_RI_query_graph()
+            print(query_graph.nodes(data=True))
+
             manager = Manager()
             return_dict = manager.dict()
             used_stwigs = manager.list()
@@ -289,6 +292,7 @@ def main():
 
             STwig_algorithm = STwig_Algorithm(query_graph, return_dict, used_stwigs, STwig_query_neighbor_labels)
             stwigs = STwig_algorithm.STwig_Order_Selection()
+            print("stwigs: " + str(stwigs))
             db = DB_Access_Test()
 
 
