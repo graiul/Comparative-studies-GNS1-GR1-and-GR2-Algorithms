@@ -13,7 +13,8 @@ from functools import partial
 def main():
     menu = [
         ["\n\n1. Graph generator tool"],
-        ["2. Insert data into db"],
+        ["2. Insert Zhao Sun data into db"],
+        ["21. Insert RI data into db"],
         ["3. Delete data from db"],
         ["4. View graph data - single thread"],
         ["5. View graph data - multi-threaded"],
@@ -41,11 +42,29 @@ def main():
             username = str(input('\nUsername of core: '))
             passwd = str(input('\nPassword of core: '))
             dataset_operator = Dataset_Operator(node_dataset_url, edge_dataset_url, leader_core_bolt_address, username, passwd)
-            dataset_operator.insert_nodes()
-            dataset_operator.insert_edges()
+            dataset_operator.insert_nodes_zhao_sun()
+            dataset_operator.insert_edges_zhao_sun()
             print()
             for m in menu:
                 print(m)
+
+        elif option == 21:
+            # node_dataset_url = str(input('\nDataset nodes URL: '))
+            node_dataset_url = "https://raw.githubusercontent.com/room229/graph_datasets/master/RI_data_graph_nodes.csv"
+            # edge_dataset_url = str(input('\nDataset edges URL: '))
+            edge_dataset_url = "https://raw.githubusercontent.com/room229/graph_datasets/master/RI_data_graph_edges.csv"
+            leader_core_bolt_address = str(input('\nLeader core bolt address: '))
+            username = str(input('\nUsername of core: '))
+            passwd = str(input('\nPassword of core: '))
+            dataset_operator = Dataset_Operator(node_dataset_url, edge_dataset_url, leader_core_bolt_address, username, passwd)
+            dataset_operator.insert_nodes_RI()
+            option = str(input('\nStart inserting edges? (y/n): '))
+            if option == "y":
+                dataset_operator.insert_edges_RI()
+            print()
+            for m in menu:
+                print(m)
+
         elif option == 3:
             leader_core_bolt_address = str(input('\nLeader core bolt address: '))
             username = str(input('\nUsername of core: '))

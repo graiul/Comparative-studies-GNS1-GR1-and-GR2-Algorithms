@@ -13,7 +13,7 @@ class Dataset_Operator(object):
         self.username = username
         self.passwd = passwd
 
-    def insert_nodes(self):
+    def insert_nodes_zhao_sun(self):
         neograph_data = Graph(self.leader_core_bolt_address, auth=(self.username, self.passwd))
         # tx = neograph_data.begin() # LA VARIANTA CU NEO4J CA SI C NU MERGE, NEO4j VER 3.3.1
         cqlQuery = "LOAD CSV WITH HEADERS FROM '" + str(self.dataset_nodes_url) + "' AS line" \
@@ -21,7 +21,14 @@ class Dataset_Operator(object):
         # tx.run(cqlQuery)
         neograph_data.run(cqlQuery)
 
-    def insert_edges(self):
+    def insert_nodes_RI(self):
+        neograph_data = Graph(self.leader_core_bolt_address, auth=(self.username, self.passwd))
+        cqlQuery = "LOAD CSV WITH HEADERS FROM '" + str(self.dataset_nodes_url) + "' AS line" \
+                   " CREATE (:Node {  RI_node_id: line.RI_node_id, RI_node_label: line.RI_node_label})"
+        neograph_data.run(cqlQuery)
+
+    # Aici modificam pentru graf orientat.
+    def insert_edges_zhao_sun(self):
         neograph_data = Graph(self.leader_core_bolt_address, auth=(self.username, self.passwd))
         # tx = neograph_data.begin()
         cqlQuery = "LOAD CSV WITH HEADERS FROM '" + str(self.dataset_edges_url) + "' AS line" \
@@ -30,6 +37,15 @@ class Dataset_Operator(object):
                    " MERGE (n)-[:PPI]-(m)"
         # tx.run(cqlQuery)
         neograph_data.run(cqlQuery)
+
+    def insert_edges_RI(self):
+        neograph_data = Graph(self.leader_core_bolt_address, auth=(self.username, self.passwd))
+        cqlQuery = "LOAD CSV WITH HEADERS FROM '" + str(self.dataset_edges_url) + "' AS line" \
+                   " MERGE (n:Node {RI_node_id: line.RI_from})" \
+                   " MERGE (m:Node {RI_node_id: line.RI_to})" \
+                   " MERGE (n)-[:PPI]-(m)" # La aceasta linie modificam pentru graf orientat.
+        neograph_data.run(cqlQuery)
+
 
     def delete_data_from_db(self):
         neograph_data = Graph(self.leader_core_bolt_address, auth=(self.username, self.passwd))

@@ -389,6 +389,34 @@ class Graph_Format:
     def get_graph(self):
         return self.graph
 
+    def create_RI_data_graph_nodes_csv_file(self, nx_RI_data_graph):
+        f = open('RI_data_graph_nodes.csv', "w+")
+        f.write("RI_node_label,RI_node_id\n")
+        node_list = list(nx_RI_data_graph.nodes(data=True))
+        node_list_without_last_element = node_list[:-1]
+        # print(node_list[1][0])
+        # print(str(node_list[0][1]).split(": ")[1])
+        for node in node_list_without_last_element:
+            RI_node_label_aux = str(node[1]).split(": '")[1]
+            RI_node_label = RI_node_label_aux.split("'}")[0]
+            f.write(RI_node_label + "," + str(node[0]) + "\n")
+
+        last_node = node_list[len(node_list)-1]
+        RI_node_label_aux = str(last_node[1]).split(": '")[1]
+        RI_node_label = RI_node_label_aux.split("'}")[0]
+        f.write(RI_node_label + "," + str(last_node[0]))
+
+    def create_RI_data_graph_edges_csv_file(self, nx_RI_data_graph):
+        f = open('RI_data_graph_edges.csv', "w+")
+        f.write("RI_from,RI_to\n")
+        edge_list = list(nx_RI_data_graph.edges())
+        edge_list_without_last_elem = edge_list[:-1]
+        # print(edge_list)
+        for edge in edge_list_without_last_elem:
+            f.write(str(edge[0]) + "," + str(edge[1]) + "\n")
+        # Adaugarea ultimei muchii, dar fara un "\n" dupa ea.
+        f.write(str(edge_list[len(edge_list)-1][0]) + "," + str(edge_list[len(edge_list)-1][1]))
+
 # # Date mari
 # # Prelucrez fisierul text:
 # print()
@@ -425,7 +453,9 @@ class Graph_Format:
 # print("Lista de noduri: ")
 # print(graph.nodes(data=True))
 
-# gf = Graph_Format("Homo_sapiens_udistr_32.gfd")
-# gf.create_graph_from_RI_db_file()
-# graph = gf.get_graph()
-# print(graph.nodes(data=True))
+gf = Graph_Format("Homo_sapiens_udistr_32.gfd")
+gf.create_graph_from_RI_file()
+nx_RI_data_graph = gf.get_graph()
+# print(nx_RI_data_graph.nodes(data=True))
+gf.create_RI_data_graph_nodes_csv_file(nx_RI_data_graph)
+# gf.create_RI_data_graph_edges_csv_file(nx_RI_data_graph)
