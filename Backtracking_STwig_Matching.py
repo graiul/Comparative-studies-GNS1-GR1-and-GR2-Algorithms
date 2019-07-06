@@ -33,7 +33,6 @@ def match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, ind
             if solution not in complete_solutions:
                 print("Complete solution: " + str(solution))
                 complete_solutions.append(solution)
-            # solution[1] = solution[1][:2]
 
             # for i in range(1, len(query_stwig_1[1])):
             #     # print(i)
@@ -62,13 +61,17 @@ def match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, ind
             if len(solution[1]) < len(query_stwig_1[1]):
                 for leaf_label in query_stwig_as_labels[1]:
                     valid_root = find_valid_leaf_with_label(leaf_label, solution, data_graph)
+                    print("valid_root: " + valid_root)
                     solution[1].append(valid_root)
                     # print(solution)
 
                     # Trece la urmatoarea frunza
-                    solution[1] = solution[1][:2] # .append(valid_root)
-                    print(solution)
+                    # solution[1] = solution[1][:3] # .append(valid_root)
+                    print("solution before next rec call: " + str(solution))
                     match_stwig_backtracking(query_stwig_1, query_stwig_1_as_labels, data_graph, index, solution)
+
+                    # Remove and replace last elem
+                    # solution[1] = solution[1][:2]
 
                     # print("leaf_label selectat: " + str(leaf_label))
                     # for leaf in data_graph.nodes():
@@ -117,12 +120,14 @@ def match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, ind
 
 def find_valid_leaf_with_label(leaf_label, solution, data_graph):
     for leaf in data_graph.nodes():
-        if leaf not in solution[1]:
+        if len(complete_solutions) != 0 and leaf not in complete_solutions[-1][1][-1]:
             if data_graph.node[leaf]['label'] == leaf_label:  # and leaf not in solution[1]: # Avem un nod te tipul unui leaf
                 if data_graph.has_edge(solution[0], leaf):  # Verificam daca este vecinatate de ordinul 1
                     return leaf
-        # else:
-
+        else:
+            if data_graph.node[leaf]['label'] == leaf_label:  # and leaf not in solution[1]: # Avem un nod te tipul unui leaf
+                if data_graph.has_edge(solution[0], leaf):  # Verificam daca este vecinatate de ordinul 1
+                    return leaf
 
 # Cream graful de 1000 de muchii.
 # Il inseram in NetworkX
