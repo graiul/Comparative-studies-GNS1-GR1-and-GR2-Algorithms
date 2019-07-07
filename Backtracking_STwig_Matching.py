@@ -36,7 +36,7 @@ def match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, ind
 
         solution = back(solution)
         print("Solution without last elem: " + str(solution))
-        index = 1
+        index = index - 1
         # new_leaf = find_valid_leaf_with_label(query_stwig_as_labels[3], solution, data_graph)
         # print("new_leaf: " + str(new_leaf))
         match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, index, solution)
