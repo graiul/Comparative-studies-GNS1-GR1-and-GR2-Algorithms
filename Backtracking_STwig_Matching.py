@@ -38,9 +38,9 @@ def match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, ind
             complete_solutions.append(solution)
 
             solution = back(solution)
-            print("solution without last elem: " + str(solution))
+            print("Solution without last elem: " + str(solution))
             new_leaf = find_valid_leaf_with_label(query_stwig_as_labels[3], solution, data_graph)
-            # print("new_leaf: " + str(new_leaf))
+            print("new_leaf: " + str(new_leaf))
             # match_stwig_backtracking(query_stwig_1, query_stwig_1_as_labels, data_graph, index, solution)
 
         # if len(solution[1:]) < len(query_stwig[1:]):
@@ -81,7 +81,7 @@ def match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, ind
 
                     # Trece la urmatoarea frunza
                     # solution[1] = solution[1][:3] # .append(valid_root)
-                    print("solution before next rec call: " + str(solution))
+                    print("Solution before next rec call: " + str(solution))
                     match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, index, solution)
 
                     # valid_root = find_valid_leaf_with_label(leaf_label, solution, data_graph)
@@ -161,14 +161,24 @@ def find_valid_leaf_with_label(leaf_label, solution, data_graph):
     if len(complete_solutions) != 0:
         print("     SECOND VALIDATION IF - USED WHEN WE ALREADY HAD A COMPLETE SOLUTION")
         for c_sol in complete_solutions:
-            print("     " + str(c_sol))
-            print("     " + str(c_sol[-1]))
+            # print("     " + str(c_sol))
+            # print("     " + str(c_sol[-1]))
             for leaf in data_graph.nodes():
-                print(leaf)
+                # print(leaf)
+                # if leaf == c_sol[-1]:
+                    # print("^---leaf already used")
+
                 if leaf != c_sol[-1]:
-                    print("^---leaf is different than the one in the complete solutions")
-                    # if data_graph.node[leaf]['label'] is leaf_label:  # and leaf not in solution[1]: # Avem un nod te tipul unui leaf
-                    #     print("YES")
+                    # print("^---leaf is different than the one in the complete solutions")
+                    # print("    and its label is: " + str(data_graph.node[leaf]['label']))
+                    # print("    The current selected leaf label is: " + str(leaf_label))
+
+                    if data_graph.node[leaf]['label'] == leaf_label:  # and leaf not in solution[1]: # Avem un nod te tipul unui leaf
+                        # print("    The labels are equal! Can be returned.")
+                        print("     returned leaf: " + str(leaf))
+                        print("find_valid_leaf_with_label execution end on SECOND VALIDATION IF ")
+
+                        return leaf
 
 
 
