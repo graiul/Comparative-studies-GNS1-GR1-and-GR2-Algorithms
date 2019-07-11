@@ -1,11 +1,12 @@
-from package.GenericQueryProc import GenericQueryProc
 import copy
 import networkx as nx
-from package.Graph_Format import Graph_Format
+from GenericQueryProc import GenericQueryProc
+from Graph_Format import Graph_Format
 from timeit import default_timer as timer
 
 
 # print("\nVF2 algorithm:")
+
 
 class VF2Algorithm(GenericQueryProc):
 
