@@ -68,18 +68,38 @@ def match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, ind
         # Pentru O FRUNZA STwig-ului:
         if len(solution) >= 1:
             if len(solution[1:]) < len(query_stwig[1:]):
+
                 print("query_stwig_as_labels: ")
                 print(query_stwig_as_labels)
                 leaf_labels = query_stwig_as_labels[1:]
                 print("leaf_labels: ")
                 print(leaf_labels)
-                # for leaf_label in leaf_labels:
-                leaf_label = leaf_labels[0]
+
+                # if len(solution[1:]) > 0:
+                if len(leaf_labels) > 0:
+                    solution_leafs_number = len(solution[1:])
+                    print("solution_leafs_number: ")
+                    print(solution_leafs_number)
+                    print("leaf_labels without already found node labels: ")
+                    new_list_leaf_labels = leaf_labels[solution_leafs_number:]
+                    print(new_list_leaf_labels)
+                    if len(new_list_leaf_labels) > 0:
+                        leaf_label = new_list_leaf_labels[0]
+                        print("leaf_label")
+                        print(leaf_label)
+
+
+
+                    else:
+                        leaf_label = leaf_labels[0]
+
                 print("leaf label for next valid leaf: ")
                 print(leaf_label)
                 print("label list for next iteration: ")
                 del leaf_labels[0]
                 print(leaf_labels)
+
+
                 print("query_stwig_as_labels for next iteration: MUST BE EQUAL WITH ABOVE LIST")
                 query_stwig_as_labels.remove(leaf_label)
                 print(query_stwig_as_labels[1:])
