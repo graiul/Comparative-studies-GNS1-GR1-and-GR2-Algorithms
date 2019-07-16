@@ -33,8 +33,9 @@ def match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, ind
     # if len(solution) > 1:
 
     if is_valid(solution, query_stwig):
-        print("Complete solution: " + str(solution))
-        complete_solutions.append(solution)
+        cs = copy.deepcopy(solution)
+        print("Complete solution: " + str(cs))
+        complete_solutions.append(cs)
         print("Intermediary complete list: ")
         for c in complete_solutions:
             print(c)
@@ -88,8 +89,6 @@ def match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, ind
                         print("leaf_label")
                         print(leaf_label)
 
-
-
                     else:
                         leaf_label = leaf_labels[0]
 
@@ -101,7 +100,10 @@ def match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, ind
 
 
                 print("query_stwig_as_labels for next iteration: MUST BE EQUAL WITH ABOVE LIST")
-                query_stwig_as_labels.remove(leaf_label)
+                # query_stwig_as_labels.remove(leaf_label)
+                del query_stwig_as_labels[0]
+
+
                 print(query_stwig_as_labels[1:])
                 valid_leaf = find_valid_leaf_with_label(leaf_label, solution, data_graph)
 
@@ -182,6 +184,8 @@ def find_valid_leaf_with_label(leaf_label, solution, data_graph):
     # Aici vine solutia fara ultimul element dupa gasirea primei solutii complete
     if len(complete_solutions) != 0:
         print("     SECOND VALIDATION IF - USED WHEN WE ALREADY HAD A COMPLETE SOLUTION")
+        print("         complete_solutions: ")
+        print("         " + str(complete_solutions))
         for c_sol in complete_solutions:
             # print("     " + str(c_sol))
             # print("     " + str(c_sol[-1]))
