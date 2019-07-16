@@ -1,3 +1,5 @@
+import copy
+
 from Graph_Format import Graph_Format
 import networkx as nx
 
@@ -25,8 +27,8 @@ def match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, ind
 
 
     # if solution == [[]] or len(solution[1]) == len(query_stwig[1]):
-
-    print("\nInput solution: " + str(solution))
+    print("\n------------------------------")
+    print("Input solution: " + str(solution))
     # Verficam daca am gasit o solutie completa.
     # if len(solution) > 1:
 
@@ -37,7 +39,8 @@ def match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, ind
         for c in complete_solutions:
             print(c)
         solution = back(solution, -1)
-        print("Solution without last elem: " + str(solution))
+        print("Solution without last element: " + str(solution))
+        print("Passing it on...")
         index = index - 2
         # new_leaf = find_valid_leaf_with_label(query_stwig_as_labels[3], solution, data_graph)
         # print("new_leaf: " + str(new_leaf))
@@ -65,6 +68,8 @@ def match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, ind
         # Pentru O FRUNZA STwig-ului:
         if len(solution) >= 1:
             if len(solution[1:]) < len(query_stwig[1:]):
+                print("query_stwig_as_labels: ")
+                print(query_stwig_as_labels)
                 leaf_labels = query_stwig_as_labels[1:]
                 print("leaf_labels: ")
                 print(leaf_labels)
@@ -93,7 +98,10 @@ def match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, ind
                     match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, index, solution)
                 else:
                     print("Found first solution. Must pass it on.")
-                    print()
+                    print("Refreshed query_stwig_1_as_labels: ")
+                    query_stwig_1_as_labels = copy.deepcopy(query_stwig_1_as_labels_source)
+                    print(query_stwig_1_as_labels)
+                    match_stwig_backtracking(query_stwig, query_stwig_1_as_labels, data_graph, index, solution)
 
 
 
@@ -188,8 +196,8 @@ def find_valid_leaf_with_label(leaf_label, solution, data_graph):
 
 def back(solution, pos):
     del solution[pos]
-    print("sol_aux: ")
-    print(solution)
+    # print("sol_aux: ")
+    # print(solution)
     return solution
 
 def is_valid(solution, query_stwig):
@@ -278,7 +286,7 @@ for nl in neighbor_labels:
     query_stwig_1_as_labels.append(nl)
 print("query_stwig_1_as_labels: " + str(query_stwig_1_as_labels))
 print()
-
+query_stwig_1_as_labels_source = copy.deepcopy(query_stwig_1_as_labels)
 print("Backtracking start: ")
 complete_solutions = []
 # Pentru graful cu 1000 de muchii:
