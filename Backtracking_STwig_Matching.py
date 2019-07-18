@@ -51,6 +51,10 @@ def match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, ind
         if solution in complete_solutions:
             print("Already found.")
             print(back(solution, -2))
+            solution = copy.deepcopy(back(solution, -2))
+            # leaf_labels = copy.deepcopy(query_stwig_as_labels[1:])
+            query_stwig_as_labels = copy.deepcopy(query_stwig_1_as_labels_source)
+            match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, 1, solution)
 
         # Pentru radacina STwig-ului:
         if len(solution) == 0:
@@ -76,7 +80,7 @@ def match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, ind
 
                 print("query_stwig_as_labels: ")
                 print(query_stwig_as_labels)
-                leaf_labels = query_stwig_as_labels[1:]
+                leaf_labels = copy.deepcopy(query_stwig_as_labels[1:])
                 print("leaf_labels: ")
                 print(leaf_labels)
 
@@ -224,7 +228,8 @@ def find_valid_leaf_with_label(leaf_label, solution, data_graph):
 
 def back(solution, pos):
     to_del = copy.deepcopy(solution)
-    del to_del[pos]
+    to_del = to_del[:pos]
+    # del to_del[pos]
     # print("sol_aux: ")
     # print(solution)
     return to_del
