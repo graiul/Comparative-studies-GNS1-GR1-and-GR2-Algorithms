@@ -167,6 +167,8 @@ def match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, ind
 
 
 def find_valid_leaf_with_label(leaf_label, solution, data_graph):
+    valid_leafs_for_position = []
+
     print("find_valid_leaf_with_label execution: ")
     # print(len(data_graph.nodes()))
     print("     leaf_label: " + leaf_label)
@@ -195,14 +197,17 @@ def find_valid_leaf_with_label(leaf_label, solution, data_graph):
         print("         complete_solutions: ")
         print("         " + str(complete_solutions))
         for c_sol in complete_solutions:
-            # print("     " + str(c_sol))
+            print("completed solution selected for comparison: ")
+            print("     " + str(c_sol))
             # print("     " + str(c_sol[-1]))
             for leaf in data_graph.nodes():
                 # print(leaf)
                 # if leaf == c_sol[-1]:
                     # print("^---leaf already used")
 
-                if leaf != c_sol[-1]:
+                if leaf != c_sol[-2]:
+                    print("leaf from completed solution selected for comparison : ")
+                    print(c_sol[-2])
                     print(leaf)
                     print("^---leaf is different than the one in the complete solutions")
                     print("    and its label is: " + str(data_graph.node[leaf]['label']))
@@ -214,10 +219,14 @@ def find_valid_leaf_with_label(leaf_label, solution, data_graph):
                             # print("    The labels are equal! Can be returned.")
                             print("    RETURNED LEAF: " + str(leaf))
                             print("find_valid_leaf_with_label execution end on SECOND VALIDATION IF ")
-
-                            return leaf
-
-
+            # if c_sol != complete_solutions[-1]:
+            #     continue
+                            if leaf not in valid_leafs_for_position:
+                                valid_leafs_for_position.append(leaf)
+        valid_leafs_for_position.sort()
+        print("valid_leafs_for_position: ")
+        print(valid_leafs_for_position)
+        return valid_leafs_for_position[-1]
 
                 #             print("     " + str(leaf) + " " + str(leaf_label))
                 #             if data_graph.has_edge(solution[0], leaf):  # Verificam daca este vecinatate de ordinul 1
@@ -304,6 +313,7 @@ node_attr_dict = dict(zip(sorted(small_graph.nodes()), node_attr))
 print(node_attr_dict.items())
 nx.set_node_attributes(small_graph, node_attr_dict, 'label')
 print(small_graph.nodes(data=True))
+print(small_graph.edges())
 
 query_stwig_1 = [1, 2, 3]
 print("Query STwig: " + str(query_stwig_1))
