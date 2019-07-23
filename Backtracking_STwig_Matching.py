@@ -274,8 +274,10 @@ def update_state(node):
     p_solution.append(c_node)
     return p_solution
 
-def restore_state():
-    del p_solution[-1]
+def restore_state(partial_solution):
+    del partial_solution[-1]
+    p_solution = copy.deepcopy(partial_solution)
+    print(p_solution)
     # return partial_solution
 
 def next_query_vertex(current_node, query_stwig_dict):
@@ -298,6 +300,7 @@ def subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph
         # candidate = []
         # subgraph_search(partial_solution, query_stwig_dict, candidate, data_graph)
 
+    # if len(partial_solution) < len(list(query_stwig_dict.items())):
     else:
         candidate = next_query_vertex(current_node, query_stwig_dict)
         print("Candidate: ")
@@ -308,7 +311,7 @@ def subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph
             print("PARTIAL SOLUTION: ")
             print(partial_solution)
             subgraph_search(partial_solution, query_stwig_dict, candidate, data_graph)
-            restore_state()
+            restore_state(partial_solution)
 
 # # Cream graful de 1000 de muchii.
 # # Il inseram in NetworkX
@@ -399,7 +402,7 @@ print(query_stwig1_dict.items())
 print()
 p_solution = []
 complete_solutions = []
-subgraph_search([], query_stwig1_dict, [], small_graph)
+subgraph_search(p_solution, query_stwig1_dict, [], small_graph)
 # complete_solutions = []
 # b = Backtracking_STwig_Matching()
 # b.subgraph_search([], query_stwig1_dict, [], small_graph)
