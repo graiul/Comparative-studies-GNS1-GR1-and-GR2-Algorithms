@@ -169,8 +169,6 @@ def match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, ind
                             #     break
                                 # return solution
 
-
-
 def find_valid_leaf_with_label(leaf_label, solution, data_graph, position):
     valid_leafs_for_position = []
 
@@ -235,7 +233,6 @@ def find_valid_leaf_with_label(leaf_label, solution, data_graph, position):
         # return leaf_to_return
 
 
-
 def back(solution, pos):
     to_del = copy.deepcopy(solution)
     to_del = to_del[:pos]
@@ -249,6 +246,38 @@ def is_valid(solution, query_stwig):
         # print(solution[1][:2])
         if solution not in complete_solutions:
             return True
+
+#---------------------------------------------------
+def is_joinable(node, partial_solution, data_graph, query_stwig_as_dict):
+    if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
+        if node not in partial_solution:
+            if node in list(nx.ego_graph(data_graph, list(query_stwig_as_dict.keys())[0], radius=1, center=True, undirected=True, distance=None).nodes()):
+                if data_graph.node[node]['label'] == query_stwig_as_dict[node]:
+                    return True
+
+
+    if len(partial_solution) == 0:
+        # print(len(solution))
+        for root in data_graph.nodes():
+            # print("root: " + str(root))
+            if data_graph.node[root]['label'] == query_stwig_as_labels[0]:  # Avem un root al unei solutii
+                partial_solution.insert(0, root)
+                print("root: " + str(query_stwig[0]))
+                print("root label: " + str(query_stwig_as_labels[0]))
+                # solution.append([])
+                print("-solution start: " + str(partial_solution))
+
+def update_state(node, partial_solution):
+    partial_solution.append(node)
+
+def restore_state(partial_solution):
+    del partial_solution[-1]
+
+def next_query_vertex():
+    pass
+
+def subgraph_search():
+    pass
 
 # # Cream graful de 1000 de muchii.
 # # Il inseram in NetworkX
@@ -332,13 +361,23 @@ for nl in neighbor_labels:
 print("query_stwig_1_as_labels: " + str(query_stwig_1_as_labels))
 print()
 query_stwig_1_as_labels_source = copy.deepcopy(query_stwig_1_as_labels)
-print("Backtracking start: ")
-complete_solutions = []
-# Pentru graful cu 1000 de muchii:
-match_stwig_backtracking(query_stwig_1, query_stwig_1_as_labels, small_graph, 1, [])
-print("\nComplete solutions list: ")
-for c in complete_solutions:
-    print(c)
+
+query_stwig1_dict = dict(zip(query_stwig_1, query_stwig_1_as_labels_source))
+print("query_stwig1_dict: ")
+print(query_stwig1_dict.items())
+print(list(query_stwig1_dict.keys())[0])
+print(query_stwig1_dict[1])
+
+
+
+
+
+# print("Backtracking start: ")
+# complete_solutions = []
+# match_stwig_backtracking(query_stwig_1, query_stwig_1_as_labels, small_graph, 1, [])
+# print("\nComplete solutions list: ")
+# for c in complete_solutions:
+#     print(c)
 
 
 # r = '1773'
