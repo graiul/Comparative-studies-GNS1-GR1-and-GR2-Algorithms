@@ -16,266 +16,271 @@ from collections import OrderedDict
 # print(permute(1, ["a","b","c"]))
 # print(permute(2, ["a","b","c"]))
 
+# class Backtracking_STwig_Matching:
+#     partial_solution = []
+#     query_stwig_dict = {}
+#     current_node = None
+#     data_graph = None
 
-def match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, index, solution):
-# Cate o lista cu noduri din graf pentru fiecare tip de nod din STwig. Atunci lucram doar cu cateva liste.
+    # def match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, index, solution):
+    # # Cate o lista cu noduri din graf pentru fiecare tip de nod din STwig. Atunci lucram doar cu cateva liste.
+    #
+    #
+    # # Verificam daca exista solutie
+    # #   Cum returnam mai multe solutii? Cum facem intoarcerea?
+    # # Punem criteriul de validitate
+    # # In caz de validitate, apelam din nou si construim astfel solutia
+    #
+    #
+    #     # if solution == [[]] or len(solution[1]) == len(query_stwig[1]):
+    #     print("\n------------------------------")
+    #     print("Input solution: " + str(solution))
+    #     # Verficam daca am gasit o solutie completa.
+    #     # if len(solution) > 1:
+    #
+    #     if is_valid(solution, query_stwig):
+    #         cs = copy.deepcopy(solution)
+    #         print("Complete solution: " + str(cs))
+    #         complete_solutions.append(cs)
+    #         print("Intermediary complete list: ")
+    #         for c in complete_solutions:
+    #             print(c)
+    #         solution = back(solution, -1)
+    #         print("Solution without last element: " + str(solution))
+    #         print("Passing it on...")
+    #         index = index - 2
+    #         # new_leaf = find_valid_leaf_with_label(query_stwig_as_labels[3], solution, data_graph)
+    #         # print("new_leaf: " + str(new_leaf))
+    #         match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, index, solution)
+    #
+    #     else:
+    #         if solution in complete_solutions:
+    #             print("Already found.")
+    #             print(back(solution, -2))
+    #             solution = copy.deepcopy(back(solution, -2))
+    #             # leaf_labels = copy.deepcopy(query_stwig_as_labels[1:])
+    #             query_stwig_as_labels = copy.deepcopy(query_stwig_1_as_labels_source)
+    #             match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, 1, solution)
+    #
+    #         # Pentru radacina STwig-ului:
+    #         if len(solution) == 0:
+    #             # print(len(solution))
+    #             for root in data_graph.nodes():
+    #                 # print("root: " + str(root))
+    #                 if data_graph.node[root]['label'] == query_stwig_as_labels[0]: # Avem un root al unei solutii
+    #                     solution.insert(0,root)
+    #                     print("root: " + str(query_stwig[0]))
+    #                     print("root label: " + str(query_stwig_as_labels[0]))
+    #                     # solution.append([])
+    #                     print("-solution start: " + str(solution))
+    #                     # match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, index, solution)
+    #                     break
+    #
+    #
+    #                     # La urma vom sterge radacina, si vom intra din nou pe ramura aceasta.
+    #                     # Trebuie facut ca sa nu ia aceeasi radacina din nou.
+    #
+    #         # Pentru O FRUNZA STwig-ului:
+    #         if len(solution) >= 1:
+    #             if len(solution[1:]) < len(query_stwig[1:]):
+    #
+    #                 print("query_stwig_as_labels: ")
+    #                 print(query_stwig_as_labels)
+    #                 leaf_labels = copy.deepcopy(query_stwig_as_labels[1:])
+    #                 print("leaf_labels: ")
+    #                 print(leaf_labels)
+    #
+    #                 # if len(solution[1:]) > 0:
+    #                 if len(leaf_labels) > 0:
+    #                     solution_leafs_number = len(solution[1:])
+    #                     print("solution_leafs_number: ")
+    #                     print(solution_leafs_number)
+    #                     print("leaf_labels without already found node labels: ")
+    #                     new_list_leaf_labels = leaf_labels[solution_leafs_number:]
+    #                     print(new_list_leaf_labels)
+    #                     if len(new_list_leaf_labels) > 0:
+    #                         leaf_label = new_list_leaf_labels[0]
+    #                         print("leaf_label")
+    #                         print(leaf_label)
+    #
+    #                     else:
+    #                         leaf_label = leaf_labels[0]
+    #
+    #                 print("leaf label for next valid leaf: ")
+    #                 print(leaf_label)
+    #                 print("label list for next iteration: ")
+    #                 del leaf_labels[0]
+    #                 print(leaf_labels)
+    #
+    #
+    #                 print("query_stwig_as_labels for next iteration: MUST BE EQUAL WITH ABOVE LIST")
+    #                 # query_stwig_as_labels.remove(leaf_label)
+    #
+    #                 position_for_replacement = query_stwig_1_as_labels_source.index(query_stwig_as_labels[0])
+    #                 position_for_replacement = position_for_replacement + 1
+    #                 print("position_for_replacement: ")
+    #                 print(position_for_replacement)
+    #                 del query_stwig_as_labels[0]
+    #
+    #
+    #                 print(query_stwig_as_labels[1:])
+    #                 valid_leaf = find_valid_leaf_with_label(leaf_label, solution, data_graph, position_for_replacement)
+    #
+    #                 print("valid_leaf: " + str(valid_leaf))
+    #                 solution.append(valid_leaf)
+    #                 # print(solution)
+    #
+    #                 # Trece la urmatoarea frunza
+    #                 # solution[1] = solution[1][:3] # .append(valid_root)
+    #                 print("Solution before next rec call: " + str(solution))
+    #                 if index <= len(query_stwig_as_labels)-1:
+    #                     index = index + 1
+    #                     print("index: " + str(index))
+    #                     match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, index, solution)
+    #                 else:
+    #                     print("Found first solution. Must pass it on.")
+    #                     print("Refreshed query_stwig_1_as_labels: ")
+    #                     query_stwig_1_as_labels = copy.deepcopy(query_stwig_1_as_labels_source)
+    #                     print(query_stwig_1_as_labels)
+    #                     match_stwig_backtracking(query_stwig, query_stwig_1_as_labels, data_graph, index, solution)
+    #
+    #
+    #
+    #
+    #                 # leaf_label = query_stwig_1_as_labels[1][0]
+    #                 # print("leaf_label selectat: " + str(leaf_label))
+    #                 #
+    #                 # for leaf in data_graph.nodes():
+    #                 #     print("--leaf: " + str(leaf))
+    #                 #     if data_graph.node[leaf]['label'] == leaf_label: # and leaf not in solution[1]: # Avem un nod te tipul unui leaf
+    #                 #         # print("---leaf label: " + str(leaf_label))
+    #                 #         # print("Same label")
+    #                 #         if data_graph.has_edge(solution[0], leaf): # Verificam daca este vecinatate de ordinul 1
+    #                 #         #     # print("----Is neighbor.")
+    #                 #
+    #                 #             solution[1].append(leaf)
+    #                 #             # solution[1].append(leaf_label)
+    #                 #             # print("     solution[1]: " + str(solution[1]))
+    #                 #             print("     partial solution: " + str(solution))
+    #                         #
+    #                         #     solution[1] = solution[1][:1] # Cu asta putem face intoarcerea
+    #
+    #                                 # for i in range(1, len(query_stwig_1[1])):
+    #                                 #     print(i)
+    #                                 #     solution[1] = solution[1][:i]
+    #                                 #     print(solution[1])
+    #                                 # index = index + 1
+    #                                 # match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, index, solution)
+    #                             # else:
+    #                             #     break
+    #                                 # return solution
+    #
+    # def find_valid_leaf_with_label(leaf_label, solution, data_graph, position):
+    #     valid_leafs_for_position = []
+    #
+    #     print("find_valid_leaf_with_label execution: ")
+    #     # print(len(data_graph.nodes()))
+    #     print("     leaf_label: " + leaf_label)
+    #     # print(data_graph.has_node('3301'))
+    #         # print(leaf)
+    #         # print(type(leaf))
+    #
+    #     if len(complete_solutions) == 0:
+    #         for leaf in data_graph.nodes():
+    #
+    #             # print("FIRST VALIDATION IF")
+    #             if data_graph.node[leaf]['label'] == leaf_label:  # and leaf not in solution[1]: # Avem un nod te tipul unui leaf
+    #                     print("     " + str(leaf) + " " + str(leaf_label))
+    #
+    #                     # if data_graph.has_edge(solution[0], leaf):  # Verificam daca este vecinatate de ordinul 1
+    #                     if leaf in data_graph.neighbors(solution[0]):
+    #                         # print("YES")
+    #                         print("find_valid_leaf_with_label execution end on FIRST VALIDATION IF ")
+    #
+    #                         return leaf
+    #
+    #
+    #     # Aici vine solutia fara ultimul element dupa gasirea primei solutii complete
+    #     if len(complete_solutions) != 0:
+    #         print("     SECOND VALIDATION IF - USED WHEN WE ALREADY HAD A COMPLETE SOLUTION")
+    #         print("         complete_solutions until this iteration: ")
+    #         print("         " + str(complete_solutions))
+    #         for c_sol in complete_solutions:
+    #             print("completed solution selected for comparison: ")
+    #             print("     " + str(c_sol))
+    #             # print("     " + str(c_sol[-1]))
+    #             for leaf in data_graph.nodes():
+    #                 # print(leaf)
+    #                 # if leaf == c_sol[-1]:
+    #                     # print("^---leaf already used")
+    #
+    #                 if leaf != c_sol[position]:
+    #                     print("leaf from completed solution selected for comparison : ")
+    #                     print(c_sol[position])
+    #                     print(leaf)
+    #                     print("^---leaf is different than the one in the complete solutions")
+    #                     print("    and its label is: " + str(data_graph.node[leaf]['label']))
+    #                     print("    The current selected leaf label is: " + str(leaf_label))
+    #
+    #                     if data_graph.node[leaf]['label'] == leaf_label:  # and leaf not in solution[1]: # Avem un nod te tipul unui leaf
+    #                         if leaf in data_graph.neighbors(solution[0]):
+    #                             print("     RETURNED VALID LEAF: " + str(leaf))
+    #                             return leaf
+    #                             # if leaf not in valid_leafs_for_position:
+    #                             #     valid_leafs_for_position.append(leaf)
+    #                             #     print("    APPENDED LEAF TO VALID LEAFS FOR POSITION: " + str(leaf))
+    #
+    #         # valid_leafs_for_position.sort()
+    #         # print("valid_leafs_for_position: ")
+    #         # print(valid_leafs_for_position)
+    #         # leaf_to_return = valid_leafs_for_position[-1]
+    #         # del valid_leafs_for_position[-1]
+    #         # print("find_valid_leaf_with_label execution end on SECOND VALIDATION IF ")
+    #         # return leaf_to_return
+    #
+    #
+    # def back(solution, pos):
+    #     to_del = copy.deepcopy(solution)
+    #     to_del = to_del[:pos]
+    #     # del to_del[pos]
+    #     # print("sol_aux: ")
+    #     # print(solution)
+    #     return to_del
+    #
+    # def is_valid(solution, query_stwig):
+    #     if len(solution[1:]) == len(query_stwig[1:]):
+    #         # print(solution[1][:2])
+    #         if solution not in complete_solutions:
+    #             return True
 
+    #---------------------------------------------------
 
-# Verificam daca exista solutie
-#   Cum returnam mai multe solutii? Cum facem intoarcerea?
-# Punem criteriul de validitate
-# In caz de validitate, apelam din nou si construim astfel solutia
+    # def __init__(self, partial_solution, query_stwig_dict, current_node, data_graph):
+    #     self.partial_solution = partial_solution
+    #     self.query_stwig_dict = query_stwig_dict
+    #     self.current_node = current_node
+    #     self.data_graph = data_graph
 
-
-    # if solution == [[]] or len(solution[1]) == len(query_stwig[1]):
-    print("\n------------------------------")
-    print("Input solution: " + str(solution))
-    # Verficam daca am gasit o solutie completa.
-    # if len(solution) > 1:
-
-    if is_valid(solution, query_stwig):
-        cs = copy.deepcopy(solution)
-        print("Complete solution: " + str(cs))
-        complete_solutions.append(cs)
-        print("Intermediary complete list: ")
-        for c in complete_solutions:
-            print(c)
-        solution = back(solution, -1)
-        print("Solution without last element: " + str(solution))
-        print("Passing it on...")
-        index = index - 2
-        # new_leaf = find_valid_leaf_with_label(query_stwig_as_labels[3], solution, data_graph)
-        # print("new_leaf: " + str(new_leaf))
-        match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, index, solution)
-
-    else:
-        if solution in complete_solutions:
-            print("Already found.")
-            print(back(solution, -2))
-            solution = copy.deepcopy(back(solution, -2))
-            # leaf_labels = copy.deepcopy(query_stwig_as_labels[1:])
-            query_stwig_as_labels = copy.deepcopy(query_stwig_1_as_labels_source)
-            match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, 1, solution)
-
-        # Pentru radacina STwig-ului:
-        if len(solution) == 0:
-            # print(len(solution))
-            for root in data_graph.nodes():
-                # print("root: " + str(root))
-                if data_graph.node[root]['label'] == query_stwig_as_labels[0]: # Avem un root al unei solutii
-                    solution.insert(0,root)
-                    print("root: " + str(query_stwig[0]))
-                    print("root label: " + str(query_stwig_as_labels[0]))
-                    # solution.append([])
-                    print("-solution start: " + str(solution))
-                    # match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, index, solution)
-                    break
-
-
-                    # La urma vom sterge radacina, si vom intra din nou pe ramura aceasta.
-                    # Trebuie facut ca sa nu ia aceeasi radacina din nou.
-
-        # Pentru O FRUNZA STwig-ului:
-        if len(solution) >= 1:
-            if len(solution[1:]) < len(query_stwig[1:]):
-
-                print("query_stwig_as_labels: ")
-                print(query_stwig_as_labels)
-                leaf_labels = copy.deepcopy(query_stwig_as_labels[1:])
-                print("leaf_labels: ")
-                print(leaf_labels)
-
-                # if len(solution[1:]) > 0:
-                if len(leaf_labels) > 0:
-                    solution_leafs_number = len(solution[1:])
-                    print("solution_leafs_number: ")
-                    print(solution_leafs_number)
-                    print("leaf_labels without already found node labels: ")
-                    new_list_leaf_labels = leaf_labels[solution_leafs_number:]
-                    print(new_list_leaf_labels)
-                    if len(new_list_leaf_labels) > 0:
-                        leaf_label = new_list_leaf_labels[0]
-                        print("leaf_label")
-                        print(leaf_label)
-
-                    else:
-                        leaf_label = leaf_labels[0]
-
-                print("leaf label for next valid leaf: ")
-                print(leaf_label)
-                print("label list for next iteration: ")
-                del leaf_labels[0]
-                print(leaf_labels)
-
-
-                print("query_stwig_as_labels for next iteration: MUST BE EQUAL WITH ABOVE LIST")
-                # query_stwig_as_labels.remove(leaf_label)
-
-                position_for_replacement = query_stwig_1_as_labels_source.index(query_stwig_as_labels[0])
-                position_for_replacement = position_for_replacement + 1
-                print("position_for_replacement: ")
-                print(position_for_replacement)
-                del query_stwig_as_labels[0]
-
-
-                print(query_stwig_as_labels[1:])
-                valid_leaf = find_valid_leaf_with_label(leaf_label, solution, data_graph, position_for_replacement)
-
-                print("valid_leaf: " + str(valid_leaf))
-                solution.append(valid_leaf)
-                # print(solution)
-
-                # Trece la urmatoarea frunza
-                # solution[1] = solution[1][:3] # .append(valid_root)
-                print("Solution before next rec call: " + str(solution))
-                if index <= len(query_stwig_as_labels)-1:
-                    index = index + 1
-                    print("index: " + str(index))
-                    match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, index, solution)
-                else:
-                    print("Found first solution. Must pass it on.")
-                    print("Refreshed query_stwig_1_as_labels: ")
-                    query_stwig_1_as_labels = copy.deepcopy(query_stwig_1_as_labels_source)
-                    print(query_stwig_1_as_labels)
-                    match_stwig_backtracking(query_stwig, query_stwig_1_as_labels, data_graph, index, solution)
-
-
-
-
-                # leaf_label = query_stwig_1_as_labels[1][0]
-                # print("leaf_label selectat: " + str(leaf_label))
-                #
-                # for leaf in data_graph.nodes():
-                #     print("--leaf: " + str(leaf))
-                #     if data_graph.node[leaf]['label'] == leaf_label: # and leaf not in solution[1]: # Avem un nod te tipul unui leaf
-                #         # print("---leaf label: " + str(leaf_label))
-                #         # print("Same label")
-                #         if data_graph.has_edge(solution[0], leaf): # Verificam daca este vecinatate de ordinul 1
-                #         #     # print("----Is neighbor.")
-                #
-                #             solution[1].append(leaf)
-                #             # solution[1].append(leaf_label)
-                #             # print("     solution[1]: " + str(solution[1]))
-                #             print("     partial solution: " + str(solution))
-                        #
-                        #     solution[1] = solution[1][:1] # Cu asta putem face intoarcerea
-
-                                # for i in range(1, len(query_stwig_1[1])):
-                                #     print(i)
-                                #     solution[1] = solution[1][:i]
-                                #     print(solution[1])
-                                # index = index + 1
-                                # match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, index, solution)
-                            # else:
-                            #     break
-                                # return solution
-
-def find_valid_leaf_with_label(leaf_label, solution, data_graph, position):
-    valid_leafs_for_position = []
-
-    print("find_valid_leaf_with_label execution: ")
-    # print(len(data_graph.nodes()))
-    print("     leaf_label: " + leaf_label)
-    # print(data_graph.has_node('3301'))
-        # print(leaf)
-        # print(type(leaf))
-
-    if len(complete_solutions) == 0:
-        for leaf in data_graph.nodes():
-
-            # print("FIRST VALIDATION IF")
-            if data_graph.node[leaf]['label'] == leaf_label:  # and leaf not in solution[1]: # Avem un nod te tipul unui leaf
-                    print("     " + str(leaf) + " " + str(leaf_label))
-
-                    # if data_graph.has_edge(solution[0], leaf):  # Verificam daca este vecinatate de ordinul 1
-                    if leaf in data_graph.neighbors(solution[0]):
-                        # print("YES")
-                        print("find_valid_leaf_with_label execution end on FIRST VALIDATION IF ")
-
-                        return leaf
-
-
-    # Aici vine solutia fara ultimul element dupa gasirea primei solutii complete
-    if len(complete_solutions) != 0:
-        print("     SECOND VALIDATION IF - USED WHEN WE ALREADY HAD A COMPLETE SOLUTION")
-        print("         complete_solutions until this iteration: ")
-        print("         " + str(complete_solutions))
-        for c_sol in complete_solutions:
-            print("completed solution selected for comparison: ")
-            print("     " + str(c_sol))
-            # print("     " + str(c_sol[-1]))
-            for leaf in data_graph.nodes():
-                # print(leaf)
-                # if leaf == c_sol[-1]:
-                    # print("^---leaf already used")
-
-                if leaf != c_sol[position]:
-                    print("leaf from completed solution selected for comparison : ")
-                    print(c_sol[position])
-                    print(leaf)
-                    print("^---leaf is different than the one in the complete solutions")
-                    print("    and its label is: " + str(data_graph.node[leaf]['label']))
-                    print("    The current selected leaf label is: " + str(leaf_label))
-
-                    if data_graph.node[leaf]['label'] == leaf_label:  # and leaf not in solution[1]: # Avem un nod te tipul unui leaf
-                        if leaf in data_graph.neighbors(solution[0]):
-                            print("     RETURNED VALID LEAF: " + str(leaf))
-                            return leaf
-                            # if leaf not in valid_leafs_for_position:
-                            #     valid_leafs_for_position.append(leaf)
-                            #     print("    APPENDED LEAF TO VALID LEAFS FOR POSITION: " + str(leaf))
-
-        # valid_leafs_for_position.sort()
-        # print("valid_leafs_for_position: ")
-        # print(valid_leafs_for_position)
-        # leaf_to_return = valid_leafs_for_position[-1]
-        # del valid_leafs_for_position[-1]
-        # print("find_valid_leaf_with_label execution end on SECOND VALIDATION IF ")
-        # return leaf_to_return
-
-
-def back(solution, pos):
-    to_del = copy.deepcopy(solution)
-    to_del = to_del[:pos]
-    # del to_del[pos]
-    # print("sol_aux: ")
-    # print(solution)
-    return to_del
-
-def is_valid(solution, query_stwig):
-    if len(solution[1:]) == len(query_stwig[1:]):
-        # print(solution[1][:2])
-        if solution not in complete_solutions:
-            return True
-
-#---------------------------------------------------
 def is_joinable(node, partial_solution, data_graph, query_stwig_as_dict):
     if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
         if node not in partial_solution:
             if node in list(nx.ego_graph(data_graph, list(query_stwig_as_dict.keys())[0], radius=1, center=True, undirected=True, distance=None).nodes()):
                 if data_graph.node[node]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[len(partial_solution)]]:
                     return True
-
     return False
 
-    # if len(partial_solution) == 0:
-    #     # print(len(solution))
-    #     for root in data_graph.nodes():
-    #         # print("root: " + str(root))
-    #         if data_graph.node[root]['label'] == query_stwig_as_labels[0]:  # Avem un root al unei solutii
-    #             partial_solution.insert(0, root)
-    #             print("root: " + str(query_stwig[0]))
-    #             print("root label: " + str(query_stwig_as_labels[0]))
-    #             # solution.append([])
-    #             print("-solution start: " + str(partial_solution))
+def update_state(node):
+    c_node = copy.deepcopy(node)
+    p_solution.append(c_node)
+    return p_solution
 
-def update_state(node, partial_solution):
-    partial_solution.append(node)
-
-def restore_state(partial_solution):
-    del partial_solution[-1]
+def restore_state():
+    del p_solution[-1]
+    # return partial_solution
 
 def next_query_vertex(current_node, query_stwig_dict):
+    if current_node == []:
+        return list(query_stwig_dict.keys())[0]
     current_node_pos = list(query_stwig_dict.keys()).index(current_node)
     next_node_pos = current_node_pos + 1
     try:
@@ -283,8 +288,27 @@ def next_query_vertex(current_node, query_stwig_dict):
     except IndexError:
         print("No more elements after this one in dict.")
 
-def subgraph_search():
-    pass
+def subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph):
+    if len(partial_solution) == len(list(query_stwig_dict.items())):
+        # if partial_solution not in complete_solutions:
+        c_sol = copy.deepcopy(partial_solution)
+        complete_solutions.append(c_sol)
+        # return partial_solution
+        # partial_solution = []
+        # candidate = []
+        # subgraph_search(partial_solution, query_stwig_dict, candidate, data_graph)
+
+    else:
+        candidate = next_query_vertex(current_node, query_stwig_dict)
+        print("Candidate: ")
+        print(candidate)
+        if is_joinable(candidate, partial_solution, data_graph, query_stwig_dict):
+            print("IS JOINABLE")
+            partial_solution = copy.deepcopy(update_state(candidate))
+            print("PARTIAL SOLUTION: ")
+            print(partial_solution)
+            subgraph_search(partial_solution, query_stwig_dict, candidate, data_graph)
+            restore_state()
 
 # # Cream graful de 1000 de muchii.
 # # Il inseram in NetworkX
@@ -373,7 +397,12 @@ query_stwig1_dict = OrderedDict(zip(query_stwig_1, query_stwig_1_as_labels_sourc
 print("query_stwig1_dict: ")
 print(query_stwig1_dict.items())
 print()
-print(is_joinable(3, [1,2], small_graph, query_stwig1_dict))
+p_solution = []
+complete_solutions = []
+subgraph_search([], query_stwig1_dict, [], small_graph)
+# complete_solutions = []
+# b = Backtracking_STwig_Matching()
+# b.subgraph_search([], query_stwig1_dict, [], small_graph)
 
 # print(list(query_stwig1_dict.keys())[0])
 # print(query_stwig1_dict[1])
@@ -383,6 +412,7 @@ print(is_joinable(3, [1,2], small_graph, query_stwig1_dict))
 # print(next_node_pos)
 # print("Next element:")
 # print(next_query_vertex(2, query_stwig1_dict))
+# print(is_joinable(3, [1,2], small_graph, query_stwig1_dict))
 
 
 
