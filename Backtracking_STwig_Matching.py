@@ -109,11 +109,16 @@ def match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, ind
 
                 print("query_stwig_as_labels for next iteration: MUST BE EQUAL WITH ABOVE LIST")
                 # query_stwig_as_labels.remove(leaf_label)
+
+                position_for_replacement = query_stwig_1_as_labels_source.index(query_stwig_as_labels[0])
+                position_for_replacement = position_for_replacement + 1
+                print("position_for_replacement: ")
+                print(position_for_replacement)
                 del query_stwig_as_labels[0]
 
 
                 print(query_stwig_as_labels[1:])
-                valid_leaf = find_valid_leaf_with_label(leaf_label, solution, data_graph)
+                valid_leaf = find_valid_leaf_with_label(leaf_label, solution, data_graph, position_for_replacement)
 
                 print("valid_leaf: " + str(valid_leaf))
                 solution.append(valid_leaf)
@@ -166,7 +171,7 @@ def match_stwig_backtracking(query_stwig, query_stwig_as_labels, data_graph, ind
 
 
 
-def find_valid_leaf_with_label(leaf_label, solution, data_graph):
+def find_valid_leaf_with_label(leaf_label, solution, data_graph, position):
     valid_leafs_for_position = []
 
     print("find_valid_leaf_with_label execution: ")
@@ -194,7 +199,7 @@ def find_valid_leaf_with_label(leaf_label, solution, data_graph):
     # Aici vine solutia fara ultimul element dupa gasirea primei solutii complete
     if len(complete_solutions) != 0:
         print("     SECOND VALIDATION IF - USED WHEN WE ALREADY HAD A COMPLETE SOLUTION")
-        print("         complete_solutions: ")
+        print("         complete_solutions until this iteration: ")
         print("         " + str(complete_solutions))
         for c_sol in complete_solutions:
             print("completed solution selected for comparison: ")
@@ -205,9 +210,9 @@ def find_valid_leaf_with_label(leaf_label, solution, data_graph):
                 # if leaf == c_sol[-1]:
                     # print("^---leaf already used")
 
-                if leaf != c_sol[-2]:
+                if leaf != c_sol[position]:
                     print("leaf from completed solution selected for comparison : ")
-                    print(c_sol[-2])
+                    print(c_sol[position])
                     print(leaf)
                     print("^---leaf is different than the one in the complete solutions")
                     print("    and its label is: " + str(data_graph.node[leaf]['label']))
@@ -215,25 +220,21 @@ def find_valid_leaf_with_label(leaf_label, solution, data_graph):
 
                     if data_graph.node[leaf]['label'] == leaf_label:  # and leaf not in solution[1]: # Avem un nod te tipul unui leaf
                         if leaf in data_graph.neighbors(solution[0]):
+                            print("     RETURNED VALID LEAF: " + str(leaf))
+                            return leaf
+                            # if leaf not in valid_leafs_for_position:
+                            #     valid_leafs_for_position.append(leaf)
+                            #     print("    APPENDED LEAF TO VALID LEAFS FOR POSITION: " + str(leaf))
 
-                            # print("    The labels are equal! Can be returned.")
-                            print("    RETURNED LEAF: " + str(leaf))
-                            print("find_valid_leaf_with_label execution end on SECOND VALIDATION IF ")
-            # if c_sol != complete_solutions[-1]:
-            #     continue
-                            if leaf not in valid_leafs_for_position:
-                                valid_leafs_for_position.append(leaf)
-        valid_leafs_for_position.sort()
-        print("valid_leafs_for_position: ")
-        print(valid_leafs_for_position)
-        return valid_leafs_for_position[-1]
+        # valid_leafs_for_position.sort()
+        # print("valid_leafs_for_position: ")
+        # print(valid_leafs_for_position)
+        # leaf_to_return = valid_leafs_for_position[-1]
+        # del valid_leafs_for_position[-1]
+        # print("find_valid_leaf_with_label execution end on SECOND VALIDATION IF ")
+        # return leaf_to_return
 
-                #             print("     " + str(leaf) + " " + str(leaf_label))
-                #             if data_graph.has_edge(solution[0], leaf):  # Verificam daca este vecinatate de ordinul 1
-                #                 # print("YES")
-                #                 print("find_valid_leaf_with_label execution end on SECOND VALIDATION IF ")
-                #
-                #                 return leaf
+
 
 def back(solution, pos):
     to_del = copy.deepcopy(solution)
