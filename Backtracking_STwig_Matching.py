@@ -2,6 +2,7 @@ import copy
 
 from Graph_Format import Graph_Format
 import networkx as nx
+from collections import OrderedDict
 
 # def permute(list, s):
 #     if list == 1:
@@ -252,20 +253,21 @@ def is_joinable(node, partial_solution, data_graph, query_stwig_as_dict):
     if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
         if node not in partial_solution:
             if node in list(nx.ego_graph(data_graph, list(query_stwig_as_dict.keys())[0], radius=1, center=True, undirected=True, distance=None).nodes()):
-                if data_graph.node[node]['label'] == query_stwig_as_dict[node]:
+                if data_graph.node[node]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[len(partial_solution)]]:
                     return True
 
+    return False
 
-    if len(partial_solution) == 0:
-        # print(len(solution))
-        for root in data_graph.nodes():
-            # print("root: " + str(root))
-            if data_graph.node[root]['label'] == query_stwig_as_labels[0]:  # Avem un root al unei solutii
-                partial_solution.insert(0, root)
-                print("root: " + str(query_stwig[0]))
-                print("root label: " + str(query_stwig_as_labels[0]))
-                # solution.append([])
-                print("-solution start: " + str(partial_solution))
+    # if len(partial_solution) == 0:
+    #     # print(len(solution))
+    #     for root in data_graph.nodes():
+    #         # print("root: " + str(root))
+    #         if data_graph.node[root]['label'] == query_stwig_as_labels[0]:  # Avem un root al unei solutii
+    #             partial_solution.insert(0, root)
+    #             print("root: " + str(query_stwig[0]))
+    #             print("root label: " + str(query_stwig_as_labels[0]))
+    #             # solution.append([])
+    #             print("-solution start: " + str(partial_solution))
 
 def update_state(node, partial_solution):
     partial_solution.append(node)
@@ -273,8 +275,13 @@ def update_state(node, partial_solution):
 def restore_state(partial_solution):
     del partial_solution[-1]
 
-def next_query_vertex():
-    pass
+def next_query_vertex(current_node, query_stwig_dict):
+    current_node_pos = list(query_stwig_dict.keys()).index(current_node)
+    next_node_pos = current_node_pos + 1
+    try:
+        return list(query_stwig_dict.keys())[next_node_pos]
+    except IndexError:
+        print("No more elements after this one in dict.")
 
 def subgraph_search():
     pass
@@ -362,13 +369,20 @@ print("query_stwig_1_as_labels: " + str(query_stwig_1_as_labels))
 print()
 query_stwig_1_as_labels_source = copy.deepcopy(query_stwig_1_as_labels)
 
-query_stwig1_dict = dict(zip(query_stwig_1, query_stwig_1_as_labels_source))
+query_stwig1_dict = OrderedDict(zip(query_stwig_1, query_stwig_1_as_labels_source))
 print("query_stwig1_dict: ")
 print(query_stwig1_dict.items())
-print(list(query_stwig1_dict.keys())[0])
-print(query_stwig1_dict[1])
+print()
+print(is_joinable(3, [1,2], small_graph, query_stwig1_dict))
 
-
+# print(list(query_stwig1_dict.keys())[0])
+# print(query_stwig1_dict[1])
+# current_node_pos = list(query_stwig1_dict.keys()).index(2)
+# print(current_node_pos)
+# next_node_pos = current_node_pos + 1
+# print(next_node_pos)
+# print("Next element:")
+# print(next_query_vertex(2, query_stwig1_dict))
 
 
 
