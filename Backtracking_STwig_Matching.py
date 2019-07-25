@@ -278,15 +278,18 @@ def is_joinable(node, partial_solution, data_graph, query_stwig_as_dict):
                             if data_graph.node[node]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[len(partial_solution)]]:
                                 found = True
 
-    if found == True:
-        return True
+
 
     if len(complete_solutions) == 0:
         if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
             if node not in partial_solution:
                 if node in list(nx.ego_graph(data_graph, list(query_stwig_as_dict.keys())[0], radius=1, center=True, undirected=True, distance=None).nodes()):
                     if data_graph.node[node]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[len(partial_solution)]]:
-                        return True
+                        found = True
+
+    if found == True:
+        return True
+
     return False
 
 def update_state(node, partial_solution):
@@ -305,7 +308,7 @@ def restore_state(partial_solution):
     del partial_solution[-1]
     # partial_solution = []
     p_solution = copy.deepcopy(partial_solution)
-    print("Restored state: " + str(p_solution))
+    # print("Restored state: " + str(p_solution))
     return p_solution
 
 def next_query_vertex(current_node, query_stwig_dict):
@@ -338,8 +341,10 @@ def subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph
     print()
     print("Started subgraph search: ")
     print("Partial solution given: " + str(partial_solution))
+    i = False
     if len(partial_solution) == len(list(query_stwig_dict.items())):
         if partial_solution not in complete_solutions:
+            i = True
             # if partial_solution not in complete_solutions:
             c_sol = copy.deepcopy(partial_solution)
             # print(is_joinable(3, [1,2], data_graph, query_stwig_dict))
@@ -347,8 +352,7 @@ def subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph
             print("One complete solution found!")
             print("List of complete solutions: " + str(complete_solutions))
 
-            partial_solution = copy.deepcopy(restore_state(partial_solution)
-    )
+            partial_solution = copy.deepcopy(restore_state(partial_solution))
             print("Restored state: " + str(partial_solution))
 
             print()
@@ -377,12 +381,19 @@ def subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph
             # restore_state(partial_solution)
             subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph)
 
-    # if partial_solution not in complete_solutions:
-    #     print("Here")
+        if partial_solution in complete_solutions:
+            print("Already found.")
+            partial_solution = copy.deepcopy(partial_solution[:1])
+            print(partial_solution)
+            current_node = copy.deepcopy(partial_solution[-1])
+            print(current_node)
+            subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph)
 
 
-    # if len(partial_solution) < len(list(query_stwig_dict.items())):
+
+
     else:
+        i = True
         candidate = next_data_vertex(partial_solution, data_graph, query_stwig_dict)
         print("Candidate: ")
         print(candidate)
@@ -392,7 +403,12 @@ def subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph
             print("PARTIAL SOLUTION: ")
             print(partial_solution)
             subgraph_search(partial_solution, query_stwig_dict, candidate, data_graph)
-            restore_state(partial_solution)
+            # restore_state(partial_solution)
+
+    if i == False:
+        print("Finished.")
+
+
 
 # # Cream graful de 1000 de muchii.
 # # Il inseram in NetworkX
