@@ -272,12 +272,13 @@ def is_joinable(node, partial_solution, data_graph, query_stwig_as_dict):
             # print(node)
         if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
             if node not in partial_solution:
+                if partial_solution not in complete_solutions: # ?
+                    print("New unique sol: " + str(partial_solution)) # ?
+                    if node not in sol:
 
-                if node not in sol:
-
-                    if node in list(nx.ego_graph(data_graph, list(query_stwig_as_dict.keys())[0], radius=1, center=True, undirected=True, distance=None).nodes()):
-                        if data_graph.node[node]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[len(partial_solution)]]:
-                            found = True
+                        if node in list(nx.ego_graph(data_graph, list(query_stwig_as_dict.keys())[0], radius=1, center=True, undirected=True, distance=None).nodes()):
+                            if data_graph.node[node]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[len(partial_solution)]]:
+                                found = True
 
 
 
@@ -384,6 +385,7 @@ def subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph
 
         if partial_solution in complete_solutions:
             print("Already found.")
+            # HOW MUCH DO WE BACKTRACK?
             partial_solution = copy.deepcopy(partial_solution[:1])
             print(partial_solution)
             current_node = copy.deepcopy(partial_solution[-1])
