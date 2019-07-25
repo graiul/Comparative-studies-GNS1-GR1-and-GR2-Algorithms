@@ -266,17 +266,18 @@ def is_joinable(node, partial_solution, data_graph, query_stwig_as_dict):
     found = False
 
     if len(complete_solutions) > 0:
-        for sol in complete_solutions:
+        # for sol in complete_solutions:
+        sol = complete_solutions[-1]
             # print("complete solution selected for comparison: " + str(sol))
             # print(node)
-            if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
-                if node not in partial_solution:
+        if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
+            if node not in partial_solution:
 
-                    if node not in sol:
+                if node not in sol:
 
-                        if node in list(nx.ego_graph(data_graph, list(query_stwig_as_dict.keys())[0], radius=1, center=True, undirected=True, distance=None).nodes()):
-                            if data_graph.node[node]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[len(partial_solution)]]:
-                                found = True
+                    if node in list(nx.ego_graph(data_graph, list(query_stwig_as_dict.keys())[0], radius=1, center=True, undirected=True, distance=None).nodes()):
+                        if data_graph.node[node]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[len(partial_solution)]]:
+                            found = True
 
 
 
