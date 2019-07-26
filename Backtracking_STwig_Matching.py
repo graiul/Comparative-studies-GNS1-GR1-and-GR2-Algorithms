@@ -265,7 +265,7 @@ def is_joinable(node, partial_solution, data_graph, query_stwig_as_dict):
 
     found = False
 
-
+    # pt mijloc
     if len(complete_solutions) > 0:
         # for sol in complete_solutions:
         sol = complete_solutions[-1]
@@ -279,14 +279,17 @@ def is_joinable(node, partial_solution, data_graph, query_stwig_as_dict):
                     if node not in sol:
                         aux = copy.deepcopy(partial_solution)
                         aux.append(node)
-                        # pos = aux.index(aux[-1])
+                        pos = aux.index(aux[-1])
                         if aux not in complete_solutions:
-                            if node in list(nx.ego_graph(data_graph, list(query_stwig_as_dict.keys())[0], radius=1, center=True, undirected=True, distance=None).nodes()):
-                                if data_graph.node[node]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[len(partial_solution)]]:
-                                    found = True
-                                    # if aux[-1] not in positions[pos]:
-                                    #     positions[pos].append(aux[-1])
-                                    # print(positions.items())
+
+                            if node not in positions[1]:
+
+                                if node in list(nx.ego_graph(data_graph, list(query_stwig_as_dict.keys())[0], radius=1, center=True, undirected=True, distance=None).nodes()):
+                                    if data_graph.node[node]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[len(partial_solution)]]:
+                                        found = True
+                                        if aux[-1] not in positions[pos]:
+                                            positions[pos].append(aux[-1])
+                                        print(positions.items())
 
 
         # pt ultima pos
@@ -297,18 +300,18 @@ def is_joinable(node, partial_solution, data_graph, query_stwig_as_dict):
                     if node not in sol:
                         aux = copy.deepcopy(partial_solution)
                         aux.append(node)
-                        # pos = aux.index(aux[-1])
+                        pos = aux.index(aux[-1])
                         if aux not in complete_solutions:
                             if node in list(nx.ego_graph(data_graph, list(query_stwig_as_dict.keys())[0], radius=1, center=True,
                                                  undirected=True, distance=None).nodes()):
                                 if data_graph.node[node]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[len(partial_solution)]]:
                                     found = True
 
-                                    remove_used_node_from_node_list(node)
+                                    # remove_used_node_from_node_list(node)
 
-                                    # if aux[-1] not in positions[pos]:
-                                    #     positions[pos].append(aux[-1])
-                                    # print(positions.items())
+                                    if aux[-1] not in positions[pos]:
+                                        positions[pos].append(aux[-1])
+                                    print(positions.items())
 
 
     if len(complete_solutions) == 0:
@@ -440,7 +443,11 @@ def subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph
 
         if candidate == None: # go back a position with restore position()
             print("Going back a postition and restoring list of nodes.")
-            node_list_aux = copy.deepcopy(renew_node_list())
+
+
+            # node_list_aux = copy.deepcopy(renew_node_list())
+
+
             # HOW MUCH DO WE BACKTRACK?
             partial_solution = copy.deepcopy(partial_solution[:1])
             print(partial_solution)
@@ -473,8 +480,8 @@ def sublist2(lst1, lst2):
     return True
 
 def remove_used_node_from_node_list(node):
-    print(node_list_aux)
     node_list_aux.remove(node)
+    print(node_list_aux)
 
 def renew_node_list(old_node_list):
     old_node_list = copy.deepcopy(list(small_graph.nodes()))
