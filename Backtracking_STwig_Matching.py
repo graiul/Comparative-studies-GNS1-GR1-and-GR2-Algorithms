@@ -272,13 +272,18 @@ def is_joinable(node, partial_solution, data_graph, query_stwig_as_dict):
             # print(node)
         if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
             if node not in partial_solution:
-                if partial_solution not in complete_solutions: # ?
-                    print("New unique sol: " + str(partial_solution)) # ?
-                    if node not in sol:
-
-                        if node in list(nx.ego_graph(data_graph, list(query_stwig_as_dict.keys())[0], radius=1, center=True, undirected=True, distance=None).nodes()):
-                            if data_graph.node[node]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[len(partial_solution)]]:
-                                found = True
+                # if partial_solution not in complete_solutions: # ?
+                #     print("New unique sol: " + str(partial_solution)) # ?
+                if node not in sol:
+                    aux = copy.deepcopy(partial_solution)
+                    aux.append(node)
+                    if aux not in complete_solutions:
+                        for c in complete_solutions:
+                            if sublist2(aux, c):
+                                if node in list(nx.ego_graph(data_graph, list(query_stwig_as_dict.keys())[0], radius=1, center=True, undirected=True, distance=None).nodes()):
+                                    if data_graph.node[node]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[len(partial_solution)]]:
+                                        found = True
+                                        # break
 
 
 
@@ -383,14 +388,14 @@ def subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph
             # restore_state(partial_solution)
             subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph)
 
-        if partial_solution in complete_solutions:
-            print("Already found.")
-            # HOW MUCH DO WE BACKTRACK?
-            partial_solution = copy.deepcopy(partial_solution[:1])
-            print(partial_solution)
-            current_node = copy.deepcopy(partial_solution[-1])
-            print(current_node)
-            subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph)
+        # if partial_solution in complete_solutions:
+        #     print("Already found.")
+        #     # HOW MUCH DO WE BACKTRACK?
+        #     partial_solution = copy.deepcopy(partial_solution[:1])
+        #     print(partial_solution)
+        #     current_node = copy.deepcopy(partial_solution[-1])
+        #     print(current_node)
+        #     subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph)
 
 
 
@@ -400,6 +405,17 @@ def subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph
         candidate = next_data_vertex(partial_solution, data_graph, query_stwig_dict)
         print("Candidate: ")
         print(candidate)
+
+        if candidate == None: # go back a position with restore position()
+            print("Going back a postition.")
+            # HOW MUCH DO WE BACKTRACK?
+            partial_solution = copy.deepcopy(partial_solution[:1])
+            print(partial_solution)
+            current_node = copy.deepcopy(partial_solution[-1])
+            print(current_node)
+            subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph)
+
+
         if is_joinable(candidate, partial_solution, data_graph, query_stwig_dict):
             print("IS JOINABLE")
             partial_solution = copy.deepcopy(update_state(candidate, partial_solution))
@@ -410,6 +426,17 @@ def subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph
 
     if i == False:
         print("Finished.")
+
+# https://stackoverflow.com/questions/35964155/checking-if-list-is-a-sublist
+def sublist2(lst1, lst2):
+    def get_all_in(one, another):
+        for element in one:
+            if element in another:
+                yield element
+    for x1, x2 in zip(get_all_in(lst1, lst2), get_all_in(lst2, lst1)):
+        if x1 != x2:
+            return False
+    return True
 
 
 
