@@ -272,51 +272,43 @@ def is_joinable(node, partial_solution, data_graph, query_stwig_as_dict):
             # print("complete solution selected for comparison: " + str(sol))
             # print(node)
 
-        # pt pos din mijloc
         if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
-            if node not in partial_solution:
-                # if partial_solution not in complete_solutions: # ?
-                #     print("New unique sol: " + str(partial_solution)) # ?
-                if node not in sol:
-                    aux = copy.deepcopy(partial_solution)
-                    aux.append(node)
-                    if aux not in complete_solutions:
+            if len(partial_solution) == 1:
 
-                        # for c in complete_solutions:
-                        #     print("c[:2]: ")
-                        #     print(c[:2])
-                        #     if aux != c[:2] and aux[-1] != complete_solutions[-1][1]:
-                        #
+                if node not in partial_solution:
+                    if node not in sol:
+                        aux = copy.deepcopy(partial_solution)
+                        aux.append(node)
+                        # pos = aux.index(aux[-1])
+                        if aux not in complete_solutions:
+                            if node in list(nx.ego_graph(data_graph, list(query_stwig_as_dict.keys())[0], radius=1, center=True, undirected=True, distance=None).nodes()):
+                                if data_graph.node[node]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[len(partial_solution)]]:
+                                    found = True
+                                    # if aux[-1] not in positions[pos]:
+                                    #     positions[pos].append(aux[-1])
+                                    # print(positions.items())
 
-                        if node in list(nx.ego_graph(data_graph, list(query_stwig_as_dict.keys())[0], radius=1, center=True, undirected=True, distance=None).nodes()):
-                            if data_graph.node[node]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[len(partial_solution)]]:
-                                found = True
-                                pos = aux.index(aux[-1])
-                                # if pos in positions:
-                                if aux[-1] not in positions[pos]:
-                                    positions[pos].append(aux[-1])
-                                # positions[pos] = aux[-1]
-                                print(positions.items())
 
-                                # break
+        # pt ultima pos
+        if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
+            if len(partial_solution) == 2:
+                if node not in partial_solution:
 
-        # # pt ultima pos
-        # if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
-        #     if node not in partial_solution:
-        #         # if partial_solution not in complete_solutions: # ?
-        #         #     print("New unique sol: " + str(partial_solution)) # ?
-        #         if node not in sol:
-        #             aux = copy.deepcopy(partial_solution)
-        #             aux.append(node)
-        #             if aux not in complete_solutions:
-        #                 # for c in complete_solutions:
-        #                 #     if not aux[-1] == c[aux.index(aux[-1])]:
-        #                 if node in list(nx.ego_graph(data_graph, list(query_stwig_as_dict.keys())[0], radius=1, center=True,
-        #                                      undirected=True, distance=None).nodes()):
-        #                     if data_graph.node[node]['label'] == query_stwig_as_dict[
-        #                         list(query_stwig_as_dict.keys())[len(partial_solution)]]:
-        #                         found = True
-        #                         # break
+                    if node not in sol:
+                        aux = copy.deepcopy(partial_solution)
+                        aux.append(node)
+                        # pos = aux.index(aux[-1])
+                        if aux not in complete_solutions:
+                            if node in list(nx.ego_graph(data_graph, list(query_stwig_as_dict.keys())[0], radius=1, center=True,
+                                                 undirected=True, distance=None).nodes()):
+                                if data_graph.node[node]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[len(partial_solution)]]:
+                                    found = True
+
+                                    remove_used_node_from_node_list(node)
+
+                                    # if aux[-1] not in positions[pos]:
+                                    #     positions[pos].append(aux[-1])
+                                    # print(positions.items())
 
 
     if len(complete_solutions) == 0:
@@ -447,7 +439,8 @@ def subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph
         print(candidate)
 
         if candidate == None: # go back a position with restore position()
-            print("Going back a postition.")
+            print("Going back a postition and restoring list of nodes.")
+            node_list_aux = copy.deepcopy(renew_node_list())
             # HOW MUCH DO WE BACKTRACK?
             partial_solution = copy.deepcopy(partial_solution[:1])
             print(partial_solution)
@@ -456,13 +449,14 @@ def subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph
             subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph)
 
 
-        if is_joinable(candidate, partial_solution, data_graph, query_stwig_dict):
-            print("IS JOINABLE")
-            partial_solution = copy.deepcopy(update_state(candidate, partial_solution))
-            print("PARTIAL SOLUTION: ")
-            print(partial_solution)
-            subgraph_search(partial_solution, query_stwig_dict, candidate, data_graph)
-            # restore_state(partial_solution)
+        # if is_joinable(candidate, partial_solution, data_graph, query_stwig_dict):
+        #     print("IS JOINABLE")
+
+        partial_solution = copy.deepcopy(update_state(candidate, partial_solution))
+        print("PARTIAL SOLUTION: ")
+        print(partial_solution)
+        subgraph_search(partial_solution, query_stwig_dict, candidate, data_graph)
+        # restore_state(partial_solution)
 
     if i == False:
         print("Finished.")
@@ -478,6 +472,14 @@ def sublist2(lst1, lst2):
             return False
     return True
 
+def remove_used_node_from_node_list(node):
+    print(node_list_aux)
+    node_list_aux.remove(node)
+
+def renew_node_list(old_node_list):
+    old_node_list = copy.deepcopy(list(small_graph.nodes()))
+    print(old_node_list)
+    return old_node_list
 
 
 # # Cream graful de 1000 de muchii.
@@ -574,8 +576,8 @@ positions[0] = []
 positions[1] = []
 positions[2] = []
 positions[3] = []
-
 print(positions.items())
+node_list_aux = copy.deepcopy(list(small_graph.nodes()))
 subgraph_search(p_solution, query_stwig1_dict, [], small_graph)
 # complete_solutions = []
 # b = Backtracking_STwig_Matching()
