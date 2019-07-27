@@ -4,6 +4,14 @@ from Graph_Format import Graph_Format
 import networkx as nx
 from collections import OrderedDict
 
+# https://stackoverflow.com/questions/6537487/changing-shell-text-color-windows
+# https://pypi.org/project/colorama/
+from colorama import init
+from colorama import Fore, Back, Style
+init()
+
+import traceback
+
 # def permute(list, s):
 #     if list == 1:
 #         return s
@@ -409,7 +417,8 @@ def next_data_vertex(partial_solution, data_graph, query_stwig_dict):
 def subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph):
     print()
     print("Started subgraph search: ")
-    print("Partial solution given: " + str(partial_solution))
+    print(Back.WHITE + Fore.LIGHTBLUE_EX + Style.BRIGHT + "Partial solution given: " + str(partial_solution))
+    print(Style.RESET_ALL)
     i = False
     if len(partial_solution) == len(list(query_stwig_dict.items())):
         if partial_solution not in complete_solutions:
@@ -419,8 +428,8 @@ def subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph
             # print(is_joinable(3, [1,2], data_graph, query_stwig_dict))
             complete_solutions.append(c_sol)
             print("One complete solution found!")
-            print("List of complete solutions: " + str(complete_solutions))
-
+            print(Fore.GREEN + Style.BRIGHT + "List of complete solutions: " + str(complete_solutions))
+            print(Style.RESET_ALL)
             partial_solution = copy.deepcopy(restore_state(partial_solution))
             print("Restored state: " + str(partial_solution))
 
@@ -467,22 +476,21 @@ def subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph
 
         i = True
         candidate = next_data_vertex(partial_solution, data_graph, query_stwig_dict)
-        print("Candidate: ")
-        print(candidate)
+        if candidate is not None:
+            print("Candidate: " + str(candidate))
+            # print(candidate)
 
-        if candidate == None: # go back a position with restore position()
-
+        if candidate is None:  # go back a position with restore position()
+            print("Candidate: " + Fore.LIGHTRED_EX + str(candidate))
+            print(Style.RESET_ALL) # go back a position with restore position()
             print("Going back a postition.")
-
-
-            # node_list_aux = copy.deepcopy(renew_node_list())
-
-
-            # HOW MUCH DO WE BACKTRACK?
+            input("Continue execution?")
             partial_solution = copy.deepcopy(restore_state(partial_solution)) #partial_solution[:1])
             print(partial_solution)
             if len(partial_solution) == 0:
                 current_node = []
+                positions[1] = []
+                # positions[2] = []
             else:
                 current_node = copy.deepcopy(partial_solution[-1])
             print(current_node)
@@ -615,7 +623,14 @@ positions[2] = []
 positions[3] = []
 print(positions.items())
 node_list_aux = copy.deepcopy(list(small_graph.nodes()))
-subgraph_search(p_solution, query_stwig1_dict, [], small_graph)
+try:
+    subgraph_search(p_solution, query_stwig1_dict, [], small_graph)
+except IndexError:
+    tb = traceback.format_exc()
+finally:
+    print(tb)
+    input("End execution?")
+
 # complete_solutions = []
 # b = Backtracking_STwig_Matching()
 # b.subgraph_search([], query_stwig1_dict, [], small_graph)
