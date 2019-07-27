@@ -500,7 +500,7 @@ def subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph
                 input()
                 exit(0)
 
-            print("Going back a postition.")
+            print("Going back a position.")
             input("Continue execution?")
             partial_solution = copy.deepcopy(restore_state(partial_solution)) #partial_solution[:1])
             print(partial_solution)
