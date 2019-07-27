@@ -1,6 +1,6 @@
 import copy
 
-from Graph_Format import Graph_Format
+# from Graph_Format import Graph_Format
 import networkx as nx
 from collections import OrderedDict
 
@@ -10,6 +10,7 @@ from colorama import init
 from colorama import Fore, Back, Style
 init()
 
+# https://stackoverflow.com/questions/4564559/get-exception-description-and-stack-trace-which-caused-an-exception-all-as-a-st
 import traceback
 
 # def permute(list, s):
