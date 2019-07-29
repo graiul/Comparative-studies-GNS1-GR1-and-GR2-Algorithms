@@ -615,7 +615,7 @@ small_graph = nx.Graph()
 small_graph_nodes = [1,2,3,4,5,6,7,8,9,10]
 # Sortarea ascendenta la string este diferita de cea a de la tipul int
 small_graph_nodes.sort()
-small_graph_edges = [[1, 2], [1, 3], [5, 6], [5, 7], [1, 6], [1, 7], [1, 10], [9, 10], [9, 7], [5, 10], [5, 3]]
+small_graph_edges = [[1, 2], [1, 3], [5, 6], [5, 7], [1, 6], [1, 7], [1, 10], [9, 10], [9, 7], [5, 10], [5, 3], [2, 3], [2, 4], [2, 10], [2, 8], [10, 7], [10, 8]]
 small_graph.add_nodes_from(small_graph_nodes)
 small_graph.add_edges_from(small_graph_edges)
 node_attr = ["a", "b", "c", "d", "a", "b", "c", "d", "a", "b"]
@@ -626,6 +626,8 @@ print(small_graph.nodes(data=True))
 print(small_graph.edges())
 
 query_stwig_1 = [1, 2, 3]
+# query_stwig_1 = [2, 3, 4]
+
 print("Query STwig: " + str(query_stwig_1))
 # Label-ul radacinii
 root_label = small_graph.node[query_stwig_1[0]]['label']
