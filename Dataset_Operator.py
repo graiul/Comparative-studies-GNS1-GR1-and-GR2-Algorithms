@@ -30,6 +30,16 @@ class Dataset_Operator(object):
         neograph_data.run(cqlQuery)
         neograph_data.run(cqlQuery_create_nodes_index)
 
+    def insert_nodes_small_graph(self):
+        neograph_data = Graph(self.leader_core_bolt_address, auth=(self.username, self.passwd))
+        cqlQuery = "LOAD CSV WITH HEADERS FROM '" + str(self.dataset_nodes_url) + "' AS line" \
+                   " CREATE (:Node {  node_id: line.node_id, node_label: line.node_label})"
+        # cqlQuery_create_nodes_index = "create index on :Node(RI_node_id)"
+
+        neograph_data.run(cqlQuery)
+        # neograph_data.run(cqlQuery_create_nodes_index)
+
+
     # Aici modificam pentru graf orientat.
     def insert_edges_zhao_sun(self):
         neograph_data = Graph(self.leader_core_bolt_address, auth=(self.username, self.passwd))
@@ -49,6 +59,13 @@ class Dataset_Operator(object):
                    " MERGE (n)-[:PPI]-(m)" # La aceasta linie modificam pentru graf orientat.
         neograph_data.run(cqlQuery)
 
+    def insert_edges_small_graph(self):
+        neograph_data = Graph(self.leader_core_bolt_address, auth=(self.username, self.passwd))
+        cqlQuery = "LOAD CSV WITH HEADERS FROM '" + str(self.dataset_edges_url) + "' AS line" \
+                   " MERGE (n:Node {node_id: line.from})" \
+                   " MERGE (m:Node {node_id: line.to})" \
+                   " MERGE (n)-[:PPI]-(m)" # La aceasta linie modificam pentru graf orientat.
+        neograph_data.run(cqlQuery)
 
     def delete_data_from_db(self):
         neograph_data = Graph(self.leader_core_bolt_address, auth=(self.username, self.passwd))
