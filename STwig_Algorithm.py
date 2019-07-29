@@ -421,6 +421,13 @@ class STwig_Algorithm(object):
                 else:
                     return False
 
+    def get_node_label_from_neo4j(self, node_id):
+        cqlQuery = "MATCH (n) WHERE n.node_id='" + str(node_id) + "' RETURN n.node_label"
+        result = self.neograph_data.run(cqlQuery).to_ndarray()
+        # test = [['xyz']]
+        # print(test[0][0])
+        return result[0][0]
+
     def MatchSTwig(self, q, iteration_number): # q 1 = (a,{b,c}) din articol, [a, [b,c]] in py. Acest q1 (STwig din query graph)si altele vor fi date de STwigOrderSelection care lucreaza cu graful query.
         # print("IF QUERY STWIG IS UNDIRECTED, THEN MULTIPLE RESULTS ARE GIVEN "
         #       "\nBECAUSE WE USE LABELS NOT NODE ID's WHICH ENCOMPASS MULTIPLE NODES")
@@ -526,7 +533,11 @@ class STwig_Algorithm(object):
             elem_labels_total = []
             for elem in combinations:
                 for el in elem:
-                    elem_labels.append(el[0])
+                    print("get_node_label_from_neo4j: ")
+                    print("el: ")
+                    print(el)
+                    print(self.get_node_label_from_neo4j(el))
+                    elem_labels.append(self.get_node_label_from_neo4j(el))
                 elem_labels_total.append(elem_labels)
                 elem_labels = []
             combinations_dict = dict(zip(combinations, elem_labels_total))
