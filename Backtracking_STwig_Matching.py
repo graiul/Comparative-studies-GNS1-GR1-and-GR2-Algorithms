@@ -281,6 +281,32 @@ def is_joinable(node, partial_solution, data_graph, query_stwig_as_dict):
             # print("complete solution selected for comparison: " + str(sol))
             # print(node)
 
+        # pt al patrulea element:
+        if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
+            if len(partial_solution) == 3:
+                if node not in partial_solution:
+
+                    # if node != sol[2]:
+
+                    aux = copy.deepcopy(partial_solution)
+                    aux.append(node)
+                    pos = aux.index(aux[-1])
+                    if aux not in complete_solutions:
+
+                        if node not in positions[2]:
+                        # print("node: " + str(node))
+                        # print("positions[2]: " + str(positions[2]))
+
+                            if node in list(nx.ego_graph(data_graph, partial_solution[0], radius=1, center=True, undirected=True, distance=None).nodes()):
+                                if data_graph.node[node]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[3]]:
+                                    found = True
+
+                                    # remove_used_node_from_node_list(node)
+
+                                    if aux[-1] not in positions[pos]:
+                                        positions[pos].append(aux[-1])
+                                    print(positions.items())
+
         # pt ultima pos
         if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
             if len(partial_solution) == 2:
@@ -615,7 +641,7 @@ small_graph = nx.Graph()
 small_graph_nodes = [1,2,3,4,5,6,7,8,9,10]
 # Sortarea ascendenta la string este diferita de cea a de la tipul int
 small_graph_nodes.sort()
-small_graph_edges = [[1, 2], [1, 3], [5, 6], [5, 7], [1, 6], [1, 7], [1, 10], [9, 10], [9, 7], [5, 10], [5, 3], [2, 3], [2, 4], [2, 10], [2, 8], [10, 7], [10, 8]]
+small_graph_edges = [[1, 2], [1, 3], [5, 6], [5, 7], [1, 6], [1, 7], [1, 10], [9, 10], [9, 7], [5, 10], [5, 3], [2, 3], [2, 4], [2, 10], [2, 8], [10, 7], [10, 8], [1, 8], [1, 4], [5, 4], [5, 8], [9, 8]]
 small_graph.add_nodes_from(small_graph_nodes)
 small_graph.add_edges_from(small_graph_edges)
 node_attr = ["a", "b", "c", "d", "a", "b", "c", "d", "a", "b"]
@@ -625,8 +651,12 @@ nx.set_node_attributes(small_graph, node_attr_dict, 'label')
 print(small_graph.nodes(data=True))
 print(small_graph.edges())
 
-query_stwig_1 = [1, 2, 3]
+query_stwig_1 = [1, 2, 3, 4]
+# FUNCTIONAL:
+# query_stwig_1 = [1, 2, 3]
 # query_stwig_1 = [2, 3, 4]
+# query_stwig_1 = [1, 2]
+
 
 print("Query STwig: " + str(query_stwig_1))
 # Label-ul radacinii
