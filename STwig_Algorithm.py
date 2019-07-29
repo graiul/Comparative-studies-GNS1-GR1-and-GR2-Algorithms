@@ -11,6 +11,12 @@ import operator
 import itertools
 from timeit import default_timer as timer
 
+# https://stackoverflow.com/questions/6537487/changing-shell-text-color-windows
+# https://pypi.org/project/colorama/
+from colorama import init
+from colorama import Fore, Back, Style
+init()
+
 class STwig_Algorithm(object):
 
     query_graph = None
@@ -46,7 +52,10 @@ class STwig_Algorithm(object):
         # cqlQuery = "MATCH (n) WHERE n.zhaosun_id = '" + str(node_id) + "' RETURN n"
 
         # PENTRU RI data graph
-        cqlQuery = "MATCH (n) WHERE n.RI_node_id = '" + str(node_id) + "' RETURN n"
+        # cqlQuery = "MATCH (n) WHERE n.RI_node_id = '" + str(node_id) + "' RETURN n"
+
+        # PENTRU SMALL data graph
+        cqlQuery = "MATCH (n) WHERE n.node_id = '" + str(node_id) + "' RETURN n"
 
 
         # print(cqlQuery)
@@ -60,8 +69,14 @@ class STwig_Algorithm(object):
         # cqlQuery2 = "MATCH(n{zhaosun_id: '" + str(node_id) + "'})--(m) return m"
         # MATCH(n{zhaosun_id: 'a1'})--(m) return m
         # print(cqlQuery2)
+
         # PENTRU RI data graph
-        cqlQuery2 = "MATCH(n{RI_node_id: '" + str(node_id) + "'})--(m) return m"
+        # cqlQuery2 = "MATCH(n{RI_node_id: '" + str(node_id) + "'})--(m) return m"
+
+        # PENTRU SMALL data graph
+        cqlQuery2 = "MATCH(n{node_id: '" + str(node_id) + "'})--(m) return m"
+
+
 
         result2 = list(self.neograph_data.run(cqlQuery2).to_ndarray())
         # print(result2)
@@ -104,7 +119,10 @@ class STwig_Algorithm(object):
             # cqlQuery = "MATCH (n) WHERE n.zhaosun_label='" + str(label) + "' RETURN n.zhaosun_id" # IF a IN a1! Graf Zhaosun
 
             # PENTRU RI data graph
-            cqlQuery = "MATCH (n) WHERE n.RI_node_label='" + str(label) + "' RETURN n.RI_node_id"
+            # cqlQuery = "MATCH (n) WHERE n.RI_node_label='" + str(label) + "' RETURN n.RI_node_id"
+
+            # PENTRU SMALL data graph
+            cqlQuery = "MATCH (n) WHERE n.node_label='" + str(label) + "' RETURN n.node_id"
 
             # result = tx.run(cqlQuery).to_ndarray()
             result = self.neograph_data.run(cqlQuery).to_ndarray()
@@ -244,7 +262,10 @@ class STwig_Algorithm(object):
                 # cqlQuery = "MATCH (n) WHERE n.zhaosun_id='" + str(leaf) + "' RETURN n.zhaosun_label"
 
                 # PENTRU RI data graph
-                cqlQuery = "MATCH (n) WHERE n.RI_node_id='" + str(leaf) + "' RETURN n.RI_node_label"
+                # cqlQuery = "MATCH (n) WHERE n.RI_node_id='" + str(leaf) + "' RETURN n.RI_node_label"
+
+                # PENTRU SMALL data graph
+                cqlQuery = "MATCH (n) WHERE n.node_id='" + str(leaf) + "' RETURN n.node_label"
 
 
                 result_label = self.neograph_data.run(cqlQuery).to_ndarray()[0][0]
@@ -286,7 +307,10 @@ class STwig_Algorithm(object):
                         # cqlQuery2 = "MATCH(n{zhaosun_id: '" + str(started_match[0]) + "'})--(m) WHERE m.zhaosun_label='" + str(neighbor_label) + "' return m"
 
                         # PENTRU RI data graph
-                        cqlQuery2 = "MATCH(n{RI_node_id: '" + str(started_match[0]) + "'})--(m) WHERE m.RI_node_label='" + str(neighbor_label) + "' return m"
+                        # cqlQuery2 = "MATCH(n{RI_node_id: '" + str(started_match[0]) + "'})--(m) WHERE m.RI_node_label='" + str(neighbor_label) + "' return m"
+
+                        # PENTRU SMALL data graph
+                        cqlQuery2 = "MATCH(n{node_id: '" + str(started_match[0]) + "'})--(m) WHERE m.node_label='" + str(neighbor_label) + "' return m"
 
                         # print(cqlQuery2)
                         result2 = list(self.neograph_data.run(cqlQuery2).to_ndarray())
@@ -340,7 +364,10 @@ class STwig_Algorithm(object):
             # cqlQuery = "MATCH (n) WHERE n.zhaosun_label='" + str(label) + "' RETURN n.zhaosun_id" # IF a IN a1! Graf Zhaosun
 
             # PENTRU RI data graph
-            cqlQuery = "MATCH (n) WHERE n.RI_node_label='" + str(label) + "' RETURN n.RI_node_id" # IF a IN a1! Graf Zhaosun
+            # cqlQuery = "MATCH (n) WHERE n.RI_node_label='" + str(label) + "' RETURN n.RI_node_id" # IF a IN a1! Graf Zhaosun
+
+            # PENTRU SMALL data graph
+            cqlQuery = "MATCH (n) WHERE n.node_label='" + str(label) + "' RETURN n.node_id" # IF a IN a1! Graf Zhaosun
 
 
             result = self.neograph_data.run(cqlQuery).to_ndarray()
@@ -371,7 +398,10 @@ class STwig_Algorithm(object):
         # print(cqlQuery)
 
         # PENTRU RI data graph
-        cqlQuery = "MATCH (n) WHERE n.RI_node_label='" + str(label) + "' AND n.RI_node_id='" + str(node_id) + "' RETURN n"
+        # cqlQuery = "MATCH (n) WHERE n.RI_node_label='" + str(label) + "' AND n.RI_node_id='" + str(node_id) + "' RETURN n"
+
+        # PENTRU SMALL data graph
+        cqlQuery = "MATCH (n) WHERE n.node_label='" + str(label) + "' AND n.node_id='" + str(node_id) + "' RETURN n"
 
         result = self.neograph_data.run(cqlQuery).to_ndarray()
         # print("Index_hasLabel query result= ")
@@ -434,7 +464,7 @@ class STwig_Algorithm(object):
         # print("Number of leaf labels: " + str(len(q[1])))
 
         r = str(self.query_graph.node[q[0]]['label'])
-        # print("STwig root label: " + str(r))
+        print("STwig root label: " + str(r))
         L = q_labels_start[1]
         print("Children labels: " + str(L))
         # for l in children_labels:
@@ -448,13 +478,14 @@ class STwig_Algorithm(object):
 
         # (2) Foreach root node, find its child nodes using Cloud.Load();
         for root_node in Sr:
-            print("---Root node: " + str(root_node))
+            print(Fore.GREEN + "---Root node: " + str(root_node))
             c = self.Cloud_Load(root_node)
-            print("     Children for selected root, first elem is selected root: " + str(c))
+            # print("     Result of Cloud Load method: " + str(c))
             root = c[0][0]
             children = c[0][1]
-            # print("root=" + str(root))
-            # print("children=" + str(children))
+            print("root=" + str(root))
+            print("children=" + str(children))
+            print(Style.RESET_ALL)
 
             # (3) Find its child nodes that match the labels in L by calling Index.hasLabel()
             S = []
@@ -466,7 +497,7 @@ class STwig_Algorithm(object):
                     if child not in S_child_lists:
                         # print("     child= " + str(child)) # Child, sau vecinii de ordinul 1.
                         aux = str(child).split("id: '")[1]
-                        child_id = str(aux).split("',")[0]
+                        child_id = int(str(aux).split("',")[0])
                         # print("     child_id= " + str(child_id))
                         # aux2 = str(child).split(" {")[0]
                         # child_label = str(aux2.split(":")[1])
@@ -516,9 +547,13 @@ class STwig_Algorithm(object):
         STwig_matches = sorted(R)
         # for stwig in STwigs:
         #     print(stwig)
+
+
         # Am schimbat graful astfel: am inlaturat muchia a3,b3: MATCH (n:a)-[r:RELTYPE]-(m:b) WHERE n.id = 'a3' AND m.id = 'b3' DELETE r
         #                            am adaugat muchia a3,c3: # MATCH (n:a),(m:c) WHERE n.id = 'a3' AND m.id = 'c3' CREATE (n)-[r:RELTYPE]->(m)
         # Astfel am obtinur rezultatele din p788_Zhaosun, pag 5, G(q1) = ...
+
+
         # print("End MatchSTwig")
         # total_time_sec = timer() - start_time
         # total_time_millis = total_time_sec * 1000
@@ -589,7 +624,11 @@ class STwig_Algorithm(object):
         # cqlQuery = "MATCH (n) WHERE n.zhaosun_label='" + str(v_label) + "' return n"
 
         # PENTRU RI data graph
-        cqlQuery = "MATCH (n) WHERE n.RI_node_label='" + str(v_label) + "' return n"
+        # cqlQuery = "MATCH (n) WHERE n.RI_node_label='" + str(v_label) + "' return n"
+
+        # PENTRU SMALL data graph
+        cqlQuery = "MATCH (n) WHERE n.node_label='" + str(v_label) + "' return n"
+
 
         # result = tx.run(cqlQuery).to_ndarray()
         result = self.neograph_data.run(cqlQuery)
