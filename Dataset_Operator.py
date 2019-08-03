@@ -61,10 +61,7 @@ class Dataset_Operator(object):
 
     def insert_edges_small_graph(self):
         neograph_data = Graph(self.leader_core_bolt_address, auth=(self.username, self.passwd))
-        cqlQuery = "LOAD CSV WITH HEADERS FROM '" + str(self.dataset_edges_url) + "' AS line" \
-                   " MERGE (n:Node {node_id: line.from})" \
-                   " MERGE (m:Node {node_id: line.to})" \
-                   " MERGE (n)-[:PPI]-(m)" # La aceasta linie modificam pentru graf orientat.
+        cqlQuery = "LOAD CSV WITH HEADERS FROM '" + str(self.dataset_edges_url) + "' AS line MERGE (n:Node {node_id: line.from}) MERGE (m:Node {node_id: line.to}) MERGE (n)-[:PPI]-(m)" # La aceasta linie modificam pentru graf orientat.
         neograph_data.run(cqlQuery)
 
     def delete_data_from_db(self):
