@@ -461,7 +461,9 @@ def subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph
             # print(is_joinable(3, [1,2], data_graph, query_stwig_dict))
             complete_solutions.append(c_sol)
             print("One complete solution found!")
-            print(Fore.GREEN + Style.BRIGHT + "List of complete solutions: " + str(complete_solutions))
+            print(Fore.GREEN + Style.BRIGHT + "List of complete solutions: ")
+            for cs in complete_solutions:
+                print(cs)
             print(Style.RESET_ALL)
             partial_solution = copy.deepcopy(restore_state(partial_solution))
             print("Restored state: " + str(partial_solution))
@@ -651,11 +653,13 @@ nx.set_node_attributes(small_graph, node_attr_dict, 'label')
 print(small_graph.nodes(data=True))
 print(small_graph.edges())
 
-query_stwig_1 = [1, 2, 3, 4]
 # FUNCTIONAL:
+query_stwig_1 = [1, 2, 3, 4]
 # query_stwig_1 = [1, 2, 3]
 # query_stwig_1 = [2, 3, 4]
 # query_stwig_1 = [1, 2]
+# query_stwig_1 = [3, 10]
+# query_stwig_1 = [4, 10]
 
 
 print("Query STwig: " + str(query_stwig_1))
