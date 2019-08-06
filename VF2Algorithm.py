@@ -98,11 +98,16 @@ class VF2Algorithm(GenericQueryProc):
                 self.total_time = timer() - self.start_time
                 print("Timp total de executare algoritm VF2: " + str(self.total_time) + " secunde.")
                 exit(0)
-            print(str(u) + " Selectat de nextQueryVertex.")
+            print("Nodul cu id-ul: " + str(u) + " a fost selectat de nextQueryVertex.")
 
             candidates_u = self.filterCandidates(u)
             print("Candidatii lui " + str(u) + ": " + str(candidates_u))
+
             candidates_refined = self.refineCandidates(M, u, candidates_u)
+
+            exit(0)
+
+
             print("Candidatii rafinati ai nodului " + str(u) + ": " + str(candidates_refined))
             print("Asocieri / Matchings: " + str(M))
             for v in candidates_refined:
@@ -153,7 +158,7 @@ class VF2Algorithm(GenericQueryProc):
     #     return filteredDataGraphVertices
 
     def nextQueryVertex(self, M): # Neoptimizat, adica se vor parcurge nodurile query in ordine lexicografic crescatoare. In aceeasi ordine vor fi inserate perechile [nod query, ..] in M.
-        # print("next query vertex exec:")
+        print("\nnext query vertex exec:")
         # print("queryNodes:")
         queryNodes = sorted(list(self.queryGraph.nodes()))
         # print(queryNodes)
@@ -165,7 +170,8 @@ class VF2Algorithm(GenericQueryProc):
         #     print("matching from reversed matching list: " + str(matching))
         for node in queryNodes:
             if self.queryGraph.node[node]['matched'] is False:
-                print("Returnam nodul " + str(node))
+                print("     Returnam nodul query: " + str(node))
+                print("next query vertex exec finish\n")
                 return node  # Returneaza primul nod query care nu se afla
 
         # VARIANTA VECHE in care folosesc lista M de asocieri.
@@ -206,8 +212,8 @@ class VF2Algorithm(GenericQueryProc):
         self.respectare_conditie_2 = False
         self.respectare_conditie_3 = False
         for candidate in query_node_candidates:
-            # print("\n Candidatul selectat: " + str(candidate))
-            # print("     Conditia(1):")
+            print("\n Candidatul selectat: " + str(candidate))
+            print("     Conditia(1):")
             # for matching in M:
             last_matching = M[-1]
             # print("     Matching (trebuie verificat pentru fiecare matching / asociere): " + str(matching))
@@ -249,15 +255,17 @@ class VF2Algorithm(GenericQueryProc):
                         break
 
 
-            # print("         Candidatii lui " + str(query_node))# + " actualizati in functie de conditia (1) al VF2: ")
-            # print("         " + str(query_nodes_candidates_for_deletion))
-            # print()
+            print("         Candidatii lui " + str(query_node))# + " actualizati in functie de conditia (1) al VF2: ")
+            print("         " + str(query_nodes_candidates_for_deletion))
+            print()
 
             # Pentru fiecare candidat trebuie verificata si Conditia (2): Prune out any vertex v in c(u) such that |Cq intersected with adj(u)| > |Cg intersected with adj(v)|
             if self.respectare_conditie_1:
-                # print("     Conditia(2):")
+                print("     Conditia(2):")
                 first_intersection = []
                 adjQueryNode = sorted(list(self.adj(query_node, self.queryGraph))) # Retin candidatii in ordine lexicografic crescatoare.
+                print("adjQueryNode: ")
+                print(adjQueryNode)
                 for xx in adjQueryNode:
                     for yy in Cq[-1]:
                         if xx == yy:
@@ -268,13 +276,13 @@ class VF2Algorithm(GenericQueryProc):
                     for yy in Cg[-1]:
                         if xx == yy:
                             second_intersection.append(xx)
-                # print("         Facut intersectiile de la c2")
-                # print("         " + str(len(first_intersection)))
-                # print("         " + str(len(second_intersection)))
+                print("         Facut intersectiile de la c2")
+                print("         " + str(len(first_intersection)))
+                print("         " + str(len(second_intersection)))
 
                 if len(first_intersection) > len(second_intersection):
-                    # print("         Conditia(2) intra in vigoare, astfel avem:")
-                    # print("         *Cardinalul primei intersectii este mai mare decat cea de-a doua. Se va sterge candidatul " + str(candidate) + ".")
+                    print("         Conditia(2) intra in vigoare, astfel avem:")
+                    print("         *Cardinalul primei intersectii este mai mare decat cea de-a doua. Se va sterge candidatul " + str(candidate) + ".")
                     if candidate in query_nodes_candidates_for_deletion:
                         query_nodes_candidates_for_deletion.remove(candidate)
                         # print("         Candidatii lui " + str(query_node))
