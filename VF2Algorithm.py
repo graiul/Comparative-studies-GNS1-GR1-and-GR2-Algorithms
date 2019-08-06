@@ -61,9 +61,9 @@ class VF2Algorithm(GenericQueryProc):
         # # Pentru metoda nextQueryVertex, fiecare nod al celor doua grafuir
         # # va avea adaugat o proprietate de tip bool numita 'matched'
         nx.set_node_attributes(self.queryGraph, False, 'matched')
-        # print(self.queryGraph.nodes(data=True))
+        print(self.queryGraph.nodes(data=True))
         nx.set_node_attributes(self.dataGraph, False, 'matched')
-        # print(self.dataGraph.nodes(data=True))
+        print(self.dataGraph.nodes(data=True))
 
         self.queryGraph.node[M[0][0]]['matched'] = True
         self.dataGraph.node[M[0][1]]['matched'] = True
@@ -96,7 +96,7 @@ class VF2Algorithm(GenericQueryProc):
             if u is None:
                 print("Nu mai sunt noduri query!")
                 self.total_time = timer() - self.start_time
-                print("Timp total de executare algoritm GADDI: " + str(self.total_time) + " secunde.")
+                print("Timp total de executare algoritm VF2: " + str(self.total_time) + " secunde.")
                 exit(0)
             print(str(u) + " Selectat de nextQueryVertex.")
 
