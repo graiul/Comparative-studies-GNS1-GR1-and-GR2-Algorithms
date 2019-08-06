@@ -1,9 +1,11 @@
 #Small_query_graph_VF2
+5
 a
 b
 c
 d
 b
+5
 1 2
 1 3
 1 4
