@@ -202,28 +202,34 @@ class VF2Algorithm(GenericQueryProc):
         # timpul initializata cu o asociere.
         Cq.append(list(self.adj(M[-1][0], self.queryGraph)))
         Cg.append(list(self.adj(M[-1][1], self.dataGraph)))
-        # print("Mq = " + str(Mq))
-        # print("Mg = " + str(Mg))
-        # print("Cq = " + str(Cq))
-        # print("Cg = " + str(Cg))
+        print("Mq = " + str(Mq))
+        print("Mg = " + str(Mg))
+        print("Cq = " + str(Cq))
+        print("Cg = " + str(Cg))
         # Pentru fiecare candidat verificam conditia (1)
 
         query_nodes_candidates_for_deletion = copy.deepcopy(query_node_candidates)
         self.respectare_conditie_1 = False
         self.respectare_conditie_2 = False
         self.respectare_conditie_3 = False
+
+        # Conditia (1): Prune out candidate such that candidate is not connected from already matched data vertices.
+                        # Prune out candidate such that candidate is connected
+        # from not matched data vertices.
         for candidate in query_node_candidates:
             # print("\n Candidatul selectat: " + str(candidate))
             # print("     Conditia(1):")
             # for matching in M:
-            last_matching = M[-1]
+            # last_matching = M[-1]
             # print("     Matching (trebuie verificat pentru fiecare matching / asociere): " + str(matching))
             # print("M: " + str(M))
             # print(candidate)
 
             for data_node in self.dataGraph.nodes():
                 print("data_node: " + str(data_node))
+                # Daca nodul data selectat nu a mai fost folosit
                 if self.dataGraph.node[data_node]['matched'] is False:
+                    # Atunci verificam sa nu fie adiacent lui
                     if self.dataGraph.has_edge(candidate, data_node):
                         if candidate in query_nodes_candidates_for_deletion:
                             query_nodes_candidates_for_deletion.remove(candidate)
@@ -299,7 +305,7 @@ class VF2Algorithm(GenericQueryProc):
                     self.respectare_conditie_2 = True
 
                 if self.respectare_conditie_2 is True:
-                    # print("     Conditia(3):")
+                    print("     Conditia(3):")
 
                     for cq_elem in Cq:
                         for cq_elem_node in cq_elem:
