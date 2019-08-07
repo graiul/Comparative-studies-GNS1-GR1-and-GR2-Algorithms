@@ -236,7 +236,7 @@ class Graph_Format:
         # print("Input graph edges: ")
         edge_list = []
         for i in range(num_nodes+3, len(self.lines)):
-            line = [self.lines[i].split(sep="\n")[0], self.lines[i].split(sep="\n")[1]]
+            line = [self.lines[i].split(sep="\n")[0]]
             new_edge = tuple(line[0].split(sep=" "), )
             edge_list.append(new_edge)
         # print(edge_list)
