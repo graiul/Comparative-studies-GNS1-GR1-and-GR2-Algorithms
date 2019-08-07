@@ -219,9 +219,9 @@ class Graph_Format:
         # Lista de etichete are numarul de elemente egal cu numarul de noduri, dar aceasta este lista care poate fi atribuita direct nodurilor, numarul de etichete unice fiind in realitate mult mai mic, si anume 32,
         # avand o distribuire uniforma asupra nodurilor.
         input_graph = nx.Graph()
-        print("Input graph name: " + str(self.lines[0]))
+        # print("Input graph name: " + str(self.lines[0]))
         num_nodes = int(self.lines[1])
-        print("Number of nodes: " + str(num_nodes))
+        # print("Number of nodes: " + str(num_nodes))
         nodes_attr_list = []
         # for line in self.lines:
         #     if "ENSP" in line:
@@ -230,16 +230,21 @@ class Graph_Format:
         for i in range(2,num_nodes+2):
             spl = self.lines[i].split(sep="\n")[0]
             nodes_attr_list.append(spl)
-        print("Nodes attributes number: " + str(len(nodes_attr_list)))
+        # print("Nodes attributes number: " + str(len(nodes_attr_list)))
         num_edges = int(self.lines[num_nodes+2])
-        print("Number of edges: " + str(num_edges))
-        print("Input graph edges: ")
+        # print("Number of edges: " + str(num_edges))
+        # print("Input graph edges: ")
         edge_list = []
         for i in range(num_nodes+3, len(self.lines)):
-            print(self.lines[i].split(sep="\n")[0])
+            # print(self.lines[i].split(sep="\n")[0])
             line = [self.lines[i].split(sep="\n")[0]]
             new_edge = tuple(line[0].split(sep=" "), )
-            edge_list.append(new_edge)
+            # print("new_edge: ")
+            # print(new_edge)
+            aux_edge_int_nodes = (int(new_edge[0]), int(new_edge[1]))
+            # print("aux_edge_int_nodes: ")
+            # print(aux_edge_int_nodes)
+            edge_list.append(aux_edge_int_nodes)
         # print(edge_list)
         # print(len(edge_list))
         input_graph.add_edges_from(edge_list)
