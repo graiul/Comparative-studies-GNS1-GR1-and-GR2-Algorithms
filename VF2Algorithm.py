@@ -3,9 +3,7 @@ import networkx as nx
 from GenericQueryProc import GenericQueryProc
 from Graph_Format import Graph_Format
 from timeit import default_timer as timer
-from colorama import init
-from colorama import Fore, Back, Style
-init()
+
 
 # print("\nVF2 algorithm:")
 
@@ -63,13 +61,9 @@ class VF2Algorithm(GenericQueryProc):
         # # Pentru metoda nextQueryVertex, fiecare nod al celor doua grafuir
         # # va avea adaugat o proprietate de tip bool numita 'matched'
         nx.set_node_attributes(self.queryGraph, False, 'matched')
-        print(self.queryGraph.nodes(data=True))
-        print(self.queryGraph.edges())
+        # print(self.queryGraph.nodes(data=True))
         nx.set_node_attributes(self.dataGraph, False, 'matched')
-
-        print()
-        print(self.dataGraph.nodes(data=True))
-        print(self.dataGraph.edges())
+        # print(self.dataGraph.nodes(data=True))
 
         self.queryGraph.node[M[0][0]]['matched'] = True
         self.dataGraph.node[M[0][1]]['matched'] = True
@@ -102,18 +96,13 @@ class VF2Algorithm(GenericQueryProc):
             if u is None:
                 print("Nu mai sunt noduri query!")
                 self.total_time = timer() - self.start_time
-                print("Timp total de executare algoritm VF2: " + str(self.total_time) + " secunde.")
+                print("Timp total de executare algoritm GADDI: " + str(self.total_time) + " secunde.")
                 exit(0)
-            print("Nodul cu id-ul: " + str(u) + " a fost selectat de nextQueryVertex.")
+            print(str(u) + " Selectat de nextQueryVertex.")
 
             candidates_u = self.filterCandidates(u)
-            print("Candidatii lui " + str(u) + "(nod query graph): " + str(candidates_u) + "  - noduri data graph")
-
+            print("Candidatii lui " + str(u) + ": " + str(candidates_u))
             candidates_refined = self.refineCandidates(M, u, candidates_u)
-
-            exit(0)
-
-
             print("Candidatii rafinati ai nodului " + str(u) + ": " + str(candidates_refined))
             print("Asocieri / Matchings: " + str(M))
             for v in candidates_refined:
@@ -164,7 +153,7 @@ class VF2Algorithm(GenericQueryProc):
     #     return filteredDataGraphVertices
 
     def nextQueryVertex(self, M): # Neoptimizat, adica se vor parcurge nodurile query in ordine lexicografic crescatoare. In aceeasi ordine vor fi inserate perechile [nod query, ..] in M.
-        print("\nnext query vertex exec:")
+        # print("next query vertex exec:")
         # print("queryNodes:")
         queryNodes = sorted(list(self.queryGraph.nodes()))
         # print(queryNodes)
@@ -176,8 +165,7 @@ class VF2Algorithm(GenericQueryProc):
         #     print("matching from reversed matching list: " + str(matching))
         for node in queryNodes:
             if self.queryGraph.node[node]['matched'] is False:
-                print("     Returnam nodul query: " + str(node))
-                print("next query vertex exec finish\n")
+                print("Returnam nodul " + str(node))
                 return node  # Returneaza primul nod query care nu se afla
 
         # VARIANTA VECHE in care folosesc lista M de asocieri.
@@ -190,8 +178,6 @@ class VF2Algorithm(GenericQueryProc):
     # DUPA SELECAREA FIECARUI CANDIDAT, VA REZULTA O LISTA GOALA A CANDIDATILOR RAFINATI.
     # DAR, cateodata este nevoie doar de ultima intrare. Pentru o posibila rezolvare, am notat in comentarii deasupra metodei subgraphSearch.
     def refineCandidates(self, M, query_node, query_node_candidates):
-        print("\nrefine candidates exec: ")
-
         Mq = []  # Set of matched query vertices
         Mg = []  # Set of matched data vertices
         Cq = []  # Set of adjacent and not-yet-matched query vertices connected from Mq
@@ -209,11 +195,10 @@ class VF2Algorithm(GenericQueryProc):
         # timpul initializata cu o asociere.
         Cq.append(list(self.adj(M[-1][0], self.queryGraph)))
         Cg.append(list(self.adj(M[-1][1], self.dataGraph)))
-        print("Mq = " + str(Mq))
-        print("Mg = " + str(Mg))
-        print("Cq = " + str(Cq))
-        print("Cg = " + str(Cg))
-        print()
+        # print("Mq = " + str(Mq))
+        # print("Mg = " + str(Mg))
+        # print("Cq = " + str(Cq))
+        # print("Cg = " + str(Cg))
         # Pentru fiecare candidat verificam conditia (1)
 
         query_nodes_candidates_for_deletion = copy.deepcopy(query_node_candidates)
@@ -221,70 +206,75 @@ class VF2Algorithm(GenericQueryProc):
         self.respectare_conditie_2 = False
         self.respectare_conditie_3 = False
         for candidate in query_node_candidates:
-            print(Fore.LIGHTBLUE_EX + Style.BRIGHT + "\n     Candidatul(nod din data graph) selectat: " + str(candidate))
-            print(Style.RESET_ALL)
+            # print("\n Candidatul selectat: " + str(candidate))
+            # print("     Conditia(1):")
+            # for matching in M:
+            last_matching = M[-1]
+            # print("     Matching (trebuie verificat pentru fiecare matching / asociere): " + str(matching))
+            # print("M: " + str(M))
+            # print(candidate)
 
-            print("     Conditia(1):")
-            for matching in M:
-                print("         matching in M selectat: " + str(matching))
-                # Astfel nu mai folosim atributul 'matched' al fiecarui nod data.
-                if not self.dataGraph.has_edge(candidate, matching[1]):
-                    if candidate in query_nodes_candidates_for_deletion:
-                        query_nodes_candidates_for_deletion.remove(candidate)
+            for data_node in self.dataGraph.nodes():
+                if self.dataGraph.node[data_node]['matched'] is False:
+                    if self.dataGraph.has_edge(candidate, data_node):
+                        if candidate in query_nodes_candidates_for_deletion:
+                            query_nodes_candidates_for_deletion.remove(candidate)
+                            self.respectare_conditie_1 = False
+            # # A DOUA VARIANTA VECHE: foloseste lista M inversata.
+            # for matching in reversed(M):
+            #     print("Candidate: " + str(candidate))
+            #     print("Refinement: " + str(matching))
+            #     # # PRIMA VARIANTA VECHE: cautarea in lista M care contine elementele in ordinea inserarii.
+            #     # if self.data_graph.has_edge(candidate, matching[1]) is False:
+            #     #     # print("         Conditia(1) intra in vigoare, astfel avem:")
+            #     #     # print("         *Nu exista muchie intre " + str(candidate) + " si " + str(matching[1]) + ". Se va sterge candidatul " + str(candidate) + ".")
+            #     #     # print("         *Nu se mai verifica pentru Conditia(2), ci verificam Conditia(2) pentru candidatii care au trecut.")
+            #     #     for neighbor in self.data_graph.neighbors(matching[1]):
+            #     #         if neighbor is matching[1]:
+            #     #             if self.data_graph.has_edge(candidate, neighbor) is True:
+            #     #                 print("Has edge. Trece regula 1.\n")
+            #     #                 self.respectare_conditie_1 = True
+            #     #                 break
+            #     # else:
+            #     #     break
+            #
+            #     if self.data_graph.has_edge(candidate, matching[1]) is False:
+            #         if candidate in query_nodes_candidates_for_deletion:
+            #             query_nodes_candidates_for_deletion.remove(candidate) # Am putut sa fac remove unui element din lista direct in bucla foreach. NU SE FAC STERGERI DIN LISTA IN ACELASI TIMP CU ITERAREA!
+            #             self.respectare_conditie_1 = False
+                    else:
+                        # print("         Candidatul trece de filtru, lista de candidati ramane neschimbata. Continuam cu verificarea Conditiei(2)")
+                        print("Has edge. Trece regula 1.\n")
                         self.respectare_conditie_1 = True
                         break
 
 
-            # print("     data nodes: " + str(self.dataGraph.nodes()))
-            # for data_node in self.dataGraph.nodes():
-            #     print("     data_node: " + str(data_node))
-            #     if self.dataGraph.node[data_node]['matched'] is False:
-            #         if not self.dataGraph.has_edge(candidate, data_node):
-            #             if candidate in query_nodes_candidates_for_deletion:
-            #                 query_nodes_candidates_for_deletion.remove(candidate)
-            #                 self.respectare_conditie_1 = True
-            #                 break
-
-
-            print("         Candidatii lui " + str(query_node) + " actualizati in functie de conditia (1) al VF2: ")
-            print("         " + str(query_nodes_candidates_for_deletion))
-            print()
+            # print("         Candidatii lui " + str(query_node))# + " actualizati in functie de conditia (1) al VF2: ")
+            # print("         " + str(query_nodes_candidates_for_deletion))
+            # print()
 
             # Pentru fiecare candidat trebuie verificata si Conditia (2): Prune out any vertex v in c(u) such that |Cq intersected with adj(u)| > |Cg intersected with adj(v)|
             if self.respectare_conditie_1:
-                print("     Conditia(2):")
-                print("         Candidatii lui " + str(query_node) + " actualizati in functie de conditia (1) al VF2: ")
-                print("         " + str(query_nodes_candidates_for_deletion))
-
+                # print("     Conditia(2):")
                 first_intersection = []
                 adjQueryNode = sorted(list(self.adj(query_node, self.queryGraph))) # Retin candidatii in ordine lexicografic crescatoare.
-                print("     adj(u); adjQueryNode(noduri adiacente pentru nodul query selectat): " + str(adjQueryNode))
-
-                print("Intersectiile de la Conditia 2:")
-                print("Cq = " + str(Cq))
-                print("adjQueryNode: " + str(adjQueryNode))
                 for xx in adjQueryNode:
-                    print("         xx: " + str(xx))
                     for yy in Cq[-1]:
-                        print("         yy: " + str(yy))
                         if xx == yy:
                             first_intersection.append(xx)
                 second_intersection = []
                 adjCandidate = sorted(list(self.adj(candidate, self.dataGraph)))
-                print("     adjCandidate(noduri adiacente pentru nodul data candidat selectat): " + str(adjCandidate))
-
-
                 for xx in adjCandidate:
                     for yy in Cg[-1]:
                         if xx == yy:
                             second_intersection.append(xx)
-                print("\n         Facut intersectiile de la Conditia 2")
-                print("         first_intersection: " + str(len(first_intersection)))
-                print("         second_intersection: " + str(len(second_intersection)))
+                # print("         Facut intersectiile de la c2")
+                # print("         " + str(len(first_intersection)))
+                # print("         " + str(len(second_intersection)))
 
                 if len(first_intersection) > len(second_intersection):
-                    print("         Conditia(2) intra in vigoare, astfel avem:")
-                    print("         *Cardinalul primei intersectii este mai mare decat cea de-a doua. Se va sterge candidatul " + str(candidate) + ".")
+                    # print("         Conditia(2) intra in vigoare, astfel avem:")
+                    # print("         *Cardinalul primei intersectii este mai mare decat cea de-a doua. Se va sterge candidatul " + str(candidate) + ".")
                     if candidate in query_nodes_candidates_for_deletion:
                         query_nodes_candidates_for_deletion.remove(candidate)
                         # print("         Candidatii lui " + str(query_node))
@@ -420,7 +410,6 @@ class VF2Algorithm(GenericQueryProc):
         # # print(query_node_candidates)
         # print("---------------------\n")
         # print("------------SFARSIT EXECUTIE RAFINARE CANDIDATI-----------")
-        print("\nrefine candidates finish")
         return query_nodes_candidates_for_deletion
 
         # Adaug in M o noua asociere. Voi alege doar primul candidat din lista de candidati care au ramas dupa regulile de refinement.
@@ -482,13 +471,8 @@ class VF2Algorithm(GenericQueryProc):
         # SAU pentru a elimina ultimul element:
         # M.remove(M[-1])
 
-    def adj(self, node, graph):
-        print("\nadj() exec: ")
-        print("Nodul input: " + str(node))
-        print("Graful dat ca si input: " + str(graph.nodes()))
-        print("Noduri adiacente: " + str(list(graph.neighbors(node))))
-        print("adj() exec finish\n")
-        return graph.neighbors(node)
+    def adj(self, u, graph):
+        return graph.neighbors(u)
     # def adj(self, u, dataGraphDict):
     #     adjacentVertices = []
     #     # print("----------")
