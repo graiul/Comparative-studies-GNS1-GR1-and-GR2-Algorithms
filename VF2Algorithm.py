@@ -258,7 +258,7 @@ class VF2Algorithm(GenericQueryProc):
 
                 first_intersection = []
                 adjQueryNode = sorted(list(self.adj(query_node, self.queryGraph))) # Retin candidatii in ordine lexicografic crescatoare.
-                print("     adjQueryNode(noduri adiacente pentru nodul query selectat): " + str(adjQueryNode))
+                print("     adj(u); adjQueryNode(noduri adiacente pentru nodul query selectat): " + str(adjQueryNode))
 
                 print("Intersectiile de la Conditia 2:")
                 print("Cq = " + str(Cq))
