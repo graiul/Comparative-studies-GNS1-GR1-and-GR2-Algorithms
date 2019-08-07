@@ -3,7 +3,9 @@ import networkx as nx
 from GenericQueryProc import GenericQueryProc
 from Graph_Format import Graph_Format
 from timeit import default_timer as timer
-
+from colorama import init
+from colorama import Fore, Back, Style
+init()
 
 # print("\nVF2 algorithm:")
 
@@ -62,8 +64,12 @@ class VF2Algorithm(GenericQueryProc):
         # # va avea adaugat o proprietate de tip bool numita 'matched'
         nx.set_node_attributes(self.queryGraph, False, 'matched')
         print(self.queryGraph.nodes(data=True))
+        print(self.queryGraph.edges())
         nx.set_node_attributes(self.dataGraph, False, 'matched')
+
+        print()
         print(self.dataGraph.nodes(data=True))
+        print(self.dataGraph.edges())
 
         self.queryGraph.node[M[0][0]]['matched'] = True
         self.dataGraph.node[M[0][1]]['matched'] = True
@@ -203,10 +209,11 @@ class VF2Algorithm(GenericQueryProc):
         # timpul initializata cu o asociere.
         Cq.append(list(self.adj(M[-1][0], self.queryGraph)))
         Cg.append(list(self.adj(M[-1][1], self.dataGraph)))
-        # print("Mq = " + str(Mq))
-        # print("Mg = " + str(Mg))
-        # print("Cq = " + str(Cq))
-        # print("Cg = " + str(Cg))
+        print("Mq = " + str(Mq))
+        print("Mg = " + str(Mg))
+        print("Cq = " + str(Cq))
+        print("Cg = " + str(Cg))
+        print()
         # Pentru fiecare candidat verificam conditia (1)
 
         query_nodes_candidates_for_deletion = copy.deepcopy(query_node_candidates)
@@ -214,7 +221,9 @@ class VF2Algorithm(GenericQueryProc):
         self.respectare_conditie_2 = False
         self.respectare_conditie_3 = False
         for candidate in query_node_candidates:
-            print("     Candidatul(nod din data graph) selectat: " + str(candidate))
+            print(Fore.LIGHTBLUE_EX + Style.BRIGHT + "\n     Candidatul(nod din data graph) selectat: " + str(candidate))
+            print(Style.RESET_ALL)
+
             print("     Conditia(1):")
             for matching in M:
                 print("         matching in M selectat: " + str(matching))
@@ -244,22 +253,34 @@ class VF2Algorithm(GenericQueryProc):
             # Pentru fiecare candidat trebuie verificata si Conditia (2): Prune out any vertex v in c(u) such that |Cq intersected with adj(u)| > |Cg intersected with adj(v)|
             if self.respectare_conditie_1:
                 print("     Conditia(2):")
+                print("         Candidatii lui " + str(query_node) + " actualizati in functie de conditia (1) al VF2: ")
+                print("         " + str(query_nodes_candidates_for_deletion))
+
                 first_intersection = []
                 adjQueryNode = sorted(list(self.adj(query_node, self.queryGraph))) # Retin candidatii in ordine lexicografic crescatoare.
-                print("         adjQueryNode(noduri adiacente pentru nodul query selectat): " + str(adjQueryNode))
+                print("     adjQueryNode(noduri adiacente pentru nodul query selectat): " + str(adjQueryNode))
+
+                print("Intersectiile de la Conditia 2:")
+                print("Cq = " + str(Cq))
+                print("adjQueryNode: " + str(adjQueryNode))
                 for xx in adjQueryNode:
+                    print("         xx: " + str(xx))
                     for yy in Cq[-1]:
+                        print("         yy: " + str(yy))
                         if xx == yy:
                             first_intersection.append(xx)
                 second_intersection = []
                 adjCandidate = sorted(list(self.adj(candidate, self.dataGraph)))
+                print("     adjCandidate(noduri adiacente pentru nodul data candidat selectat): " + str(adjCandidate))
+
+
                 for xx in adjCandidate:
                     for yy in Cg[-1]:
                         if xx == yy:
                             second_intersection.append(xx)
-                print("         Facut intersectiile de la c2")
-                print("         " + str(len(first_intersection)))
-                print("         " + str(len(second_intersection)))
+                print("\n         Facut intersectiile de la Conditia 2")
+                print("         first_intersection: " + str(len(first_intersection)))
+                print("         second_intersection: " + str(len(second_intersection)))
 
                 if len(first_intersection) > len(second_intersection):
                     print("         Conditia(2) intra in vigoare, astfel avem:")
@@ -461,8 +482,13 @@ class VF2Algorithm(GenericQueryProc):
         # SAU pentru a elimina ultimul element:
         # M.remove(M[-1])
 
-    def adj(self, u, graph):
-        return graph.neighbors(u)
+    def adj(self, node, graph):
+        print("\nadj() exec: ")
+        print("Nodul input: " + str(node))
+        print("Graful dat ca si input: " + str(graph.nodes()))
+        print("Noduri adiacente: " + str(list(graph.neighbors(node))))
+        print("adj() exec finish\n")
+        return graph.neighbors(node)
     # def adj(self, u, dataGraphDict):
     #     adjacentVertices = []
     #     # print("----------")
