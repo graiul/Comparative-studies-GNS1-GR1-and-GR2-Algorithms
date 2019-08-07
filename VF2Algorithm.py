@@ -52,12 +52,10 @@ class VF2Algorithm(GenericQueryProc):
             # gfq.display_file()
             gfq.create_graph_from_RI_file()
             self.queryGraph = gfq.get_graph()
-            print(self.queryGraph.nodes(data=True))
             gfd = Graph_Format(self.dataGraphFile)
             gfd.create_graph_from_RI_file()
             self.dataGraph = gfd.get_graph()
-            print()
-            print(self.dataGraph.nodes(data=True))
+
 
         # # Pentru metoda nextQueryVertex, fiecare nod al celor doua grafuir
         # # va avea adaugat o proprietate de tip bool numita 'matched'
@@ -67,6 +65,14 @@ class VF2Algorithm(GenericQueryProc):
         # print(self.dataGraph.nodes(data=True))
         self.queryGraph.node[M[0][0]]['matched'] = True
         self.dataGraph.node[M[0][1]]['matched'] = True
+
+        print(self.queryGraph.nodes(data=True))
+        print()
+        print(self.dataGraph.nodes(data=True))
+        print()
+        print(self.queryGraph.edges())
+        print()
+        print(self.dataGraph.edges())
 
         # exit(0)
 
@@ -216,6 +222,7 @@ class VF2Algorithm(GenericQueryProc):
             # print(candidate)
 
             for data_node in self.dataGraph.nodes():
+                print("data_node: " + str(data_node))
                 if self.dataGraph.node[data_node]['matched'] is False:
                     if self.dataGraph.has_edge(candidate, data_node):
                         if candidate in query_nodes_candidates_for_deletion:
@@ -245,7 +252,9 @@ class VF2Algorithm(GenericQueryProc):
             #             self.respectare_conditie_1 = False
                     else:
                         # print("         Candidatul trece de filtru, lista de candidati ramane neschimbata. Continuam cu verificarea Conditiei(2)")
-                        print("Has edge. Trece regula 1.\n")
+                        print("Has edge. Trece regula 1.")
+                        print("Has edge: " + str([candidate, data_node]))
+                        print()
                         self.respectare_conditie_1 = True
                         break
 
@@ -269,9 +278,9 @@ class VF2Algorithm(GenericQueryProc):
                     for yy in Cg[-1]:
                         if xx == yy:
                             second_intersection.append(xx)
-                # print("         Facut intersectiile de la c2")
-                # print("         " + str(len(first_intersection)))
-                # print("         " + str(len(second_intersection)))
+                print("         Facut intersectiile de la Conditia 2")
+                print("         " + str(len(first_intersection)))
+                print("         " + str(len(second_intersection)))
 
                 if len(first_intersection) > len(second_intersection):
                     # print("         Conditia(2) intra in vigoare, astfel avem:")
@@ -283,10 +292,10 @@ class VF2Algorithm(GenericQueryProc):
                         # print()
                         self.respectare_conditie_2 = False
                 else:
-                    # print("         Trece de filtru mai departe la Conditia(3)")
-                    # print("         Candidatii lui " + str(query_node))
-                    # print("         " + str(query_nodes_candidates_for_deletion))
-                    # print()
+                    print("         Trece de filtru mai departe la Conditia(3)")
+                    print("         Candidatii lui " + str(query_node))
+                    print("         " + str(query_nodes_candidates_for_deletion))
+                    print()
                     self.respectare_conditie_2 = True
 
                 if self.respectare_conditie_2 is True:
