@@ -239,6 +239,7 @@ class VF2Algorithm(GenericQueryProc):
                             print("Muchia care exista: " + str([candidate, data_node]))
                             query_nodes_candidates_for_deletion.remove(candidate)
                             self.respectare_conditie_1 = False
+                            break
             # # A DOUA VARIANTA VECHE: foloseste lista M inversata.
             # for matching in reversed(M):
             #     print("Candidate: " + str(candidate))
