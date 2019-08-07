@@ -52,11 +52,12 @@ class VF2Algorithm(GenericQueryProc):
             # gfq.display_file()
             gfq.create_graph_from_RI_file()
             self.queryGraph = gfq.get_graph()
-            # print(self.queryGraph.edges)
+            print(self.queryGraph.nodes(data=True))
             gfd = Graph_Format(self.dataGraphFile)
             gfd.create_graph_from_RI_file()
             self.dataGraph = gfd.get_graph()
-            # print(self.dataGraph.edges())
+            print()
+            print(self.dataGraph.nodes(data=True))
 
         # # Pentru metoda nextQueryVertex, fiecare nod al celor doua grafuir
         # # va avea adaugat o proprietate de tip bool numita 'matched'
@@ -64,10 +65,10 @@ class VF2Algorithm(GenericQueryProc):
         # print(self.queryGraph.nodes(data=True))
         nx.set_node_attributes(self.dataGraph, False, 'matched')
         # print(self.dataGraph.nodes(data=True))
-
         self.queryGraph.node[M[0][0]]['matched'] = True
         self.dataGraph.node[M[0][1]]['matched'] = True
 
+        # exit(0)
 
     # Varianta in care lucram cu lista M in vederea verificarii daca un nod a fost asociat deja sau nu este dificil de implementat datorita contradictiei care apare:
     # in anumite cazuri, adica pentru unele noduri query sau data este nevoie doar de ultima asociere din lista, iar daca aceasta nu corespunde cerintelor, trebuie verificata toata lista.
@@ -96,7 +97,7 @@ class VF2Algorithm(GenericQueryProc):
             if u is None:
                 print("Nu mai sunt noduri query!")
                 self.total_time = timer() - self.start_time
-                print("Timp total de executare algoritm GADDI: " + str(self.total_time) + " secunde.")
+                print("Timp total de executare algoritm VF2: " + str(self.total_time) + " secunde.")
                 exit(0)
             print(str(u) + " Selectat de nextQueryVertex.")
 
@@ -155,7 +156,7 @@ class VF2Algorithm(GenericQueryProc):
     def nextQueryVertex(self, M): # Neoptimizat, adica se vor parcurge nodurile query in ordine lexicografic crescatoare. In aceeasi ordine vor fi inserate perechile [nod query, ..] in M.
         # print("next query vertex exec:")
         # print("queryNodes:")
-        queryNodes = sorted(list(self.queryGraph.nodes()))
+        queryNodes = list(self.queryGraph.nodes())
         # print(queryNodes)
         # print("matchings:")
         # print(M)
@@ -257,13 +258,13 @@ class VF2Algorithm(GenericQueryProc):
             if self.respectare_conditie_1:
                 # print("     Conditia(2):")
                 first_intersection = []
-                adjQueryNode = sorted(list(self.adj(query_node, self.queryGraph))) # Retin candidatii in ordine lexicografic crescatoare.
+                adjQueryNode = list(self.adj(query_node, self.queryGraph)) # Retin candidatii in ordine lexicografic crescatoare.
                 for xx in adjQueryNode:
                     for yy in Cq[-1]:
                         if xx == yy:
                             first_intersection.append(xx)
                 second_intersection = []
-                adjCandidate = sorted(list(self.adj(candidate, self.dataGraph)))
+                adjCandidate = list(self.adj(candidate, self.dataGraph))
                 for xx in adjCandidate:
                     for yy in Cg[-1]:
                         if xx == yy:
