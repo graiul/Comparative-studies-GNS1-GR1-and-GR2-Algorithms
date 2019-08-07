@@ -50,4 +50,8 @@ VF2:
 [1, 2
 [1, 6
 [1, 10
-Candidatii nodului query 2: nodurile data 2, 6 si 10.
+Candidatii rafinati ai nodului query 2: ['2', '6', '10']
+Candidatii rafinati ai nodului query 3: ['3', '7']
+Candidatii rafinati ai nodului query 4: ['4', '8']
+
+PENTRU QUERY GRAPH CU PATRU NODURI.
