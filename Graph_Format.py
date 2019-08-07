@@ -236,15 +236,9 @@ class Graph_Format:
         # print("Input graph edges: ")
         edge_list = []
         for i in range(num_nodes+3, len(self.lines)):
-            # print(self.lines[i].split(sep="\n")[0])
-            line = [self.lines[i].split(sep="\n")[0]]
+            line = [self.lines[i].split(sep="\n")[0], self.lines[i].split(sep="\n")[1]]
             new_edge = tuple(line[0].split(sep=" "), )
-            # print("new_edge: ")
-            # print(new_edge)
-            aux_edge_int_nodes = (int(new_edge[0]), int(new_edge[1]))
-            # print("aux_edge_int_nodes: ")
-            # print(aux_edge_int_nodes)
-            edge_list.append(aux_edge_int_nodes)
+            edge_list.append(new_edge)
         # print(edge_list)
         # print(len(edge_list))
         input_graph.add_edges_from(edge_list)
@@ -423,8 +417,6 @@ class Graph_Format:
         # Adaugarea ultimei muchii, dar fara un "\n" dupa ea.
         f.write(str(edge_list[len(edge_list)-1][0]) + "," + str(edge_list[len(edge_list)-1][1]))
 
-
-
 # # Date mari
 # # Prelucrez fisierul text:
 # print()
@@ -461,9 +453,9 @@ class Graph_Format:
 # print("Lista de noduri: ")
 # print(graph.nodes(data=True))
 
-# gf = Graph_Format("Homo_sapiens_udistr_32.gfd")
-# gf.create_graph_from_RI_file()
-# nx_RI_data_graph = gf.get_graph()
-# # print(nx_RI_data_graph.nodes(data=True))
-# gf.create_RI_data_graph_nodes_csv_file(nx_RI_data_graph)
-# # gf.create_RI_data_graph_edges_csv_file(nx_RI_data_graph)
+gf = Graph_Format("Homo_sapiens_udistr_32.gfd")
+gf.create_graph_from_RI_file()
+nx_RI_data_graph = gf.get_graph()
+# print(nx_RI_data_graph.nodes(data=True))
+gf.create_RI_data_graph_nodes_csv_file(nx_RI_data_graph)
+# gf.create_RI_data_graph_edges_csv_file(nx_RI_data_graph)
