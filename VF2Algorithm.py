@@ -110,8 +110,11 @@ class VF2Algorithm(GenericQueryProc):
             candidates_u = self.filterCandidates(u)
             print("Candidatii lui " + str(u) + ": " + str(candidates_u))
             candidates_refined = self.refineCandidates(M, u, candidates_u)
-            print("Candidatii rafinati ai nodului " + str(u) + ": " + str(candidates_refined))
+            print("\nCandidatii rafinati ai nodului " + str(u) + ": " + str(candidates_refined))
             print("Asocieri / Matchings: " + str(M))
+
+            print("TREBUIE SA FOLOSESC SI 6 SI 10, ADICA SI CEILALTI CANDIDATI RAFINATI AI NODULUI QUERY SELECTAT! - BACKTRACKING!")
+
             for v in candidates_refined:
                 print("Candidat rafinat selectat: " + str(v))
                 print("Asocieri existente: ")
