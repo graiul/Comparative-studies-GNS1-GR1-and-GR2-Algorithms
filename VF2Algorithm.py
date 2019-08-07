@@ -228,15 +228,16 @@ class VF2Algorithm(GenericQueryProc):
             # print(candidate)
 
             for data_node in self.dataGraph.nodes():
-                print("data_node: " + str(data_node))
-                # Daca nodul data selectat nu a mai fost folosit
-                if self.dataGraph.node[data_node]['matched'] is False:
+                print("Nod data selectat pentru verificare: " + str(data_node))
+                # Daca nodul data selectat a mai fost folosit
+                if self.dataGraph.node[data_node]['matched'] is True:
+                    print("Nodul " + str(data_node) + " este deja marcat ca fiind 'matched' ")
                     # Atunci verificam sa nu fie adiacent lui
-                    print("Exista in graful data muchia " + str([candidate, data_node]) + " ?")
-                    if self.dataGraph.has_edge(candidate, data_node):
+                    print("Lipseste in graful data muchia " + str([candidate, data_node]) + " ?")
+                    if self.dataGraph.has_edge(candidate, data_node) == False:
                         if candidate in query_nodes_candidates_for_deletion:
-                            print("Exista. Eliminam candidatul conform Conditiei 1.")
-                            print("Muchia care exista: " + str([candidate, data_node]))
+                            print("Nu exista muchie. Eliminam candidatul conform Conditiei 1.")
+                            print("Muchia care nu exista: " + str([candidate, data_node]))
                             query_nodes_candidates_for_deletion.remove(candidate)
                             self.respectare_conditie_1 = False
                             break
@@ -264,7 +265,7 @@ class VF2Algorithm(GenericQueryProc):
             #             self.respectare_conditie_1 = False
                     else:
                         # print("         Candidatul trece de filtru, lista de candidati ramane neschimbata. Continuam cu verificarea Conditiei(2)")
-                        print("Nu. Trece Conditia (1).")
+                        print("Exista muchia. Trece Conditia (1).")
                         print()
                         self.respectare_conditie_1 = True
                         break
