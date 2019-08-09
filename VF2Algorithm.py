@@ -111,6 +111,9 @@ class VF2Algorithm(GenericQueryProc):
             print("Candidatii lui " + str(u) + ": " + str(candidates_u))
             candidates_refined = self.refineCandidates(M, u, candidates_u)
             print("\nCandidatii rafinati ai nodului " + str(u) + ": " + str(candidates_refined))
+
+            # exit(0)
+
             print("Asocieri / Matchings: " + str(M))
 
             print("TREBUIE SA FOLOSESC SI 6 SI 10, ADICA SI CEILALTI CANDIDATI RAFINATI AI NODULUI QUERY SELECTAT! - BACKTRACKING!")
@@ -230,6 +233,8 @@ class VF2Algorithm(GenericQueryProc):
             # print("M: " + str(M))
             # print(candidate)
 
+            delete_indicator = False
+            occurence_list = []
             for data_node in self.dataGraph.nodes():
                 print("Nod data selectat pentru verificare: " + str(data_node))
                 # Daca nodul data selectat a mai fost folosit
@@ -239,11 +244,19 @@ class VF2Algorithm(GenericQueryProc):
                     print("Lipseste in graful data muchia " + str([candidate, data_node]) + " ?")
                     if self.dataGraph.has_edge(candidate, data_node) == False:
                         if candidate in query_nodes_candidates_for_deletion:
-                            print("Nu exista muchie. Eliminam candidatul conform Conditiei 1.")
-                            print("Muchia care nu exista: " + str([candidate, data_node]))
-                            query_nodes_candidates_for_deletion.remove(candidate)
-                            self.respectare_conditie_1 = False
-                            break
+                            delete_indicator = True
+                            print("Lipseste.")
+                            occurence_list.append("Lipseste")
+
+                    else:
+                        delete_indicator = False
+                        print("Exista.")
+                        occurence_list.append("Exista")
+                            # print("Nu exista muchie. Eliminam candidatul conform Conditiei 1.")
+                            # print("Muchia care nu exista: " + str([candidate, data_node]))
+                            # query_nodes_candidates_for_deletion.remove(candidate)
+                            # self.respectare_conditie_1 = False
+                            # break
             # # A DOUA VARIANTA VECHE: foloseste lista M inversata.
             # for matching in reversed(M):
             #     print("Candidate: " + str(candidate))
@@ -266,12 +279,38 @@ class VF2Algorithm(GenericQueryProc):
             #         if candidate in query_nodes_candidates_for_deletion:
             #             query_nodes_candidates_for_deletion.remove(candidate) # Am putut sa fac remove unui element din lista direct in bucla foreach. NU SE FAC STERGERI DIN LISTA IN ACELASI TIMP CU ITERAREA!
             #             self.respectare_conditie_1 = False
-                    else:
-                        # print("         Candidatul trece de filtru, lista de candidati ramane neschimbata. Continuam cu verificarea Conditiei(2)")
-                        print("Exista muchia. Trece Conditia (1).")
-                        print()
-                        self.respectare_conditie_1 = True
-                        break
+
+            print(occurence_list)
+            # exit(0)
+
+            if len(occurence_list) == 1:
+                if occurence_list[0] == "Lipseste":
+                    print("Nu exista muchie. Eliminam candidatul conform Conditiei 1.")
+                    print("Muchia care nu exista: " + str([candidate, data_node]))
+                    query_nodes_candidates_for_deletion.remove(candidate)
+                    self.respectare_conditie_1 = False
+
+            if len(occurence_list) == 1:
+                if occurence_list[0] == "Exista":
+                    print("Exista muchia. Trece Conditia (1).")
+                    print()
+                    self.respectare_conditie_1 = True
+                    break
+
+            if len(occurence_list) > 1:
+                if occurence_list[-1] == "Lipseste":
+                    if occurence_list[-2] == "Lipseste":
+                        print("Nu exista muchie. Eliminam candidatul conform Conditiei 1.")
+                        print("Muchia care nu exista: " + str([candidate, data_node]))
+                        query_nodes_candidates_for_deletion.remove(candidate)
+                        self.respectare_conditie_1 = False
+
+            if occurence_list[-1] == "Exista":
+                # print("         Candidatul trece de filtru, lista de candidati ramane neschimbata. Continuam cu verificarea Conditiei(2)")
+                print("Exista muchia. Trece Conditia (1).")
+                print()
+                self.respectare_conditie_1 = True
+                break
 
 
             # print("         Candidatii lui " + str(query_node))# + " actualizati in functie de conditia (1) al VF2: ")
