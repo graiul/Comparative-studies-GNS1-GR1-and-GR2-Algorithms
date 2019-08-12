@@ -410,15 +410,18 @@ def main():
             # vf2 = VF2Algorithm(M, 'graph_to_RI_db.txt', 'Homo_sapiens_udistr_32.gfd', 'RI')
 
             # M = [["1","1"]]
-            # M = [['1','5']]
+            # M = [[1, 5]]
             # M = [["1","9"]]
             # print(M)
 
-            M = []
+            # vf2 = VF2Algorithm(M)
+            # vf2.subGraphSearch(M)
 
             # vf2 = VF2Algorithm(M, 'small_query_graph_VF2.txt', 'small_data_graph_VF2.txt', 'RI')
             # vf2.subGraphSearch(M)
 
+
+            M = []
             results = []
 
             if len(M) == 0:
@@ -427,7 +430,9 @@ def main():
                 # din rezultatul final voi elimina radacinile care nu au fost folosite
                 # pentru executia respectiva a algoritmului.
                 print("\nRoots: ")
-                vf2 = VF2Algorithm(M, 'small_query_graph_VF2.txt', 'small_data_graph_VF2.txt', 'RI')
+                # vf2 = VF2Algorithm(M, 'small_query_graph_VF2.txt', 'small_data_graph_VF2.txt', 'RI')
+                vf2 = VF2Algorithm(M)
+
                 roots = vf2.subGraphSearch(M)[1]
                 print()
                 print("Roots: ")
@@ -435,20 +440,18 @@ def main():
                 print("Selected root: ")
                 for root in roots:
                     print(root)
-                    M = [["1",str(root)]]
+
+
+                    # Alegem noi primul nod al grafului query:
+                    M = [[1, root]]
+
+
                     print("M = " + str(M))
-                    vf2 = VF2Algorithm(M, 'small_query_graph_VF2.txt', 'small_data_graph_VF2.txt', 'RI')
+                    # vf2 = VF2Algorithm(M, 'small_query_graph_VF2.txt', 'small_data_graph_VF2.txt', 'RI')
+                    vf2 = VF2Algorithm(M)
                     vf2.subGraphSearch(M)
                     # vf2 = None
-                    results.append([["Query root: " + "1"], ["Data root: " + root], [list(vf2.results_dict.items())[1:]]])
-
-                print()
-                print("Query graph: ")
-                print(vf2.queryGraph.edges())
-                print()
-                print("Data graph: ")
-                print(vf2.dataGraph.edges())
-                print()
+                    results.append([["Query root: " + "1"], ["Data root: " + str(root)], [list(vf2.results_dict.items())[1:]]])
                 print("\nFinal results: ")
                 for result in results:
                     print(result)
