@@ -2,10 +2,14 @@ import copy
 from collections import OrderedDict
 
 import networkx as nx
+from py2neo import Graph, Subgraph
+
 from GenericQueryProc import GenericQueryProc
+from Graph_File_Generator import Graph_File_Generator
 from Graph_Format import Graph_Format
 from timeit import default_timer as timer
-
+# from pandas import DataFrame
+import pandas
 
 # print("\nVF2 algorithm:")
 
@@ -32,52 +36,88 @@ class VF2Algorithm(GenericQueryProc):
 
     results_dict = OrderedDict()
 
-    def __init__(self, M, queryGraphFile, dataGraphFile, graph_format_type):
+
+
+    def __init__(self, M): #, queryGraphFile, dataGraphFile, graph_format_type):
         # self.queryGraph = query_graph
         # self.dataGraph = data_graph
         self.start_time = timer()
 
 
-        self.queryGraphFile = queryGraphFile
-        self.dataGraphFile = dataGraphFile
-        if graph_format_type is 'p133han':
-            gfq = Graph_Format(self.queryGraphFile)
-            # gfq.display_file()
-            gfq.create_graph_from_p133han_file()
-            self.queryGraph = gfq.get_graph()
-            # print(self.queryGraph.edges)
-            gfd = Graph_Format(self.dataGraphFile)
-            gfd.create_graph_from_p133han_file()
-            self.dataGraph = gfd.get_graph()
-            # print(self.dataGraph.edges())
+        # self.queryGraphFile = queryGraphFile
+        # self.dataGraphFile = dataGraphFile
+        # if graph_format_type is 'p133han':
+        #     gfq = Graph_Format(self.queryGraphFile)
+        #     # gfq.display_file()
+        #     gfq.create_graph_from_p133han_file()
+        #     self.queryGraph = gfq.get_graph()
+        #     # print(self.queryGraph.edges)
+        #     gfd = Graph_Format(self.dataGraphFile)
+        #     gfd.create_graph_from_p133han_file()
+        #     self.dataGraph = gfd.get_graph()
+        #     # print(self.dataGraph.edges())
+        #
+        # if graph_format_type is 'RI':
+        #     gfq = Graph_Format(self.queryGraphFile)
+        #     # gfq.display_file()
+        #     gfq.create_graph_from_RI_file()
+        #     self.queryGraph = gfq.get_graph()
+        #     gfd = Graph_Format(self.dataGraphFile)
+        #     gfd.create_graph_from_RI_file()
+        #     self.dataGraph = gfd.get_graph()
 
-        if graph_format_type is 'RI':
-            gfq = Graph_Format(self.queryGraphFile)
-            # gfq.display_file()
-            gfq.create_graph_from_RI_file()
-            self.queryGraph = gfq.get_graph()
-            gfd = Graph_Format(self.dataGraphFile)
-            gfd.create_graph_from_RI_file()
-            self.dataGraph = gfd.get_graph()
 
-
-        # # Pentru metoda nextQueryVertex, fiecare nod al celor doua grafuir
+        # # Pentru metoda nextQueryVertex, fiecare nod al celor doua grafuri
         # # va avea adaugat o proprietate de tip bool numita 'matched'
+
+        # GRAFUL QUERY - FOLOSESTE NODURI CU ID DE TIPUL INT
+        query_graph_gen = Graph_File_Generator()
+        self.queryGraph = query_graph_gen.gen_small_graph_query_graph()
         nx.set_node_attributes(self.queryGraph, False, 'matched')
-        # print(self.queryGraph.nodes(data=True))
+
+        # GRAFUL DATA DIN NEO4J
+        neograph_data = Graph("bolt://127.0.0.1:7690", auth=("neo4j", "changeme"))  # Data Graph Zhaosun din READ_REPLICA
+        cqlQuery = "MATCH p=(n)-[r:PPI]->(m) return n.node_id, m.node_id"
+        result = neograph_data.run(cqlQuery).to_ndarray()
+        edge_list = result.tolist()
+        print("edge_list: ")
+        print(edge_list)
+        edge_list_integer_ids = []
+        for string_edge in edge_list:
+            edge_list_integer_ids.append([int(i) for i in string_edge])
+        print("edge_list_integer_ids: ")
+        print(edge_list_integer_ids)
+
+
+        self.dataGraph = nx.Graph()
+        self.dataGraph.add_edges_from(sorted(edge_list_integer_ids))
+        cqlQuery2 = "MATCH (n) return n.node_id, n.node_label"
+        result2 = neograph_data.run(cqlQuery2).to_ndarray()
+        # print("result2: ")
+        # print(result2)
+        node_ids_as_integers_with_string_labels = []
+        for node in result2:
+            # print(node[0])
+            node_ids_as_integers_with_string_labels.append([int(node[0]), node[1]])
+        print("node_ids_as_integers_with_string_labels: ")
+        print(node_ids_as_integers_with_string_labels)
+
+        node_attr_dict = OrderedDict(sorted(node_ids_as_integers_with_string_labels))
+        nx.set_node_attributes(self.dataGraph, node_attr_dict, 'label')
         nx.set_node_attributes(self.dataGraph, False, 'matched')
-        # print(self.dataGraph.nodes(data=True))
         if len(M) > 0:
             self.queryGraph.node[M[0][0]]['matched'] = True
             self.dataGraph.node[M[0][1]]['matched'] = True
 
+        print("\nQuery graph: ")
         print(self.queryGraph.nodes(data=True))
-        print()
-        print(self.dataGraph.nodes(data=True))
-        print()
         print(self.queryGraph.edges())
         print()
+
+        print("Data graph: ")
+        print(self.dataGraph.nodes(data=True))
         print(self.dataGraph.edges())
+        print()
 
         # exit(0)
 
@@ -343,7 +383,7 @@ class VF2Algorithm(GenericQueryProc):
                     self.respectare_conditie_1 = True
                     # break
 
-            if len(occurence_list) > 1:
+            if len(occurence_list) > 2:
                 if occurence_list[-1] == "Lipseste":
                     if occurence_list[-2] == "Lipseste":
                         print("Nu exista muchie. Eliminam candidatul conform Conditiei 1.")
@@ -357,12 +397,21 @@ class VF2Algorithm(GenericQueryProc):
                         self.respectare_conditie_1 = True
 
                 if occurence_list[-1] == "Exista":
-                    # print("         Candidatul trece de filtru, lista de candidati ramane neschimbata. Continuam cu verificarea Conditiei(2)")
                     print("Exista muchia. Trece Conditia (1).")
                     print()
                     self.respectare_conditie_1 = True
                     # break
+                if occurence_list.count("Exista") > occurence_list.count("Lipseste"):
+                    print("Exista muchia. Trece Conditia (1).")
+                    print()
+                    self.respectare_conditie_1 = True
+                if occurence_list.count("Exista") < occurence_list.count("Lipseste"):
+                    if candidate in query_nodes_candidates_for_deletion:
 
+                        print("Nu exista muchie. Eliminam candidatul conform Conditiei 1.")
+                        print("Muchia care nu exista: " + str([candidate, data_node]))
+                        query_nodes_candidates_for_deletion.remove(candidate)
+                        self.respectare_conditie_1 = False
 
             # print("         Candidatii lui " + str(query_node))# + " actualizati in functie de conditia (1) al VF2: ")
             # print("         " + str(query_nodes_candidates_for_deletion))
