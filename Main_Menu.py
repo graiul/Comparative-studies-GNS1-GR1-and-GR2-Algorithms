@@ -409,28 +409,30 @@ def main():
             # M = [["0", "1173"]] # Test al timpului de executie.
             # vf2 = VF2Algorithm(M, 'graph_to_RI_db.txt', 'Homo_sapiens_udistr_32.gfd', 'RI')
 
-            # M = [["1","1"]]
-            # M = [["1","5"]]
+            M = [["1","1"]]
+            # M = [['1','5']]
             # M = [["1","9"]]
-            M = []
+            # print(M)
+
+            # M = []
 
             vf2 = VF2Algorithm(M, 'small_query_graph_VF2.txt', 'small_data_graph_VF2.txt', 'RI')
+            vf2.subGraphSearch(M)
 
 
-            if len(M) == 0:
-                print("\nFinal results: ")
-                roots = vf2.subGraphSearch(M)[1]
-                print()
-                print(roots)
-            # for result in results[0]:
-            #     for root in results[0]:
-            #         M.append([str(result[0]), str(root)])
-            #         print(M)
-            #         # vf2.subGraphSearch(M)
-            elif len(M) > 0:
-                vf2.subGraphSearch(M)
-                # print("\nFinal results: ")
-                # print(vf2.results_dict.items())
+            # if len(M) == 0:
+            #     print("\nRoots: ")
+            #     roots = vf2.subGraphSearch(M)[1]
+            #     print()
+            #     print(roots)
+            #     print("Selected root: ")
+            #     print(roots[0])
+            #     M = [["1","1"]]
+            #     print("M = " + str(M))
+            #     vf2.subGraphSearch(M)
+            #     print("\nFinal results: ")
+            #     results = list(vf2.results_dict.items())
+            #     print(results)
 
         elif option == 0:
             exit(code=0)
