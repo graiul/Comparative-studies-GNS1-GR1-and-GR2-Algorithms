@@ -36,7 +36,12 @@ def main():
     for m in menu:
         print(m)
     while(True):
+
         option = int(input('\nPlease choose option: '))
+        # option = 12
+
+
+
         if option == 2:
             # node_dataset_url = str(input('\nDataset nodes URL: '))
             node_dataset_url = "https://raw.githubusercontent.com/room229/graph_datasets/master/ZhaoSun_Data_Graph_Nodes.csv"
@@ -396,11 +401,28 @@ def main():
             os.system(file)
 
         elif option == 12:
-            M = [["0", "0"]]  # Test de corectitudine. Ar trebui sa dea un M in care toate match-urile sa aiba elemente egale, practic sa imi returneze toate nodurile query asociate cu ele insasi.
-            # M = [["0", "1173"]] # Test al timpului de executie.
             print("\nVF2 Algorithm: ")
-            vf2 = VF2Algorithm(M, 'dataset_RI\input\graph_to_RI_db.txt', 'dataset_RI\input\Homo_sapiens_udistr_32.gfd', 'RI')
-            vf2.subGraphSearch(M)
+
+            # TRANSFORMA IN INT DIN STR IN CREAREA GRAFULUI NX! - Facut.
+
+            # M = [["0", "0"]]  # Test de corectitudine. Ar trebui sa dea un M in care toate match-urile sa aiba elemente egale, practic sa imi returneze toate nodurile query asociate cu ele insasi.
+            # M = [["0", "1173"]] # Test al timpului de executie.
+            # vf2 = VF2Algorithm(M, 'graph_to_RI_db.txt', 'Homo_sapiens_udistr_32.gfd', 'RI')
+
+            # M = [["1","1"]]
+            # M = [["1","5"]]
+            M = [["1","9"]]
+            # M = []
+
+            vf2 = VF2Algorithm(M, 'small_query_graph_VF2.txt', 'small_data_graph_VF2.txt', 'RI')
+
+            results = vf2.subGraphSearch(M)
+            # print("\nFinal results: ")
+            # for result in results[0]:
+            #     for root in results[0]:
+            #         M.append([str(result[0]), str(root)])
+            #         print(M)
+            #         # vf2.subGraphSearch(M)
 
         elif option == 0:
             exit(code=0)
