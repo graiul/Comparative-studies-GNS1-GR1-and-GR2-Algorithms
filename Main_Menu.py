@@ -430,6 +430,7 @@ def main():
                 vf2 = VF2Algorithm(M, 'small_query_graph_VF2.txt', 'small_data_graph_VF2.txt', 'RI')
                 roots = vf2.subGraphSearch(M)[1]
                 print()
+                print("Roots: ")
                 print(roots)
                 print("Selected root: ")
                 for root in roots:
