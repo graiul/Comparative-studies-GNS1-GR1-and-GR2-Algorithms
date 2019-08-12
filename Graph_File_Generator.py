@@ -28,10 +28,10 @@ class Graph_File_Generator(object):
         small_graph_nodes = [1, 2, 3, 4]
         # Sortarea ascendenta la string este diferita de cea a de la tipul int
         small_graph_nodes.sort()
-        small_graph_edges = [[1, 2], [1, 3], [1, 4], [10,3], [10,4]]
+        small_graph_edges = [[1, 2], [1, 3], [1, 4]]
         small_graph.add_nodes_from(small_graph_nodes)
         small_graph.add_edges_from(small_graph_edges)
-        node_attr = ["a", "b", "c", "d", "b"]
+        node_attr = ["a", "b", "c", "d"]
         node_attr_dict = dict(zip(sorted(small_graph.nodes()), node_attr))
         # print(node_attr_dict.items())
         nx.set_node_attributes(small_graph, node_attr_dict, 'label')
