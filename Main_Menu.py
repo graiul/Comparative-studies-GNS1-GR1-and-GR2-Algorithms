@@ -411,18 +411,26 @@ def main():
 
             # M = [["1","1"]]
             # M = [["1","5"]]
-            M = [["1","9"]]
-            # M = []
+            # M = [["1","9"]]
+            M = []
 
             vf2 = VF2Algorithm(M, 'small_query_graph_VF2.txt', 'small_data_graph_VF2.txt', 'RI')
 
-            results = vf2.subGraphSearch(M)
-            # print("\nFinal results: ")
+
+            if len(M) == 0:
+                print("\nFinal results: ")
+                roots = vf2.subGraphSearch(M)[1]
+                print()
+                print(roots)
             # for result in results[0]:
             #     for root in results[0]:
             #         M.append([str(result[0]), str(root)])
             #         print(M)
             #         # vf2.subGraphSearch(M)
+            elif len(M) > 0:
+                vf2.subGraphSearch(M)
+                # print("\nFinal results: ")
+                # print(vf2.results_dict.items())
 
         elif option == 0:
             exit(code=0)
