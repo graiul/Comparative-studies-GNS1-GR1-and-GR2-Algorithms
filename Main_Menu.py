@@ -409,30 +409,37 @@ def main():
             # M = [["0", "1173"]] # Test al timpului de executie.
             # vf2 = VF2Algorithm(M, 'graph_to_RI_db.txt', 'Homo_sapiens_udistr_32.gfd', 'RI')
 
-            M = [["1","1"]]
+            # M = [["1","1"]]
             # M = [['1','5']]
             # M = [["1","9"]]
             # print(M)
 
-            # M = []
+            M = []
 
-            vf2 = VF2Algorithm(M, 'small_query_graph_VF2.txt', 'small_data_graph_VF2.txt', 'RI')
-            vf2.subGraphSearch(M)
+            # vf2 = VF2Algorithm(M, 'small_query_graph_VF2.txt', 'small_data_graph_VF2.txt', 'RI')
+            # vf2.subGraphSearch(M)
 
+            results = []
 
-            # if len(M) == 0:
-            #     print("\nRoots: ")
-            #     roots = vf2.subGraphSearch(M)[1]
-            #     print()
-            #     print(roots)
-            #     print("Selected root: ")
-            #     print(roots[0])
-            #     M = [["1","1"]]
-            #     print("M = " + str(M))
-            #     vf2.subGraphSearch(M)
-            #     print("\nFinal results: ")
-            #     results = list(vf2.results_dict.items())
-            #     print(results)
+            if len(M) == 0:
+                print("\nRoots: ")
+                vf2 = VF2Algorithm(M, 'small_query_graph_VF2.txt', 'small_data_graph_VF2.txt', 'RI')
+                roots = vf2.subGraphSearch(M)[1]
+                print()
+                print(roots)
+                print("Selected root: ")
+                for root in roots:
+                    print(root)
+                    M = [["1",str(root)]]
+                    print("M = " + str(M))
+                    vf2 = VF2Algorithm(M, 'small_query_graph_VF2.txt', 'small_data_graph_VF2.txt', 'RI')
+                    vf2.subGraphSearch(M)
+                    # vf2 = None
+                    results.append(list(vf2.results_dict.items()))
+
+                print("\nFinal results: ")
+                for result in results:
+                    print(result)
 
         elif option == 0:
             exit(code=0)
