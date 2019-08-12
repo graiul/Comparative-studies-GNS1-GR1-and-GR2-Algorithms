@@ -422,6 +422,10 @@ def main():
             results = []
 
             if len(M) == 0:
+                # Pentru radacini nu am mai facut pruning!
+                # Pentru fiecare radacina din lista de radacini,
+                # din rezultatul final voi elimina radacinile care nu au fost folosite
+                # pentru executia respectiva a algoritmului.
                 print("\nRoots: ")
                 vf2 = VF2Algorithm(M, 'small_query_graph_VF2.txt', 'small_data_graph_VF2.txt', 'RI')
                 roots = vf2.subGraphSearch(M)[1]
@@ -435,8 +439,15 @@ def main():
                     vf2 = VF2Algorithm(M, 'small_query_graph_VF2.txt', 'small_data_graph_VF2.txt', 'RI')
                     vf2.subGraphSearch(M)
                     # vf2 = None
-                    results.append(list(vf2.results_dict.items()))
+                    results.append([["Query root: " + "1"], ["Data root: " + root], [list(vf2.results_dict.items())[1:]]])
 
+                print()
+                print("Query graph: ")
+                print(vf2.queryGraph.edges())
+                print()
+                print("Data graph: ")
+                print(vf2.dataGraph.edges())
+                print()
                 print("\nFinal results: ")
                 for result in results:
                     print(result)
