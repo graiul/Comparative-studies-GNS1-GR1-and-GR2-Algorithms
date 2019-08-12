@@ -101,7 +101,9 @@ class VF2Algorithm(GenericQueryProc):
 
 
     def subGraphSearch(self, M):
-        if len(M) == len(self.queryGraph.nodes()):
+        if M == None: # Termina executia programului.
+            return
+        if len(M) == len(self.queryGraph.nodes()): # Termina cautarea dupa rezultate
             return M
         else:
             print()
@@ -111,7 +113,7 @@ class VF2Algorithm(GenericQueryProc):
                 print("Nu mai sunt noduri query!")
                 self.total_time = timer() - self.start_time
                 print("Timp total de executare algoritm VF2: " + str(self.total_time) + " secunde.")
-                exit(0)
+                return
             print(str(u) + " Selectat de nextQueryVertex.")
 
             candidates_u = self.filterCandidates(u)
@@ -309,7 +311,7 @@ class VF2Algorithm(GenericQueryProc):
                     print("Exista muchia. Trece Conditia (1).")
                     print()
                     self.respectare_conditie_1 = True
-                    break
+                    # break
 
             if len(occurence_list) > 1:
                 if occurence_list[-1] == "Lipseste":
@@ -564,7 +566,7 @@ class VF2Algorithm(GenericQueryProc):
         else:
             print("VF2 results: ")
             print(self.results_dict.items())
-            exit(0)
+            return
 
     # VARIANTA PROPRIE: Trebuie sa dau si valoarea False indicativului 'matched' nodurilor u si v.
     def restoreState(self, M, u, v): # Inlatur o asociere / match din M, care in acest caz, cautand perechea [u, v], ar trebui sa o elimine, si in acelasi timp, perechea eliminata sa fie cea adaugata de
