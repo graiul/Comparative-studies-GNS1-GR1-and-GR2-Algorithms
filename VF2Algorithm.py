@@ -1,4 +1,6 @@
 import copy
+from collections import OrderedDict
+
 import networkx as nx
 from GenericQueryProc import GenericQueryProc
 from Graph_Format import Graph_Format
@@ -27,6 +29,8 @@ class VF2Algorithm(GenericQueryProc):
     respectare_conditie_1 = False
     respectare_conditie_2 = False
     respectare_conditie_3 = False
+
+    results_dict = OrderedDict()
 
     def __init__(self, M, queryGraphFile, dataGraphFile, graph_format_type):
         # self.queryGraph = query_graph
@@ -63,8 +67,9 @@ class VF2Algorithm(GenericQueryProc):
         # print(self.queryGraph.nodes(data=True))
         nx.set_node_attributes(self.dataGraph, False, 'matched')
         # print(self.dataGraph.nodes(data=True))
-        self.queryGraph.node[M[0][0]]['matched'] = True
-        self.dataGraph.node[M[0][1]]['matched'] = True
+        if len(M) > 0:
+            self.queryGraph.node[M[0][0]]['matched'] = True
+            self.dataGraph.node[M[0][1]]['matched'] = True
 
         print(self.queryGraph.nodes(data=True))
         print()
@@ -93,6 +98,8 @@ class VF2Algorithm(GenericQueryProc):
     # Trebuie sa vad ce folos are restoreState in context
     # Trebuie sa returnez toate instantele lui M, adica de fiecare data cand graful query a fost gasit in totalitate in graful data.
 
+
+
     def subGraphSearch(self, M):
         if len(M) == len(self.queryGraph.nodes()):
             return M
@@ -109,14 +116,20 @@ class VF2Algorithm(GenericQueryProc):
 
             candidates_u = self.filterCandidates(u)
             print("Candidatii lui " + str(u) + ": " + str(candidates_u))
+
+            if len(M) == 0:
+                self.results_dict[u] = candidates_u
+                return list(self.results_dict.items())[0]
+
             candidates_refined = self.refineCandidates(M, u, candidates_u)
             print("\nCandidatii rafinati ai nodului " + str(u) + ": " + str(candidates_refined))
 
+            if len(M) > 0:
+                self.results_dict[u] = candidates_refined
             # exit(0)
 
             print("Asocieri / Matchings: " + str(M))
 
-            print("TREBUIE SA FOLOSESC SI 6 SI 10, ADICA SI CEILALTI CANDIDATI RAFINATI AI NODULUI QUERY SELECTAT! - BACKTRACKING!")
 
             for v in candidates_refined:
                 print("Candidat rafinat selectat: " + str(v))
@@ -202,17 +215,18 @@ class VF2Algorithm(GenericQueryProc):
         # print("------------INCEPUT EXECUTIE RAFINARE CANDIDATI-----------")
         # print("QUERY NODE: " + str(query_node))
         # print("CANDIDATES: " + str(query_node_candidates))
-        Mq.append(M[-1][0]) # Ce are a face cu ultima asociere?
-        Mg.append(M[-1][1]) # Folosesc -1 pentru a returna ultimul element din lista (https://stackoverflow.com/questions/930397/getting-the-last-element-of-a-list-in-python).
-        # Este necesar ca lista sa nu fie niciodata goala, ceea ce se rezolva foarte bine prin faptul ca lista va fi tot
-        # timpul initializata cu o asociere.
-        Cq.append(list(self.adj(M[-1][0], self.queryGraph)))
-        Cg.append(list(self.adj(M[-1][1], self.dataGraph)))
-        print("Mq = " + str(Mq))
-        print("Mg = " + str(Mg))
-        print("Cq = " + str(Cq))
-        print("Cg = " + str(Cg))
-        # Pentru fiecare candidat verificam conditia (1)
+        if len(M) > 0:
+            Mq.append(M[-1][0]) # Ce are a face cu ultima asociere?
+            Mg.append(M[-1][1]) # Folosesc -1 pentru a returna ultimul element din lista (https://stackoverflow.com/questions/930397/getting-the-last-element-of-a-list-in-python).
+            # Este necesar ca lista sa nu fie niciodata goala, ceea ce se rezolva foarte bine prin faptul ca lista va fi tot
+            # timpul initializata cu o asociere.
+            Cq.append(list(self.adj(M[-1][0], self.queryGraph)))
+            Cg.append(list(self.adj(M[-1][1], self.dataGraph)))
+            print("Mq = " + str(Mq))
+            print("Mg = " + str(Mg))
+            print("Cq = " + str(Cq))
+            print("Cg = " + str(Cg))
+            # Pentru fiecare candidat verificam conditia (1)
 
         query_nodes_candidates_for_deletion = copy.deepcopy(query_node_candidates)
         self.respectare_conditie_1 = False
@@ -305,12 +319,17 @@ class VF2Algorithm(GenericQueryProc):
                         query_nodes_candidates_for_deletion.remove(candidate)
                         self.respectare_conditie_1 = False
 
+                    if occurence_list[-2] == "Exista":
+                        print("Exista muchia. Trece Conditia (1).")
+                        print()
+                        self.respectare_conditie_1 = True
+
             if occurence_list[-1] == "Exista":
                 # print("         Candidatul trece de filtru, lista de candidati ramane neschimbata. Continuam cu verificarea Conditiei(2)")
                 print("Exista muchia. Trece Conditia (1).")
                 print()
                 self.respectare_conditie_1 = True
-                break
+                # break
 
 
             # print("         Candidatii lui " + str(query_node))# + " actualizati in functie de conditia (1) al VF2: ")
@@ -525,10 +544,27 @@ class VF2Algorithm(GenericQueryProc):
         #         return True
 
     def updateState(self, M, u, v): # Adaug o asociere / match la sfarsitul lui M.
+        # self.queryGraph.node[u]['matched'] = True
+        # self.dataGraph.node[v]['matched'] = True # Am declarat si nodul data ca fiind MATCHED. In p133-han se lucreaza cu lista M, exista nextQueryVertex, dar prea putin se ocupa de nodurile data din acest pct de vedere.
+        # M.append([u, v])
+        # return M
+
+        print("updateState exec: ")
         self.queryGraph.node[u]['matched'] = True
         self.dataGraph.node[v]['matched'] = True # Am declarat si nodul data ca fiind MATCHED. In p133-han se lucreaza cu lista M, exista nextQueryVertex, dar prea putin se ocupa de nodurile data din acest pct de vedere.
         M.append([u, v])
-        return M
+        print(str(self.queryGraph.nodes(data=True)))
+        print("updateState exec finish")
+        end_program = True
+        for query_node in self.queryGraph.nodes():
+            if self.queryGraph.node[query_node]['matched'] == False:
+                end_program = False
+        if end_program == False:
+            return M
+        else:
+            print("VF2 results: ")
+            print(self.results_dict.items())
+            exit(0)
 
     # VARIANTA PROPRIE: Trebuie sa dau si valoarea False indicativului 'matched' nodurilor u si v.
     def restoreState(self, M, u, v): # Inlatur o asociere / match din M, care in acest caz, cautand perechea [u, v], ar trebui sa o elimine, si in acelasi timp, perechea eliminata sa fie cea adaugata de
