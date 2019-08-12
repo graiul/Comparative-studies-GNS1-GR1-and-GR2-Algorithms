@@ -1,4 +1,6 @@
 import copy
+from collections import OrderedDict
+
 import networkx as nx
 from GenericQueryProc import GenericQueryProc
 from Graph_Format import Graph_Format
@@ -27,6 +29,8 @@ class VF2Algorithm(GenericQueryProc):
     respectare_conditie_1 = False
     respectare_conditie_2 = False
     respectare_conditie_3 = False
+
+    results_dict = OrderedDict()
 
     def __init__(self, M, queryGraphFile, dataGraphFile, graph_format_type):
         # self.queryGraph = query_graph
@@ -74,6 +78,9 @@ class VF2Algorithm(GenericQueryProc):
         print()
         print(self.dataGraph.edges())
 
+        for node in self.queryGraph.nodes():
+            self.results_dict[node] = []
+
         # exit(0)
 
     # Varianta in care lucram cu lista M in vederea verificarii daca un nod a fost asociat deja sau nu este dificil de implementat datorita contradictiei care apare:
@@ -112,7 +119,7 @@ class VF2Algorithm(GenericQueryProc):
             candidates_refined = self.refineCandidates(M, u, candidates_u)
             print("\nCandidatii rafinati ai nodului " + str(u) + ": " + str(candidates_refined))
 
-            # exit(0)
+            self.results_dict[u].append(candidates_refined)
 
             print("Asocieri / Matchings: " + str(M))
 
@@ -166,8 +173,10 @@ class VF2Algorithm(GenericQueryProc):
     #     return filteredDataGraphVertices
 
     def nextQueryVertex(self, M): # Neoptimizat, adica se vor parcurge nodurile query in ordine lexicografic crescatoare. In aceeasi ordine vor fi inserate perechile [nod query, ..] in M.
-        # print("next query vertex exec:")
+        print("next query vertex exec:")
         # print("queryNodes:")
+        print(str(self.queryGraph.nodes(data=True)))
+
         queryNodes = list(self.queryGraph.nodes())
         # print(queryNodes)
         # print("matchings:")
@@ -176,10 +185,15 @@ class VF2Algorithm(GenericQueryProc):
         # # SAU:
         # for matching in reversed(M):
         #     print("matching from reversed matching list: " + str(matching))
+
+
         for node in queryNodes:
             if self.queryGraph.node[node]['matched'] is False:
                 print("Returnam nodul " + str(node))
+                print("next query vertex exec finish")
                 return node  # Returneaza primul nod query care nu se afla
+        print("next query vertex exec finish")
+        return None
 
         # VARIANTA VECHE in care folosesc lista M de asocieri.
         # for queryNode in queryNodes:
@@ -525,10 +539,22 @@ class VF2Algorithm(GenericQueryProc):
         #         return True
 
     def updateState(self, M, u, v): # Adaug o asociere / match la sfarsitul lui M.
+        print("updateState exec: ")
         self.queryGraph.node[u]['matched'] = True
         self.dataGraph.node[v]['matched'] = True # Am declarat si nodul data ca fiind MATCHED. In p133-han se lucreaza cu lista M, exista nextQueryVertex, dar prea putin se ocupa de nodurile data din acest pct de vedere.
         M.append([u, v])
-        return M
+        print(str(self.queryGraph.nodes(data=True)))
+        print("updateState exec finish")
+        end_program = True
+        for query_node in self.queryGraph.nodes():
+            if self.queryGraph.node[query_node]['matched'] == False:
+                end_program = False
+        if end_program == False:
+            return M
+        else:
+            print("VF2 results: ")
+            print(self.results_dict.items())
+            exit(0)
 
     # VARIANTA PROPRIE: Trebuie sa dau si valoarea False indicativului 'matched' nodurilor u si v.
     def restoreState(self, M, u, v): # Inlatur o asociere / match din M, care in acest caz, cautand perechea [u, v], ar trebui sa o elimine, si in acelasi timp, perechea eliminata sa fie cea adaugata de
