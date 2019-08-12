@@ -303,18 +303,20 @@ class VF2Algorithm(GenericQueryProc):
             if len(M) == 0:
                 print("Inca nu avem nici un matching, deci nu putem verifica 'such that candidate is not connected from already matched data vertices' ")
                 print("Dar verificam daca exista muchie intre nodul candidat si celelalte noduri data. Facem acest lucru pentru a verifica si urmatoarele doua conditii.")
-                for data_node in self.dataGraph.nodes():
-                    print("Lipseste in graful data muchia " + str([candidate, data_node]) + " ?")
-                    if self.dataGraph.has_edge(candidate, data_node) == False:
-                        if candidate in query_nodes_candidates_for_deletion:
-                            delete_indicator = True
-                            print("Lipseste.")
-                            occurence_list.append("Lipseste")
+                print(
+                    "Pentru ca nu avem inca asocieri in lista M, nu avem Mq si Mg. De aceea nu putem verifica Conditia(2) sau Conditia(3) pentru ca are nevoie de aceleasi doua liste Mq si Mg.")
+                print(
+                    "Conform p133han pentru rularea algoritmului este nevoie deja de o asociere existenta in lista M.")
+                print(
+                    "Din articolul p133han, http://www.vldb.org/pvldb/vol6/p133-han.pdf, sectiunea 3.3 VF2 Algorithm, explicatii pentru metoda NextQueryVertex: ")
+                print(
+                    "NextQueryVertex: Unlike Ullmann, VF2 starts with the first vertex and selects a vertex connected from the already matched query vertices. Note that the original VF2 algorithm does not define any order in which query vertices are selected.")
+                print("'already matched query vertices.'")
+                print("Deci avem nevoie de un matching la inceputul executarii algoritmului.")
+                print(
+                    "Astfel returnam candidatii cu care putem face asocierea primului nod al grafului query. Cu alte cuvinte, radacinile-candidat.")
 
-                    else:
-                        delete_indicator = False
-                        print("Exista.")
-                        occurence_list.append("Exista")
+                return query_node_candidates
 
             if len(M) > 0:
 
@@ -383,7 +385,8 @@ class VF2Algorithm(GenericQueryProc):
                     self.respectare_conditie_1 = True
                     # break
 
-            if len(occurence_list) > 2:
+
+            if len(occurence_list) > 1:
                 if occurence_list[-1] == "Lipseste":
                     if occurence_list[-2] == "Lipseste":
                         print("Nu exista muchie. Eliminam candidatul conform Conditiei 1.")
@@ -401,17 +404,17 @@ class VF2Algorithm(GenericQueryProc):
                     print()
                     self.respectare_conditie_1 = True
                     # break
-                if occurence_list.count("Exista") > occurence_list.count("Lipseste"):
-                    print("Exista muchia. Trece Conditia (1).")
-                    print()
-                    self.respectare_conditie_1 = True
-                if occurence_list.count("Exista") < occurence_list.count("Lipseste"):
-                    if candidate in query_nodes_candidates_for_deletion:
-
-                        print("Nu exista muchie. Eliminam candidatul conform Conditiei 1.")
-                        print("Muchia care nu exista: " + str([candidate, data_node]))
-                        query_nodes_candidates_for_deletion.remove(candidate)
-                        self.respectare_conditie_1 = False
+                # if occurence_list.count("Exista") > occurence_list.count("Lipseste"):
+                #     print("Exista muchia. Trece Conditia (1).")
+                #     print()
+                #     self.respectare_conditie_1 = True
+                # if occurence_list.count("Exista") < occurence_list.count("Lipseste"):
+                #     if candidate in query_nodes_candidates_for_deletion:
+                #
+                #         print("Nu exista muchie. Eliminam candidatul conform Conditiei 1.")
+                #         print("Muchia care nu exista: " + str([candidate, data_node]))
+                #         query_nodes_candidates_for_deletion.remove(candidate)
+                #         self.respectare_conditie_1 = False
 
             # print("         Candidatii lui " + str(query_node))# + " actualizati in functie de conditia (1) al VF2: ")
             # print("         " + str(query_nodes_candidates_for_deletion))
@@ -420,16 +423,6 @@ class VF2Algorithm(GenericQueryProc):
             # Pentru fiecare candidat trebuie verificata si Conditia (2): Prune out any vertex v in c(u) such that |Cq intersected with adj(u)| > |Cg intersected with adj(v)|
             if self.respectare_conditie_1:
                 print("     Conditia(2):")
-
-                if len(M) == 0:
-                    print("Pentru ca nu avem inca asocieri in lista M, nu avem Mq si Mg. De aceea nu putem verifica Conditia(2) sau Conditia(3) pentru ca are nevoie de aceleasi doua liste Mq si Mg.")
-                    print("Conform p133han pentru rularea algoritmului este nevoie deja de o asociere existenta in lista M.")
-                    print("Din articolul p133han, http://www.vldb.org/pvldb/vol6/p133-han.pdf, sectiunea 3.3 VF2 Algorithm, explicatii pentru metoda NextQueryVertex: ")
-                    print("NextQueryVertex: Unlike Ullmann, VF2 starts with the first vertex and selects a vertex connected from the already matched query vertices. Note that the original VF2 algorithm does not define any order in which query vertices are selected.")
-                    print("'already matched query vertices.'")
-                    print("Deci avem nevoie de un matching la inceputul executarii algoritmului.")
-                    print("Astfel returnam candidatii cu care putem face asocierea primului nod al grafului query. Cu alte cuvinte, radacinile-candidat.")
-                    return query_node_candidates
 
                 first_intersection = []
                 adjQueryNode = list(self.adj(query_node, self.queryGraph)) # Retin candidatii in ordine lexicografic crescatoare.
