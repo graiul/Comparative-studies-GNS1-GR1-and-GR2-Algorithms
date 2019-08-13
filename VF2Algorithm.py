@@ -8,8 +8,9 @@ from GenericQueryProc import GenericQueryProc
 from Graph_File_Generator import Graph_File_Generator
 from Graph_Format import Graph_Format
 from timeit import default_timer as timer
-# from pandas import DataFrame
-import pandas
+from colorama import init
+from colorama import Fore, Back, Style
+init()
 
 # print("\nVF2 algorithm:")
 
@@ -36,6 +37,7 @@ class VF2Algorithm(GenericQueryProc):
 
     results_dict = OrderedDict()
 
+    M_list = []
 
 
     def __init__(self, M): #, queryGraphFile, dataGraphFile, graph_format_type):
@@ -119,7 +121,6 @@ class VF2Algorithm(GenericQueryProc):
         print(self.dataGraph.edges())
         print()
 
-        # exit(0)
 
     # Varianta in care lucram cu lista M in vederea verificarii daca un nod a fost asociat deja sau nu este dificil de implementat datorita contradictiei care apare:
     # in anumite cazuri, adica pentru unele noduri query sau data este nevoie doar de ultima asociere din lista, iar daca aceasta nu corespunde cerintelor, trebuie verificata toata lista.
@@ -144,10 +145,15 @@ class VF2Algorithm(GenericQueryProc):
         if M == None: # Termina executia programului.
             return
         if len(M) == len(self.queryGraph.nodes()): # Termina cautarea dupa rezultate
+            print(Fore.LIGHTRED_EX + "Reported M: ")
+            print(M)
+            print(Style.RESET_ALL)
             return M
         else:
             print()
-            print("Subgraph search:")
+            print(Back.WHITE + Fore.LIGHTBLUE_EX + Style.BRIGHT + "Subgraph search:")
+            print(Style.RESET_ALL)
+
             u = self.nextQueryVertex(M)
             if u is None:
                 print("Nu mai sunt noduri query!")
@@ -191,7 +197,8 @@ class VF2Algorithm(GenericQueryProc):
                         updated_M = self.updateState(M, u, v)
                         print("updated_M: " + str(updated_M))
                         self.subGraphSearch(updated_M)
-                        # self.restoreState(updated_M, u, v)
+                        if updated_M != None:
+                            self.restoreState(updated_M, u, v)
                     else:
                         print("Not joinable!")
 
@@ -383,7 +390,6 @@ class VF2Algorithm(GenericQueryProc):
                     print("Exista muchia. Trece Conditia (1).")
                     print()
                     self.respectare_conditie_1 = True
-                    # break
 
 
             if len(occurence_list) > 1:
@@ -403,7 +409,6 @@ class VF2Algorithm(GenericQueryProc):
                     print("Exista muchia. Trece Conditia (1).")
                     print()
                     self.respectare_conditie_1 = True
-                    # break
                 # if occurence_list.count("Exista") > occurence_list.count("Lipseste"):
                 #     print("Exista muchia. Trece Conditia (1).")
                 #     print()
@@ -492,11 +497,10 @@ class VF2Algorithm(GenericQueryProc):
                             # self.respectare_conditie_2 = False
                     else:
                         self.respectare_conditie_3 = True
-                    # else:
                         print("         Nu. Candidatul " + str(candidate) + " a trecut de toate cele 3 filtre / conditii.")
-                        # print("         Candidatii finali ai lui " + str(query_node))
-                        # print("         " + str(query_nodes_candidates_for_deletion))
-                        # print()
+                        print("         Candidatii finali ai lui " + str(query_node))
+                        print("         " + str(query_nodes_candidates_for_deletion))
+                        print()
         # VECHI: Conditia 1 am adaptat-o pe loc mai sus.
         # Mai jos se afla si Conditia 2 si 3 functionale, dar fara blocari(trecerea la candidatul urmator) daca un candidat nu a trecut de o conditie, si fara verificari daca exista candidatul care trebuie eliminat.
         # De asemenea, nu folosesc o copie din care voi fi facut eliminarea de candidati, avand astfel un rezultat eronat.
@@ -590,20 +594,20 @@ class VF2Algorithm(GenericQueryProc):
 
     def isJoinable(self, M, u, v):
         # VARIANTA PROPRIE care lucreaza cu proprietatea 'matched' adaugata nodurilor grafurilor atat query, cat si data.
-        print("IS JOINABLE EXEC:")
+        # print("IS JOINABLE EXEC:")
         # v5 trebuie sa fie cu matched = True pentru ca se afla deja in M
-        print(self.dataGraph.nodes(data=True))
-        print("u = " + str(u))
+        # print(self.dataGraph.nodes(data=True))
+        # print("u = " + str(u))
         # IsJoinable iterates through all adjacent query vertices of u.
         for query_neighbor in self.queryGraph.neighbors(u):
             # If the adjacent query vertex u' is already matched
             if self.queryGraph.node[query_neighbor]['matched'] is True:
-                print("ALREADY MATCHED query_neighbor = " + str(query_neighbor))
+                # print("ALREADY MATCHED query_neighbor = " + str(query_neighbor))
                 # then it checks whether there is a corresponding edge (v, v') in the data graph.
                 for data_node in self.dataGraph.nodes():
                     if self.dataGraph.node[data_node]['matched'] is True:
-                        print("NEW DATA NODE v = " + str(v))
-                        print("ALREADY MATCHED data_node = " + str(data_node))
+                        # print("NEW DATA NODE v = " + str(v))
+                        # print("ALREADY MATCHED data_node = " + str(data_node))
                         if self.dataGraph.has_edge(v, data_node):
                             return True # !!! Aici se termina executia inainte devreme. Nu trebuie terminata la prima necorespondenta.
                         else:
@@ -638,6 +642,8 @@ class VF2Algorithm(GenericQueryProc):
         self.queryGraph.node[u]['matched'] = True
         self.dataGraph.node[v]['matched'] = True # Am declarat si nodul data ca fiind MATCHED. In p133-han se lucreaza cu lista M, exista nextQueryVertex, dar prea putin se ocupa de nodurile data din acest pct de vedere.
         M.append([u, v])
+        print(Fore.GREEN + Style.BRIGHT + "Updated M: " + str(M))
+        print(Style.RESET_ALL)
         print(str(self.queryGraph.nodes(data=True)))
         print("updateState exec finish")
         end_program = True
@@ -647,8 +653,9 @@ class VF2Algorithm(GenericQueryProc):
         if end_program == False:
             return M
         else:
-            print("VF2 results: ")
+            print(Fore.GREEN + Style.BRIGHT + "VF2 results: ")
             print(self.results_dict.items())
+            print(Style.RESET_ALL)
             return
 
     # VARIANTA PROPRIE: Trebuie sa dau si valoarea False indicativului 'matched' nodurilor u si v.
