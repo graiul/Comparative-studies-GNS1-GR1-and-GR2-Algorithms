@@ -1,0 +1,1 @@
+C:\Users\Gheorghica Radu\Desktop\To compile> pyinstaller -F .\Backtracking_STwig_Matching.py
