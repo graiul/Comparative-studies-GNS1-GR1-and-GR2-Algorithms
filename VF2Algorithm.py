@@ -8,6 +8,9 @@ from GenericQueryProc import GenericQueryProc
 from Graph_File_Generator import Graph_File_Generator
 from Graph_Format import Graph_Format
 from timeit import default_timer as timer
+
+# https://stackoverflow.com/questions/6537487/changing-shell-text-color-windows
+# https://pypi.org/project/colorama/
 from colorama import init
 from colorama import Fore, Back, Style
 init()
