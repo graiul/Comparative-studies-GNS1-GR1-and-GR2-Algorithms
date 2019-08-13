@@ -430,6 +430,9 @@ def main():
                 # Pentru fiecare radacina din lista de radacini,
                 # din rezultatul final voi elimina radacinile care nu au fost folosite
                 # pentru executia respectiva a algoritmului.
+
+                M_list_main = []
+
                 print("\nRoots: ")
                 # vf2 = VF2Algorithm(M, 'small_query_graph_VF2.txt', 'small_data_graph_VF2.txt', 'RI')
                 vf2 = VF2Algorithm(M)
@@ -450,13 +453,14 @@ def main():
                     print("M = " + str(M))
                     # vf2 = VF2Algorithm(M, 'small_query_graph_VF2.txt', 'small_data_graph_VF2.txt', 'RI')
                     vf2 = VF2Algorithm(M)
-                    vf2.subGraphSearch(M)
+                    M_list_main.append(vf2.subGraphSearch(M))
                     # vf2 = None
                     results.append([["Query root: " + "1"], ["Data root: " + str(root)], [list(vf2.results_dict.items())[1:]]])
                 print("\nFinal results: ")
                 for result in results:
                     print(result)
-
+                print("M_list_main: ")
+                print(M_list_main)
 
         # elif option == 13:
         #     backtracking = Backtracking_STwig_Matching()
