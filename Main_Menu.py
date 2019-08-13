@@ -12,6 +12,12 @@ from timeit import default_timer as timer
 
 from functools import partial
 
+# https://stackoverflow.com/questions/6537487/changing-shell-text-color-windows
+# https://pypi.org/project/colorama/
+from colorama import init
+from colorama import Fore, Back, Style
+init()
+
 def main():
     menu = [
         ["\n\n1. Graph generator tool"],
@@ -456,9 +462,10 @@ def main():
                     M_list_main.append(vf2.subGraphSearch(M))
                     # vf2 = None
                     results.append([["Query root: " + "1"], ["Data root: " + str(root)], [list(vf2.results_dict.items())[1:]]])
-                print("\nFinal results: ")
+                print(Fore.GREEN + "\nFinal results: ")
                 for result in results:
                     print(result)
+                print(Style.RESET_ALL)
                 print("M_list_main: ")
                 print(M_list_main)
 
