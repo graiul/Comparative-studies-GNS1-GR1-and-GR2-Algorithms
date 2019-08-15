@@ -43,7 +43,7 @@ class VF2Algorithm(GenericQueryProc):
     M_list = []
 
 
-    def __init__(self, M): #, queryGraphFile, dataGraphFile, graph_format_type):
+    def __init__(self, M, graph_choice): #, queryGraphFile, dataGraphFile, graph_format_type):
         # self.queryGraph = query_graph
         # self.dataGraph = data_graph
         self.start_time = timer()
@@ -77,9 +77,13 @@ class VF2Algorithm(GenericQueryProc):
 
         # GRAFUL QUERY - FOLOSESTE NODURI CU ID DE TIPUL INT
         query_graph_gen = Query_Graph_Generator()
-        # self.queryGraph = query_graph_gen.gen_small_graph_query_graph()
-        self.queryGraph = query_graph_gen.gen_RI_query_graph()
-        nx.set_node_attributes(self.queryGraph, False, 'matched')
+        if graph_choice == "sm":
+            self.queryGraph = query_graph_gen.gen_small_graph_query_graph()
+            nx.set_node_attributes(self.queryGraph, False, 'matched')
+
+        if graph_choice == "ri":
+            self.queryGraph = query_graph_gen.gen_RI_query_graph()
+            nx.set_node_attributes(self.queryGraph, False, 'matched')
 
         # GRAFUL DATA DIN NEO4J
         neograph_data = Graph("bolt://127.0.0.1:7690", auth=("neo4j", "changeme"))  # Data Graph Zhaosun din READ_REPLICA
@@ -172,6 +176,8 @@ class VF2Algorithm(GenericQueryProc):
             candidates_refined = self.refineCandidates(M, u, candidates_u)
             # print("\nCandidatii rafinati ai nodului " + str(u) + ": " + str(candidates_refined))
 
+            if len(candidates_refined) == 0:
+                print("No refined candidates for node: " + str(u))
 
             if len(M) == 0:
                 self.results_dict[u] = candidates_refined
