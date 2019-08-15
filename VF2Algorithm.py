@@ -347,7 +347,7 @@ class VF2Algorithm(GenericQueryProc):
                         # print("Nodul " + str(data_node) + " este deja marcat ca fiind 'matched' ")
                         # Atunci verificam sa nu fie adiacent lui
                         # print("Lipseste in graful data muchia " + str([candidate, data_node]) + " ?")
-                        if self.dataGraph.has_edge(candidate, data_node) == False:
+                        if self.dataGraph.has_edge(data_node, candidate) == False:
                             if candidate in query_nodes_candidates_for_deletion:
                                 delete_indicator = True
                                 # print("Lipseste.")
@@ -356,6 +356,7 @@ class VF2Algorithm(GenericQueryProc):
                         else:
                             delete_indicator = False
                             # print("Exista.")
+                            print("Edge " + str([data_node, candidate]) + " exists.")
                             occurence_list.append("Exista")
                                 # print("Nu exista muchie. Eliminam candidatul conform Conditiei 1.")
                                 # print("Muchia care nu exista: " + str([candidate, data_node]))
