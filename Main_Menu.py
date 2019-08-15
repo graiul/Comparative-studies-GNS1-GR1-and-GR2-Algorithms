@@ -55,7 +55,7 @@ def main():
             # edge_dataset_url = str(input('\nDataset edges URL: '))
             edge_dataset_url = "https://raw.githubusercontent.com/room229/graph_datasets/master/ZhaoSun_Data_Graph_Edges.csv"
             # leader_core_bolt_address = str(input('\nLeader core bolt address: '))
-            leader_core_bolt_address = "http://localhost:7474/"
+            leader_core_bolt_address = "http://localhost:7478/"
             # username = str(input('\nUsername of core: '))
             username = "neo4j"
             # passwd = str(input('\nPassword of core: '))
@@ -73,7 +73,7 @@ def main():
             # edge_dataset_url = str(input('\nDataset edges URL: '))
             edge_dataset_url = "https://raw.githubusercontent.com/room229/graph_datasets/master/RI_data_graph_edges.csv"
             # leader_core_bolt_address = str(input('\nLeader core bolt address: '))
-            leader_core_bolt_address = "http://localhost:7474/"
+            leader_core_bolt_address = "http://localhost:7478/"
             # username = str(input('\nUsername of core: '))
             username = "neo4j"
             # passwd = str(input('\nPassword of core: '))
@@ -91,7 +91,7 @@ def main():
             node_dataset_url = "https://raw.githubusercontent.com/room229/graph_datasets/master/10_node_graph_nodes.csv"
             edge_dataset_url = "https://raw.githubusercontent.com/room229/graph_datasets/master/10_node_graph_edges.csv"
             # leader_core_bolt_address = str(input('\nLeader core bolt address: '))
-            leader_core_bolt_address = "http://localhost:7474/"
+            leader_core_bolt_address = "http://localhost:7478/"
             # username = str(input('\nUsername of core: '))
             username = "neo4j"
             # passwd = str(input('\nPassword of core: '))
@@ -105,7 +105,7 @@ def main():
 
         elif option == 3:
             # leader_core_bolt_address = str(input('\nLeader core bolt address: '))
-            leader_core_bolt_address = "http://localhost:7474/"
+            leader_core_bolt_address = "http://localhost:7478/"
             username = "neo4j"
             # username = str(input('\nUsername of core: '))
             passwd = "changeme"
@@ -439,7 +439,8 @@ def main():
 
             M = []
             results = []
-
+            print("Query graph choice: for Small data graph or RI data graph? (sm/ri)")
+            graph_choice = str(input())
             if len(M) == 0:
                 # Pentru radacini nu am mai facut pruning!
                 # Pentru fiecare radacina din lista de radacini,
@@ -448,41 +449,59 @@ def main():
 
                 M_list_main = []
 
-                print("\nRoots: ")
+                print("\nRoots search beginning: ")
                 # vf2 = VF2Algorithm(M, 'small_query_graph_VF2.txt', 'small_data_graph_VF2.txt', 'RI')
-                exit(0)
+                # exit(0)
 
-                vf2 = VF2Algorithm(M)
+                vf2 = VF2Algorithm(M, graph_choice)
 
                 roots = vf2.subGraphSearch(M)[1]
                 print()
-                print("Roots: ")
+                print("Roots found.: ")
                 print(roots)
-                print("Selected root: ")
+                print()
+                # print("Selected root: ")
                 for root in roots:
-                    print(root)
+                    # print(root)
 
                     # Alegem noi primul nod al grafului query:
                     # Pentru small graph
-                    # M = [[1, root]]
+                    # M2 = [[1, root]]
 
                     # Pentru RI graph
-                    # gf = Query_Graph_Generator()
-                    # RI_query_graph = gf.gen_RI_query_graph()
-                    M = [[1773, root]]
+                    # M2 = [[1773, root]] # Algoritmul va schimba al doilea element doar.
+                    # print("M2 = " + str(M2))
 
-                    print("M = " + str(M))
+                    if graph_choice == "sm":
+                        M2 = [[1, root]]
+
+                    if graph_choice == "ri":
+                        M2 = [[1773, root]]
+
                     # vf2 = VF2Algorithm(M, 'small_query_graph_VF2.txt', 'small_data_graph_VF2.txt', 'RI')
-                    vf2 = VF2Algorithm(M)
-                    M_list_main.append(vf2.subGraphSearch(M))
+                    vf2_2 = VF2Algorithm(M2, graph_choice)
+                    M_list_main.append(vf2_2.subGraphSearch(M2))
                     # vf2 = None
-                    results.append([["Query root: " + "1"], ["Data root: " + str(root)], [list(vf2.results_dict.items())[1:]]])
-                print(Fore.GREEN + "\nFinal results: ")
-                for result in results:
-                    print(result)
-                print(Style.RESET_ALL)
-                print("M_list_main: ")
-                print(M_list_main)
+
+                    # Pentru small graph
+                    # results.append([["Query root: " + "1"], ["Data root: " + str(root)], [list(vf2_2.results_dict.items())[1:]]])
+                    # Pentru RI graph
+                    # results.append([["Query root: " + "1773"], ["Data root: " + str(root)], [list(vf2_2.results_dict.items())[1:]]])
+                    print(Fore.LIGHTGREEN_EX + str([["Query root: " + "1773"], ["Data root: " + str(root)], [list(vf2_2.results_dict.items())[1:]]]))
+                    print(Style.RESET_ALL)
+
+                    # print(Fore.LIGHTBLUE_EX + "\nShow results found until now? (y/n): ")
+                    # i = input()
+                    # if i == "y":
+                    #     break
+                    # print(Style.RESET_ALL)
+
+            # print(Fore.GREEN + "\nFinal results: ")
+            # for result in results:
+            #     print(result)
+            # print(Style.RESET_ALL)
+            # print("M_list_main: ")
+            # print(M_list_main)
 
         # elif option == 13:
         #     backtracking = Backtracking_STwig_Matching()
