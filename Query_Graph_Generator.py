@@ -19,7 +19,7 @@ class Query_Graph_Generator(object):
         query_graph.add_edges_from(query_graph_edges)
         # node_attr = ["29", "25", "19", "6", "29", "13", "15", "20"]
         node_attr = ["25", "28", "29", "27"]
-        node_attr_dict = dict(zip(sorted(query_graph.nodes()), node_attr))
+        node_attr_dict = dict(zip(query_graph.nodes(), node_attr))
         nx.set_node_attributes(query_graph, node_attr_dict, 'label')
         return query_graph
 
