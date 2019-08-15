@@ -2,6 +2,7 @@ import copy
 from collections import OrderedDict
 
 import networkx as nx
+from networkx.algorithms import isomorphism
 from py2neo import Graph, Subgraph
 
 from GenericQueryProc import GenericQueryProc
@@ -119,6 +120,10 @@ class VF2Algorithm(GenericQueryProc):
             self.queryGraph.node[M[0][0]]['matched'] = True
             self.dataGraph.node[M[0][1]]['matched'] = True
 
+        # GM = isomorphism.GraphMatcher(self.queryGraph, self.dataGraph)
+        # print(GM.is_isomorphic())
+        # exit(0)
+
         # print("\nQuery graph: ")
         # print(self.queryGraph.nodes(data=True))
         # print(self.queryGraph.edges())
@@ -179,6 +184,8 @@ class VF2Algorithm(GenericQueryProc):
             if candidates_refined == None:
                 # print("No refined candidates for node: " + str(u))
                 # print()
+                # print(self.results_dict.items())
+                # self.results_dict = {}
                 return 0
 
             if len(M) == 0:
@@ -206,7 +213,7 @@ class VF2Algorithm(GenericQueryProc):
                     if self.isJoinable(M, u, v):
                         # print("Joinable!")
                         updated_M = self.updateState(M, u, v)
-                        # print("updated_M: " + str(updated_M))
+                        print("updated_M: " + str(updated_M))
                         self.subGraphSearch(updated_M)
                         if updated_M != None:
                             self.restoreState(updated_M, u, v)
@@ -343,7 +350,7 @@ class VF2Algorithm(GenericQueryProc):
                 for data_node in self.dataGraph.nodes():
                     # print("Nod data selectat pentru verificare: " + str(data_node))
                     # Daca nodul data selectat a mai fost folosit
-                    if self.dataGraph.node[data_node]['matched'] is True:
+                    if self.dataGraph.node[data_node]['matched'] == True:
                         # print("Nodul " + str(data_node) + " este deja marcat ca fiind 'matched' ")
                         # Atunci verificam sa nu fie adiacent lui
                         # print("Lipseste in graful data muchia " + str([candidate, data_node]) + " ?")
