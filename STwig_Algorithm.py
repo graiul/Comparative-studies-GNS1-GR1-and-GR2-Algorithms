@@ -107,11 +107,12 @@ class STwig_Algorithm(object):
     # given label.
     def Index_getID(self, label, iteration_number, matches, stwig_query):
         if iteration_number == 0:
-            print("***Index_getID output for Process 0")
-            print("STwig query: " + str(stwig_query))
-            print("Initial matches list - must be empty at the beginning of the Iteration 0: " + str(matches))
-            print("Results for the first iteration will be seen in the printing of the shared dictionary "
-                  "\nfrom the second process onward.")
+            # print("***Index_getID output for Process 0")
+            # print("STwig query: " + str(stwig_query))
+            # print("Initial matches list - must be empty at the beginning of the Iteration 0: " + str(matches))
+            # print("Results for the first iteration will be seen in the printing of the shared dictionary "
+            #       "\nfrom the second process onward.")
+
             # tx = self.neograph_data.begin()
             # cqlQuery = "MATCH (n:`" + str(label) + "`) RETURN n.RI_id"
 
@@ -129,7 +130,7 @@ class STwig_Algorithm(object):
             # print("result:" + str(list(result)))
             nodes_loaded = []
             for r in result:
-                print("r=" + str(r))
+                # print("r=" + str(r))
                 nodes_loaded.append(r[0])
             # print("nodes loaded: " + str(nodes_loaded))
 
@@ -154,20 +155,22 @@ class STwig_Algorithm(object):
             #     print('\x1b[0;30;45m' + str(match) + '\x1b[0m')
 
 
-            print("***End of Index_getID output for Process 0")
-            print()
+            # print("***End of Index_getID output for Process 0")
+            # print()
             return nodes_loaded
 
         elif iteration_number > 0:
-            # print("Matches for previous iteration: ")
-            # print(matches)
-            print("***Index_getID output for Process " + str(iteration_number))
+            # # print("Matches for previous iteration: ")
+            # # print(matches)
 
-            print("STwig query: " + str(stwig_query))
+            # print("***Index_getID output for Process " + str(iteration_number))
+            #
+            # print("STwig query: " + str(stwig_query))
+            #
+            # print("Matches dictionary - key,value pair: ")
 
-            print("Matches dictionary - key,value pair: ")
-            # print(list(self.matches_dict.keys())[iteration_number])
-            # print(list(self.matches_dict.values())[iteration_number])
+            # # print(list(self.matches_dict.keys())[iteration_number])
+            # # print(list(self.matches_dict.values())[iteration_number])
             for item in self.matches_dict.items():
                 print(item)
 
@@ -199,8 +202,8 @@ class STwig_Algorithm(object):
                 # adica pentru fiecare radacina, atasam o lista.
                 # Pentru fiecare astfel de lista vom cauta in graful data.
 
-                print("Used stwigs: ")
-                print(self.used_stwig_list)
+                # print("Used stwigs: ")
+                # print(self.used_stwig_list)
                 for used_stwig in self.used_stwig_list:
                     # Daca radacina stwig-ului actual selectat
                     # este de tipul unei frunze al unui stwig deja prelucrat
@@ -216,11 +219,11 @@ class STwig_Algorithm(object):
                 # print(list(self.matches_dict.keys())[-1])
                 # last_dict_key = list(self.matches_dict.keys())[-1]
 
-                        print("Current stwig: ")
-                        print(stwig_query)
-
-                        print("Selected 'used stwig': ")
-                        print(used_stwig)
+                        # print("Current stwig: ")
+                        # print(stwig_query)
+                        #
+                        # print("Selected 'used stwig': ")
+                        # print(used_stwig)
 
 
                         if self.matches_dict.get(repr(stwig_query), []) == []:
@@ -242,14 +245,14 @@ class STwig_Algorithm(object):
 
 
             sorted_leafs_to_be_roots = sorted(leafs_to_be_roots)
-            print("Leafs to be roots - taken from selected 'used stwig' matches dict values: ")
-            print(sorted_leafs_to_be_roots)
+            # print("Leafs to be roots - taken from selected 'used stwig' matches dict values: ")
+            # print(sorted_leafs_to_be_roots)
 
             # #Trebuie returnate toate frunzele de tipul:
             # # Label-ul radacinii stwig-ului dat ca si parametru pentru Index.getID!
             stwig_query_root_type = self.query_graph.node[stwig_query[0]]['label']
 
-            print("Current iteration STwig query root type: " + str(stwig_query_root_type))
+            # print("Current iteration STwig query root type: " + str(stwig_query_root_type))
             new_roots = []
             for leaf in sorted_leafs_to_be_roots:
                 # print("Leaf: " + str(leaf))
@@ -274,7 +277,7 @@ class STwig_Algorithm(object):
                 if stwig_query_root_type == result_label:
                     new_roots.append(leaf)
 
-            print("New roots: " + str(new_roots))
+            # print("New roots: " + str(new_roots))
 
             current_stwig_childred_node_labels = []
             for child in stwig_query[1]:
@@ -282,17 +285,17 @@ class STwig_Algorithm(object):
                 # print(self.query_graph.node[child]['label'])
                 child_node_label = self.query_graph.node[child]['label']
                 current_stwig_childred_node_labels.append(child_node_label)
-            print("current_stwig_childred_node_labels: " + str(current_stwig_childred_node_labels))
+            # print("current_stwig_childred_node_labels: " + str(current_stwig_childred_node_labels))
 
             started_matches = []
             not_match = 0
             for nr in new_roots:
                 st = [nr, []]
                 started_matches.append(st)
-            if len(started_matches) == 0:
-                print("Started matches: " + str(started_matches))
+            # if len(started_matches) == 0:
+            #     print("Started matches: " + str(started_matches))
             if len(started_matches) > 0:
-                print("Matches: ")
+                # print("Matches: ")
                 finished_matches = []
 
                 for started_match in started_matches:
@@ -373,10 +376,10 @@ class STwig_Algorithm(object):
             result = self.neograph_data.run(cqlQuery).to_ndarray()
             nodes_loaded = []
             for r in result:
-                print("r=" + str(r))
+                # print("r=" + str(r))
                 nodes_loaded.append(r[0])
-            print("***End of Index_getID output for Process " + str(iteration_number))
-            print()
+            # print("***End of Index_getID output for Process " + str(iteration_number))
+            # print()
             return nodes_loaded
 
     def Index_getID_NX(self, label, query_graph_nx):
@@ -450,8 +453,10 @@ class STwig_Algorithm(object):
         # Pentru q2 cauta doar in nodurile frunza corespunzatoare din G(q1)
         # Pentru twig-ul q3 cauta doar in nodurile frunza corespunzatoare din G(q1) si G(q2)
         # Se adauga filtrare in plus pentru Sr <- Index.getID(r), linia 1 din alg 1 - MatchSTwig.
-        print("###MatchSTwig output:")
-        print("STwig query node id's: " + str(q))
+
+        # print("###MatchSTwig output:")
+        # print("STwig query node id's: " + str(q))
+
         # print(q[0])
         #---HARDCODED
         # r = str(q[0]) # Root node label
@@ -466,40 +471,42 @@ class STwig_Algorithm(object):
         # print(q_labels_start)
         for leaf_id in q[1]:
             q_labels_start[1].append(self.query_graph.node[leaf_id]['label'])
-        print("Query STwig labels: " + str(q_labels_start))
+        # print("Query STwig labels: " + str(q_labels_start))
+
+
         # print("STwig query labels - must be only the labels: " + str(q_labels_start))
         # print("Number of leaf labels: " + str(len(q[1])))
 
         r = str(self.query_graph.node[q[0]]['label'])
-        print("STwig root label: " + str(r))
+        # print("STwig root label: " + str(r))
         L = q_labels_start[1]
-        print("Children labels: " + str(L))
+        # print("Children labels: " + str(L))
         # for l in children_labels:
         #     L.append(str(self.query_graph.node[]))
 
         #  (1) Find the set of root nodes by calling Index.getID(r);
         Sr = self.Index_getID(r, iteration_number, self.matches, q) # AICI q ESTE FORMAT DIN LABEL-URI
-        print("Sr, Set of root nodes for label " + str(r) + ": " + str(Sr))
+        # print("Sr, Set of root nodes for label " + str(r) + ": " + str(Sr))
         R = []
         Sli = []
 
         # (2) Foreach root node, find its child nodes using Cloud.Load();
         for root_node in Sr:
-            print(Fore.GREEN + "---Root node: " + str(root_node))
+            # print(Fore.GREEN + "---Root node: " + str(root_node))
             c = self.Cloud_Load(root_node)
             # print("     Result of Cloud Load method: " + str(c))
             root = c[0][0]
             children = c[0][1]
-            print("root=" + str(root))
-            print("children=" + str(children))
-            print(Style.RESET_ALL)
+            # print("root=" + str(root))
+            # print("children=" + str(children))
+            # print(Style.RESET_ALL)
 
             # (3) Find its child nodes that match the labels in L by calling Index.hasLabel()
             S = []
             S_child_lists = []
             for root_child_label in L:
-                print("     Root_child_label: " + str(root_child_label))
-                print("     " + str(type(root_child_label)))
+                # print("     Root_child_label: " + str(root_child_label))
+                # print("     " + str(type(root_child_label)))
                 for child in children:
                     if child not in S_child_lists:
                         # print("     child= " + str(child)) # Child, sau vecinii de ordinul 1.
@@ -533,10 +540,10 @@ class STwig_Algorithm(object):
             elem_labels_total = []
             for elem in combinations:
                 for el in elem:
-                    print("get_node_label_from_neo4j: ")
-                    print("el: ")
-                    print(el)
-                    print(self.get_node_label_from_neo4j(el))
+                    # print("get_node_label_from_neo4j: ")
+                    # print("el: ")
+                    # print(el)
+                    # print(self.get_node_label_from_neo4j(el))
                     elem_labels.append(self.get_node_label_from_neo4j(el))
                 elem_labels_total.append(elem_labels)
                 elem_labels = []
@@ -577,13 +584,14 @@ class STwig_Algorithm(object):
             for child in match[1:]:
                 formatted_match[1].append(child)
             STwig_matches_formatted.append(formatted_match)
+            # print(formatted_match)
 
 
         self.matches = STwig_matches
         # self.stwig_list.append(q)
 
         # print("STwig_matches_formatted: " + str(STwig_matches_formatted))
-        print("###End of MatchSTwig output")
+        # print("###End of MatchSTwig output")
         return STwig_matches_formatted
 
     def Query_Graph_Split(self, query_graph):
