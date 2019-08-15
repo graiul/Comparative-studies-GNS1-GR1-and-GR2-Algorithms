@@ -433,6 +433,7 @@ def main():
 
             print("Results from multiprocessing: ")
             for item in return_dict.values():
+                # print(item)
                 for i in item:
                     print(i)
             print("\n============== End of Option 94 execution =================")
@@ -519,19 +520,26 @@ def main():
 
                     # vf2 = VF2Algorithm(M, 'small_query_graph_VF2.txt', 'small_data_graph_VF2.txt', 'RI')
                     vf2_2 = VF2Algorithm(M2, graph_choice)
-                    M_list_main.append(vf2_2.subGraphSearch(M2))
+                    execution_flag = vf2_2.subGraphSearch(M2)
+                    M_list_main.append(execution_flag)
                     # vf2 = None
 
                     # Pentru small graph
                     # results.append([["Query root: " + "1"], ["Data root: " + str(root)], [list(vf2_2.results_dict.items())[1:]]])
                     # Pentru RI graph
                     # results.append([["Query root: " + "1773"], ["Data root: " + str(root)], [list(vf2_2.results_dict.items())[1:]]])
-                    if graph_choice == "sm":
-                        print(Fore.LIGHTGREEN_EX + str([["Query root: " + "1"], ["Data root: " + str(root)],
-                                                        [list(vf2_2.results_dict.items())[1:]]]))
-                    if graph_choice == "ri":
-                        print(Fore.LIGHTGREEN_EX + str([["Query root: " + "1773"], ["Data root: " + str(root)], [list(vf2_2.results_dict.items())[1:]]]))
-                    print(Style.RESET_ALL)
+                    if execution_flag == None:
+                        if graph_choice == "sm":
+                            print(Fore.LIGHTGREEN_EX + str([["Query root: " + "1"], ["Data root: " + str(root)],
+                                                            [list(vf2_2.results_dict.items())[1:]]]))
+                            print(Style.RESET_ALL)
+
+                        if graph_choice == "ri":
+                            print(Fore.LIGHTGREEN_EX + str([["Query root: " + "1773"], ["Data root: " + str(root)], [list(vf2_2.results_dict.items())[1:]]]))
+                            print(Style.RESET_ALL)
+
+                        # print("M_list_main: ")
+                        # print(M_list_main)
 
                     # print(Fore.LIGHTBLUE_EX + "\nShow results found until now? (y/n): ")
                     # i = input()
@@ -543,8 +551,7 @@ def main():
             # for result in results:
             #     print(result)
             # print(Style.RESET_ALL)
-            # print("M_list_main: ")
-            # print(M_list_main)
+
 
         # elif option == 13:
         #     backtracking = Backtracking_STwig_Matching()
