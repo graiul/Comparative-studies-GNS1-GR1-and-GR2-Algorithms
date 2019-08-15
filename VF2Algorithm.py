@@ -176,8 +176,10 @@ class VF2Algorithm(GenericQueryProc):
             candidates_refined = self.refineCandidates(M, u, candidates_u)
             # print("\nCandidatii rafinati ai nodului " + str(u) + ": " + str(candidates_refined))
 
-            if len(candidates_refined) == 0:
-                print("No refined candidates for node: " + str(u))
+            if candidates_refined == None:
+                # print("No refined candidates for node: " + str(u))
+                # print()
+                return 0
 
             if len(M) == 0:
                 self.results_dict[u] = candidates_refined
@@ -513,6 +515,8 @@ class VF2Algorithm(GenericQueryProc):
                     # print("         Candidatii finali ai lui " + str(query_node))
                     # print("         " + str(query_nodes_candidates_for_deletion))
                     # print()
+        if len(query_nodes_candidates_for_deletion) == 0:
+            return None
         # VECHI: Conditia 1 am adaptat-o pe loc mai sus.
         # Mai jos se afla si Conditia 2 si 3 functionale, dar fara blocari(trecerea la candidatul urmator) daca un candidat nu a trecut de o conditie, si fara verificari daca exista candidatul care trebuie eliminat.
         # De asemenea, nu folosesc o copie din care voi fi facut eliminarea de candidati, avand astfel un rezultat eronat.
