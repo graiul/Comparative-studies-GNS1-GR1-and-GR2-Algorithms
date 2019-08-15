@@ -95,8 +95,8 @@ class DB_Access_Test(object):
     def match_finding_process(self, query_stwig, return_dict):
         # print("--------Iteration number: " + str(iteration_number) + str("-----------"))
         from neo4j_test_2 import neo4j_test_2
-        from Graph_File_Generator import Graph_File_Generator
-        query_graph_gen = Graph_File_Generator()
+        from Query_Graph_Generator import Query_Graph_Generator
+        query_graph_gen = Query_Graph_Generator()
         query_graph = query_graph_gen.gen_zhaosun_query_graph()
         test2 = neo4j_test_2(query_graph)
         test2.STwig_query_neighbor_labels = query_stwig[1]
