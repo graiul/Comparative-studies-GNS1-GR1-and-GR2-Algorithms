@@ -47,11 +47,8 @@ List of complete solutions:
 [9, 10, 7, 8]]
 
 VF2:
-[1, 2
-[1, 6
-[1, 10
-Candidatii rafinati ai nodului query 2: ['2', '6', '10']
-Candidatii rafinati ai nodului query 3: ['3', '7']
-Candidatii rafinati ai nodului query 4: ['4', '8']
+[['Query root: 1'], ['Data root: 1'], [[(2, [2, 6, 10]), (3, [3, 7]), (4, [4, 8])]]]
+[['Query root: 1'], ['Data root: 5'], [[(2, [6, 10]), (3, [3, 7]), (4, [4, 8])]]]
+[['Query root: 1'], ['Data root: 9'], [[(2, [10]), (3, [7]), (4, [8])]]]
 
 PENTRU QUERY GRAPH CU PATRU NODURI.
