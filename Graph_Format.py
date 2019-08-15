@@ -417,6 +417,62 @@ class Graph_Format:
         # Adaugarea ultimei muchii, dar fara un "\n" dupa ea.
         f.write(str(edge_list[len(edge_list)-1][0]) + "," + str(edge_list[len(edge_list)-1][1]))
 
+    def create_RI_1000_edge_data_graph(self):
+        # Cream graful de 1000 de muchii.
+        # Il inseram in NetworkX
+        # Adaugam label-urile nodurilor
+
+        # Inseram in graful nx graful RI
+        graph_format = Graph_Format("Homo_sapiens_udistr_32.gfd")
+        graph_format.create_graph_from_RI_file()
+        nx_ri_graph = graph_format.get_graph()
+        # print(nx_ri_graph.nodes())
+        # print(list(nx_ri_graph.edges())[2])
+
+        # Noduri pentru 1000 de muchii, apoi 1000 muchii.
+
+        # Cream un graf nou cu 1000 de muchii din graful RI
+        nx_ri_graph_1000edges = nx.Graph()
+        # nodes_for_1000_edges =
+        nx_ri_graph_1000edges.add_edges_from(list(nx_ri_graph.edges())[:1000])
+        # nodes_and_labels_dict = {}
+        nodes_for_selected_1000_edges = list(nx_ri_graph_1000edges.nodes())
+
+        aux_graph = nx.Graph()
+        for node in nodes_for_selected_1000_edges:
+            aux_graph.add_node(node, label=nx_ri_graph.node[node]['label'])
+        # for n in aux_graph.nodes(data=True):
+        #     print(n)
+        aux_graph.add_edges_from(list(nx_ri_graph.edges())[:1000])
+        print(len(aux_graph.edges()))
+        print(aux_graph.nodes(data=True))
+        print(len(aux_graph.nodes(data=True)))
+
+        f = open('RI_1000_edge_data_graph_nodes.csv', "w+")
+        f.write("RI_node_label,RI_node_id\n")
+        node_list = list(aux_graph.nodes(data=True))
+        node_list_without_last_element = node_list[:-1]
+        # print(node_list[1][0])
+        # print(str(node_list[0][1]).split(": ")[1])
+        for node in node_list_without_last_element:
+            RI_node_label_aux = str(node[1]).split(": '")[1]
+            RI_node_label = RI_node_label_aux.split("'}")[0]
+            f.write(RI_node_label + "," + str(node[0]) + "\n")
+
+        last_node = node_list[len(node_list) - 1]
+        RI_node_label_aux = str(last_node[1]).split(": '")[1]
+        RI_node_label = RI_node_label_aux.split("'}")[0]
+        f.write(RI_node_label + "," + str(last_node[0]))
+
+        f = open('RI_1000_edge_data_graph_edges.csv', "w+")
+        f.write("RI_from,RI_to\n")
+        edge_list = list(aux_graph.edges())
+        edge_list_without_last_elem = edge_list[:-1]
+        # print(edge_list)
+        for edge in edge_list_without_last_elem:
+            f.write(str(edge[0]) + "," + str(edge[1]) + "\n")
+        # Adaugarea ultimei muchii, dar fara un "\n" dupa ea.
+        f.write(str(edge_list[len(edge_list)-1][0]) + "," + str(edge_list[len(edge_list)-1][1]))
 # # Date mari
 # # Prelucrez fisierul text:
 # print()
@@ -454,8 +510,10 @@ class Graph_Format:
 # print(graph.nodes(data=True))
 
 gf = Graph_Format("Homo_sapiens_udistr_32.gfd")
-gf.create_graph_from_RI_file()
-nx_RI_data_graph = gf.get_graph()
+gf.create_RI_1000_edge_data_graph()
+
+# gf.create_graph_from_RI_file()
+# nx_RI_data_graph = gf.get_graph()
 # print(nx_RI_data_graph.nodes(data=True))
-gf.create_RI_data_graph_nodes_csv_file(nx_RI_data_graph)
+# gf.create_RI_data_graph_nodes_csv_file(nx_RI_data_graph)
 # gf.create_RI_data_graph_edges_csv_file(nx_RI_data_graph)
