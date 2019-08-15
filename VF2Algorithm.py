@@ -77,7 +77,8 @@ class VF2Algorithm(GenericQueryProc):
 
         # GRAFUL QUERY - FOLOSESTE NODURI CU ID DE TIPUL INT
         query_graph_gen = Query_Graph_Generator()
-        self.queryGraph = query_graph_gen.gen_small_graph_query_graph()
+        # self.queryGraph = query_graph_gen.gen_small_graph_query_graph()
+        self.queryGraph = query_graph_gen.gen_RI_query_graph()
         nx.set_node_attributes(self.queryGraph, False, 'matched')
 
         # GRAFUL DATA DIN NEO4J
