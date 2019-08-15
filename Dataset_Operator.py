@@ -16,24 +16,21 @@ class Dataset_Operator(object):
     def insert_nodes_zhao_sun(self):
         neograph_data = Graph(self.leader_core_bolt_address, auth=(self.username, self.passwd))
         # tx = neograph_data.begin() # LA VARIANTA CU NEO4J CA SI C NU MERGE, NEO4j VER 3.3.1
-        cqlQuery = "LOAD CSV WITH HEADERS FROM '" + str(self.dataset_nodes_url) + "' AS line" \
-                   " CREATE (:Node {  zhaosun_id: line.zhaosun_id, zhaosun_label: line.zhaosun_label})"
+        cqlQuery = "LOAD CSV WITH HEADERS FROM '" + str(self.dataset_nodes_url) + "' AS line CREATE (:Node {  zhaosun_id: line.zhaosun_id, zhaosun_label: line.zhaosun_label})"
         # tx.run(cqlQuery)
         neograph_data.run(cqlQuery)
 
     def insert_nodes_RI(self):
         neograph_data = Graph(self.leader_core_bolt_address, auth=(self.username, self.passwd))
-        cqlQuery = "LOAD CSV WITH HEADERS FROM '" + str(self.dataset_nodes_url) + "' AS line" \
-                   " CREATE (:Node {  RI_node_id: line.RI_node_id, RI_node_label: line.RI_node_label})"
-        cqlQuery_create_nodes_index = "create index on :Node(RI_node_id)"
+        cqlQuery = "LOAD CSV WITH HEADERS FROM '" + str(self.dataset_nodes_url) + "' AS line CREATE (:Node {  node_id: line.node_id, node_label: line.node_label})"
+        cqlQuery_create_nodes_index = "create index on :Node(node_id)"
 
         neograph_data.run(cqlQuery)
         neograph_data.run(cqlQuery_create_nodes_index)
 
     def insert_nodes_small_graph(self):
         neograph_data = Graph(self.leader_core_bolt_address, auth=(self.username, self.passwd))
-        cqlQuery = "LOAD CSV WITH HEADERS FROM '" + str(self.dataset_nodes_url) + "' AS line" \
-                   " CREATE (:Node {  node_id: line.node_id, node_label: line.node_label})"
+        cqlQuery = "LOAD CSV WITH HEADERS FROM '" + str(self.dataset_nodes_url) + "' AS line CREATE (:Node {  node_id: line.node_id, node_label: line.node_label})"
         # cqlQuery_create_nodes_index = "create index on :Node(RI_node_id)"
 
         neograph_data.run(cqlQuery)
@@ -53,10 +50,7 @@ class Dataset_Operator(object):
 
     def insert_edges_RI(self):
         neograph_data = Graph(self.leader_core_bolt_address, auth=(self.username, self.passwd))
-        cqlQuery = "LOAD CSV WITH HEADERS FROM '" + str(self.dataset_edges_url) + "' AS line" \
-                   " MERGE (n:Node {RI_node_id: line.RI_from})" \
-                   " MERGE (m:Node {RI_node_id: line.RI_to})" \
-                   " MERGE (n)-[:PPI]-(m)" # La aceasta linie modificam pentru graf orientat.
+        cqlQuery = "LOAD CSV WITH HEADERS FROM '" + str(self.dataset_edges_url) + "' AS line MERGE (n:Node {node_id: line.from}) MERGE (m:Node {node_id: line.to}) MERGE (n)-[:PPI]-(m)" # La aceasta linie modificam pentru graf orientat.
         neograph_data.run(cqlQuery)
 
     def insert_edges_small_graph(self):
