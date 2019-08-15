@@ -8,7 +8,7 @@ class Query_Graph_Generator(object):
         # query_graph_edges = [["a", "b"], ["a", "c"], ["c", "d"], ["c", "f"], ["f", "d"], ["d", "b"], ["d", "e"], ["e", "b"]]
         query_graph.add_edges_from(query_graph_edges)
         node_attr = ["a", "b", "c", "d", "e", "f"]
-        node_attr_dict = dict(zip(sorted(query_graph.nodes()), node_attr))
+        node_attr_dict = dict(zip(sorted(query_graph.nodes()), node_attr)) # ATENTIE: daca se incurca asocierea dintre id-urile nodurilor cu label-urile corespunzatoare, trebuie scoasa sortarea crescatoare al id-urilor nodurilor. Aici lucram cu string-uri pentru id-urile nodurilor. Label-urile vor fi tot timpul de tipul str.
         nx.set_node_attributes(query_graph, node_attr_dict, 'label')
         return query_graph
 
@@ -19,7 +19,7 @@ class Query_Graph_Generator(object):
         query_graph.add_edges_from(query_graph_edges)
         # node_attr = ["29", "25", "19", "6", "29", "13", "15", "20"]
         node_attr = ["25", "28", "29", "27"]
-        node_attr_dict = dict(zip(query_graph.nodes(), node_attr))
+        node_attr_dict = dict(zip(query_graph.nodes(), node_attr)) # Am scos sortarea crescatoare al id-urilor nodurilor. Astfel se face corect asocierea intre noduri si label-uri.
         nx.set_node_attributes(query_graph, node_attr_dict, 'label')
         return query_graph
 
@@ -32,7 +32,9 @@ class Query_Graph_Generator(object):
         small_graph.add_nodes_from(small_graph_nodes)
         small_graph.add_edges_from(small_graph_edges)
         node_attr = ["a", "b", "c", "d"]
-        node_attr_dict = dict(zip(sorted(small_graph.nodes()), node_attr))
+        node_attr_dict = dict(zip(sorted(small_graph.nodes()), node_attr)) # ATENTIE: daca se incurca asocierea dintre id-urile nodurilor cu label-urile corespunzatoare, trebuie scoasa sortarea crescatoare al id-urilor nodurilor. Aici lucram cu string-uri pentru id-urile nodurilor. Label-urile vor fi tot timpul de tipul str.
+                                                                            # Aici este o exceptie, ordinea crescatoare al nodurilor pastreaza ordinea originala a nodurilor. Ele coincid in acest caz.
+
         # print(node_attr_dict.items())
         nx.set_node_attributes(small_graph, node_attr_dict, 'label')
         # print(small_graph.nodes(data=True))
