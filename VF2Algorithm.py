@@ -5,7 +5,7 @@ import networkx as nx
 from py2neo import Graph, Subgraph
 
 from GenericQueryProc import GenericQueryProc
-from Graph_File_Generator import Graph_File_Generator
+from Query_Graph_Generator import Query_Graph_Generator
 from Graph_Format import Graph_Format
 from timeit import default_timer as timer
 
@@ -76,7 +76,7 @@ class VF2Algorithm(GenericQueryProc):
         # # va avea adaugat o proprietate de tip bool numita 'matched'
 
         # GRAFUL QUERY - FOLOSESTE NODURI CU ID DE TIPUL INT
-        query_graph_gen = Graph_File_Generator()
+        query_graph_gen = Query_Graph_Generator()
         self.queryGraph = query_graph_gen.gen_small_graph_query_graph()
         nx.set_node_attributes(self.queryGraph, False, 'matched')
 
