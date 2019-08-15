@@ -1,6 +1,6 @@
 import networkx as nx
 
-class Graph_File_Generator(object):
+class Query_Graph_Generator(object):
     # Zhaosun Query Graph
     def gen_zhaosun_query_graph(self):
         query_graph = nx.Graph()
