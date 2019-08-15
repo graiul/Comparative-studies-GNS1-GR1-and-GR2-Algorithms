@@ -115,10 +115,10 @@ class VF2Algorithm(GenericQueryProc):
             self.queryGraph.node[M[0][0]]['matched'] = True
             self.dataGraph.node[M[0][1]]['matched'] = True
 
-        print("\nQuery graph: ")
-        print(self.queryGraph.nodes(data=True))
-        print(self.queryGraph.edges())
-        print()
+        # print("\nQuery graph: ")
+        # print(self.queryGraph.nodes(data=True))
+        # print(self.queryGraph.edges())
+        # print()
 
         # print("Data graph: ")
         # print(self.dataGraph.nodes(data=True))
@@ -149,28 +149,28 @@ class VF2Algorithm(GenericQueryProc):
         if M == None: # Termina executia programului.
             return
         if len(M) == len(self.queryGraph.nodes()): # Termina cautarea dupa rezultate
-            print(Fore.LIGHTRED_EX + "Reported M: ")
-            print(M)
-            print(Style.RESET_ALL)
+            # print(Fore.LIGHTRED_EX + "Reported M: ")
+            # print(M)
+            # print(Style.RESET_ALL)
             return M
         else:
-            print()
-            print(Back.WHITE + Fore.LIGHTBLUE_EX + Style.BRIGHT + "Subgraph search:")
-            print(Style.RESET_ALL)
+            # print()
+            # print(Back.WHITE + Fore.LIGHTBLUE_EX + Style.BRIGHT + "Subgraph search:")
+            # print(Style.RESET_ALL)
 
             u = self.nextQueryVertex(M)
             if u is None:
-                print("Nu mai sunt noduri query!")
+                # print("Nu mai sunt noduri query!")
                 self.total_time = timer() - self.start_time
-                print("Timp total de executare algoritm VF2: " + str(self.total_time) + " secunde.")
+                # print("Timp total de executare algoritm VF2: " + str(self.total_time) + " secunde.")
                 return
-            print(str(u) + " Selectat de nextQueryVertex.")
+            # print(str(u) + " Selectat de nextQueryVertex.")
 
             candidates_u = self.filterCandidates(u)
-            print("Candidatii lui " + str(u) + ": " + str(candidates_u))
+            # print("Candidatii lui " + str(u) + ": " + str(candidates_u))
 
             candidates_refined = self.refineCandidates(M, u, candidates_u)
-            print("\nCandidatii rafinati ai nodului " + str(u) + ": " + str(candidates_refined))
+            # print("\nCandidatii rafinati ai nodului " + str(u) + ": " + str(candidates_refined))
 
 
             if len(M) == 0:
@@ -179,13 +179,13 @@ class VF2Algorithm(GenericQueryProc):
             if len(M) > 0:
                 self.results_dict[u] = candidates_refined
 
-            print("Asocieri / Matchings: " + str(M))
+            # print("Asocieri / Matchings: " + str(M))
 
 
             for v in candidates_refined:
-                print("Candidat rafinat selectat: " + str(v))
-                print("Asocieri existente: ")
-                print(M)
+                # print("Candidat rafinat selectat: " + str(v))
+                # print("Asocieri existente: ")
+                # print(M)
                 # for m_elem in M:
 
                 last_matching = M[-1]
@@ -244,7 +244,7 @@ class VF2Algorithm(GenericQueryProc):
         #     print("matching from reversed matching list: " + str(matching))
         for node in queryNodes:
             if self.queryGraph.node[node]['matched'] is False:
-                print("Returnam nodul " + str(node))
+                # print("Returnam nodul " + str(node))
                 return node  # Returneaza primul nod query care nu se afla
 
         # VARIANTA VECHE in care folosesc lista M de asocieri.
@@ -269,8 +269,8 @@ class VF2Algorithm(GenericQueryProc):
         # print("QUERY NODE: " + str(query_node))
         # print("CANDIDATES: " + str(query_node_candidates))
 
-        print()
-        print(M)
+        # print()
+        # print(M)
         if len(M) == 0:
             print("\nNu avem valori pt Mq si Mg pentru ca nu avem o prima asociere inca.")
             print("Astfel, Cq si Cg vor avea toate nodurile din grafurile query, respectiv cel data.")
@@ -284,10 +284,10 @@ class VF2Algorithm(GenericQueryProc):
             # timpul initializata cu o asociere.
             Cq.append(list(self.adj(M[-1][0], self.queryGraph)))
             Cg.append(list(self.adj(M[-1][1], self.dataGraph)))
-            print("Mq = " + str(Mq))
-            print("Mg = " + str(Mg))
-            print("Cq = " + str(Cq))
-            print("Cg = " + str(Cg))
+            # print("Mq = " + str(Mq))
+            # print("Mg = " + str(Mg))
+            # print("Cq = " + str(Cq))
+            # print("Cg = " + str(Cg))
             # Pentru fiecare candidat verificam conditia (1)
 
         query_nodes_candidates_for_deletion = copy.deepcopy(query_node_candidates)
