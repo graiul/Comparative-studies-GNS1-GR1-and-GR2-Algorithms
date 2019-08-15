@@ -1,4 +1,4 @@
-from Graph_File_Generator import Graph_File_Generator
+from Query_Graph_Generator import Query_Graph_Generator
 from DB_Access_Test import DB_Access_Test
 from Dataset_Operator import Dataset_Operator
 from STwig_Algorithm import STwig_Algorithm
@@ -54,9 +54,12 @@ def main():
             node_dataset_url = "https://raw.githubusercontent.com/room229/graph_datasets/master/ZhaoSun_Data_Graph_Nodes.csv"
             # edge_dataset_url = str(input('\nDataset edges URL: '))
             edge_dataset_url = "https://raw.githubusercontent.com/room229/graph_datasets/master/ZhaoSun_Data_Graph_Edges.csv"
-            leader_core_bolt_address = str(input('\nLeader core bolt address: '))
-            username = str(input('\nUsername of core: '))
-            passwd = str(input('\nPassword of core: '))
+            # leader_core_bolt_address = str(input('\nLeader core bolt address: '))
+            leader_core_bolt_address = "http://localhost:7474/"
+            # username = str(input('\nUsername of core: '))
+            username = "neo4j"
+            # passwd = str(input('\nPassword of core: '))
+            passwd = "changeme"
             dataset_operator = Dataset_Operator(node_dataset_url, edge_dataset_url, leader_core_bolt_address, username, passwd)
             dataset_operator.insert_nodes_zhao_sun()
             dataset_operator.insert_edges_zhao_sun()
@@ -69,9 +72,12 @@ def main():
             node_dataset_url = "https://raw.githubusercontent.com/room229/graph_datasets/master/RI_data_graph_nodes.csv"
             # edge_dataset_url = str(input('\nDataset edges URL: '))
             edge_dataset_url = "https://raw.githubusercontent.com/room229/graph_datasets/master/RI_data_graph_edges.csv"
-            leader_core_bolt_address = str(input('\nLeader core bolt address: '))
-            username = str(input('\nUsername of core: '))
-            passwd = str(input('\nPassword of core: '))
+            # leader_core_bolt_address = str(input('\nLeader core bolt address: '))
+            leader_core_bolt_address = "http://localhost:7474/"
+            # username = str(input('\nUsername of core: '))
+            username = "neo4j"
+            # passwd = str(input('\nPassword of core: '))
+            passwd = "changeme"
             dataset_operator = Dataset_Operator(node_dataset_url, edge_dataset_url, leader_core_bolt_address, username, passwd)
             dataset_operator.insert_nodes_RI()
             option = str(input('\nStart inserting edges? (y/n): '))
@@ -98,9 +104,12 @@ def main():
                 print(m)
 
         elif option == 3:
-            leader_core_bolt_address = str(input('\nLeader core bolt address: '))
-            username = str(input('\nUsername of core: '))
-            passwd = str(input('\nPassword of core: '))
+            # leader_core_bolt_address = str(input('\nLeader core bolt address: '))
+            leader_core_bolt_address = "http://localhost:7474/"
+            username = "neo4j"
+            # username = str(input('\nUsername of core: '))
+            passwd = "changeme"
+            # passwd = str(input('\nPassword of core: '))
             dataset_operator = Dataset_Operator(None, None, leader_core_bolt_address, username, passwd)
             dataset_operator.delete_data_from_db()
             print()
@@ -156,7 +165,7 @@ def main():
             # q = ['a', ['b', 'c']]
             # q = ['b', ['a', 'd', 'e']]
             q = ['d', ['c', 'f', 'e']]
-            query_graph_gen = Graph_File_Generator()
+            query_graph_gen = Query_Graph_Generator()
             query_graph = query_graph_gen.gen_zhaosun_query_graph()
             test2 = neo4j_test_2(query_graph)
             print("Searcing given STwigs from query graph in the data graph: ")
@@ -174,7 +183,7 @@ def main():
         elif option == 8:
             print("\n================= Option 8 commencing... =================")
             print("STwig_Order_Selection: ")
-            query_graph_gen = Graph_File_Generator()
+            query_graph_gen = Query_Graph_Generator()
             query_graph = query_graph_gen.gen_zhaosun_query_graph()
             test2 = neo4j_test_2(query_graph)
 
@@ -195,7 +204,7 @@ def main():
 
         elif option == 9:
             print("\n================= Option 9 commencing... =================")
-            query_graph_gen = Graph_File_Generator()
+            query_graph_gen = Query_Graph_Generator()
             query_graph = query_graph_gen.gen_zhaosun_query_graph()
             test2 = neo4j_test_2(query_graph)
 
@@ -250,7 +259,7 @@ def main():
 
         elif option == 91:
             print("\n================= Option 91 commencing... =================")
-            query_graph_gen = Graph_File_Generator()
+            query_graph_gen = Query_Graph_Generator()
             query_graph = query_graph_gen.gen_zhaosun_query_graph()
             test2 = neo4j_test_2(query_graph)
 
@@ -312,7 +321,7 @@ def main():
 
         elif option == 92:
             print("\n================= Option 92 commencing... =================")
-            query_graph_gen = Graph_File_Generator()
+            query_graph_gen = Query_Graph_Generator()
             # query_graph = query_graph_gen.gen_zhaosun_query_graph()
             query_graph = query_graph_gen.gen_RI_query_graph()
             print(query_graph.nodes(data=True))
@@ -355,7 +364,7 @@ def main():
 
         elif option == 93:
             print("\n================= Option 93 commencing... =================")
-            query_graph_gen = Graph_File_Generator()
+            query_graph_gen = Query_Graph_Generator()
             # query_graph = query_graph_gen.gen_zhaosun_query_graph()
             query_graph = query_graph_gen.gen_small_graph_query_graph()
             print(query_graph.nodes(data=True))
@@ -393,10 +402,10 @@ def main():
         elif option == 10:
             print("\n================= Option 10 commencing... =================")
             # print("Are these the query graph STWIGS?")
-            query_graph_gen = Graph_File_Generator()
+            query_graph_gen = Query_Graph_Generator()
             query_graph = query_graph_gen.gen_zhaosun_query_graph()
             test2 = neo4j_test_2()
-            query_graph_gen = Graph_File_Generator()
+            query_graph_gen = Query_Graph_Generator()
             query_graph = query_graph_gen.gen_zhaosun_query_graph()
             splits = test2.Query_Graph_Split(query_graph)
             for s in splits:
@@ -441,6 +450,8 @@ def main():
 
                 print("\nRoots: ")
                 # vf2 = VF2Algorithm(M, 'small_query_graph_VF2.txt', 'small_data_graph_VF2.txt', 'RI')
+                exit(0)
+
                 vf2 = VF2Algorithm(M)
 
                 roots = vf2.subGraphSearch(M)[1]
@@ -451,10 +462,14 @@ def main():
                 for root in roots:
                     print(root)
 
-
                     # Alegem noi primul nod al grafului query:
-                    M = [[1, root]]
+                    # Pentru small graph
+                    # M = [[1, root]]
 
+                    # Pentru RI graph
+                    # gf = Query_Graph_Generator()
+                    # RI_query_graph = gf.gen_RI_query_graph()
+                    M = [[1773, root]]
 
                     print("M = " + str(M))
                     # vf2 = VF2Algorithm(M, 'small_query_graph_VF2.txt', 'small_data_graph_VF2.txt', 'RI')
