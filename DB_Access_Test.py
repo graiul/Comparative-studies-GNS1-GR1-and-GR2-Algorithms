@@ -7,7 +7,7 @@ from py2neo import Graph
 from timeit import default_timer as timer
 
 class DB_Access_Test(object):
-    neograph_data = Graph("bolt://127.0.0.1:7691", auth=("neo4j", "changeme"))
+    neograph_data = Graph("bolt://localhost:7687", auth=("neo4j", "changeme"))
 
     def single_thread_access_to_one_read_replica(self):
         start_time = timer()
