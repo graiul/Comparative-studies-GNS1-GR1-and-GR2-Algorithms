@@ -497,8 +497,8 @@ def main():
 
                 roots = vf2.subGraphSearch(M)[1]
                 print()
-                print("Roots found.: ")
-                print(roots)
+                # print("Roots found.: ")
+                # print(roots)
                 print()
                 # print("Selected root: ")
                 for root in roots:
@@ -517,6 +517,8 @@ def main():
 
                     if graph_choice == "ri":
                         M2 = [[1773, root]]
+                        # print()
+                        # print("Query root node: " + str(root))
 
                     # vf2 = VF2Algorithm(M, 'small_query_graph_VF2.txt', 'small_data_graph_VF2.txt', 'RI')
                     vf2_2 = VF2Algorithm(M2, graph_choice)
@@ -535,11 +537,14 @@ def main():
                             print(Style.RESET_ALL)
 
                         if graph_choice == "ri":
-                            print(Fore.LIGHTGREEN_EX + str([["Query root: " + "1773"], ["Data root: " + str(root)], [list(vf2_2.results_dict.items())[1:]]]))
-                            print(Style.RESET_ALL)
+                            if len(list(vf2_2.results_dict.items())[1:]) > 0:
 
-                        # print("M_list_main: ")
-                        # print(M_list_main)
+                                print(Fore.LIGHTGREEN_EX + "Data root: " + str(root))
+                                print(list(vf2_2.results_dict.items())[1:])
+                                # print(list(vf2_2.results_dict.items())[0])
+                                print(Style.RESET_ALL)
+                                vf2_2.results_dict.clear()
+
 
                     # print(Fore.LIGHTBLUE_EX + "\nShow results found until now? (y/n): ")
                     # i = input()
