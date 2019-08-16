@@ -131,7 +131,7 @@ class STwig_Algorithm(object):
             nodes_loaded = []
             for r in result:
                 # print("r=" + str(r))
-                nodes_loaded.append(r[0])
+                nodes_loaded.append(int(r[0]))
             # print("nodes loaded: " + str(nodes_loaded))
 
             # # Label-urile primului stwig!
@@ -477,7 +477,7 @@ class STwig_Algorithm(object):
         # print("STwig query labels - must be only the labels: " + str(q_labels_start))
         # print("Number of leaf labels: " + str(len(q[1])))
 
-        r = str(self.query_graph.node[q[0]]['label'])
+        r = int(self.query_graph.node[q[0]]['label'])
         # print("STwig root label: " + str(r))
         L = q_labels_start[1]
         # print("Children labels: " + str(L))
