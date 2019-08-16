@@ -195,8 +195,10 @@ class VF2Algorithm(GenericQueryProc):
                 # if candidates_refined != None:
                 # print("Query leaf node: " + str(u))
                 # print("Query root node: " + str(M[0][1]))
+                # print("Results dict before putting results: " + str(list(self.results_dict.items())))
                 # print("Refined candidates for leaf " + str(u) + ": " + str(candidates_refined))
                 self.results_dict[u] = candidates_refined
+                # print("Results dict after putting results: " + str(list(self.results_dict.items())))
 
             # print("Asocieri / Matchings: " + str(M))
 
