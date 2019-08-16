@@ -192,13 +192,12 @@ class VF2Algorithm(GenericQueryProc):
                 self.results_dict[u] = candidates_refined
                 return list(self.results_dict.items())[0]
             if len(M) > 0:
-                if candidates_refined != None:
-                    print("Query node: " + str(u))
-                    print("Refined candidates: " + str(candidates_refined))
-                    self.results_dict[u] = candidates_refined
+                # if candidates_refined != None:
+                print("Query node: " + str(u))
+                print("Refined candidates: " + str(candidates_refined))
+                # self.results_dict[u] = candidates_refined
 
             # print("Asocieri / Matchings: " + str(M))
-
 
             for v in candidates_refined:
                 # print("Candidat rafinat selectat: " + str(v))
