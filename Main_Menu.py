@@ -1,3 +1,5 @@
+import copy
+
 from Query_Graph_Generator import Query_Graph_Generator
 from DB_Access_Test import DB_Access_Test
 from Dataset_Operator import Dataset_Operator
@@ -537,13 +539,17 @@ def main():
                             print(Style.RESET_ALL)
 
                         if graph_choice == "ri":
-                            if len(list(vf2_2.results_dict.items())[1:]) > 0:
+                            # if len(list(vf2_2.results_dict.items())) > 0:
 
-                                print(Fore.LIGHTGREEN_EX + "Data root: " + str(root))
-                                print(list(vf2_2.results_dict.items())[1:])
-                                # print(list(vf2_2.results_dict.items())[0])
-                                print(Style.RESET_ALL)
-                                vf2_2.results_dict.clear()
+                            print(Fore.LIGHTGREEN_EX + "Data root: " + str(root))
+                            leafs = copy.deepcopy(list(vf2_2.results_dict.items()))
+                            leafs.insert(0, root)
+                            res = copy.deepcopy(leafs)
+                            print(res)
+                            print(len(res))
+                            # print(list(vf2_2.results_dict.items())[0])
+                            print(Style.RESET_ALL)
+                            vf2_2.results_dict.clear()
 
 
                     # print(Fore.LIGHTBLUE_EX + "\nShow results found until now? (y/n): ")
