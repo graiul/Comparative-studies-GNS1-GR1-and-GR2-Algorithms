@@ -192,7 +192,10 @@ class VF2Algorithm(GenericQueryProc):
                 self.results_dict[u] = candidates_refined
                 return list(self.results_dict.items())[0]
             if len(M) > 0:
-                self.results_dict[u] = candidates_refined
+                if candidates_refined != None:
+                    print("Query node: " + str(u))
+                    print("Refined candidates: " + str(candidates_refined))
+                    self.results_dict[u] = candidates_refined
 
             # print("Asocieri / Matchings: " + str(M))
 
@@ -259,7 +262,7 @@ class VF2Algorithm(GenericQueryProc):
         #     print("matching from reversed matching list: " + str(matching))
         for node in queryNodes:
             if self.queryGraph.node[node]['matched'] is False:
-                # print("Returnam nodul " + str(node))
+                # print("Returnam nodul query: " + str(node))
                 return node  # Returneaza primul nod query care nu se afla
 
         # VARIANTA VECHE in care folosesc lista M de asocieri.
