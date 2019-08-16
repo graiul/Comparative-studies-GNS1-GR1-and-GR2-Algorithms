@@ -433,7 +433,7 @@ def main():
                 j.start()
                 j.join()
 
-            print("Results from multiprocessing: ")
+            print("Results from STwig Algorithm: ")
             for item in return_dict.values():
                 # print(item)
                 for i in item:
