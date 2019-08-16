@@ -203,22 +203,22 @@ class VF2Algorithm(GenericQueryProc):
                 # print(M)
                 # for m_elem in M:
 
-                last_matching = M[-1]
+                # last_matching = M[-1]
                 # print("Subgraph search last_matching:")
                 # print(last_matching)
                 # print(str(v) + " not in " + str(last_matching) + " ?")
-                if v not in last_matching: # such that v is not yet matched. Am verificat deja acest lucru pentru nodul query u in metoda nextQueryVertex().
+                # if v not in last_matching: # such that v is not yet matched. Am verificat deja acest lucru pentru nodul query u in metoda nextQueryVertex().
                     # print("v not in last_matching! Continuing...")
                     # print("Is joinable?")
-                    if self.isJoinable(M, u, v):
-                        # print("Joinable!")
-                        updated_M = self.updateState(M, u, v)
-                        print("updated_M: " + str(updated_M))
-                        self.subGraphSearch(updated_M)
-                        if updated_M != None:
-                            self.restoreState(updated_M, u, v)
+                if self.isJoinable(M, u, v):
+                    # print("Joinable!")
+                    updated_M = self.updateState(M, u, v)
+                    # print("updated_M: " + str(updated_M))
+                    self.subGraphSearch(updated_M)
+                    # if updated_M != None:
+                    #     self.restoreState(updated_M, u, v)
                     # else:
-                        # print("Not joinable!")
+                    #     print("Not joinable!")
 
 
     # Unele noduri pot avea eticheta compusa. Astfel verificam daca eticheta unui nod query SE AFLA IN eticheta unui nod data.
@@ -657,17 +657,13 @@ class VF2Algorithm(GenericQueryProc):
         #         return True
 
     def updateState(self, M, u, v): # Adaug o asociere / match la sfarsitul lui M.
-        # self.queryGraph.node[u]['matched'] = True
-        # self.dataGraph.node[v]['matched'] = True # Am declarat si nodul data ca fiind MATCHED. In p133-han se lucreaza cu lista M, exista nextQueryVertex, dar prea putin se ocupa de nodurile data din acest pct de vedere.
-        # M.append([u, v])
-        # return M
-
-        # print("updateState exec: ")
+        print("updateState exec: ")
         self.queryGraph.node[u]['matched'] = True
-        self.dataGraph.node[v]['matched'] = True # Am declarat si nodul data ca fiind MATCHED. In p133-han se lucreaza cu lista M, exista nextQueryVertex, dar prea putin se ocupa de nodurile data din acest pct de vedere.
+        # self.dataGraph.node[v]['matched'] = True # Am declarat si nodul data ca fiind MATCHED. In p133-han se lucreaza cu lista M, exista nextQueryVertex, dar prea putin se ocupa de nodurile data din acest pct de vedere.
+        print(Fore.BLUE + str([u,v]))
         M.append([u, v])
-        # print(Fore.GREEN + Style.BRIGHT + "Updated M: " + str(M))
-        # print(Style.RESET_ALL)
+        print(Fore.LIGHTMAGENTA_EX + "Updated M: " + str(M))
+        print(Style.RESET_ALL)
         # print(str(self.queryGraph.nodes(data=True)))
         # print("updateState exec finish")
         end_program = True
