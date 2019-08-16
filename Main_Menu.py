@@ -498,6 +498,8 @@ def main():
                 vf2 = VF2Algorithm(M, graph_choice)
 
                 roots = vf2.subGraphSearch(M)[1]
+                vf2.results_dict.clear()
+
                 print()
                 # print("Roots found.: ")
                 # print(roots)
@@ -541,15 +543,16 @@ def main():
                         if graph_choice == "ri":
                             # if len(list(vf2_2.results_dict.items())) > 0:
 
-                            print(Fore.LIGHTGREEN_EX + "Data root: " + str(root))
                             leafs = copy.deepcopy(list(vf2_2.results_dict.items()))
                             leafs.insert(0, root)
                             res = copy.deepcopy(leafs)
-                            print(res)
-                            print(len(res))
-                            # print(list(vf2_2.results_dict.items())[0])
-                            print(Style.RESET_ALL)
-                            vf2_2.results_dict.clear()
+                            if len(res) == len(vf2_2.queryGraph.nodes()):
+                                print(Fore.LIGHTGREEN_EX + "Data root: " + str(root))
+                                print(res)
+                                print(len(res))
+                                # print(list(vf2_2.results_dict.items())[0])
+                                print(Style.RESET_ALL)
+                                vf2_2.results_dict.clear()
 
 
                     # print(Fore.LIGHTBLUE_EX + "\nShow results found until now? (y/n): ")
