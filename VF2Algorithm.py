@@ -363,7 +363,7 @@ class VF2Algorithm(GenericQueryProc):
                         else:
                             delete_indicator = False
                             # print("Exista.")
-                            print("Edge " + str([data_node, candidate]) + " exists.")
+                            # print("Edge " + str([data_node, candidate]) + " exists.")
                             occurence_list.append("Exista")
                                 # print("Nu exista muchie. Eliminam candidatul conform Conditiei 1.")
                                 # print("Muchia care nu exista: " + str([candidate, data_node]))
@@ -657,13 +657,13 @@ class VF2Algorithm(GenericQueryProc):
         #         return True
 
     def updateState(self, M, u, v): # Adaug o asociere / match la sfarsitul lui M.
-        print("updateState exec: ")
+        # print("updateState exec: ")
         self.queryGraph.node[u]['matched'] = True
         # self.dataGraph.node[v]['matched'] = True # Am declarat si nodul data ca fiind MATCHED. In p133-han se lucreaza cu lista M, exista nextQueryVertex, dar prea putin se ocupa de nodurile data din acest pct de vedere.
-        print(Fore.BLUE + str([u,v]))
+        # print(Fore.BLUE + str([u,v]))
         M.append([u, v])
-        print(Fore.LIGHTMAGENTA_EX + "Updated M: " + str(M))
-        print(Style.RESET_ALL)
+        # print(Fore.LIGHTMAGENTA_EX + "Updated M: " + str(M))
+        # print(Style.RESET_ALL)
         # print(str(self.queryGraph.nodes(data=True)))
         # print("updateState exec finish")
         end_program = True
