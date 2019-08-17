@@ -13,6 +13,9 @@ init()
 # https://stackoverflow.com/questions/4564559/get-exception-description-and-stack-trace-which-caused-an-exception-all-as-a-st
 import traceback
 
+from py2neo import Graph, Subgraph
+
+
 # def permute(list, s):
 #     if list == 1:
 #         return s
@@ -636,39 +639,105 @@ def renew_node_list(old_node_list):
 #     query_stwig_1_as_labels.append(nl)
 # print("query_stwig_1_as_labels: " + str(query_stwig_1_as_labels))
 
-
+##################################################################
 # Graf data foarte mic, 10 noduri, 4 label-uri.
+# small_graph = nx.Graph()
+# small_graph_nodes = [1,2,3,4,5,6,7,8,9,10]
+# # Sortarea ascendenta la string este diferita de cea a de la tipul int
+# small_graph_nodes.sort()
+# small_graph_edges = [[1, 2], [1, 3], [5, 6], [5, 7], [1, 6], [1, 7], [1, 10], [9, 10], [9, 7], [5, 10], [5, 3], [2, 3], [2, 4], [2, 10], [2, 8], [10, 7], [10, 8], [1, 8], [1, 4], [5, 4], [5, 8], [9, 8]]
+# small_graph.add_nodes_from(small_graph_nodes)
+# small_graph.add_edges_from(small_graph_edges)
+# node_attr = ["a", "b", "c", "d", "a", "b", "c", "d", "a", "b"]
+# node_attr_dict = dict(zip(sorted(small_graph.nodes()), node_attr))
+# print(node_attr_dict.items())
+# nx.set_node_attributes(small_graph, node_attr_dict, 'label')
+# print(small_graph.nodes(data=True))
+# print(small_graph.edges())
+##################################################################
 
-small_graph = nx.Graph()
-small_graph_nodes = [1,2,3,4,5,6,7,8,9,10]
-# Sortarea ascendenta la string este diferita de cea a de la tipul int
-small_graph_nodes.sort()
-small_graph_edges = [[1, 2], [1, 3], [5, 6], [5, 7], [1, 6], [1, 7], [1, 10], [9, 10], [9, 7], [5, 10], [5, 3], [2, 3], [2, 4], [2, 10], [2, 8], [10, 7], [10, 8], [1, 8], [1, 4], [5, 4], [5, 8], [9, 8]]
-small_graph.add_nodes_from(small_graph_nodes)
-small_graph.add_edges_from(small_graph_edges)
-node_attr = ["a", "b", "c", "d", "a", "b", "c", "d", "a", "b"]
-node_attr_dict = dict(zip(sorted(small_graph.nodes()), node_attr))
-print(node_attr_dict.items())
-nx.set_node_attributes(small_graph, node_attr_dict, 'label')
-print(small_graph.nodes(data=True))
-print(small_graph.edges())
+# GRAFUL DATA DIN NEO4J
+neograph_data = Graph("bolt://127.0.0.1:7690", auth=("neo4j", "changeme"))
+cqlQuery = "MATCH p=(n)-[r:PPI]->(m) return n.node_id, m.node_id"
+result = neograph_data.run(cqlQuery).to_ndarray()
+edge_list = result.tolist()
+# print("edge_list: ")
+# print(edge_list)
+edge_list_integer_ids = []
+for string_edge in edge_list:
+    edge_list_integer_ids.append([int(i) for i in string_edge])
+# print("edge_list_integer_ids: ")
+# print(edge_list_integer_ids)
+
+dataGraph = nx.Graph()
+dataGraph.add_edges_from(sorted(edge_list_integer_ids))
+cqlQuery2 = "MATCH (n) return n.node_id, n.node_label"
+result2 = neograph_data.run(cqlQuery2).to_ndarray()
+# print("result2: ")
+# print(result2)
+node_ids_as_integers_with_string_labels = []
+for node in result2:
+    # print(node[0])
+    node_ids_as_integers_with_string_labels.append([int(node[0]), node[1]])
+# print("node_ids_as_integers_with_string_labels: ")
+# print(node_ids_as_integers_with_string_labels)
+
+node_attr_dict = OrderedDict(sorted(node_ids_as_integers_with_string_labels))
+nx.set_node_attributes(dataGraph, node_attr_dict, 'label')
+#############################################################################
+
+# # FUNCTIONAL:
+# query_stwig_1 = [1, 2, 3, 4]
+# # query_stwig_1 = [1, 2, 3]
+# # query_stwig_1 = [2, 3, 4]
+# # query_stwig_1 = [1, 2]
+# # query_stwig_1 = [3, 10]
+# # query_stwig_1 = [4, 10]
+#
+#
+# print("Query STwig: " + str(query_stwig_1))
+# # Label-ul radacinii
+# root_label = small_graph.node[query_stwig_1[0]]['label']
+# # Label-urile vecinilor din lista
+# neighbor_labels = []
+# for n in query_stwig_1[1:]:
+#     neighbor_labels.append(small_graph.node[n]['label'])
+#
+# query_stwig_1_as_labels = []
+# query_stwig_1_as_labels.append(root_label)
+# for nl in neighbor_labels:
+#     query_stwig_1_as_labels.append(nl)
+# print("query_stwig_1_as_labels: " + str(query_stwig_1_as_labels))
+# print()
+# query_stwig_1_as_labels_source = copy.deepcopy(query_stwig_1_as_labels)
+#
+# query_stwig1_dict = OrderedDict(zip(query_stwig_1, query_stwig_1_as_labels_source))
+# print("query_stwig1_dict: ")
+# print(query_stwig1_dict.items())
+# print()
+# p_solution = []
+# complete_solutions = []
+# positions = OrderedDict().fromkeys([0,1,2,3])
+# positions[0] = []
+# positions[1] = []
+# positions[2] = []
+# positions[3] = []
+# print(positions.items())
+# node_list_aux = copy.deepcopy(list(small_graph.nodes()))
+#######################################################################################
 
 # FUNCTIONAL:
-query_stwig_1 = [1, 2, 3, 4]
-# query_stwig_1 = [1, 2, 3]
-# query_stwig_1 = [2, 3, 4]
-# query_stwig_1 = [1, 2]
-# query_stwig_1 = [3, 10]
-# query_stwig_1 = [4, 10]
+query_stwig_1 = [1773, 1488, 1898, 2285]
+
 
 
 print("Query STwig: " + str(query_stwig_1))
 # Label-ul radacinii
-root_label = small_graph.node[query_stwig_1[0]]['label']
+root_label = dataGraph.node[query_stwig_1[0]]['label']
 # Label-urile vecinilor din lista
 neighbor_labels = []
 for n in query_stwig_1[1:]:
-    neighbor_labels.append(small_graph.node[n]['label'])
+    neighbor_labels.append(dataGraph.node[n]['label'])
 
 query_stwig_1_as_labels = []
 query_stwig_1_as_labels.append(root_label)
@@ -690,14 +759,20 @@ positions[1] = []
 positions[2] = []
 positions[3] = []
 print(positions.items())
-node_list_aux = copy.deepcopy(list(small_graph.nodes()))
+node_list_aux = copy.deepcopy(list(dataGraph.nodes()))
+####################################################################################
+
 try:
-    subgraph_search(p_solution, query_stwig1_dict, [], small_graph)
+    # subgraph_search(p_solution, query_stwig1_dict, [], small_graph)
+    subgraph_search(p_solution, query_stwig1_dict, [], dataGraph)
+
 except IndexError:
     tb = traceback.format_exc()
     print(tb)
 except SystemExit:
     exit(0)
+
+
 # finally:
 #     input("End execution?")
 
