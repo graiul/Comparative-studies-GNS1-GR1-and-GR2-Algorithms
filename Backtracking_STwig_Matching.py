@@ -15,6 +15,8 @@ import traceback
 
 from py2neo import Graph, Subgraph
 
+from timeit import default_timer as timer
+
 
 # def permute(list, s):
 #     if list == 1:
@@ -532,7 +534,7 @@ def subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph
                 exit(0)
 
             print("Going back a position.")
-            input("Continue execution?")
+            # input("Continue execution?")
             partial_solution = copy.deepcopy(restore_state(partial_solution)) #partial_solution[:1])
             print(partial_solution)
             if len(partial_solution) == 0:  # poz 0 = []
@@ -764,8 +766,10 @@ node_list_aux = copy.deepcopy(list(dataGraph.nodes()))
 
 try:
     # subgraph_search(p_solution, query_stwig1_dict, [], small_graph)
+    start_time = timer()
     subgraph_search(p_solution, query_stwig1_dict, [], dataGraph)
-
+    total_time = timer() - start_time
+    print("Timp total de executare algoritm Backtracking: " + str(total_time) + " secunde.")
 except IndexError:
     tb = traceback.format_exc()
     print(tb)
