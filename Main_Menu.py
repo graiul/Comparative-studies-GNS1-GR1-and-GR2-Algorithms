@@ -520,7 +520,9 @@ def main():
                         M2 = [[1, root]]
 
                     if graph_choice == "ri":
-                        M2 = [[1773, root]]
+                        # M2 = [[1773, root]]
+                        M2 = [[1488, root]]
+
                         # print()
                         # print("Query root node: " + str(root))
 
