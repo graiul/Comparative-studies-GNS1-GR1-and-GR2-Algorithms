@@ -8,7 +8,7 @@ from STwig_Algorithm import STwig_Algorithm
 from VF2Algorithm import VF2Algorithm
 from neo4j_test_2 import neo4j_test_2
 import os
-from multiprocessing import Pool, Process, Manager
+from multiprocessing import Pool, Process, Manager, Lock
 
 from timeit import default_timer as timer
 
@@ -417,29 +417,41 @@ def main():
             used_stwigs = manager.list()
             STwig_query_neighbor_labels = manager.list()
 
-            STwig_algorithm = STwig_Algorithm(query_graph, return_dict, used_stwigs, STwig_query_neighbor_labels)
+            lock = Lock()
+
+            STwig_algorithm = STwig_Algorithm(query_graph, return_dict, used_stwigs, STwig_query_neighbor_labels, lock)
             stwigs = STwig_algorithm.STwig_Order_Selection()
             print("stwigs: " + str(stwigs))
             db = DB_Access_Test()
 
             jobs = []
 
-            for t in stwigs:
-                iter_num = stwigs.index(t)
-                process = Process(target=db.match_finding_process_filtered, args=(t, return_dict, STwig_query_neighbor_labels, query_graph, iter_num, used_stwigs, ))
-                jobs.append(process)
+            producer = Process(target=db.match_finding_process_producer, args=(stwigs[0], return_dict, STwig_query_neighbor_labels, query_graph, 0, used_stwigs, lock, ))
+            consumer = Process(target=db.match_finding_process_consumer, args=(stwigs[1], return_dict, STwig_query_neighbor_labels, query_graph, 1, used_stwigs, lock, ))
+            prod_com = [producer]
+            for pc in prod_com:
+                pc.start()
+            for pc in prod_com:
+                pc.join()
 
             start_time = timer()
-            for j in jobs:
-                j.start()
-                # print('PID is ' + str(j.pid))
-                # print(os.getpid())
-                # started_processes.append(j)
-                print(j.is_alive())
-                # j.join()
 
-            for jo in jobs:
-                jo.join()
+            # for t in stwigs:
+            #     iter_num = stwigs.index(t)
+            #     process = Process(target=db.match_finding_process_producer, args=(t, return_dict, STwig_query_neighbor_labels, query_graph, iter_num, used_stwigs, lock, ))
+            #     jobs.append(process)
+            #
+            # start_time = timer()
+            # for j in jobs:
+            #     j.start()
+            #     # print('PID is ' + str(j.pid))
+            #     # print(os.getpid())
+            #     # started_processes.append(j)
+            #     print(j.is_alive())
+            #     # j.join()
+            #
+            # for jo in jobs:
+            #     jo.join()
 
             total_time = timer() - start_time
 
