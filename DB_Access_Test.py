@@ -114,12 +114,36 @@ class DB_Access_Test(object):
         return list(test2.matches_dict.values())[0]
         # print("--------Iteration end-----------------")
 
-    def match_finding_process_filtered(self, query_stwig, return_dict, STwig_query_neighbor_labels, query_graph, iter_num, used_stwigs):
+    def match_finding_process_producer(self, query_stwig, return_dict, STwig_query_neighbor_labels, query_graph, iter_num, used_stwigs, lock):
         from STwig_Algorithm import STwig_Algorithm
         # print(os.getpid())
-        print(multiprocessing.current_process())
+        # print("Process details: " + str(multiprocessing.current_process()))
+        with lock:
+            print('Starting producer => {}'.format(os.getpid()))
+            print("Iter num: " + str(iter_num))
+
         STwig_query_neighbor_labels = query_stwig[1]
-        STwig_algorithm = STwig_Algorithm(query_graph, return_dict, used_stwigs, STwig_query_neighbor_labels)
+        STwig_algorithm = STwig_Algorithm(query_graph, return_dict, used_stwigs, STwig_query_neighbor_labels, lock)
+        matches = STwig_algorithm.MatchSTwig(query_stwig, iter_num) # Ca filtrarea sa mearga, trebuie sa dam si numarul iteratiilor!
+        # print(matches)
+        return_dict[repr(query_stwig)] = matches
+
+    def match_finding_process_consumer(self, query_stwig, return_dict, STwig_query_neighbor_labels, query_graph, iter_num, used_stwigs, lock):
+        # https://stonesoupprogramming.com/2017/09/11/python-multiprocessing-producer-consumer-pattern/
+        # https://pythontic.com/multiprocessing/queue/get
+        # https://stackoverflow.com/questions/42490368/pythonappending-to-the-same-list-from-different-processes-using-multiprocessing
+        # https://www.machinelearningplus.com/python/parallel-processing-python/
+        # https://docs.python.org/3.8/library/multiprocessing.shared_memory.html
+        # https://stackoverflow.com/questions/46709830/multiprocess-not-working-working-in-parallel-in-python3 - no join after start in the same loop!
+        from STwig_Algorithm import STwig_Algorithm
+        # print(os.getpid())
+        # print("Process details: " + str(multiprocessing.current_process()))
+        with lock:
+            print('Starting consumer => {}'.format(os.getpid()))
+            print("Iter num: " + str(iter_num))
+
+        STwig_query_neighbor_labels = query_stwig[1]
+        STwig_algorithm = STwig_Algorithm(query_graph, return_dict, used_stwigs, STwig_query_neighbor_labels, lock)
         matches = STwig_algorithm.MatchSTwig(query_stwig, iter_num) # Ca filtrarea sa mearga, trebuie sa dam si numarul iteratiilor!
         # print(matches)
         return_dict[repr(query_stwig)] = matches
