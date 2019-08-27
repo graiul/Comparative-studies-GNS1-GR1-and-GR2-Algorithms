@@ -429,9 +429,20 @@ def main():
                 process = Process(target=db.match_finding_process_filtered, args=(t, return_dict, STwig_query_neighbor_labels, query_graph, iter_num, used_stwigs, ))
                 jobs.append(process)
 
+            started_processes = []
             for j in jobs:
                 j.start()
-                j.join()
+                # print('PID is ' + str(j.pid))
+                # print(os.getpid())
+                # started_processes.append(j)
+                print(j.is_alive())
+            for jo in jobs:
+                jo.join()
+
+
+            # for started_process in started_processes:
+            #     print('PID is ' + str(started_process.pid))
+            #     started_process.join()
 
             print("Results from STwig Algorithm: ")
             for item in return_dict.values():
