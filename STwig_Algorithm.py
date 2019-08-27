@@ -31,11 +31,12 @@ class STwig_Algorithm(object):
 
 
     used_stwig_list = []
-    def __init__(self, query_graph, return_dict, used_stwigs, STwig_query_neighbor_labels):
+    def __init__(self, query_graph, return_dict, used_stwigs, STwig_query_neighbor_labels, lock):
         self.query_graph = query_graph
         self.matches_dict = return_dict
         self.used_stwig_list = used_stwigs
         self.STwig_query_neighbor_labels = STwig_query_neighbor_labels
+        self.lock = lock
 
     # neograph_data = Graph(port="7687", user="neo4j", password="graph") # Data Graph Zhaosun
     neograph_data = Graph("bolt://127.0.0.1:7690", auth=("neo4j", "changeme")) # Data Graph Zhaosun din READ_REPLICA
@@ -160,8 +161,9 @@ class STwig_Algorithm(object):
             return nodes_loaded
 
         elif iteration_number > 0:
-            # # print("Matches for previous iteration: ")
-            # # print(matches)
+            with self.lock:
+                print("Matches for previous iteration: ")
+                print(matches)
 
             # print("***Index_getID output for Process " + str(iteration_number))
             #
@@ -361,7 +363,9 @@ class STwig_Algorithm(object):
                 #     for neighbor in finished_match[1][0]:
                 #         # print(neighbor)
                 #         print(self.get_neo4j_stwig_node_trim(neighbor))
-            print("----------------------------------")
+
+            # with self.lock:
+            # print("----------------------------------")
 
             # PENTRU Zhao Sun data graph
             # cqlQuery = "MATCH (n) WHERE n.zhaosun_label='" + str(label) + "' RETURN n.zhaosun_id" # IF a IN a1! Graf Zhaosun
