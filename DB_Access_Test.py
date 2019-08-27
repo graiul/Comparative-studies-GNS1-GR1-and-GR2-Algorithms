@@ -1,4 +1,5 @@
 import multiprocessing
+import os
 import sys
 import threading
 # from multiprocessing import Pool
@@ -115,6 +116,8 @@ class DB_Access_Test(object):
 
     def match_finding_process_filtered(self, query_stwig, return_dict, STwig_query_neighbor_labels, query_graph, iter_num, used_stwigs):
         from STwig_Algorithm import STwig_Algorithm
+        # print(os.getpid())
+        print(multiprocessing.current_process())
         STwig_query_neighbor_labels = query_stwig[1]
         STwig_algorithm = STwig_Algorithm(query_graph, return_dict, used_stwigs, STwig_query_neighbor_labels)
         matches = STwig_algorithm.MatchSTwig(query_stwig, iter_num) # Ca filtrarea sa mearga, trebuie sa dam si numarul iteratiilor!
