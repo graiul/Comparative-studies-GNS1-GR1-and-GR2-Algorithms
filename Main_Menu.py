@@ -429,26 +429,29 @@ def main():
                 process = Process(target=db.match_finding_process_filtered, args=(t, return_dict, STwig_query_neighbor_labels, query_graph, iter_num, used_stwigs, ))
                 jobs.append(process)
 
-            started_processes = []
+            start_time = timer()
             for j in jobs:
                 j.start()
                 # print('PID is ' + str(j.pid))
                 # print(os.getpid())
                 # started_processes.append(j)
                 print(j.is_alive())
+                # j.join()
+
             for jo in jobs:
                 jo.join()
 
-
-            # for started_process in started_processes:
-            #     print('PID is ' + str(started_process.pid))
-            #     started_process.join()
+            total_time = timer() - start_time
 
             print("Results from STwig Algorithm: ")
             for item in return_dict.values():
                 # print(item)
                 for i in item:
                     print(i)
+
+            print()
+            print("Total exec time: " + str(total_time))
+
             print("\n============== End of Option 94 execution =================")
 
 
