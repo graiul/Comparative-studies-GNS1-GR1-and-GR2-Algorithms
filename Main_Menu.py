@@ -416,20 +416,22 @@ def main():
             return_dict = manager.dict()
             used_stwigs = manager.list()
             STwig_query_neighbor_labels = manager.list()
+            shared_sorted_leafs_to_be_roots = manager.list()
 
             lock = Lock()
 
-            STwig_algorithm = STwig_Algorithm(query_graph, return_dict, used_stwigs, STwig_query_neighbor_labels, lock)
+            STwig_algorithm = STwig_Algorithm(query_graph, return_dict, used_stwigs, STwig_query_neighbor_labels, lock, shared_sorted_leafs_to_be_roots)
             stwigs = STwig_algorithm.STwig_Order_Selection()
             print("stwigs: " + str(stwigs))
             db = DB_Access_Test()
 
             jobs = []
 
-            producer = Process(target=db.match_finding_process_producer, args=(stwigs[0], return_dict, STwig_query_neighbor_labels, query_graph, 0, used_stwigs, lock, ))
-            producer2 = Process(target=db.match_finding_process_producer, args=(stwigs[1], return_dict, STwig_query_neighbor_labels, query_graph, 0, used_stwigs, lock, ))
-            producer3 = Process(target=db.match_finding_process_producer, args=(stwigs[2], return_dict, STwig_query_neighbor_labels, query_graph, 0, used_stwigs, lock, ))
-            prod_com = [producer2]
+            producer = Process(target=db.match_finding_process_producer, args=(stwigs[0], return_dict, STwig_query_neighbor_labels, query_graph, 0, used_stwigs, lock, shared_sorted_leafs_to_be_roots, ))
+            producer2 = Process(target=db.match_finding_process_producer, args=(stwigs[1], return_dict, STwig_query_neighbor_labels, query_graph, 0, used_stwigs, lock, shared_sorted_leafs_to_be_roots, ))
+            producer3 = Process(target=db.match_finding_process_producer, args=(stwigs[2], return_dict, STwig_query_neighbor_labels, query_graph, 0, used_stwigs, lock, shared_sorted_leafs_to_be_roots, ))
+            filterer = Process(target=db.filter_results_process, args=(stwigs[1], return_dict, stwigs[1][1], query_graph, used_stwigs, lock, shared_sorted_leafs_to_be_roots, ))
+            prod_com = [producer]
             for pc in prod_com:
                 pc.start()
                 # pc.join()
@@ -471,11 +473,16 @@ def main():
             print()
             print("Total exec time: " + str(total_time))
 
+            # print()
+            # print("used_stwigs: ")
+            # for us in used_stwigs:
+            #     print(us)
 
-
-            q = stwigs[2]
+            # for q in stwigs:
+            q = stwigs[1]
             STwig_query_neighbors = q[1]
             STwig_algorithm.filter_results(q, STwig_query_neighbors)
+
 
             print("\n============== End of Option 94 execution =================")
 
