@@ -427,14 +427,19 @@ def main():
             jobs = []
 
             producer = Process(target=db.match_finding_process_producer, args=(stwigs[0], return_dict, STwig_query_neighbor_labels, query_graph, 0, used_stwigs, lock, ))
-            producer2 = Process(target=db.match_finding_process_producer, args=(stwigs[1], return_dict, STwig_query_neighbor_labels, query_graph, 1, used_stwigs, lock, ))
+            producer2 = Process(target=db.match_finding_process_producer, args=(stwigs[1], return_dict, STwig_query_neighbor_labels, query_graph, 0, used_stwigs, lock, ))
             producer3 = Process(target=db.match_finding_process_producer, args=(stwigs[2], return_dict, STwig_query_neighbor_labels, query_graph, 0, used_stwigs, lock, ))
-            prod_com = [producer]
+            prod_com = [producer, producer2]
             for pc in prod_com:
                 pc.start()
+                # pc.join()
+
+            for pc in prod_com:
                 pc.join()
-            # for pc in prod_com:
-            #     pc.join()
+
+            # print()
+            # print("STwig_query_neighbor_labels - must not be empty")
+            # print(STwig_query_neighbor_labels)
 
             start_time = timer()
 
@@ -466,12 +471,14 @@ def main():
             print()
             print("Total exec time: " + str(total_time))
 
-            q = stwigs[1]
-            root_label = query_graph.node[q[0]]['label']
+
+
+            q = stwigs[2]
+            STwig_query_neighbors = q[1]
             q_labels_start = [query_graph.node[q[0]]['label'], []]
             for leaf_id in q[1]:
                 q_labels_start[1].append(query_graph.node[leaf_id]['label'])
-            STwig_algorithm.filter_results(root_label, stwigs[1])
+            STwig_algorithm.filter_results(q, STwig_query_neighbors)
 
             print("\n============== End of Option 94 execution =================")
 
