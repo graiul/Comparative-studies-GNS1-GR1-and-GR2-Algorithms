@@ -31,11 +31,14 @@ class STwig_Algorithm(object):
 
 
     used_stwig_list = []
-    def __init__(self, query_graph, return_dict, used_stwigs, STwig_query_neighbor_labels, lock):
+
+    shared_sorted_leafs_to_be_roots = []
+    def __init__(self, query_graph, return_dict, used_stwigs, STwig_query_neighbor_labels, lock, shared_sorted_leafs_to_be_roots):
         self.query_graph = query_graph
         self.matches_dict = return_dict
         self.used_stwig_list = used_stwigs
         self.STwig_query_neighbor_labels = STwig_query_neighbor_labels
+        self.shared_sorted_leafs_to_be_roots = shared_sorted_leafs_to_be_roots
         self.lock = lock
 
     # neograph_data = Graph(port="7687", user="neo4j", password="graph") # Data Graph Zhaosun
@@ -392,8 +395,8 @@ class STwig_Algorithm(object):
         # with self.lock:
         #     print("Matches for previous iteration: ")
         #     print(matches)
-        print()
-        print("Filtering started for stwig: " + str(stwig_query))
+        # print()
+        # print("Filtering started for stwig: " + str(stwig_query))
         # print("***Index_getID output for Process " + str(iteration_number))
         #
         # print("STwig query: " + str(stwig_query))
@@ -436,7 +439,7 @@ class STwig_Algorithm(object):
 
             # print("Used stwigs: ")
             # print(self.used_stwig_list)
-            for used_stwig in self.used_stwig_list:
+            for used_query_stwig in self.used_stwig_list:
                 # Daca radacina stwig-ului actual selectat
                 # (este de tipul unei) ARE ID-ul EGAL CU AL UNEI frunze al unui stwig deja prelucrat
                 # atunci cautam in graful data id-ul fiecarui nod care
@@ -444,7 +447,7 @@ class STwig_Algorithm(object):
                 # Trebuie sa gasim pentru fiecare match inceput cate
                 # un nod care sa corespunda fiecarui tip de frunza.
 
-                if stwig_query[0] in used_stwig[1]:  # Daca (ATENTIE! E VORBA DE ID NU DE LABEL, DECI GRESIT "tipul/labelul") ID-ul radacinii coincide cu una din frunze. TREBUIE SA AIBA ACELASI ID, ATUNCI IMPLICIT VA AVEA SI ACELASI LABEL!
+                if stwig_query[0] in used_query_stwig[1]:  # Daca (ATENTIE! E VORBA DE ID NU DE LABEL, DECI GRESIT "tipul/labelul") ID-ul radacinii coincide cu una din frunze. TREBUIE SA AIBA ACELASI ID, ATUNCI IMPLICIT VA AVEA SI ACELASI LABEL!
                     # Atunci stwig-ul actual selectat este legat de unul din stwig-urile deja prelucrate
 
                     # print("Last key in matches dict: ")
@@ -454,29 +457,30 @@ class STwig_Algorithm(object):
                     # print("Current stwig: ")
                     # print(stwig_query)
                     #
-                    # print("Selected 'used stwig': ")
-                    # print(used_stwig)
+                    # print("Selected 'used_query_stwig': ")
+                    # print(used_query_stwig)
 
                     if self.matches_dict.get(repr(stwig_query), []) == []:
                         # print("YES")
-                        # print(self.matches_dict.get(repr(used_stwig)))
-                        # print(len(self.matches_dict.get(repr(used_stwig))))
+                        # print(self.matches_dict.get(repr(used_query_stwig)))
+                        # print(len(self.matches_dict.get(repr(used_query_stwig))))
                         # if len(list(self.matches_dict.values())) == 1:
-                        #     for item in list(self.matches_dict[repr(used_stwig)])[1]:
+                        #     for item in list(self.matches_dict[repr(used_query_stwig)])[1]:
                         #         if item not in leafs_to_be_roots:
                         #             leafs_to_be_roots.append(item)
                         #     print("leafs_to_be_roots on first if: " + str(leafs_to_be_roots))
                         #
                         # elif len(list(self.matches_dict.values())) > 1:
-                        for mm in self.matches_dict.get(repr(used_stwig)):
-                            # print("mm: " + str(mm))
-                            for item in mm[1]:
-                                if item not in leafs_to_be_roots:
-                                    leafs_to_be_roots.append(item)
+                        for found_data_stwig in self.matches_dict.get(repr(used_query_stwig)):
+                            # print("found_data_stwig: " + str(found_data_stwig))
+                            for leaf in found_data_stwig[1]:
+                                if leaf not in leafs_to_be_roots:
+                                    leafs_to_be_roots.append(leaf)
 
-        sorted_leafs_to_be_roots = sorted(leafs_to_be_roots)
+        for leaf2 in sorted(leafs_to_be_roots):
+            self.shared_sorted_leafs_to_be_roots.append(leaf2)
         # print("Leafs to be roots - taken from selected 'used stwig' matches dict values: ")
-        # print(sorted_leafs_to_be_roots)
+        # print(self.shared_sorted_leafs_to_be_roots)
 
         # #Trebuie returnate toate frunzele de tipul:
         # # Label-ul radacinii stwig-ului dat ca si parametru pentru Index.getID!
@@ -484,7 +488,7 @@ class STwig_Algorithm(object):
 
         # print("Current iteration STwig query root type: " + str(stwig_query_root_type))
         new_roots = []
-        for leaf in sorted_leafs_to_be_roots:
+        for leaf in self.shared_sorted_leafs_to_be_roots:
             # print("Leaf: " + str(leaf))
             # If the leafs of the prev stwig/current 'used stwig'
             # have the same type as the current stwig root type:
@@ -556,7 +560,7 @@ class STwig_Algorithm(object):
                 if len(STwig_query_neighbors) == len(started_match[1]):
                     print('\x1b[0;30;45m' + "Finished match: " + str(started_match) + '\x1b[0m')
 
-                    self.matches_dict[repr(stwig_query)] = started_match
+                    # self.matches_dict[repr(stwig_query)] = started_match
                     if stwig_query not in self.used_stwig_list:
                         self.used_stwig_list.append(stwig_query)
 
@@ -565,7 +569,7 @@ class STwig_Algorithm(object):
                     # doar ultimul finished match pentru o cheie.
                     finished_matches.append(started_match)
                     # print("Filtered match: " + str(started_match))
-
+                    return finished_matches
                 else:
                     # print("A complete match was not found: " + str(started_match))
                     not_match = not_match + 1
