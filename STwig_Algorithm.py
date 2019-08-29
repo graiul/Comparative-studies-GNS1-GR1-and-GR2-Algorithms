@@ -327,7 +327,7 @@ class STwig_Algorithm(object):
                             started_match[1].append(self.get_neo4j_stwig_node_trim(result2))
                     if len(self.STwig_query_neighbor_labels) == len(started_match[1]):
                         print('\x1b[0;30;45m' + "Finished match: " + str(started_match) + '\x1b[0m')
-
+                        print(self.STwig_query_neighbor_labels)
                         self.matches_dict[repr(stwig_query)] = started_match
                         if stwig_query not in self.used_stwig_list:
                             self.used_stwig_list.append(stwig_query)
@@ -336,7 +336,7 @@ class STwig_Algorithm(object):
                         # sa o adaugam cheii, altfel se inregistreaza in dict
                         # doar ultimul finished match pentru o cheie.
                         finished_matches.append(started_match)
-                        print("Filtered match: " + str(started_match))
+                        # print("Filtered match: " + str(started_match))
 
                     else:
                         print("A complete match was not found: " + str(started_match))
@@ -387,7 +387,7 @@ class STwig_Algorithm(object):
             # print()
             # return nodes_loaded
 
-    def filter_results(self, label, stwig_query):
+    def filter_results(self, stwig_query, STwig_query_neighbors):
         # with self.lock:
         #     print("Matches for previous iteration: ")
         #     print(matches)
@@ -401,10 +401,11 @@ class STwig_Algorithm(object):
 
         # # print(list(self.matches_dict.keys())[iteration_number])
         # # print(list(self.matches_dict.values())[iteration_number])
-        print("Matches dict, or results of previous query stwig: ")
-        for item in self.matches_dict.values():
-            for i in item:
-                print(i)
+
+        # print("Matches dict, or results of previous query stwig: ")
+        # for item in self.matches_dict.values():
+        #     for i in item:
+        #         print(i)
 
         # Aici trebuie modificat.
         # Frunzele unei radacini dintr-o iteratie
@@ -551,7 +552,7 @@ class STwig_Algorithm(object):
                     #     started_match[1].append(self.get_neo4j_stwig_node_trim(result2))
                     if len(result2) > 0:
                         started_match[1].append(self.get_neo4j_stwig_node_trim(result2))
-                if len(self.STwig_query_neighbor_labels) == len(started_match[1]):
+                if len(STwig_query_neighbors) == len(started_match[1]):
                     print('\x1b[0;30;45m' + "Finished match: " + str(started_match) + '\x1b[0m')
 
                     self.matches_dict[repr(stwig_query)] = started_match
