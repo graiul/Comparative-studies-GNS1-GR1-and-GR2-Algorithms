@@ -14,13 +14,32 @@ class Query_Graph_Generator(object):
 
     def gen_RI_query_graph(self):
         query_graph = nx.Graph()
-        # query_graph_edges = [["0","1773"],["0","1817"],["0","2428"],["0","3719"],["0","4426"],["0","8214"],["0","9148"]]
-        query_graph_edges = [[1773, 1488], [1773, 1898], [1773, 2285], [1488, 7465], [1898,1347], [1898,5596]]
+
+        # query_graph_edges = [[1773, 1488], [1773, 1898], [1773, 2285], [1488, 7465], [1898,1347], [1898,5596]]
+        # node_attr = ["25", "28", "29", "27", "18", "31", "9"]
+
+        query_graph_edges = [[0,1773],[0,1817],[0,2428],[0,3719]] #,[0,4426],[0,8214],[0,9148]]
+        node_attr = ["29", "25", "19", "6", "29"] #, "13", "15", "20"]
+
+        # OK - STWIG SI VF2 dau la fel - data graf RI cu 10000 muchii
+        # query_graph_edges = [[0,1773],[0,1817],[0,2428]]
+        # node_attr = ["29", "25", "19", "6"]
+
+        # OK - STWIG SI VF2 dau la fel - data graf RI cu 10000 muchii
+        # query_graph_edges = [[1898,1347], [1898,5596]]
+        # node_attr = ["29", "31", "9"]
+
+
+        # OK - STWIG SI VF2 dau la fel - data graf RI cu 10000 muchii
+        # query_graph_edges = [[1773, 1488], [1773, 1898], [1773, 2285]]
+        # node_attr = ["25", "28", "29", "27"]
+
+        # OK - STWIG SI VF2 dau la fel - data graf RI cu 10000 muchii
         # query_graph_edges = [[1488, 7465]]
-        query_graph.add_edges_from(query_graph_edges)
-        # node_attr = ["29", "25", "19", "6", "29", "13", "15", "20"]
-        node_attr = ["25", "28", "29", "27", "18", "31", "9"]
         # node_attr = ["28", "18"]
+
+        query_graph.add_edges_from(query_graph_edges)
+
         node_attr_dict = dict(zip(query_graph.nodes(), node_attr)) # Am scos sortarea crescatoare al id-urilor nodurilor. Astfel se face corect asocierea intre noduri si label-uri.
         nx.set_node_attributes(query_graph, node_attr_dict, 'label')
         return query_graph
