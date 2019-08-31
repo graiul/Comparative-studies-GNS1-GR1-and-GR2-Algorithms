@@ -18,8 +18,16 @@ class Query_Graph_Generator(object):
         # query_graph_edges = [[1773, 1488], [1773, 1898], [1773, 2285], [1488, 7465], [1898,1347], [1898,5596]]
         # node_attr = ["25", "28", "29", "27", "18", "31", "9"]
 
-        query_graph_edges = [[0,1773],[0,1817],[0,2428],[0,3719]] #,[0,4426],[0,8214],[0,9148]]
-        node_attr = ["29", "25", "19", "6", "29"] #, "13", "15", "20"]
+        # query_graph_edges = [[0,1773],[0,1817],[0,2428],[0,3719]] #,[0,4426],[0,8214],[0,9148]]
+        # node_attr = ["29", "25", "19", "6", "29"] #, "13", "15", "20"]
+
+        # OK - STWIG SI VF2 dau la fel - data graf RI cu 10000 muchii
+        query_graph_edges = [[0,1773],[0,1817],[0,2428],[0,3719]]
+        node_attr = ["29", "25", "19", "6", "29"] # - Avem doua noduri care au acelasi label, nodurile 0 si 3719 au label-ul 29.
+
+        # OK - STWIG SI VF2 dau la fel - data graf RI cu 10000 muchii
+        # query_graph_edges = [[0, 1773], [0, 1817], [0, 2428],[0,4426]]
+        # node_attr = ["29", "25", "19", "6", "13"] # - Label-urile sunt diferite!
 
         # OK - STWIG SI VF2 dau la fel - data graf RI cu 10000 muchii
         # query_graph_edges = [[0,1773],[0,1817],[0,2428]]
