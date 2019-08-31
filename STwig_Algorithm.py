@@ -732,7 +732,7 @@ class STwig_Algorithm(object):
                 for s_temp in s:
                     S_one_elems.append(s_temp)
             S_one_elems.insert(0, root_node)
-            print(S_one_elems)
+            # print(S_one_elems)
             # print("Cartesian product: ")
             # Aici len(q[1]) + 1) inseamna numarul etichetelor vecinilor + 1 care este radacina.
             # Astfel pt [a, [b,c]] avem toate gasirile de forma asta, analog pt [b, [a,d,e]].
@@ -753,14 +753,32 @@ class STwig_Algorithm(object):
             combinations_dict = dict(zip(combinations, elem_labels_total))
             combinations_dict_final = copy.deepcopy(combinations_dict)
             # vals = list(combinations_dict.values())[0]
+
+            # Aici am facut pentru exemplul de la pagina 792-jos din articolul p788_zhaosun_vldb2012.
+            # In pasajul respectiv era vorba ca pentru simplificarea explicarii lucrului cu STwig-uri Query(obtinute din descompunerea si grafului query si sortarea in ordine optima de catre metoda STwig-Order-Selection()), graful query considerat in articol va avea label-urile nodurilor diferite. Asa ca mai jos, ca si criteriu de validare al STwig-urilor Data, am implementat verificarea unicitatii label-urilor, si eliminarea STwig-urilor Data care aveau vreun label egal cu label-ul altui nod din STwig-ul Data, indiferent daca era vorba de radacina lui sau de frunze.
+            # DAR, adevaratul criteriu este ca fiecare combinare obtinuta sa aiba ordinea si valorile label-urilor elementelor sale egala cu cea al STwig-ului Query. De abia atunci combinarea poate fi considerata ca fiind un STwig Data valid.
+            # for val in combinations_dict.items():
+            #     # print(val)
+            #     # print(val[1])
+            #     for lb in val[1]:
+            #         # print(lb)
+            #         if val[1].count(lb) > 1:
+            #             # print("More than once ^")
+            #             # https://stackoverflow.com/questions/5447494/remove-an-item-from-a-dictionary-when-its-key-is-unknown
+            #             # https://docs.python.org/3/library/stdtypes.html#dict.pop
+            #             print(combinations_dict_final.pop(val[0]))
+            #             break
+
+            stwig_labels = copy.deepcopy(L)
+            rr = str(copy.deepcopy(r))
+            stwig_labels.insert(0, rr)
             for val in combinations_dict.items():
+                # print(stwig_labels)
                 # print(val[1])
-                for lb in val[1]:
-                    # print(lb)
-                    if val[1].count(lb) > 1:
-                        # print("More than once ^")
-                        combinations_dict_final.pop(val[0])
-                        break
+                if stwig_labels != val[1]:
+                    combinations_dict_final.pop(val[0])
+                # print()
+
             for stwig in combinations_dict_final.keys():
                 # print(stwig)
                 R.append(stwig)
