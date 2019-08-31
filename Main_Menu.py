@@ -428,9 +428,9 @@ def main():
             jobs = []
 
             producer = Process(target=db.match_finding_process_producer, args=(stwigs[0], return_dict, STwig_query_neighbor_labels, query_graph, 0, used_stwigs, lock, shared_sorted_leafs_to_be_roots, ))
-            producer2 = Process(target=db.match_finding_process_producer, args=(stwigs[1], return_dict, STwig_query_neighbor_labels, query_graph, 0, used_stwigs, lock, shared_sorted_leafs_to_be_roots, ))
-            producer3 = Process(target=db.match_finding_process_producer, args=(stwigs[2], return_dict, STwig_query_neighbor_labels, query_graph, 0, used_stwigs, lock, shared_sorted_leafs_to_be_roots, ))
-            filterer = Process(target=db.filter_results_process, args=(stwigs[1], return_dict, stwigs[1][1], query_graph, used_stwigs, lock, shared_sorted_leafs_to_be_roots, ))
+            # producer2 = Process(target=db.match_finding_process_producer, args=(stwigs[1], return_dict, STwig_query_neighbor_labels, query_graph, 0, used_stwigs, lock, shared_sorted_leafs_to_be_roots, ))
+            # producer3 = Process(target=db.match_finding_process_producer, args=(stwigs[2], return_dict, STwig_query_neighbor_labels, query_graph, 0, used_stwigs, lock, shared_sorted_leafs_to_be_roots, ))
+            # filterer = Process(target=db.filter_results_process, args=(stwigs[1], return_dict, stwigs[1][1], query_graph, used_stwigs, lock, shared_sorted_leafs_to_be_roots, ))
             prod_com = [producer]
             for pc in prod_com:
                 pc.start()
@@ -479,9 +479,9 @@ def main():
             #     print(us)
 
             # for q in stwigs:
-            q = stwigs[1]
-            STwig_query_neighbors = q[1]
-            STwig_algorithm.filter_results(q, STwig_query_neighbors)
+            # q = stwigs[1]
+            # STwig_query_neighbors = q[1]
+            # STwig_algorithm.filter_results(q, STwig_query_neighbors)
 
 
             print("\n============== End of Option 94 execution =================")
@@ -547,8 +547,8 @@ def main():
                 vf2.results_dict.clear()
 
                 print()
-                # print("Roots found.: ")
-                # print(roots)
+                print("Roots found: ")
+                print(roots)
                 print()
                 # print("Selected root: ")
                 for root in roots:
@@ -567,7 +567,10 @@ def main():
 
                     if graph_choice == "ri":
                         # M2 = [[1773, root]]
-                        M2 = [[1488, root]]
+                        # M2 = [[1488, root]]
+                        # M2 = [[1898, root]]
+
+                        M2 = [[0, root]]
 
                         # print()
                         # print("Query root node: " + str(root))
