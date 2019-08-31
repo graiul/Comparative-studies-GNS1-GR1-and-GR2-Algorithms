@@ -769,6 +769,14 @@ class STwig_Algorithm(object):
             #             print(combinations_dict_final.pop(val[0]))
             #             break
 
+            # https://stackoverflow.com/questions/36420022/how-can-i-compare-two-ordered-lists-in-python
+                # >>> [0,1,2] == [0,1,2]
+                # True
+                # >>> [0,1,2] == [0,2,1]
+                # False
+                # >>> [0,1] == [0,1,2]
+                # False
+                # "Lists are equal if elements at the same index are equal. Ordering is taken into account then."
             stwig_labels = copy.deepcopy(L)
             rr = str(copy.deepcopy(r))
             stwig_labels.insert(0, rr)
