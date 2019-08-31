@@ -232,7 +232,7 @@ class VF2Algorithm(GenericQueryProc):
         # if query_node is None:
         #     exit(0)
         for data_node in self.dataGraph.nodes():
-            if self.queryGraph.node[query_node]['label'] in self.dataGraph.node[data_node]['label']:
+            if self.queryGraph.node[query_node]['label'] == self.dataGraph.node[data_node]['label']:
                 candidates.append(data_node)
         return candidates
         # candidates = []
