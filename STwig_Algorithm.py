@@ -732,10 +732,13 @@ class STwig_Algorithm(object):
                 for s_temp in s:
                     S_one_elems.append(s_temp)
             S_one_elems.insert(0, root_node)
+            print(S_one_elems)
             # print("Cartesian product: ")
             # Aici len(q[1]) + 1) inseamna numarul etichetelor vecinilor + 1 care este radacina.
             # Astfel pt [a, [b,c]] avem toate gasirile de forma asta, analog pt [b, [a,d,e]].
-            combinations = list(itertools.combinations(S_one_elems, len(q[1]) + 1))
+            combination_size = len(q[1]) + 1
+            combinations = list(itertools.combinations(S_one_elems, combination_size))
+            # print(combinations)
             elem_labels = []
             elem_labels_total = []
             for elem in combinations:
