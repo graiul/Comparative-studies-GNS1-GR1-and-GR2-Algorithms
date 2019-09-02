@@ -44,7 +44,7 @@ class STwig_Algorithm(object):
     # neograph_data = Graph(port="7687", user="neo4j", password="graph") # Data Graph Zhaosun
     # neograph_query = Graph("bolt://127.0.0.1:7693", auth=("neo4j", "changeme")) # Query Graph Zhaosun din READ_REPLICA
     neograph_data = Graph("bolt://127.0.0.1:7690", auth=("neo4j", "changeme")) # Data Graph RI din READ_REPLICA - Cluster Neo4J cu 5 instante
-    # neograph_data = Graph("bolt://127.0.0.1:7687", auth=("neo4j", "changeme")) # Data Graph RI din READ_REPLICA - O singura instanta de Neo4J
+    # neograph_data = Graph("bolt://127.0.0.1:7687", auth=("neo4j", "changeme")) # Data Graph RI - O singura instanta de Neo4J
 
     def Cloud_Load(self, node_id):  # Pot rula inca o metoda?
         # print("Cloud_Load:")
