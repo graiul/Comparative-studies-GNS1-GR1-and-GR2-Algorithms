@@ -428,3 +428,53 @@ Results from STwig Algorithm:
 [2670, [8701, 5750, 362, 2838]]
 [2670, [8701, 5750, 362, 3876]]
 [2670, [8701, 5750, 362, 9526]]
+
+STWIG ALG, 10000 muchii, O singura instanta Neo4J versiunea 3.5.6 cu thread pool pentru bolt ca si la cluster.
+[(0, {'label': '29'}), (1773, {'label': '25'}), (1817, {'label': '19'}), (2428, {'label': '6'}), (3719, {'label': '29'})]
+stwigs: [[0, [1773, 1817, 2428, 3719]]]
+Starting producer => 14572
+Iter num: 0
+Total exec time (seconds):
+98.2207909
+Results from STwig Algorithm:
+[0, [1773, 1817, 2428, 3719]]
+[2670, [1230, 5750, 362, 2838]]
+[2670, [1230, 5750, 362, 3876]]
+[2670, [1230, 5750, 362, 9526]]
+[2670, [8701, 5750, 362, 2838]]
+[2670, [8701, 5750, 362, 3876]]
+[2670, [8701, 5750, 362, 9526]]
+
+O a doua rulare:
+STWIG ALG, 10000 muchii, O singura instanta Neo4J versiunea 3.5.6 cu thread pool pentru bolt ca si la cluster.
+[(0, {'label': '29'}), (1773, {'label': '25'}), (1817, {'label': '19'}), (2428, {'label': '6'}), (3719, {'label': '29'})]
+stwigs: [[0, [1773, 1817, 2428, 3719]]]
+Starting producer => 7900
+Iter num: 0
+Total exec time (seconds):
+49.1778309
+Results from STwig Algorithm:
+[0, [1773, 1817, 2428, 3719]]
+[2670, [1230, 5750, 362, 2838]]
+[2670, [1230, 5750, 362, 3876]]
+[2670, [1230, 5750, 362, 9526]]
+[2670, [8701, 5750, 362, 2838]]
+[2670, [8701, 5750, 362, 3876]]
+[2670, [8701, 5750, 362, 9526]]
+
+O a treia rulare:
+STWIG ALG, 10000 muchii, O singura instanta Neo4J versiunea 3.5.6 cu thread pool pentru bolt ca si la cluster.
+[(0, {'label': '29'}), (1773, {'label': '25'}), (1817, {'label': '19'}), (2428, {'label': '6'}), (3719, {'label': '29'})]
+stwigs: [[0, [1773, 1817, 2428, 3719]]]
+Starting producer => 4372
+Iter num: 0
+Total exec time (seconds):
+41.6055192
+Results from STwig Algorithm:
+[0, [1773, 1817, 2428, 3719]]
+[2670, [1230, 5750, 362, 2838]]
+[2670, [1230, 5750, 362, 3876]]
+[2670, [1230, 5750, 362, 9526]]
+[2670, [8701, 5750, 362, 2838]]
+[2670, [8701, 5750, 362, 3876]]
+[2670, [8701, 5750, 362, 9526]]
