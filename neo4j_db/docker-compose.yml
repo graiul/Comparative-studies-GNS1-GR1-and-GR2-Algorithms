@@ -108,6 +108,7 @@ services:
       - NEO4J_dbms_connector_bolt_thread__pool__min__size=10
       - NEO4J_dbms_connector_bolt_thread__pool__max__size=100
       - NEO4J_dbms_connector_bolt_thread__pool__keep__alive=10m
+      - NEO4J_metrics_neo4j_server_enabled=true
 
 # This core demonstrates that additional instances can be added after the initial core is established (ie: this instance is nost listed within "initialDiscoveryMembers")
   core4:
