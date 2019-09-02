@@ -122,10 +122,17 @@ class DB_Access_Test(object):
             print('Starting producer => {}'.format(os.getpid()))
             print("Iter num: " + str(iter_num))
 
+        start_time = timer()
+
         STwig_query_neighbor_labels = query_stwig[1]
         STwig_algorithm = STwig_Algorithm(query_graph, return_dict, used_stwigs, STwig_query_neighbor_labels, lock, shared_sorted_leafs_to_be_roots)
         matches = STwig_algorithm.MatchSTwig(query_stwig, iter_num) # Ca filtrarea sa mearga, trebuie sa dam si numarul iteratiilor!
         # print(matches)
+
+        total_time_sec = timer() - start_time
+        with lock:
+            print("Total exec time (seconds): ")
+            print(total_time_sec)
         return_dict[repr(query_stwig)] = matches
 
     def filter_results_process(self, query_stwig, return_dict, STwig_query_neighbors, query_graph, used_stwigs, lock, shared_sorted_leafs_to_be_roots):
