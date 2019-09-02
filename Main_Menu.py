@@ -432,6 +432,9 @@ def main():
             # producer3 = Process(target=db.match_finding_process_producer, args=(stwigs[2], return_dict, STwig_query_neighbor_labels, query_graph, 0, used_stwigs, lock, shared_sorted_leafs_to_be_roots, ))
             # filterer = Process(target=db.filter_results_process, args=(stwigs[1], return_dict, stwigs[1][1], query_graph, used_stwigs, lock, shared_sorted_leafs_to_be_roots, ))
             prod_com = [producer]
+
+            start_time = timer()
+
             for pc in prod_com:
                 pc.start()
                 # pc.join()
@@ -443,7 +446,6 @@ def main():
             # print("STwig_query_neighbor_labels - must not be empty")
             # print(STwig_query_neighbor_labels)
 
-            start_time = timer()
 
             # for t in stwigs:
             #     iter_num = stwigs.index(t)
@@ -462,7 +464,7 @@ def main():
             # for jo in jobs:
             #     jo.join()
 
-            total_time = timer() - start_time
+            total_time = (timer() - start_time) * 1000
 
             print("Results from STwig Algorithm: ")
             for item in return_dict.values():
@@ -471,7 +473,7 @@ def main():
                     print(i)
 
             print()
-            print("Total exec time: " + str(total_time))
+            # print("Total exec time: " + str(total_time))
 
             # print()
             # print("used_stwigs: ")
