@@ -397,13 +397,13 @@ Data root: 2670
 [2670, (1773, [1230, 8701]), (1817, [5750]), (2428, [362]), (3719, [2838, 3876, 9526])]
 5
 
-STWIG ALG, 10000 muchii, Cluster Neo4J cu cinci instante.
+STWIG ALG, 10000 muchii, Cluster Neo4J cu cinci instante versiunea 3.5.6 fiecare. In fisierul de configurare al cluster-ului am adaugat proprietatile pentru thread pool-ul bolt al fiecarei instante Neo4J(https://neo4j.com/docs/operations-manual/current/performance/bolt-thread-pool-configuration/).
 [(0, {'label': '29'}), (1773, {'label': '25'}), (1817, {'label': '19'}), (2428, {'label': '6'}), (3719, {'label': '29'})]
 stwigs: [[0, [1773, 1817, 2428, 3719]]]
-Starting producer => 4404
+Starting producer => 4936
 Iter num: 0
 Total exec time (seconds):
-52.0263728
+60.7889249
 Results from STwig Algorithm:
 [0, [1773, 1817, 2428, 3719]]
 [2670, [1230, 5750, 362, 2838]]
@@ -413,13 +413,13 @@ Results from STwig Algorithm:
 [2670, [8701, 5750, 362, 3876]]
 [2670, [8701, 5750, 362, 9526]]
 
-STWIG ALG, 10000 muchii, O singura instanta Neo4J.
+STWIG ALG, 10000 muchii, O singura instanta Neo4J versiunea 3.5.6.
 [(0, {'label': '29'}), (1773, {'label': '25'}), (1817, {'label': '19'}), (2428, {'label': '6'}), (3719, {'label': '29'})]
 stwigs: [[0, [1773, 1817, 2428, 3719]]]
-Starting producer => 13468
+Starting producer => 2540
 Iter num: 0
 Total exec time (seconds):
-45.063377200000005
+42.6367204
 Results from STwig Algorithm:
 [0, [1773, 1817, 2428, 3719]]
 [2670, [1230, 5750, 362, 2838]]
