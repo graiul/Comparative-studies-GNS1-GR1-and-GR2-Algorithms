@@ -15,27 +15,73 @@ class Query_Graph_Generator(object):
     def gen_RI_query_graph(self):
         query_graph = nx.Graph()
 
+        # OK - Cei trei algoritmi dau la fel - data graf RI cu 1000 muchii si 701 noduri.
+        # query_graph_edges = [[1773, 1488]]
+        # node_attr = ["25", "28"]
+
+        # OK - Cei trei algoritmi dau la fel - data graf RI cu 1000 muchii si 701 noduri.
+        # query_graph_edges = [[1773, 1488], [1773, 1898]]
+        # node_attr = ["25", "28", "29"]
+
+        # OK - Cei trei algoritmi dau la fel - data graf RI cu 1000 muchii si 701 noduri.
+        # query_graph_edges = [[1773, 1488], [1773, 1898], [1773, 2285]]
+        # node_attr = ["25", "28", "29", "27"]
+
+        # OK - Cei trei algoritmi dau la fel: nici un rezultat - data graf RI cu 1000 muchii si 701 noduri.
+        # query_graph_edges = [[1488, 7465]]
+        # node_attr = ["28", "18"]
+
+        # OK - Cei trei algoritmi dau la fel - data graf RI cu 1000 muchii si 701 noduri.
+        # OK - STWIG SI VF2 dau la fel - data graf RI cu 10000 muchii
+        # query_graph_edges = [[1898,1347], [1898,5596]]
+        # node_attr = ["29", "31", "9"]
+
+        # OK - Cei trei algoritmi dau la fel - data graf RI cu 1000 muchii si 701 noduri.
+        # query_graph_edges = [[0,1773],[0,1817]]
+        # node_attr = ["29", "25", "19"]
+
+        # OK - Cei trei algoritmi dau la fel - data graf RI cu 1000 muchii si 701 noduri.
+        # query_graph_edges = [[0, 1773], [0, 1817],[0,4426]]
+        # node_attr = ["29", "25", "19", "13"] # - Label-urile sunt diferite!
+
+        # OK - STWIG SI VF2 dau la fel - data graf RI cu 10000 muchii
+        # query_graph_edges = [[0, 1773], [0, 1817], [0, 2428],[0,4426]]
+        # node_attr = ["29", "25", "19", "6", "13"] # - Label-urile sunt diferite!
+
+        # OK - Cei trei algoritmi dau la fel - data graf RI cu 1000 muchii si 701 noduri.
+        # query_graph_edges = [[0,1773],[0,1817],[0,3719]]
+        # node_attr = ["29", "25", "19", "29"] # - Avem doua noduri care au acelasi label, nodurile 0 si 3719 au label-ul 29.
+
+        # OK - STWIG SI VF2 dau la fel - data graf RI cu 10000 muchii
+        # query_graph_edges = [[0,1773],[0,1817],[0,2428],[0,3719]]
+        # node_attr = ["29", "25", "19", "6", "29"] # - Avem doua noduri care au acelasi label, nodurile 0 si 3719 au label-ul 29.
+
+        # OK - STWIG SI VF2 dau la fel - data graf RI cu 1000 muchii, VF2 lucreaza mult mai repede
+        # query_graph_edges = [[269, 8134], [269, 9362], [269, 9573]]
+        # node_attr = ["15", "3", "31", "12"]
+
+        # OK - Cei trei algoritmi dau la fel - data graf RI cu 1000 muchii si 701 noduri.
+        # query_graph_edges = [[7190,137], [7190,419], [7190,450]]
+        # node_attr = ["3", "2", "11", "3"]
+
+        # Algoritmii STwig si VF2 arata cateva rezultate care nu trebuie sa fie: unele stwiguri data
+        # au aceeasi frunza de doua ori, datorita celor doua frunze query care au acelasi label.
+        # Algoritmul Backtracking nu arata acele stwiguri data defecte.
+        query_graph_edges = [[6523, 2844], [6523, 6107], [6523, 12230]]
+        node_attr = ["20", "15", "32", "32"]
+
         # query_graph_edges = [[1773, 1488], [1773, 1898], [1773, 2285], [1488, 7465], [1898,1347], [1898,5596]]
         # node_attr = ["25", "28", "29", "27", "18", "31", "9"]
 
         # query_graph_edges = [[0,1773],[0,1817],[0,2428],[0,3719],[0,4426],[0,8214],[0,9148]]
         # node_attr = ["29", "25", "19", "6", "29", "13", "15", "20"]
 
-        # OK - STWIG SI VF2 dau la fel - data graf RI cu 10000 muchii
-        query_graph_edges = [[0,1773],[0,1817],[0,2428],[0,3719]]
-        node_attr = ["29", "25", "19", "6", "29"] # - Avem doua noduri care au acelasi label, nodurile 0 si 3719 au label-ul 29.
 
-        # OK - STWIG SI VF2 dau la fel - data graf RI cu 10000 muchii
-        # query_graph_edges = [[0, 1773], [0, 1817], [0, 2428],[0,4426]]
-        # node_attr = ["29", "25", "19", "6", "13"] # - Label-urile sunt diferite!
 
-        # OK - STWIG SI VF2 dau la fel - data graf RI cu 10000 muchii
-        # query_graph_edges = [[0,1773],[0,1817],[0,2428]]
-        # node_attr = ["29", "25", "19", "6"]
 
-        # OK - STWIG SI VF2 dau la fel - data graf RI cu 10000 muchii
-        # query_graph_edges = [[1898,1347], [1898,5596]]
-        # node_attr = ["29", "31", "9"]
+
+
+
 
 
         # OK - STWIG SI VF2 dau la fel - data graf RI cu 10000 muchii
@@ -45,6 +91,14 @@ class Query_Graph_Generator(object):
         # OK - STWIG SI VF2 dau la fel - data graf RI cu 10000 muchii
         # query_graph_edges = [[1488, 7465]]
         # node_attr = ["28", "18"]
+
+
+
+
+
+
+
+
 
         query_graph.add_edges_from(query_graph_edges)
 
