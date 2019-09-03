@@ -54,7 +54,7 @@ class Query_Graph_Generator(object):
 
         # OK - STWIG SI VF2 dau la fel - data graf RI cu 10000 muchii
         # query_graph_edges = [[0,1773],[0,1817],[0,2428],[0,3719]]
-        # node_attr = ["29", "25", "19", "6", "29"] # - Avem doua noduri care au acelasi label, nodurile 0 si 3719 au label-ul 29.
+        # node_attr = ["29", "25", "19", "6", "29"] # - Avem doua noduri care au acelasi label, nodurile 0 si 3719 au label-ul 29. - o radacina si o frunza.
 
         # OK - STWIG SI VF2 dau la fel - data graf RI cu 1000 muchii, VF2 lucreaza mult mai repede
         # query_graph_edges = [[269, 8134], [269, 9362], [269, 9573]]
@@ -67,11 +67,19 @@ class Query_Graph_Generator(object):
         # Algoritmii STwig si VF2 arata cateva rezultate care nu trebuie sa fie: unele stwiguri data
         # au aceeasi frunza de doua ori, datorita celor doua frunze query care au acelasi label.
         # Algoritmul Backtracking nu arata acele stwiguri data defecte.
-        query_graph_edges = [[6523, 2844], [6523, 6107], [6523, 12230]]
-        node_attr = ["20", "15", "32", "32"]
+        # query_graph_edges = [[6523, 2844], [6523, 6107], [6523, 12230]]
+        # node_attr = ["20", "15", "32", "32"]
 
-        # query_graph_edges = [[1773, 1488], [1773, 1898], [1773, 2285], [1488, 7465], [1898,1347], [1898,5596]]
-        # node_attr = ["25", "28", "29", "27", "18", "31", "9"]
+        # Folosit de STwig Alg pentru filtrarea secventiala si cu graful RI de 10000 de muchii.
+        # Folosit de acelasi algoritm si cu acelasi graf data pentru cautarea in paralel folosind trei procese
+        # si depunerea rezultatelor intr-un dict comun.
+        query_graph_edges = [[1773, 1488], [1773, 1898], [1773, 2285], [1488, 7465], [1898,1347], [1898,5596]]
+        node_attr = ["25", "28", "29", "27", "18", "31", "9"]
+
+        # Pentru VF2 pentru compararea cu una si cinci instante neo4j. Doar primul STwig de mai sus.
+        # query_graph_edges = [[1773, 1488], [1773, 1898], [1773, 2285]]
+        # node_attr = ["25", "28", "29", "27"]
+
 
         # query_graph_edges = [[0,1773],[0,1817],[0,2428],[0,3719],[0,4426],[0,8214],[0,9148]]
         # node_attr = ["29", "25", "19", "6", "29", "13", "15", "20"]
