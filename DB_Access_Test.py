@@ -116,7 +116,7 @@ class DB_Access_Test(object):
         return list(test2.matches_dict.values())[0]
         # print("--------Iteration end-----------------")
 
-    def match_finding_process_producer(self, query_stwig, return_dict, STwig_query_neighbor_labels, query_graph, iter_num, used_stwigs, lock, shared_sorted_leafs_to_be_roots):
+    def match_finding_process_producer(self, query_stwig, return_dict, STwig_query_neighbor_labels, query_graph, iter_num, used_stwigs, lock):
         from STwig_Algorithm import STwig_Algorithm
         # print(os.getpid())
         # print("Process details: " + str(multiprocessing.current_process()))
@@ -127,7 +127,7 @@ class DB_Access_Test(object):
         start_time = timer()
 
         STwig_query_neighbor_labels = query_stwig[1]
-        STwig_algorithm = STwig_Algorithm(query_graph, return_dict, used_stwigs, STwig_query_neighbor_labels, lock, shared_sorted_leafs_to_be_roots)
+        STwig_algorithm = STwig_Algorithm(query_graph, return_dict, used_stwigs, STwig_query_neighbor_labels, lock)
         matches = STwig_algorithm.MatchSTwig(query_stwig, iter_num) # Ca filtrarea sa mearga, trebuie sa dam si numarul iteratiilor!
         # print(matches)
 
