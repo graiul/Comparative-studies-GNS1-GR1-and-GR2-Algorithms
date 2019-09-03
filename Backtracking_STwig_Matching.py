@@ -8,6 +8,9 @@ from collections import OrderedDict
 # https://pypi.org/project/colorama/
 from colorama import init
 from colorama import Fore, Back, Style
+
+from Query_Graph_Generator import Query_Graph_Generator
+
 init()
 
 # https://stackoverflow.com/questions/4564559/get-exception-description-and-stack-trace-which-caused-an-exception-all-as-a-st
@@ -729,10 +732,10 @@ nx.set_node_attributes(dataGraph, node_attr_dict, 'label')
 #######################################################################################
 
 # FUNCTIONAL:
-query_stwig_1 = [1773, 1488, 1898, 2285]
-
-
-
+# query_stwig_1 = [1773, 1488, 1898, 2285]
+query_graph_gen = Query_Graph_Generator()
+query_graph = query_graph_gen.gen_RI_query_graph()
+query_stwig_1 = list(query_graph.nodes())
 print("Query STwig: " + str(query_stwig_1))
 # Label-ul radacinii
 root_label = dataGraph.node[query_stwig_1[0]]['label']
