@@ -121,8 +121,8 @@ class DB_Access_Test(object):
         # print(os.getpid())
         # print("Process details: " + str(multiprocessing.current_process()))
         with lock:
-            print('Starting producer => {}'.format(os.getpid()))
-            print("Iter num: " + str(iter_num))
+            print('Starting process => {}'.format(os.getpid()))
+            # print("Iter num: " + str(iter_num))
 
         start_time = timer()
 
@@ -133,7 +133,7 @@ class DB_Access_Test(object):
 
         total_time_sec = timer() - start_time
         with lock:
-            print("Total exec time (seconds): ")
+            print("Execution time (seconds): ")
             print(total_time_sec)
         return_dict[repr(query_stwig)] = matches
 
