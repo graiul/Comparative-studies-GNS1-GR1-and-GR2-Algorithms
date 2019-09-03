@@ -87,7 +87,12 @@ class VF2Algorithm(GenericQueryProc):
             nx.set_node_attributes(self.queryGraph, False, 'matched')
 
         # GRAFUL DATA DIN NEO4J
-        neograph_data = Graph("bolt://127.0.0.1:7690", auth=("neo4j", "changeme"))  # Data Graph Zhaosun din READ_REPLICA
+        neograph_data = Graph("bolt://127.0.0.1:7690", auth=("neo4j", "changeme"))  # Data Graph RI din READ_REPLICA
+                                                                                    # din cluster Neo4J cu cinci instante.
+                                                                                    # Patru 'core' si una 'read replica'.
+
+        # neograph_data = Graph("bolt://127.0.0.1:7687", auth=("neo4j", "changeme")) # Data Graph RI - O singura instanta de Neo4J
+
         cqlQuery = "MATCH p=(n)-[r:PPI]->(m) return n.node_id, m.node_id"
         result = neograph_data.run(cqlQuery).to_ndarray()
         edge_list = result.tolist()
