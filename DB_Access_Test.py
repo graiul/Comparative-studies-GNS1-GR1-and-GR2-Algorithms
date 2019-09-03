@@ -133,7 +133,7 @@ class DB_Access_Test(object):
 
         total_time_sec = timer() - start_time
         with lock:
-            print("Execution time (seconds): ")
+            print("Execution time for STwig Algorithm (seconds): ")
             print(total_time_sec)
         return_dict[repr(query_stwig)] = matches
 
