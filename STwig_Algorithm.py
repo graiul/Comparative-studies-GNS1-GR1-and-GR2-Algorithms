@@ -33,12 +33,12 @@ class STwig_Algorithm(object):
     used_stwig_list = []
 
     shared_sorted_leafs_to_be_roots = []
-    def __init__(self, query_graph, return_dict, used_stwigs, STwig_query_neighbor_labels, lock, shared_sorted_leafs_to_be_roots):
+    def __init__(self, query_graph, return_dict, used_stwigs, STwig_query_neighbor_labels, lock):
         self.query_graph = query_graph
         self.matches_dict = return_dict
         self.used_stwig_list = used_stwigs
         self.STwig_query_neighbor_labels = STwig_query_neighbor_labels
-        self.shared_sorted_leafs_to_be_roots = shared_sorted_leafs_to_be_roots
+        # self.shared_sorted_leafs_to_be_roots = shared_sorted_leafs_to_be_roots
         self.lock = lock
 
     # neograph_data = Graph(port="7687", user="neo4j", password="graph") # Data Graph Zhaosun
@@ -164,232 +164,232 @@ class STwig_Algorithm(object):
             return nodes_loaded
 
         elif iteration_number > 0:
-            pass
-            # # with self.lock:
-            # #     print("Matches for previous iteration: ")
-            # #     print(matches)
+            # pass
+            # with self.lock:
+            #     print("Matches for previous iteration: ")
+            #     print(matches)
+
+            # print("***Index_getID output for Process " + str(iteration_number))
             #
-            # # print("***Index_getID output for Process " + str(iteration_number))
-            # #
-            # # print("STwig query: " + str(stwig_query))
-            # #
-            # # print("Matches dictionary - key,value pair: ")
+            # print("STwig query: " + str(stwig_query))
             #
-            # # # print(list(self.matches_dict.keys())[iteration_number])
-            # # # print(list(self.matches_dict.values())[iteration_number])
-            # for item in self.matches_dict.items():
-            #     print(item)
-            #
-            # # Aici trebuie modificat.
-            # # Frunzele unei radacini dintr-o iteratie
-            # # devin radacini pentru noua iteratie.
-            # # Pentru noile radacini verificam in graful data daca
-            # # sunt frunze de acelasi tip precum in twig-ul noii iteratii.
-            # # OBS: De schimbat formatul pentru matches.
-            # # De exemplu: in loc de ('b1', 'a1', 'd1', 'e1'), ar fi ['b1', ['a1', 'd1', 'e1']]
-            # leafs_to_be_roots = []
-            #
-            #
-            #
-            # # Daca stwig-ul selectat, nu exista in dictionar,
-            # # deci nu are nici un match in graful data
-            # # if self.matches_dict.get(repr(stwig_query), []) == []:
-            #
-            # # Daca stwig-ul selectat, nu exista in lista de stwig-uri folosite,
-            # # deci nu are nici un match in graful data
-            # if stwig_query not in self.used_stwig_list:
-            #     # Atunci preluam din matches pentru stwig-ul precedent,
-            #     # in dict fiind doar stwig-uri care au avut matches.
-            #
-            #     # Modificam astfel:
-            #     # Verificam daca stwig-ul curent are vreo legatura cu unul din
-            #     # stwigurile care au fost deja folosite.
-            #     # Pentru primul cu care are legatura initiem matches,
-            #     # adica pentru fiecare radacina, atasam o lista.
-            #     # Pentru fiecare astfel de lista vom cauta in graful data.
-            #
-            #     # print("Used stwigs: ")
-            #     # print(self.used_stwig_list)
-            #     for used_stwig in self.used_stwig_list:
-            #         # Daca radacina stwig-ului actual selectat
-            #         # este de tipul unei frunze al unui stwig deja prelucrat
-            #         # atunci cautam in graful data id-ul fiecarui nod care
-            #         # are tipul vreunei frunze al stwig-ului actual.
-            #         # Trebuie sa gasim pentru fiecare match inceput cate
-            #         # un nod care sa corespunda fiecarui tip de frunza.
-            #
-            #         if stwig_query[0] in used_stwig[1]: # Daca tipul/labelul radacinii coincide cu una din frunze:
-            #             # Atunci stwig-ul actual selectat este legat de unul din stwig-urile deja prelucrate
-            #
-            #     # print("Last key in matches dict: ")
-            #     # print(list(self.matches_dict.keys())[-1])
-            #     # last_dict_key = list(self.matches_dict.keys())[-1]
-            #
-            #             # print("Current stwig: ")
-            #             # print(stwig_query)
-            #             #
-            #             # print("Selected 'used stwig': ")
-            #             # print(used_stwig)
-            #
-            #
-            #             if self.matches_dict.get(repr(stwig_query), []) == []:
-            #                 # print("YES")
-            #                 # print(self.matches_dict.get(repr(used_stwig)))
-            #                 # print(len(self.matches_dict.get(repr(used_stwig))))
-            #                 # if len(list(self.matches_dict.values())) == 1:
-            #                 #     for item in list(self.matches_dict[repr(used_stwig)])[1]:
-            #                 #         if item not in leafs_to_be_roots:
-            #                 #             leafs_to_be_roots.append(item)
-            #                 #     print("leafs_to_be_roots on first if: " + str(leafs_to_be_roots))
-            #                 #
-            #                 # elif len(list(self.matches_dict.values())) > 1:
-            #                 for mm in self.matches_dict.get(repr(used_stwig)):
-            #                     # print("mm: " + str(mm))
-            #                     for item in mm[1]:
-            #                         if item not in leafs_to_be_roots:
-            #                             leafs_to_be_roots.append(item)
-            #
-            #
-            # sorted_leafs_to_be_roots = sorted(leafs_to_be_roots)
-            # # print("Leafs to be roots - taken from selected 'used stwig' matches dict values: ")
-            # # print(sorted_leafs_to_be_roots)
-            #
-            # # #Trebuie returnate toate frunzele de tipul:
-            # # # Label-ul radacinii stwig-ului dat ca si parametru pentru Index.getID!
-            # stwig_query_root_type = self.query_graph.node[stwig_query[0]]['label']
-            #
-            # # print("Current iteration STwig query root type: " + str(stwig_query_root_type))
-            # new_roots = []
-            # for leaf in sorted_leafs_to_be_roots:
-            #     # print("Leaf: " + str(leaf))
-            #     # If the leafs of the prev stwig/current 'used stwig'
-            #     # have the same type as the current stwig root type:
-            #
-            #     # Leaf types must be taken from the data graph
-            #
-            #     # PENTRU Zhao Sun data graph
-            #     # cqlQuery = "MATCH (n) WHERE n.zhaosun_id='" + str(leaf) + "' RETURN n.zhaosun_label"
-            #
-            #     # PENTRU RI data graph
-            #     # cqlQuery = "MATCH (n) WHERE n.RI_node_id='" + str(leaf) + "' RETURN n.RI_node_label"
-            #
-            #     # PENTRU SMALL data graph
-            #     cqlQuery = "MATCH (n) WHERE n.node_id='" + str(leaf) + "' RETURN n.node_label"
-            #
-            #
-            #     result_label = self.neograph_data.run(cqlQuery).to_ndarray()[0][0]
-            #     # print("leaf type: " + str(result_label))
-            #
-            #     if stwig_query_root_type == result_label:
-            #         new_roots.append(leaf)
-            #
-            # # print("New roots: " + str(new_roots))
-            #
-            # current_stwig_childred_node_labels = []
-            # for child in stwig_query[1]:
-            #     # print(child)
-            #     # print(self.query_graph.node[child]['label'])
-            #     child_node_label = self.query_graph.node[child]['label']
-            #     current_stwig_childred_node_labels.append(child_node_label)
-            # # print("current_stwig_childred_node_labels: " + str(current_stwig_childred_node_labels))
-            #
-            # started_matches = []
-            # not_match = 0
-            # for nr in new_roots:
-            #     st = [nr, []]
-            #     started_matches.append(st)
-            # # if len(started_matches) == 0:
-            # #     print("Started matches: " + str(started_matches))
-            # if len(started_matches) > 0:
-            #     # print("Matches: ")
-            #     finished_matches = []
-            #
-            #     for started_match in started_matches:
-            #         # print(started_match)
-            #         # Vecinii trebuie sa fie de tipul indicat in STwig-ul query al iteratiei curente.
-            #         for neighbor_label in current_stwig_childred_node_labels:
-            #             # print("Neighbor label selected: " + str(neighbor_label))
-            #
-            #             # AICI DE MODIFICAT IN CAZUL GRAFURILOR ORIENTATE?
-            #
-            #             # PENTRU Zhao Sun data graph
-            #             # cqlQuery2 = "MATCH(n{zhaosun_id: '" + str(started_match[0]) + "'})--(m) WHERE m.zhaosun_label='" + str(neighbor_label) + "' return m"
-            #
-            #             # PENTRU RI data graph
-            #             # cqlQuery2 = "MATCH(n{RI_node_id: '" + str(started_match[0]) + "'})--(m) WHERE m.RI_node_label='" + str(neighbor_label) + "' return m"
-            #
-            #             # PENTRU SMALL data graph
-            #             cqlQuery2 = "MATCH(n{node_id: '" + str(started_match[0]) + "'})--(m) WHERE m.node_label='" + str(neighbor_label) + "' return m"
-            #
-            #             # print(cqlQuery2)
-            #             result2 = list(self.neograph_data.run(cqlQuery2).to_ndarray())
-            #             # if len(result2) > 0:
-            #             #     print(result2)
-            #             #     print(self.get_neo4j_stwig_node_trim(result2))
-            #             #     started_match[1].append(self.get_neo4j_stwig_node_trim(result2))
-            #             if len(result2) > 0:
-            #                 started_match[1].append(self.get_neo4j_stwig_node_trim(result2))
-            #         if len(self.STwig_query_neighbor_labels) == len(started_match[1]):
-            #             print('\x1b[0;30;45m' + "Finished match: " + str(started_match) + '\x1b[0m')
-            #             print(self.STwig_query_neighbor_labels)
-            #             self.matches_dict[repr(stwig_query)] = started_match
-            #             if stwig_query not in self.used_stwig_list:
-            #                 self.used_stwig_list.append(stwig_query)
-            #
-            #             # Trebuie ca sa facem o lista de finished matches care
-            #             # sa o adaugam cheii, altfel se inregistreaza in dict
-            #             # doar ultimul finished match pentru o cheie.
-            #             finished_matches.append(started_match)
-            #             # print("Filtered match: " + str(started_match))
-            #
-            #         else:
-            #             print("A complete match was not found: " + str(started_match))
-            #             not_match = not_match + 1
-            #             # print(self.STwig_query_neighbor_labels)
-            #             # print(len(self.STwig_query_neighbor_labels))
-            #             # print(len(started_match[1]))
-            #
-            #     if not_match == len(started_matches):
-            #         print("No matches found for current query STwig!")
-            #         # option = str(input('Stop execution? (y/n)'))
-            #         # if option == "y":
-            #         #     exit(code=0)
-            #     # elif not_match < len(started_matches):
-            #     #
-            #     #     # Trebuie sa il puna in dictionarul comun doar daca exista cel putin un match pentru STwig-ul selectat.
-            #     #     self.matches_dict[repr(stwig_query)] = finished_matches
-            #     #     if stwig_query not in self.used_stwig_list:
-            #     #         self.used_stwig_list.append(stwig_query)
-            #
-            #     # print("Finished matches: ")
-            #     # for finished_match in started_matches:
-            #     #     print(finished_match)
-            #     #     # if len(finished_match[1][0]) > 0:
-            #     #     for neighbor in finished_match[1][0]:
-            #     #         # print(neighbor)
-            #     #         print(self.get_neo4j_stwig_node_trim(neighbor))
-            #
-            # # with self.lock:
-            # # print("----------------------------------")
-            #
-            # # PENTRU Zhao Sun data graph
-            # # cqlQuery = "MATCH (n) WHERE n.zhaosun_label='" + str(label) + "' RETURN n.zhaosun_id" # IF a IN a1! Graf Zhaosun
-            #
-            # # PENTRU RI data graph
-            # # cqlQuery = "MATCH (n) WHERE n.RI_node_label='" + str(label) + "' RETURN n.RI_node_id" # IF a IN a1! Graf Zhaosun
-            #
-            # # PENTRU SMALL data graph
-            # # cqlQuery = "MATCH (n) WHERE n.node_label='" + str(label) + "' RETURN n.node_id" # IF a IN a1! Graf Zhaosun
-            #
-            #
-            # # result = self.neograph_data.run(cqlQuery).to_ndarray()
-            # # nodes_loaded = []
-            # # for r in result:
-            # #     # print("r=" + str(r))
-            # #     nodes_loaded.append(r[0])
-            # # print("***End of Index_getID output for Process " + str(iteration_number))
-            # # print()
-            # # return nodes_loaded
+            # print("Matches dictionary - key,value pair: ")
+
+            # # print(list(self.matches_dict.keys())[iteration_number])
+            # # print(list(self.matches_dict.values())[iteration_number])
+            for item in self.matches_dict.items():
+                print(item)
+
+            # Aici trebuie modificat.
+            # Frunzele unei radacini dintr-o iteratie
+            # devin radacini pentru noua iteratie.
+            # Pentru noile radacini verificam in graful data daca
+            # sunt frunze de acelasi tip precum in twig-ul noii iteratii.
+            # OBS: De schimbat formatul pentru matches.
+            # De exemplu: in loc de ('b1', 'a1', 'd1', 'e1'), ar fi ['b1', ['a1', 'd1', 'e1']]
+            leafs_to_be_roots = []
+
+
+
+            # Daca stwig-ul selectat, nu exista in dictionar,
+            # deci nu are nici un match in graful data
+            # if self.matches_dict.get(repr(stwig_query), []) == []:
+
+            # Daca stwig-ul selectat, nu exista in lista de stwig-uri folosite,
+            # deci nu are nici un match in graful data
+            if stwig_query not in self.used_stwig_list:
+                # Atunci preluam din matches pentru stwig-ul precedent,
+                # in dict fiind doar stwig-uri care au avut matches.
+
+                # Modificam astfel:
+                # Verificam daca stwig-ul curent are vreo legatura cu unul din
+                # stwigurile care au fost deja folosite.
+                # Pentru primul cu care are legatura initiem matches,
+                # adica pentru fiecare radacina, atasam o lista.
+                # Pentru fiecare astfel de lista vom cauta in graful data.
+
+                # print("Used stwigs: ")
+                # print(self.used_stwig_list)
+                for used_stwig in self.used_stwig_list:
+                    # Daca radacina stwig-ului actual selectat
+                    # este de tipul unei frunze al unui stwig deja prelucrat
+                    # atunci cautam in graful data id-ul fiecarui nod care
+                    # are tipul vreunei frunze al stwig-ului actual.
+                    # Trebuie sa gasim pentru fiecare match inceput cate
+                    # un nod care sa corespunda fiecarui tip de frunza.
+
+                    if stwig_query[0] in used_stwig[1]: # Daca tipul/labelul radacinii coincide cu una din frunze:
+                        # Atunci stwig-ul actual selectat este legat de unul din stwig-urile deja prelucrate
+
+                # print("Last key in matches dict: ")
+                # print(list(self.matches_dict.keys())[-1])
+                # last_dict_key = list(self.matches_dict.keys())[-1]
+
+                        # print("Current stwig: ")
+                        # print(stwig_query)
+                        #
+                        # print("Selected 'used stwig': ")
+                        # print(used_stwig)
+
+
+                        if self.matches_dict.get(repr(stwig_query), []) == []:
+                            # print("YES")
+                            # print(self.matches_dict.get(repr(used_stwig)))
+                            # print(len(self.matches_dict.get(repr(used_stwig))))
+                            # if len(list(self.matches_dict.values())) == 1:
+                            #     for item in list(self.matches_dict[repr(used_stwig)])[1]:
+                            #         if item not in leafs_to_be_roots:
+                            #             leafs_to_be_roots.append(item)
+                            #     print("leafs_to_be_roots on first if: " + str(leafs_to_be_roots))
+                            #
+                            # elif len(list(self.matches_dict.values())) > 1:
+                            for mm in self.matches_dict.get(repr(used_stwig)):
+                                # print("mm: " + str(mm))
+                                for item in mm[1]:
+                                    if item not in leafs_to_be_roots:
+                                        leafs_to_be_roots.append(item)
+
+
+            sorted_leafs_to_be_roots = sorted(leafs_to_be_roots)
+            # print("Leafs to be roots - taken from selected 'used stwig' matches dict values: ")
+            # print(sorted_leafs_to_be_roots)
+
+            # #Trebuie returnate toate frunzele de tipul:
+            # # Label-ul radacinii stwig-ului dat ca si parametru pentru Index.getID!
+            stwig_query_root_type = self.query_graph.node[stwig_query[0]]['label']
+
+            # print("Current iteration STwig query root type: " + str(stwig_query_root_type))
+            new_roots = []
+            for leaf in sorted_leafs_to_be_roots:
+                # print("Leaf: " + str(leaf))
+                # If the leafs of the prev stwig/current 'used stwig'
+                # have the same type as the current stwig root type:
+
+                # Leaf types must be taken from the data graph
+
+                # PENTRU Zhao Sun data graph
+                # cqlQuery = "MATCH (n) WHERE n.zhaosun_id='" + str(leaf) + "' RETURN n.zhaosun_label"
+
+                # PENTRU RI data graph
+                # cqlQuery = "MATCH (n) WHERE n.RI_node_id='" + str(leaf) + "' RETURN n.RI_node_label"
+
+                # PENTRU SMALL data graph
+                cqlQuery = "MATCH (n) WHERE n.node_id='" + str(leaf) + "' RETURN n.node_label"
+
+
+                result_label = self.neograph_data.run(cqlQuery).to_ndarray()[0][0]
+                # print("leaf type: " + str(result_label))
+
+                if stwig_query_root_type == result_label:
+                    new_roots.append(leaf)
+
+            # print("New roots: " + str(new_roots))
+
+            current_stwig_childred_node_labels = []
+            for child in stwig_query[1]:
+                # print(child)
+                # print(self.query_graph.node[child]['label'])
+                child_node_label = self.query_graph.node[child]['label']
+                current_stwig_childred_node_labels.append(child_node_label)
+            # print("current_stwig_childred_node_labels: " + str(current_stwig_childred_node_labels))
+
+            started_matches = []
+            not_match = 0
+            for nr in new_roots:
+                st = [nr, []]
+                started_matches.append(st)
+            # if len(started_matches) == 0:
+            #     print("Started matches: " + str(started_matches))
+            if len(started_matches) > 0:
+                # print("Matches: ")
+                finished_matches = []
+
+                for started_match in started_matches:
+                    # print(started_match)
+                    # Vecinii trebuie sa fie de tipul indicat in STwig-ul query al iteratiei curente.
+                    for neighbor_label in current_stwig_childred_node_labels:
+                        # print("Neighbor label selected: " + str(neighbor_label))
+
+                        # AICI DE MODIFICAT IN CAZUL GRAFURILOR ORIENTATE?
+
+                        # PENTRU Zhao Sun data graph
+                        # cqlQuery2 = "MATCH(n{zhaosun_id: '" + str(started_match[0]) + "'})--(m) WHERE m.zhaosun_label='" + str(neighbor_label) + "' return m"
+
+                        # PENTRU RI data graph
+                        # cqlQuery2 = "MATCH(n{RI_node_id: '" + str(started_match[0]) + "'})--(m) WHERE m.RI_node_label='" + str(neighbor_label) + "' return m"
+
+                        # PENTRU SMALL data graph
+                        cqlQuery2 = "MATCH(n{node_id: '" + str(started_match[0]) + "'})--(m) WHERE m.node_label='" + str(neighbor_label) + "' return m"
+
+                        # print(cqlQuery2)
+                        result2 = list(self.neograph_data.run(cqlQuery2).to_ndarray())
+                        # if len(result2) > 0:
+                        #     print(result2)
+                        #     print(self.get_neo4j_stwig_node_trim(result2))
+                        #     started_match[1].append(self.get_neo4j_stwig_node_trim(result2))
+                        if len(result2) > 0:
+                            started_match[1].append(self.get_neo4j_stwig_node_trim(result2))
+                    if len(self.STwig_query_neighbor_labels) == len(started_match[1]):
+                        print('\x1b[0;30;45m' + "Finished match: " + str(started_match) + '\x1b[0m')
+                        print(self.STwig_query_neighbor_labels)
+                        self.matches_dict[repr(stwig_query)] = started_match
+                        if stwig_query not in self.used_stwig_list:
+                            self.used_stwig_list.append(stwig_query)
+
+                        # Trebuie ca sa facem o lista de finished matches care
+                        # sa o adaugam cheii, altfel se inregistreaza in dict
+                        # doar ultimul finished match pentru o cheie.
+                        finished_matches.append(started_match)
+                        # print("Filtered match: " + str(started_match))
+
+                    else:
+                        print("A complete match was not found: " + str(started_match))
+                        not_match = not_match + 1
+                        # print(self.STwig_query_neighbor_labels)
+                        # print(len(self.STwig_query_neighbor_labels))
+                        # print(len(started_match[1]))
+
+                if not_match == len(started_matches):
+                    print("No matches found for current query STwig!")
+                    # option = str(input('Stop execution? (y/n)'))
+                    # if option == "y":
+                    #     exit(code=0)
+                # elif not_match < len(started_matches):
+                #
+                #     # Trebuie sa il puna in dictionarul comun doar daca exista cel putin un match pentru STwig-ul selectat.
+                #     self.matches_dict[repr(stwig_query)] = finished_matches
+                #     if stwig_query not in self.used_stwig_list:
+                #         self.used_stwig_list.append(stwig_query)
+
+                # print("Finished matches: ")
+                # for finished_match in started_matches:
+                #     print(finished_match)
+                #     # if len(finished_match[1][0]) > 0:
+                #     for neighbor in finished_match[1][0]:
+                #         # print(neighbor)
+                #         print(self.get_neo4j_stwig_node_trim(neighbor))
+
+            # with self.lock:
+            # print("----------------------------------")
+
+            # PENTRU Zhao Sun data graph
+            # cqlQuery = "MATCH (n) WHERE n.zhaosun_label='" + str(label) + "' RETURN n.zhaosun_id" # IF a IN a1! Graf Zhaosun
+
+            # PENTRU RI data graph
+            # cqlQuery = "MATCH (n) WHERE n.RI_node_label='" + str(label) + "' RETURN n.RI_node_id" # IF a IN a1! Graf Zhaosun
+
+            # PENTRU SMALL data graph
+            # cqlQuery = "MATCH (n) WHERE n.node_label='" + str(label) + "' RETURN n.node_id" # IF a IN a1! Graf Zhaosun
+
+
+            # result = self.neograph_data.run(cqlQuery).to_ndarray()
+            # nodes_loaded = []
+            # for r in result:
+            #     # print("r=" + str(r))
+            #     nodes_loaded.append(r[0])
+            # print("***End of Index_getID output for Process " + str(iteration_number))
+            # print()
+            # return nodes_loaded
 
     def filter_results(self, stwig_query, STwig_query_neighbors):
         # with self.lock:
