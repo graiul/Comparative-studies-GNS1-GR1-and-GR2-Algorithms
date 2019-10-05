@@ -67,6 +67,7 @@ class Query_Graph_Generator(object):
         # Algoritmii STwig si VF2 arata cateva rezultate care nu trebuie sa fie: unele stwiguri data
         # au aceeasi frunza de doua ori, datorita celor doua frunze query care au acelasi label.
         # Algoritmul Backtracking nu arata acele stwiguri data defecte.
+        # FOLOSIT GRAFUL RI CU 1000 de muchii si 701 noduri.
         query_graph_edges = [[6523, 2844], [6523, 6107], [6523, 12230]]
         node_attr = ["20", "15", "32", "32"]
 
