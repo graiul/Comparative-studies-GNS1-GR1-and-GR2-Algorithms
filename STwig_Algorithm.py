@@ -783,21 +783,36 @@ class STwig_Algorithm(object):
             for val in combinations_dict.items():
                 print("query stwig labels: " + str(stwig_labels))
                 print("data stwig labels, val[1]: " + str(val[1][1:]))
-                from collections import Counter
-                print("Counter: ")
-                counter = Counter(val[0][1:])
-                print(counter)
-                print(type(counter))
-                print(counter.keys())
-                # Trebuie sa ne asiguram ca toate label-urile stwig-ului query se afla in label-urile stwig-ului data.
+
+                # Primul caz de inlaturare al unui stwig data: cazul in care trebuie sa ne asiguram
+                # ca toate label-urile stwig-ului query se afla in label-urile stwig-ului data.
+                print("\nFirst case: ")
                 for sl in stwig_labels:
                     if sl not in val[1]:
                         print("stwig label not in val[1]: " + str(sl))
                         print("Must remove. Data stwig node id's, val[0]: " + str(val[0]))
-                        # In cazul in care nu se afla, putem continua astfel:
-                        # Daca un nod frunza din stwig-ul data apare mai mult decat o singura data, eliminam stwig-ul data.
                         combinations_dict_final.pop(val[0])
                         break
+
+            for val2 in combinations_dict.items():
+
+                # Cazul al doilea:
+                # Daca un nod frunza din stwig-ul data apare mai mult decat o singura data, eliminam stwig-ul data.
+                print("\nSecond case: ")
+                from collections import Counter
+                print("Counter: ")
+                counter = Counter(val2[0][1:])
+                print(counter)
+                print(type(counter))
+                counter_values = counter.values()
+                for c_v in counter_values:
+                    if c_v > 1:
+                        if val2[0] in combinations_dict_final:
+                            combinations_dict_final.pop(val2[0])
+
+                print()
+
+
 
                 # if stwig_labels != val[1]:
                 #     combinations_dict_final.pop(val[0])
