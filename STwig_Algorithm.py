@@ -800,14 +800,14 @@ class STwig_Algorithm(object):
                 # Daca un nod frunza din stwig-ul data apare mai mult decat o singura data, eliminam stwig-ul data.
                 print("\nSecond case: ")
                 from collections import Counter
-                print("Counter: ")
+                print("Counter for leafs of the data stwig: ")
                 counter = Counter(val2[0][1:])
                 print(counter)
-                print(type(counter))
                 counter_values = counter.values()
                 for c_v in counter_values:
                     if c_v > 1:
                         if val2[0] in combinations_dict_final:
+                            print("Must remove: " + str(val2[0]))
                             combinations_dict_final.pop(val2[0])
 
                 print()
