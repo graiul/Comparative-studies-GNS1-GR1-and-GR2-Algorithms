@@ -429,39 +429,41 @@ def main():
             jobs = []
 
             # Paralelizat, fara filtrare.
-            producer = Process(target=db.match_finding_process_producer, args=(stwigs[0], return_dict, STwig_query_neighbor_labels, query_graph, 0, used_stwigs, lock, ))
-            producer2 = Process(target=db.match_finding_process_producer, args=(stwigs[1], return_dict, STwig_query_neighbor_labels, query_graph, 0, used_stwigs, lock, ))
-            producer3 = Process(target=db.match_finding_process_producer, args=(stwigs[2], return_dict, STwig_query_neighbor_labels, query_graph, 0, used_stwigs, lock, ))
-            # filterer = Process(target=db.filter_results_process, args=(stwigs[1], return_dict, stwigs[1][1], query_graph, used_stwigs, lock, shared_sorted_leafs_to_be_roots, ))
-            prod_com = [producer, producer2, producer3]
+            # producer = Process(target=db.match_finding_process_producer, args=(stwigs[0], return_dict, STwig_query_neighbor_labels, query_graph, 0, used_stwigs, lock, ))
+            # producer2 = Process(target=db.match_finding_process_producer, args=(stwigs[1], return_dict, STwig_query_neighbor_labels, query_graph, 0, used_stwigs, lock, ))
+            # producer3 = Process(target=db.match_finding_process_producer, args=(stwigs[2], return_dict, STwig_query_neighbor_labels, query_graph, 0, used_stwigs, lock, ))
+            # # filterer = Process(target=db.filter_results_process, args=(stwigs[1], return_dict, stwigs[1][1], query_graph, used_stwigs, lock, shared_sorted_leafs_to_be_roots, ))
+            # prod_com = [producer, producer2, producer3]
+            #
+            # # start_time = timer()
+            #
+            # for pc in prod_com:
+            #     pc.start()
+            #     # pc.join()
+            #
+            # for pc in prod_com:
+            #     pc.join()
 
-            # start_time = timer()
-
-            for pc in prod_com:
-                pc.start()
-                # pc.join()
-
-            for pc in prod_com:
-                pc.join()
 
             # print()
             # print("STwig_query_neighbor_labels - must not be empty")
             # print(STwig_query_neighbor_labels)
 
+
             # Neparalelizat, cu filtrare.
-            # for t in stwigs:
-            #     iter_num = stwigs.index(t)
-            #     process = Process(target=db.match_finding_process_producer, args=(t, return_dict, STwig_query_neighbor_labels, query_graph, iter_num, used_stwigs, lock, shared_sorted_leafs_to_be_roots, ))
-            #     jobs.append(process)
-            #
-            # start_time = timer()
-            # for j in jobs:
-            #     j.start()
-            #     # print('PID is ' + str(j.pid))
-            #     # print(os.getpid())
-            #     # started_processes.append(j)
-            #     # print(j.is_alive())
-            #     j.join()
+            for t in stwigs:
+                iter_num = stwigs.index(t)
+                process = Process(target=db.match_finding_process_producer, args=(stwigs[0], return_dict, STwig_query_neighbor_labels, query_graph, 0, used_stwigs, lock, ))
+                jobs.append(process)
+
+            start_time = timer()
+            for j in jobs:
+                j.start()
+                # print('PID is ' + str(j.pid))
+                # print(os.getpid())
+                # started_processes.append(j)
+                # print(j.is_alive())
+                j.join()
             #
             # total_time = (timer() - start_time) * 1000
             #
