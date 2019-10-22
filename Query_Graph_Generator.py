@@ -61,15 +61,17 @@ class Query_Graph_Generator(object):
         # node_attr = ["15", "3", "31", "12"]
 
         # OK - Cei trei algoritmi dau la fel - data graf RI cu 1000 muchii si 701 noduri.
-        # query_graph_edges = [[7190,137], [7190,419], [7190,450]]
-        # node_attr = ["3", "2", "11", "3"]
+        query_graph_edges = [[7190,137], [7190,419], [7190,450]]
+        node_attr = ["3", "2", "11", "3"]
 
+        # !!!
         # Algoritmii STwig si VF2 arata cateva rezultate care nu trebuie sa fie: unele stwiguri data
         # au aceeasi frunza de doua ori, datorita celor doua frunze query care au acelasi label.
-        # Algoritmul Backtracking nu arata acele stwiguri data defecte.
+        # Algoritmul Backtracking nu arata acele stwiguri data defecte. DAR, nu arata unele stwiguri care sunt bune de afisat,
+        # si pe care le afiseaza ceilalti doi algoritmi.
         # FOLOSIT GRAFUL RI CU 1000 de muchii si 701 noduri.
-        query_graph_edges = [[6523, 2844], [6523, 6107], [6523, 12230]]
-        node_attr = ["20", "15", "32", "32"]
+        # query_graph_edges = [[6523, 2844], [6523, 6107], [6523, 12230]]
+        # node_attr = ["20", "15", "32", "32"]
 
         # Folosit de STwig Alg pentru filtrarea secventiala si cu graful RI de 10000 de muchii.
         # Folosit de acelasi algoritm si cu acelasi graf data pentru cautarea in paralel folosind trei procese
