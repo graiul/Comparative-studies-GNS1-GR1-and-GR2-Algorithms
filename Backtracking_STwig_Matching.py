@@ -554,7 +554,7 @@ def subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph
 
             if len(partial_solution) == 2: # poz 0 = [x], poz 1 = [y]
                 current_node = copy.deepcopy(partial_solution[-1])
-            #     positions[2] = []
+                positions[3] = []
 
 
 
@@ -662,7 +662,9 @@ def renew_node_list(old_node_list):
 ##################################################################
 
 # GRAFUL DATA DIN NEO4J
-neograph_data = Graph("bolt://127.0.0.1:7690", auth=("neo4j", "changeme"))
+# neograph_data = Graph("bolt://127.0.0.1:7690", auth=("neo4j", "changeme")) # Data Graph RI - Cluster Neo4J
+neograph_data = Graph("bolt://127.0.0.1:7687", auth=("neo4j", "changeme"))  # Data Graph RI - O singura instanta de Neo4J
+
 cqlQuery = "MATCH p=(n)-[r:PPI]->(m) return n.node_id, m.node_id"
 result = neograph_data.run(cqlQuery).to_ndarray()
 edge_list = result.tolist()
@@ -733,6 +735,8 @@ nx.set_node_attributes(dataGraph, node_attr_dict, 'label')
 
 # FUNCTIONAL:
 # query_stwig_1 = [1773, 1488, 1898, 2285]
+
+# Aici cream un obiect graf query:
 query_graph_gen = Query_Graph_Generator()
 query_graph = query_graph_gen.gen_RI_query_graph()
 query_stwig_1 = list(query_graph.nodes())
