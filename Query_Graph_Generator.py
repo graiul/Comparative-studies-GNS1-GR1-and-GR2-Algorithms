@@ -70,8 +70,13 @@ class Query_Graph_Generator(object):
         # Algoritmul Backtracking nu arata acele stwiguri data defecte. DAR, nu arata unele stwiguri care sunt bune de afisat,
         # si pe care le afiseaza ceilalti doi algoritmi.
         # FOLOSIT GRAFUL RI CU 1000 de muchii si 701 noduri.
+
+        # De testat: Indiferent de id-uri, diferite label-uri date de intrare pentru algoritmi, si cautare doar dupa label-uri.
         query_graph_edges = [[6523, 2844], [6523, 6107], [6523, 12230]]
-        node_attr = ["20", "15", "32", "32"]
+        # node_attr = ["20", "15", "32", "32"]
+        # node_attr = ["19", "15", "32", "32"]
+        node_attr = ["19", "15", "20", "32"]
+
 
         # Folosit de STwig Alg pentru filtrarea secventiala si cu graful RI de 10000 de muchii.
         # Folosit de acelasi algoritm si cu acelasi graf data pentru cautarea in paralel folosind trei procese
@@ -102,12 +107,6 @@ class Query_Graph_Generator(object):
         # OK - STWIG SI VF2 dau la fel - data graf RI cu 10000 muchii
         # query_graph_edges = [[1488, 7465]]
         # node_attr = ["28", "18"]
-
-
-
-
-
-
 
 
 
