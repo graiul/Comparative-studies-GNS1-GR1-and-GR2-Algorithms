@@ -79,13 +79,13 @@ class Query_Graph_Generator(object):
 
         # FOLOSIT GRAFUL RI CU 1000 de muchii si 701 noduri.
 
-        query_graph_edges = [[6523, 2844], [6523, 6107], [6523, 12230]]
-        node_attr = ["20", "15", "32", "32"]
+        # query_graph_edges = [[6523, 2844], [6523, 6107], [6523, 12230]]
+        # node_attr = ["20", "15", "32", "32"]
 
 
         # De testat: Indiferent de id-uri, diferite label-uri date de intrare pentru algoritmi, si cautare doar dupa label-uri.
-        # query_graph_edges = [[1, 2], [1, 3], [1, 4]]
-        # node_attr = ["19", "15", "32", "32"]
+        query_graph_edges = [[1, 2], [1, 3], [1, 4]]
+        node_attr = ["19", "15", "32", "32"]
         # node_attr = ["19", "15", "20", "32"]
 
 
