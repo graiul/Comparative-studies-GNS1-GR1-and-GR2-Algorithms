@@ -391,6 +391,7 @@ def is_joinable(node, partial_solution, data_graph, query_stwig_as_dict):
     if len(complete_solutions) == 0:
         if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
             if node not in partial_solution:
+                # Aici facem verificarea dupa id-ul nodurilor. Trebuie modificat pentru a verifica dupa label, fara noduri.
                 if node in list(nx.ego_graph(data_graph, list(query_stwig_as_dict.keys())[0], radius=1, center=True, undirected=True, distance=None).nodes()):
                     if data_graph.node[node]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[len(partial_solution)]]:
                         found = True
@@ -443,10 +444,10 @@ def next_query_vertex(current_node, query_stwig_dict):
         print("No more elements after this one in dict.")
 
 def next_data_vertex(partial_solution, data_graph, query_stwig_dict):
-    # print()
-    # print("next_data_vertex exec : ")
-    # print("complete_solutions: " + str(complete_solutions))
-    # print("partial_solution: " + str(partial_solution))
+    print()
+    print("next_data_vertex exec : ")
+    print("complete_solutions: " + str(complete_solutions))
+    print("partial_solution: " + str(partial_solution))
     for node in list(data_graph.nodes()):
         # print("data node: " + str(node))
         # print(is_joinable(node, partial_solution, data_graph, query_stwig_dict))
