@@ -742,10 +742,12 @@ query_graph = query_graph_gen.gen_RI_query_graph()
 query_stwig_1 = list(query_graph.nodes())
 print("Query STwig: " + str(query_stwig_1))
 # Label-ul radacinii
+# root_label = dataGraph.node[query_stwig_1[0]]['label']
 root_label = query_graph.node[query_stwig_1[0]]['label']
 # Label-urile vecinilor din lista
 neighbor_labels = []
 for n in query_stwig_1[1:]:
+    # neighbor_labels.append(dataGraph.node[n]['label'])
     neighbor_labels.append(query_graph.node[n]['label'])
 
 query_stwig_1_as_labels = []
@@ -767,10 +769,12 @@ positions[0] = []
 positions[1] = []
 positions[2] = []
 positions[3] = []
+print("Positions log: ")
 print(positions.items())
 node_list_aux = copy.deepcopy(list(dataGraph.nodes()))
 ####################################################################################
 
+# Executia algoritmului Backtracking:
 try:
     # subgraph_search(p_solution, query_stwig1_dict, [], small_graph)
     start_time = timer()
