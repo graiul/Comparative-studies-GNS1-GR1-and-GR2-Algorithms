@@ -69,13 +69,24 @@ class Query_Graph_Generator(object):
         # au aceeasi frunza de doua ori, datorita celor doua frunze query care au acelasi label.
         # Algoritmul Backtracking nu arata acele stwiguri data defecte. DAR, nu arata unele stwiguri care sunt bune de afisat,
         # si pe care le afiseaza ceilalti doi algoritmi.
+        # RASPUNS:
+        # Algoritmul STwig nu mai arata STwig-uri data cu aceeasi frunza de mai multe ori.
+        # Acesta afiseaza acum de exemplu pt label-urile  ["20", "15", "32", "32"], rezultatul (si nu numai acesta) astfel:
+        # [6523, [2844, 6107, 12230]] si [6523, [2844, 12230, 6107]]
+        # VF2 afiseaza toate cele trei variante - cele doua descrise mai sus si cea cu dublura.
+        # Backtracking afiseaza doar una dintre ele, acest algoritm avand log-uri pt fiecare pozitie, astfel asigurandu-ne ca nu apar dubluri,
+        # si doar una din cele cu interschimbarea nodurilor descrisa mai sus.
+
         # FOLOSIT GRAFUL RI CU 1000 de muchii si 701 noduri.
 
-        # De testat: Indiferent de id-uri, diferite label-uri date de intrare pentru algoritmi, si cautare doar dupa label-uri.
         query_graph_edges = [[6523, 2844], [6523, 6107], [6523, 12230]]
-        # node_attr = ["20", "15", "32", "32"]
+        node_attr = ["20", "15", "32", "32"]
+
+
+        # De testat: Indiferent de id-uri, diferite label-uri date de intrare pentru algoritmi, si cautare doar dupa label-uri.
+        # query_graph_edges = [[1, 2], [1, 3], [1, 4]]
         # node_attr = ["19", "15", "32", "32"]
-        node_attr = ["19", "15", "20", "32"]
+        # node_attr = ["19", "15", "20", "32"]
 
 
         # Folosit de STwig Alg pentru filtrarea secventiala si cu graful RI de 10000 de muchii.
