@@ -282,6 +282,12 @@ def is_joinable(node, partial_solution, data_graph, query_stwig_as_dict):
 
     found = False
 
+    print("\nis_joinable exec:")
+    print("query_stwig_as_dict: ")
+    print(query_stwig_as_dict.items())
+    print("first element id: " + str(list(query_stwig_as_dict.items())[0][0]))
+    print("first element label: " + str(list(query_stwig_as_dict.items())[0][1]))
+
 
     if len(complete_solutions) > 0:
         # for sol in complete_solutions:
@@ -392,17 +398,20 @@ def is_joinable(node, partial_solution, data_graph, query_stwig_as_dict):
         if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
             if node not in partial_solution:
                 # Aici facem verificarea dupa id-ul nodurilor. Trebuie modificat pentru a verifica dupa label, fara noduri.
-                if node in list(nx.ego_graph(data_graph, list(query_stwig_as_dict.keys())[0], radius=1, center=True, undirected=True, distance=None).nodes()):
-                    if data_graph.node[node]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[len(partial_solution)]]:
-                        found = True
+                # if node in list(nx.ego_graph(data_graph, list(query_stwig_as_dict.keys())[0], radius=1, center=True, undirected=True, distance=None).nodes()):
+                for data_node in list(dataGraph.nodes()):
 
-                        aux = copy.deepcopy(partial_solution)
-                        aux.append(node)
-                        pos = aux.index(aux[-1])
+                    if dataGraph.has_edge(node, data_node):
+                        if query_graph.node[node]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[len(partial_solution)]]:
+                            found = True
 
-                        if node not in positions[pos]:
-                            positions[pos].append(node)
-                        # print(positions.items())
+                            aux = copy.deepcopy(partial_solution)
+                            aux.append(node)
+                            pos = aux.index(aux[-1])
+
+                            if node not in positions[pos]:
+                                positions[pos].append(node)
+                            # print(positions.items())
 
     if found == True:
         return True
