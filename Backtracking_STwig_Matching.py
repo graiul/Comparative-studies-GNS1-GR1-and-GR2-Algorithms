@@ -283,10 +283,11 @@ def is_joinable(node, partial_solution, data_graph, query_stwig_as_dict):
     found = False
 
     print("\nis_joinable exec:")
+    print("input node: " + str(node))
     print("query_stwig_as_dict: ")
     print(query_stwig_as_dict.items())
-    print("first element id: " + str(list(query_stwig_as_dict.items())[0][0]))
-    print("first element label: " + str(list(query_stwig_as_dict.items())[0][1]))
+    print("first query stwig node id: " + str(list(query_stwig_as_dict.items())[0][0]))
+    print("first query stwig node label: " + str(list(query_stwig_as_dict.items())[0][1]))
 
 
     if len(complete_solutions) > 0:
@@ -458,8 +459,11 @@ def next_data_vertex(partial_solution, data_graph, query_stwig_dict):
     print("complete_solutions: " + str(complete_solutions))
     print("partial_solution: " + str(partial_solution))
     for node in list(data_graph.nodes()):
-        # print("data node: " + str(node))
-        # print(is_joinable(node, partial_solution, data_graph, query_stwig_dict))
+        print("data node id: " + str(node))
+        data_node_label = data_graph.node[node]['label']
+        print("data node label: " + str(data_node_label))
+        print("is joinable, true/false:")
+        print(is_joinable(node, partial_solution, data_graph, query_stwig_dict))
         if is_joinable(node, partial_solution, data_graph, query_stwig_dict):
             # print("next_data_vertex exec end")
             return node
