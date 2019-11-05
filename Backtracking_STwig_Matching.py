@@ -397,6 +397,8 @@ def is_joinable(data_node_to_be_joined, partial_solution, data_graph, query_stwi
                             print(positions.items())
 
     # Pentru prima solutie la executie.
+    # Problema pt moment este faptul ca urmatorul nod care ar trebui sa fie pe aceasta prima pozitie este inregistrat pe urmatoarea.
+    # Acest lucru nu este corect, deoarece nu exista muchie intre ele, amandoua avand rolul de radacina pt STwig-ul data partial.
     if len(complete_solutions) == 0:
         if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
             if data_node_to_be_joined not in partial_solution:
