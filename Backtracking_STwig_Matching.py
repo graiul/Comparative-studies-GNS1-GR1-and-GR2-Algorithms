@@ -278,12 +278,14 @@ from timeit import default_timer as timer
     #     self.current_node = current_node
     #     self.data_graph = data_graph
 
-def is_joinable(node, partial_solution, data_graph, query_stwig_as_dict):
+def is_joinable(data_node_to_be_joined, partial_solution, data_graph, query_stwig_as_dict):
 
     found = False
 
     print("\nis_joinable exec:")
-    print("input node: " + str(node))
+    print("input data node id: " + str(data_node_to_be_joined))
+    data_node_label = data_graph.node[data_node_to_be_joined]['label']
+    print("data node label: " + str(data_node_label))
     print("query_stwig_as_dict: ")
     print(query_stwig_as_dict.items())
     print("first query stwig node id: " + str(list(query_stwig_as_dict.items())[0][0]))
@@ -299,21 +301,21 @@ def is_joinable(node, partial_solution, data_graph, query_stwig_as_dict):
         # pt al patrulea element:
         if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
             if len(partial_solution) == 3:
-                if node not in partial_solution:
+                if data_node_to_be_joined not in partial_solution:
 
                     # if node != sol[2]:
 
                     aux = copy.deepcopy(partial_solution)
-                    aux.append(node)
+                    aux.append(data_node_to_be_joined)
                     pos = aux.index(aux[-1])
                     if aux not in complete_solutions:
 
-                        if node not in positions[2]:
+                        if data_node_to_be_joined not in positions[2]:
                         # print("node: " + str(node))
                         # print("positions[2]: " + str(positions[2]))
 
-                            if node in list(nx.ego_graph(data_graph, partial_solution[0], radius=1, center=True, undirected=True, distance=None).nodes()):
-                                if data_graph.node[node]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[3]]:
+                            if data_node_to_be_joined in list(nx.ego_graph(data_graph, partial_solution[0], radius=1, center=True, undirected=True, distance=None).nodes()):
+                                if data_graph.node[data_node_to_be_joined]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[3]]:
                                     found = True
 
                                     # remove_used_node_from_node_list(node)
@@ -322,24 +324,24 @@ def is_joinable(node, partial_solution, data_graph, query_stwig_as_dict):
                                         positions[pos].append(aux[-1])
                                     print(positions.items())
 
-        # pt ultima pos
+        # pt al treilea element:
         if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
             if len(partial_solution) == 2:
-                if node not in partial_solution:
+                if data_node_to_be_joined not in partial_solution:
 
                     # if node != sol[2]:
 
                     aux = copy.deepcopy(partial_solution)
-                    aux.append(node)
+                    aux.append(data_node_to_be_joined)
                     pos = aux.index(aux[-1])
                     if aux not in complete_solutions:
 
-                        if node not in positions[2]:
+                        if data_node_to_be_joined not in positions[2]:
                         # print("node: " + str(node))
                         # print("positions[2]: " + str(positions[2]))
 
-                            if node in list(nx.ego_graph(data_graph, partial_solution[0], radius=1, center=True, undirected=True, distance=None).nodes()):
-                                if data_graph.node[node]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[2]]:
+                            if data_node_to_be_joined in list(nx.ego_graph(data_graph, partial_solution[0], radius=1, center=True, undirected=True, distance=None).nodes()):
+                                if data_graph.node[data_node_to_be_joined]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[2]]:
                                     found = True
 
                                     # remove_used_node_from_node_list(node)
@@ -348,25 +350,25 @@ def is_joinable(node, partial_solution, data_graph, query_stwig_as_dict):
                                         positions[pos].append(aux[-1])
                                     print(positions.items())
 
-        # pt mijloc
+        # pt al doilea element:
         if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
             if len(partial_solution) == 1:
 
-                if node not in partial_solution:
+                if data_node_to_be_joined not in partial_solution:
 
                     # if node != sol[1]:
 
                     aux = copy.deepcopy(partial_solution)
-                    aux.append(node)
+                    aux.append(data_node_to_be_joined)
                     pos = aux.index(aux[-1])
                     if aux not in complete_solutions:
 
-                        if node not in positions[1]:
+                        if data_node_to_be_joined not in positions[1]:
                             # root_label = query_stwig_as_dict[1]
                             # if data_graph.node[node]['label'] == root_label:
 
-                            if node in list(nx.ego_graph(data_graph, partial_solution[0], radius=1, center=True, undirected=True, distance=None).nodes()):
-                                if data_graph.node[node]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[1]]:
+                            if data_node_to_be_joined in list(nx.ego_graph(data_graph, partial_solution[0], radius=1, center=True, undirected=True, distance=None).nodes()):
+                                if data_graph.node[data_node_to_be_joined]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[1]]:
                                     found = True
                                     if aux[-1] not in positions[pos]:
                                         positions[pos].append(aux[-1])
@@ -375,7 +377,7 @@ def is_joinable(node, partial_solution, data_graph, query_stwig_as_dict):
         # pt primul element, dupa mai multe executii. Trebuie schimbata radacina pentru noul STwig.
         if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
             if len(partial_solution) == 0:
-                if node not in partial_solution:
+                if data_node_to_be_joined not in partial_solution:
 
                     # if node not in sol:
 
@@ -384,35 +386,40 @@ def is_joinable(node, partial_solution, data_graph, query_stwig_as_dict):
                         # pos = aux.index(aux[-1])
                         # if aux not in complete_solutions:
 
-                    if node not in positions[0]:
+                    if data_node_to_be_joined not in positions[0]:
 
                         # if node in list(nx.ego_graph(data_graph, list(query_stwig_as_dict.keys())[0], radius=1, center=True, undirected=True, distance=None).nodes()):
 
-                        if data_graph.node[node]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[len(partial_solution)]]:
+                        if data_graph.node[data_node_to_be_joined]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[len(partial_solution)]]:
                             found = True
                             # if node not in positions[0]:
-                            positions[0].append(node)
+                            positions[0].append(data_node_to_be_joined)
                             print(positions.items())
 
     # Pentru prima solutie la executie.
     if len(complete_solutions) == 0:
         if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
-            if node not in partial_solution:
+            if data_node_to_be_joined not in partial_solution:
+
                 # Aici facem verificarea dupa id-ul nodurilor. Trebuie modificat pentru a verifica dupa label, fara noduri.
                 # if node in list(nx.ego_graph(data_graph, list(query_stwig_as_dict.keys())[0], radius=1, center=True, undirected=True, distance=None).nodes()):
-                for data_node in list(dataGraph.nodes()):
 
-                    if dataGraph.has_edge(node, data_node):
-                        if query_graph.node[node]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[len(partial_solution)]]:
-                            found = True
+                # Pentru primul element din STwig-ul data inceput nu trebuie verificat daca exista vreo muchie.
+                # for data_node in list(dataGraph.nodes()):
+                #     if dataGraph.has_edge(node, data_node):
 
-                            aux = copy.deepcopy(partial_solution)
-                            aux.append(node)
-                            pos = aux.index(aux[-1])
+                # if query_graph.node[data_node_to_be_joined]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[len(partial_solution)]]:
+                if list(query_stwig_as_dict.items())[0][1] == data_node_label:
 
-                            if node not in positions[pos]:
-                                positions[pos].append(node)
-                            # print(positions.items())
+                    found = True
+
+                    aux = copy.deepcopy(partial_solution)
+                    aux.append(data_node_to_be_joined)
+                    pos = aux.index(aux[-1])
+
+                    if data_node_to_be_joined not in positions[pos]:
+                        positions[pos].append(data_node_to_be_joined)
+                    print(positions.items())
 
     if found == True:
         return True
@@ -462,10 +469,10 @@ def next_data_vertex(partial_solution, data_graph, query_stwig_dict):
         print("data node id: " + str(node))
         data_node_label = data_graph.node[node]['label']
         print("data node label: " + str(data_node_label))
-        print("is joinable, true/false:")
-        print(is_joinable(node, partial_solution, data_graph, query_stwig_dict))
+        # print("is joinable, true/false:")
+        # print(is_joinable(node, partial_solution, data_graph, query_stwig_dict))
         if is_joinable(node, partial_solution, data_graph, query_stwig_dict):
-            # print("next_data_vertex exec end")
+            print("next_data_vertex exec end")
             return node
     return None
 
