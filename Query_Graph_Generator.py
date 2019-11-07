@@ -85,7 +85,9 @@ class Query_Graph_Generator(object):
 
         # De testat: Indiferent de id-uri, diferite label-uri date de intrare pentru algoritmi, si cautare doar dupa label-uri.
         query_graph_edges = [[1, 2], [1, 3], [1, 4]]
-        node_attr = ["19", "15", "32", "32"]
+        node_attr = ["20", "15", "32", "32"]
+        # node_attr = ["19", "15", "32", "32"]
+        # node_attr = ["20", "15", "20", "32"]
         # node_attr = ["19", "15", "20", "32"]
 
 
