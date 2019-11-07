@@ -324,12 +324,17 @@ def is_joinable(data_node_to_be_joined, partial_solution, data_graph, query_stwi
                                         positions[pos].append(aux[-1])
                                     print(positions.items())
 
-        # pt al treilea element:
+        # pt al treilea element(a doua frunza):
         if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
             if len(partial_solution) == 2:
+                print("We entered the execution for the third element (the second leaf)")
+
                 if data_node_to_be_joined not in partial_solution:
 
                     # if node != sol[2]:
+
+                    print("positions[1], first leaf elements already used for data STwigs: " + str(positions[1]))
+                    # print("root node label with which it second leaf must have edge: " + str(query_stwig_as_dict.items())[0][1])
 
                     aux = copy.deepcopy(partial_solution)
                     aux.append(data_node_to_be_joined)
@@ -340,8 +345,19 @@ def is_joinable(data_node_to_be_joined, partial_solution, data_graph, query_stwi
                         # print("node: " + str(node))
                         # print("positions[2]: " + str(positions[2]))
 
-                            if data_node_to_be_joined in list(nx.ego_graph(data_graph, partial_solution[0], radius=1, center=True, undirected=True, distance=None).nodes()):
-                                if data_graph.node[data_node_to_be_joined]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[2]]:
+                            # if data_node_to_be_joined in list(nx.ego_graph(data_graph, partial_solution[0], radius=1, center=True, undirected=True, distance=None).nodes()):
+
+                            print("Checking if second leaf has edge with root.")
+                            print("Root: " + str(positions[0][len(positions[0]) - 1]))
+                            print("Potential leaf: " + str(data_node_to_be_joined))
+                            print("Potential leaf label: " + str(data_node_label))
+                            if data_graph.has_edge(positions[0][len(positions[0]) - 1], data_node_to_be_joined):
+
+                                # if data_graph.node[data_node_to_be_joined]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[2]]:
+
+                                print("Label of the second leaf of the query STwig: " + str(list(query_stwig_as_dict.items())[2][1]))
+                                print("Label of data node verified: " + str(data_node_label))
+                                if list(query_stwig_as_dict.items())[2][1] == data_node_label:
                                     found = True
 
                                     # remove_used_node_from_node_list(node)
@@ -359,8 +375,9 @@ def is_joinable(data_node_to_be_joined, partial_solution, data_graph, query_stwi
 
                     # if node != sol[1]:
 
-                    print("positions[0], root elements already used for data STwigs: ")
-                    print(positions[0])
+                    print("positions[0], root elements already used for data STwigs: " + str(positions[0]))
+                    # print("root node label with which it first leaf must have edge: " + str(query_stwig_as_dict.items())[0][1])
+
                     aux = copy.deepcopy(partial_solution)
                     aux.append(data_node_to_be_joined)
                     pos = aux.index(aux[-1])
@@ -380,7 +397,6 @@ def is_joinable(data_node_to_be_joined, partial_solution, data_graph, query_stwi
                             if data_graph.has_edge(positions[0][len(positions[0])-1], data_node_to_be_joined):
 
                                 # if data_graph.node[data_node_to_be_joined]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[1]]:
-                                print("The case for the second element(first leaf): ")
                                 print("Label of the first leaf of the query STwig: " + str(list(query_stwig_as_dict.items())[1][1]))
                                 print("Label of data node verified: " + str(data_node_label))
                                 if list(query_stwig_as_dict.items())[1][1] == data_node_label:
