@@ -314,8 +314,13 @@ def is_joinable(data_node_to_be_joined, partial_solution, data_graph, query_stwi
                         # print("node: " + str(node))
                         # print("positions[2]: " + str(positions[2]))
 
-                            if data_node_to_be_joined in list(nx.ego_graph(data_graph, partial_solution[0], radius=1, center=True, undirected=True, distance=None).nodes()):
-                                if data_graph.node[data_node_to_be_joined]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[3]]:
+                            # if data_node_to_be_joined in list(nx.ego_graph(data_graph, partial_solution[0], radius=1, center=True, undirected=True, distance=None).nodes()):
+
+                            if data_graph.has_edge(positions[0][len(positions[0]) - 1], data_node_to_be_joined):
+
+                                # if data_graph.node[data_node_to_be_joined]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[3]]:
+
+                                if list(query_stwig_as_dict.items())[3][1] == data_node_label:
                                     found = True
 
                                     # remove_used_node_from_node_list(node)
@@ -421,13 +426,15 @@ def is_joinable(data_node_to_be_joined, partial_solution, data_graph, query_stwi
 
                         # if node in list(nx.ego_graph(data_graph, list(query_stwig_as_dict.keys())[0], radius=1, center=True, undirected=True, distance=None).nodes()):
 
-                        if data_graph.node[data_node_to_be_joined]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[len(partial_solution)]]:
+                        # if data_graph.node[data_node_to_be_joined]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[len(partial_solution)]]:
+                        if list(query_stwig_as_dict.items())[0][1] == data_node_label:
                             found = True
                             # if node not in positions[0]:
                             positions[0].append(data_node_to_be_joined)
                             print(positions.items())
 
     # Pentru prima solutie la executie.
+
     # Problema pt moment este faptul ca urmatorul nod care ar trebui sa fie pe aceasta prima pozitie este inregistrat pe urmatoarea.
     # Acest lucru nu este corect, deoarece nu exista muchie intre ele, amandoua avand rolul de radacina pt STwig-ul data partial.
     if len(complete_solutions) == 0:
