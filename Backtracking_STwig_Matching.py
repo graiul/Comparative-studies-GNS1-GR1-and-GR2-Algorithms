@@ -734,7 +734,12 @@ def subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph
 
             if partial_solution == []:
                 # i = False
-                print("Finished. \nPress 'Enter' to close the window.")
+
+                print("\n" + Fore.GREEN + Style.BRIGHT + "Backtracking results: ")
+                for cs in complete_solutions:
+                    print(cs)
+                print(Style.RESET_ALL)
+                print("Finished. Press 'Enter' to close the window.")
                 input()
                 exit(0)
 
