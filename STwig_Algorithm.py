@@ -184,7 +184,7 @@ class STwig_Algorithm(object):
             # Frunzele unei radacini dintr-o iteratie
             # devin radacini pentru noua iteratie.
             # Pentru noile radacini verificam in graful data daca
-            # sunt frunze de acelasi label precum in twig-ul noii iteratii.
+            # sunt frunze de acelasi tip precum in twig-ul noii iteratii.
             # OBS: De schimbat formatul pentru matches.
             # De exemplu: in loc de ('b1', 'a1', 'd1', 'e1'), ar fi ['b1', ['a1', 'd1', 'e1']]
             leafs_to_be_roots = []
@@ -845,10 +845,6 @@ class STwig_Algorithm(object):
 
         # print("STWIG MATCHES: ")
         STwig_matches = sorted(R)
-        f2 = open("f2.txt", "w+")
-        for match in STwig_matches:
-            f2.write(str(list(match)) + "\n")
-        f2.close()
         # for stwig in STwigs:
         #     print(stwig)
 
@@ -865,9 +861,9 @@ class STwig_Algorithm(object):
         # print("\nMatchSTwig exec time -> sec: " + str(total_time_sec))
         # print("\nMatchSTwig exec time -> millis: " + str(total_time_millis))
         STwig_matches_formatted = []
-        for match1 in STwig_matches:
-            formatted_match = [match1[0], []]
-            for child in match1[1:]:
+        for match in STwig_matches:
+            formatted_match = [match[0], []]
+            for child in match[1:]:
                 formatted_match[1].append(child)
             STwig_matches_formatted.append(formatted_match)
             # print(formatted_match)
@@ -878,7 +874,6 @@ class STwig_Algorithm(object):
 
         # print("STwig_matches_formatted: " + str(STwig_matches_formatted))
         # print("###End of MatchSTwig output")
-
         return STwig_matches_formatted
 
     def Query_Graph_Split(self, query_graph):
