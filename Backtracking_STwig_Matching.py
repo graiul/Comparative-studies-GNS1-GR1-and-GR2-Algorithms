@@ -719,7 +719,7 @@ def subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph
         candidate = next_data_vertex(partial_solution, data_graph, query_stwig_dict)
         if candidate is not None:
             print("Candidate: " + str(candidate))
-            print(positions.items())
+            print("Position logs: " + str(positions.items()))
 
         if candidate is None:  # go back a position with restore position()
 
