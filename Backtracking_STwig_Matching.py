@@ -437,7 +437,7 @@ def is_joinable(data_node_to_be_joined, partial_solution, data_graph, query_stwi
                         # if data_graph.node[data_node_to_be_joined]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[len(partial_solution)]]:
                         if list(query_stwig_as_dict.items())[0][1] == data_node_label:
                             found = True
-                            if node not in positions[0]:
+                            if data_node_to_be_joined not in positions[0]:
                                 positions[0].append(data_node_to_be_joined)
                                 print("Positions log: ")
                                 print(positions.items())
@@ -469,17 +469,21 @@ def is_joinable(data_node_to_be_joined, partial_solution, data_graph, query_stwi
 
                 if list(query_stwig_as_dict.items())[0][1] == data_node_label:
 
-                    found = True
+                    print("Positions log before appending first node: ")
+                    print(positions[0])
+                    print(str(list(positions.items())))
 
-                    aux = copy.deepcopy(partial_solution)
-                    aux.append(data_node_to_be_joined)
-                    pos = aux.index(aux[-1])
+                    if data_node_to_be_joined not in positions[0]:
+                        found = True
 
-                    if data_node_to_be_joined not in positions[pos]:
+                        aux = copy.deepcopy(partial_solution)
+                        aux.append(data_node_to_be_joined)
+                        pos = aux.index(aux[-1])
+
                         positions[pos].append(data_node_to_be_joined)
-                    print("Positions log: ")
-                    print(positions.items())
-                    print()
+                        print("Positions log after appending first node: ")
+                        print(positions.items())
+                        print()
 
         # pt al doilea element(prima frunza) la prima executie:
         # if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
