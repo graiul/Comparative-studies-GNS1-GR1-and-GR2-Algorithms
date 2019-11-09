@@ -327,7 +327,9 @@ def is_joinable(data_node_to_be_joined, partial_solution, data_graph, query_stwi
 
                                     if aux[-1] not in positions[pos]:
                                         positions[pos].append(aux[-1])
+                                    print("Positions log: ")
                                     print(positions.items())
+                                    print()
 
         # pt al treilea element(a doua frunza):
         if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
@@ -368,7 +370,9 @@ def is_joinable(data_node_to_be_joined, partial_solution, data_graph, query_stwi
 
                                     if aux[-1] not in positions[pos]:
                                         positions[pos].append(aux[-1])
+                                    print("Positions log: ")
                                     print(positions.items())
+                                    print()
 
         # pt al doilea element(prima frunza):
         if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
@@ -383,32 +387,36 @@ def is_joinable(data_node_to_be_joined, partial_solution, data_graph, query_stwi
 
 
                     aux = copy.deepcopy(partial_solution)
-                    aux.append(data_node_to_be_joined)
-                    pos = aux.index(aux[-1])
-                    if aux not in complete_solutions:
+                    if list(query_stwig_as_dict.items())[1][1] == data_node_label:
 
-                        if data_node_to_be_joined not in positions[1]:
-                            # root_label = query_stwig_as_dict[1]
-                            # if data_graph.node[node]['label'] == root_label:
+                        aux.append(data_node_to_be_joined)
+                        pos = aux.index(aux[-1])
+                        if aux not in complete_solutions:
 
-                            # if data_node_to_be_joined in list(nx.ego_graph(data_graph, partial_solution[0], radius=1, center=True, undirected=True, distance=None).nodes()):
+                            if data_node_to_be_joined not in positions[1]:
+                                # root_label = query_stwig_as_dict[1]
+                                # if data_graph.node[node]['label'] == root_label:
 
-                            # Verificam daca label-ul primei frunze al STwig-ului query are aceeasi valoare ca si label-ul nodului data primit ca si parametru
-                            # si care sa cauta pentru pozitia primei frunze.
+                                # if data_node_to_be_joined in list(nx.ego_graph(data_graph, partial_solution[0], radius=1, center=True, undirected=True, distance=None).nodes()):
 
-                            # Trebuie sa existe muchie intre nodul de pe prima poz a sol partiale actuale(radacina), deci tot timpul ultimul nod
-                            # din log-ul nodurilor care se afla pe prima pozitie
-                            if data_graph.has_edge(positions[0][len(positions[0])-1], data_node_to_be_joined):
+                                # Verificam daca label-ul primei frunze al STwig-ului query are aceeasi valoare ca si label-ul nodului data primit ca si parametru
+                                # si care sa cauta pentru pozitia primei frunze.
 
-                                # if data_graph.node[data_node_to_be_joined]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[1]]:
+                                # Trebuie sa existe muchie intre nodul de pe prima poz a sol partiale actuale(radacina), deci tot timpul ultimul nod
+                                # din log-ul nodurilor care se afla pe prima pozitie
+                                if data_graph.has_edge(positions[0][len(positions[0])-1], data_node_to_be_joined):
 
-                                # print("Label of the first leaf of the query STwig: " + str(list(query_stwig_as_dict.items())[1][1]))
-                                # print("Label of data node verified: " + str(data_node_label))
-                                if list(query_stwig_as_dict.items())[1][1] == data_node_label:
-                                    found = True
-                                    if aux[-1] not in positions[pos]:
-                                        positions[pos].append(aux[-1])
-                                    print(positions.items())
+                                    # if data_graph.node[data_node_to_be_joined]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[1]]:
+
+                                    # print("Label of the first leaf of the query STwig: " + str(list(query_stwig_as_dict.items())[1][1]))
+                                    # print("Label of data node verified: " + str(data_node_label))
+                                    if list(query_stwig_as_dict.items())[1][1] == data_node_label:
+                                        found = True
+                                        if aux[-1] not in positions[pos]:
+                                            positions[pos].append(aux[-1])
+                                        print("Positions log: ")
+                                        print(positions.items())
+                                        print()
 
         # pt primul element, dupa mai multe executii. Trebuie schimbata radacina pentru noul STwig.
         if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
@@ -429,16 +437,22 @@ def is_joinable(data_node_to_be_joined, partial_solution, data_graph, query_stwi
                         # if data_graph.node[data_node_to_be_joined]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[len(partial_solution)]]:
                         if list(query_stwig_as_dict.items())[0][1] == data_node_label:
                             found = True
-                            # if node not in positions[0]:
-                            positions[0].append(data_node_to_be_joined)
-                            print(positions.items())
+                            if node not in positions[0]:
+                                positions[0].append(data_node_to_be_joined)
+                                print("Positions log: ")
+                                print(positions.items())
+                                print()
 
     # Pentru prima solutie la executie.
 
     # Problema pt moment este faptul ca urmatorul nod care ar trebui sa fie pe aceasta prima pozitie este inregistrat pe urmatoarea.
     # Acest lucru nu este corect, deoarece nu exista muchie intre ele, amandoua avand rolul de radacina pt STwig-ul data partial.
     if len(complete_solutions) == 0:
-        if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
+
+        # pt al primul element(radacina) la prima executie:
+        # if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
+        if len(partial_solution) == 0:
+
             if data_node_to_be_joined not in partial_solution:
 
                 # Aici facem verificarea dupa id-ul nodurilor. Trebuie modificat pentru a verifica dupa label, fara noduri.
@@ -463,7 +477,130 @@ def is_joinable(data_node_to_be_joined, partial_solution, data_graph, query_stwi
 
                     if data_node_to_be_joined not in positions[pos]:
                         positions[pos].append(data_node_to_be_joined)
+                    print("Positions log: ")
                     print(positions.items())
+                    print()
+
+        # pt al doilea element(prima frunza) la prima executie:
+        # if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
+        if len(partial_solution) == 1:
+                # print("We entered the execution for the second element (the first leaf)")
+
+                if data_node_to_be_joined not in partial_solution:
+
+                    # if node != sol[1]:
+
+                    # print("positions[0], root elements already used for data STwigs: " + str(positions[0]))
+
+
+                    aux = copy.deepcopy(partial_solution)
+                    if list(query_stwig_as_dict.items())[1][1] == data_node_label:
+
+                        aux.append(data_node_to_be_joined)
+                        pos = aux.index(aux[-1])
+                        if aux not in complete_solutions:
+
+                            if data_node_to_be_joined not in positions[1]:
+                                # root_label = query_stwig_as_dict[1]
+                                # if data_graph.node[node]['label'] == root_label:
+
+                                # if data_node_to_be_joined in list(nx.ego_graph(data_graph, partial_solution[0], radius=1, center=True, undirected=True, distance=None).nodes()):
+
+                                # Verificam daca label-ul primei frunze al STwig-ului query are aceeasi valoare ca si label-ul nodului data primit ca si parametru
+                                # si care sa cauta pentru pozitia primei frunze.
+
+                                # Trebuie sa existe muchie intre nodul de pe prima poz a sol partiale actuale(radacina), deci tot timpul ultimul nod
+                                # din log-ul nodurilor care se afla pe prima pozitie
+                                if data_graph.has_edge(positions[0][len(positions[0])-1], data_node_to_be_joined):
+
+                                    # if data_graph.node[data_node_to_be_joined]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[1]]:
+
+                                    # print("Label of the first leaf of the query STwig: " + str(list(query_stwig_as_dict.items())[1][1]))
+                                    # print("Label of data node verified: " + str(data_node_label))
+                                    if list(query_stwig_as_dict.items())[1][1] == data_node_label:
+                                        found = True
+                                        if aux[-1] not in positions[pos]:
+                                            positions[pos].append(aux[-1])
+                                        print("Positions log: ")
+                                        print(positions.items())
+                                        print()
+
+        # pt al treilea element(a doua frunza) la prima executie:
+        # if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
+        if len(partial_solution) == 2:
+                # print("We entered the execution for the third element (the second leaf)")
+
+                if data_node_to_be_joined not in partial_solution:
+
+                    # if node != sol[2]:
+
+                    # print("positions[1], first leaf elements already used for data STwigs: " + str(positions[1]))
+
+                    aux = copy.deepcopy(partial_solution)
+                    aux.append(data_node_to_be_joined)
+                    pos = aux.index(aux[-1])
+                    if aux not in complete_solutions:
+
+                        if data_node_to_be_joined not in positions[2]:
+                        # print("node: " + str(node))
+                        # print("positions[2]: " + str(positions[2]))
+
+                            # if data_node_to_be_joined in list(nx.ego_graph(data_graph, partial_solution[0], radius=1, center=True, undirected=True, distance=None).nodes()):
+
+                            # print("Checking if second leaf has edge with root.")
+                            # print("Root: " + str(positions[0][len(positions[0]) - 1]))
+                            # print("Potential leaf: " + str(data_node_to_be_joined))
+                            # print("Potential leaf label: " + str(data_node_label))
+                            if data_graph.has_edge(positions[0][len(positions[0]) - 1], data_node_to_be_joined):
+
+                                # if data_graph.node[data_node_to_be_joined]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[2]]:
+
+                                # print("Label of the second leaf of the query STwig: " + str(list(query_stwig_as_dict.items())[2][1]))
+                                # print("Label of data node verified: " + str(data_node_label))
+                                if list(query_stwig_as_dict.items())[2][1] == data_node_label:
+                                    found = True
+
+                                    # remove_used_node_from_node_list(node)
+
+                                    if aux[-1] not in positions[pos]:
+                                        positions[pos].append(aux[-1])
+                                    print("Positions log: ")
+                                    print(positions.items())
+                                    print()
+
+        # pt al patrulea element la prima executie:
+        # if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
+        if len(partial_solution) == 3:
+                if data_node_to_be_joined not in partial_solution:
+
+                    # if node != sol[2]:
+
+                    aux = copy.deepcopy(partial_solution)
+                    aux.append(data_node_to_be_joined)
+                    pos = aux.index(aux[-1])
+                    if aux not in complete_solutions:
+
+                        if data_node_to_be_joined not in positions[2]:
+                        # print("node: " + str(node))
+                        # print("positions[2]: " + str(positions[2]))
+
+                            # if data_node_to_be_joined in list(nx.ego_graph(data_graph, partial_solution[0], radius=1, center=True, undirected=True, distance=None).nodes()):
+
+                            if data_graph.has_edge(positions[0][len(positions[0]) - 1], data_node_to_be_joined):
+
+                                # if data_graph.node[data_node_to_be_joined]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[3]]:
+
+                                if list(query_stwig_as_dict.items())[3][1] == data_node_label:
+                                    found = True
+
+                                    # remove_used_node_from_node_list(node)
+
+                                    if aux[-1] not in positions[pos]:
+                                        positions[pos].append(aux[-1])
+                                    print("Positions log: ")
+                                    print(positions.items())
+                                    print()
+
 
     if found == True:
         return True
@@ -523,8 +660,7 @@ def next_data_vertex(partial_solution, data_graph, query_stwig_dict):
 def subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph):
     print()
     print("Started subgraph search: ")
-    print(Back.WHITE + Fore.LIGHTBLUE_EX + Style.BRIGHT + "Partial solution given: " + str(partial_solution))
-    print(Style.RESET_ALL)
+    print(Back.WHITE + Fore.LIGHTBLUE_EX + Style.BRIGHT + "Partial solution given: " + str(partial_solution) + Style.RESET_ALL)
     i = False
     if len(partial_solution) == len(list(query_stwig_dict.items())):
         if partial_solution not in complete_solutions:
@@ -578,9 +714,6 @@ def subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph
         #     print(current_node)
         #     subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph)
 
-
-
-
     else:
         # if len(partial_solution) == 2:
 
@@ -594,8 +727,8 @@ def subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph
 
 
 
-            print("Candidate: " + Fore.LIGHTRED_EX + str(candidate))
-            print(Style.RESET_ALL) # go back a position with restore position()
+            print("Candidate: " + Fore.LIGHTRED_EX + str(candidate) + Style.RESET_ALL)
+            # print()
 
             if partial_solution == []:
                 # i = False
@@ -603,10 +736,11 @@ def subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph
                 input()
                 exit(0)
 
+            # go back a position with restore position()
             print("Going back a position.")
             # input("Continue execution?")
             partial_solution = copy.deepcopy(restore_state(partial_solution)) #partial_solution[:1])
-            print(partial_solution)
+            print("Restored partial solution: " + str(partial_solution))
             if len(partial_solution) == 0:  # poz 0 = []
                 current_node = []
                 positions[1] = [] # poz 1 = []
@@ -623,18 +757,13 @@ def subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph
                 current_node = copy.deepcopy(partial_solution[-1])
                 positions[3] = []
 
-
-
-
-            print(current_node)
+            print("Current node: " + str(current_node))
             subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph)
 
 
         partial_solution = copy.deepcopy(update_state(candidate, partial_solution))
+        print("PARTIAL SOLUTION: " + str(partial_solution))
 
-
-        print("PARTIAL SOLUTION: ")
-        print(partial_solution)
         subgraph_search(partial_solution, query_stwig_dict, candidate, data_graph)
         # restore_state(partial_solution)
 
