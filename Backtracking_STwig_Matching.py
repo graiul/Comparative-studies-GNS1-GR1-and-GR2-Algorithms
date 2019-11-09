@@ -533,6 +533,8 @@ def subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph
             c_sol = copy.deepcopy(partial_solution)
             # print(is_joinable(3, [1,2], data_graph, query_stwig_dict))
             complete_solutions.append(c_sol)
+            f1.write(str(c_sol) + "\n")
+
             print("One complete solution found!")
             print(Fore.GREEN + Style.BRIGHT + "List of complete solutions: ")
             for cs in complete_solutions:
@@ -838,6 +840,9 @@ print("Positions log: ")
 print(positions.items())
 node_list_aux = copy.deepcopy(list(dataGraph.nodes()))
 ####################################################################################
+
+# Fisier text:
+f1 = open("f1.txt", "w+")
 
 # Executia algoritmului Backtracking:
 try:
