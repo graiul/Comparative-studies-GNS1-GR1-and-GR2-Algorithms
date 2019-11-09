@@ -467,16 +467,12 @@ def main():
             #
             # total_time = (timer() - start_time) * 1000
             #
-
-            # f2 = open("f2.txt", "w+")
             print("Results from STwig Algorithm: ")
             for item in return_dict.values():
                 # print(item)
                 for i in item:
                     print(i)
-                    # f2.write(str(i)+"\n")
-            # f2.close()
-
+            #
             # print()
             # print("Total exec time: " + str(total_time))
 
