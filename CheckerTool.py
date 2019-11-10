@@ -4,6 +4,7 @@ f1 = open("f1.txt", "r+")
 f2 = open("f2.txt", "r+")
 
 # https://www.techbeamers.com/python-read-file-line-by-line/
+# https://www.techbeamers.com/python-read-file-line-by-line/#reading-file-using-python-context-manager
 f1_string_lines = []
 f2_string_lines = []
 with open("f1.txt", "r") as rd:
@@ -20,6 +21,7 @@ with open("f2.txt", "r") as rd2:
 f1_int_lines = []
 int_backtracking_line = []
 for backtracking_line in f1_string_lines:
+    # https://www.geeksforgeeks.org/python-string-split/
     string_backtracking_line = backtracking_line.split(" ")
     for string_backtracking_line_element in string_backtracking_line:
         int_backtracking_line.append(int(string_backtracking_line_element))
