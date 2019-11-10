@@ -847,7 +847,9 @@ class STwig_Algorithm(object):
         STwig_matches = sorted(R)
         f2 = open("f2.txt", "w+")
         for match in STwig_matches:
-            f2.write(str(list(match)) + "\n")
+            for match_element in match:
+                f2.write(str(match_element) + " ")
+            f2.write("\n")
         f2.close()
         # for stwig in STwigs:
         #     print(stwig)
