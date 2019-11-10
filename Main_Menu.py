@@ -1,4 +1,6 @@
 import copy
+import traceback
+from collections import OrderedDict
 
 from Query_Graph_Generator import Query_Graph_Generator
 from DB_Access_Test import DB_Access_Test
@@ -634,9 +636,140 @@ def main():
             #     print(result)
             # print(Style.RESET_ALL)
 
-
         # elif option == 13:
+        #     ##################################################################
+        #
+        #     # GRAFUL DATA DIN NEO4J
+        #     # neograph_data = Graph("bolt://127.0.0.1:7690", auth=("neo4j", "changeme")) # Data Graph RI - Cluster Neo4J
+        #     neograph_data = Graph("bolt://127.0.0.1:7687",
+        #                           auth=("neo4j", "changeme"))  # Data Graph RI - O singura instanta de Neo4J
+        #
+        #     cqlQuery = "MATCH p=(n)-[r:PPI]->(m) return n.node_id, m.node_id"
+        #     result = neograph_data.run(cqlQuery).to_ndarray()
+        #     edge_list = result.tolist()
+        #     # print("edge_list: ")
+        #     # print(edge_list)
+        #     edge_list_integer_ids = []
+        #     for string_edge in edge_list:
+        #         edge_list_integer_ids.append([int(i) for i in string_edge])
+        #     # print("edge_list_integer_ids: ")
+        #     # print(edge_list_integer_ids)
+        #
+        #     dataGraph = nx.Graph()
+        #     dataGraph.add_edges_from(sorted(edge_list_integer_ids))
+        #     cqlQuery2 = "MATCH (n) return n.node_id, n.node_label"
+        #     result2 = neograph_data.run(cqlQuery2).to_ndarray()
+        #     # print("result2: ")
+        #     # print(result2)
+        #     node_ids_as_integers_with_string_labels = []
+        #     for node in result2:
+        #         # print(node[0])
+        #         node_ids_as_integers_with_string_labels.append([int(node[0]), node[1]])
+        #     # print("node_ids_as_integers_with_string_labels: ")
+        #     # print(node_ids_as_integers_with_string_labels)
+        #
+        #     node_attr_dict = OrderedDict(sorted(node_ids_as_integers_with_string_labels))
+        #     nx.set_node_attributes(dataGraph, node_attr_dict, 'label')
+        #     #############################################################################
+        #
+        #     # # FUNCTIONAL:
+        #     # query_stwig_1 = [1, 2, 3, 4]
+        #     # # query_stwig_1 = [1, 2, 3]
+        #     # # query_stwig_1 = [2, 3, 4]
+        #     # # query_stwig_1 = [1, 2]
+        #     # # query_stwig_1 = [3, 10]
+        #     # # query_stwig_1 = [4, 10]
+        #     #
+        #     #
+        #     # print("Query STwig: " + str(query_stwig_1))
+        #     # # Label-ul radacinii
+        #     # root_label = small_graph.node[query_stwig_1[0]]['label']
+        #     # # Label-urile vecinilor din lista
+        #     # neighbor_labels = []
+        #     # for n in query_stwig_1[1:]:
+        #     #     neighbor_labels.append(small_graph.node[n]['label'])
+        #     #
+        #     # query_stwig_1_as_labels = []
+        #     # query_stwig_1_as_labels.append(root_label)
+        #     # for nl in neighbor_labels:
+        #     #     query_stwig_1_as_labels.append(nl)
+        #     # print("query_stwig_1_as_labels: " + str(query_stwig_1_as_labels))
+        #     # print()
+        #     # query_stwig_1_as_labels_source = copy.deepcopy(query_stwig_1_as_labels)
+        #     #
+        #     # query_stwig1_dict = OrderedDict(zip(query_stwig_1, query_stwig_1_as_labels_source))
+        #     # print("query_stwig1_dict: ")
+        #     # print(query_stwig1_dict.items())
+        #     # print()
+        #     # p_solution = []
+        #     # complete_solutions = []
+        #     # positions = OrderedDict().fromkeys([0,1,2,3])
+        #     # positions[0] = []
+        #     # positions[1] = []
+        #     # positions[2] = []
+        #     # positions[3] = []
+        #     # print(positions.items())
+        #     # node_list_aux = copy.deepcopy(list(small_graph.nodes()))
+        #     #######################################################################################
+        #
+        #     # FUNCTIONAL:
+        #     # query_stwig_1 = [1773, 1488, 1898, 2285]
+        #
+        #     # Aici cream un obiect graf query:
+        #     query_graph_gen = Query_Graph_Generator()
+        #     query_graph = query_graph_gen.gen_RI_query_graph()
+        #     query_stwig_1 = list(query_graph.nodes())
+        #     print("Query STwig: " + str(query_stwig_1))
+        #     # Label-ul radacinii
+        #     # root_label = dataGraph.node[query_stwig_1[0]]['label']
+        #     root_label = query_graph.node[query_stwig_1[0]]['label']
+        #     # Label-urile vecinilor din lista
+        #     neighbor_labels = []
+        #     for n in query_stwig_1[1:]:
+        #         # neighbor_labels.append(dataGraph.node[n]['label'])
+        #         neighbor_labels.append(query_graph.node[n]['label'])
+        #
+        #     query_stwig_1_as_labels = []
+        #     query_stwig_1_as_labels.append(root_label)
+        #     for nl in neighbor_labels:
+        #         query_stwig_1_as_labels.append(nl)
+        #     print("query_stwig_1_as_labels: " + str(query_stwig_1_as_labels))
+        #     print()
+        #     query_stwig_1_as_labels_source = copy.deepcopy(query_stwig_1_as_labels)
+        #
+        #     query_stwig1_dict = OrderedDict(zip(query_stwig_1, query_stwig_1_as_labels_source))
+        #     print("query_stwig1_dict: ")
+        #     print(query_stwig1_dict.items())
+        #     print()
+        #     p_solution = []
+        #     complete_solutions = []
+        #     positions = OrderedDict().fromkeys([0, 1, 2, 3])
+        #     positions[0] = []
+        #     positions[1] = []
+        #     positions[2] = []
+        #     positions[3] = []
+        #     print("Positions log: ")
+        #     print(positions.items())
+        #     node_list_aux = copy.deepcopy(list(dataGraph.nodes()))
+        #     ####################################################################################
+        #
+        #     # Fisier text:
+        #     f1 = open("f1.txt", "w+")
+        #
+        #     # Executia algoritmului Backtracking:
         #     backtracking = Backtracking_STwig_Matching()
+        #     try:
+        #         # subgraph_search(p_solution, query_stwig1_dict, [], small_graph)
+        #         start_time = timer()
+        #         subgraph_search(p_solution, query_stwig1_dict, [], dataGraph)
+        #         total_time = timer() - start_time
+        #         print("Timp total de executare algoritm Backtracking: " + str(total_time) + " secunde.")
+        #     except IndexError:
+        #         tb = traceback.format_exc()
+        #         print(tb)
+        #     except SystemExit:
+        #         exit(0)
+
         elif option == 0:
             exit(code=0)
 
