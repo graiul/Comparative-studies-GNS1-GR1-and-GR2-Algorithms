@@ -822,26 +822,38 @@ class STwig_Algorithm(object):
             for val2 in combinations_dict.items():
 
                 # Cazul al doilea:
-                # Daca un nod frunza din stwig-ul data apare mai mult decat o singura data, eliminam stwig-ul data.
-                print("\nSecond case: ")
+                # Daca un id-ul unui nod frunza din stwig-ul data apare mai mult decat o singura data, eliminam stwig-ul data.
+                # print("\nSecond case: ")
                 from collections import Counter
-                print("Counter for leafs of the data stwig: ")
+                # print("Counter for leafs of the data stwig: ")
                 counter = Counter(val2[0][1:])
-                print(counter)
+                # print(counter)
                 counter_values = counter.values()
                 for c_v in counter_values:
                     if c_v > 1:
                         if val2[0] in combinations_dict_final:
-                            print("Must remove: " + str(val2[0]))
+                            # print("Must remove: " + str(val2[0]))
                             combinations_dict_final.pop(val2[0])
 
+            # Tot pentru cazul al doilea: dupa scoaterea duplicatelor, verificam daca doua STwig-uri au
+            # listele de frunza sub forma de permutari una fata de cealalta.
+            if len(combinations_dict_final.keys()) != 0:
+                print("combinations_list_without_leaf_permutations: ")
+                for val2_key in combinations_dict_final.keys():
+                    print(val2_key)
+            # combinations_list_without_leaf_permutations = list(combinations_dict_final.keys())
+            # for comb_w_o_p_elem in combinations_list_without_leaf_permutations:
+            #     print(comb_w_o_p_elem)
 
             for stwig in combinations_dict_final.keys():
                 # print(stwig)
                 R.append(stwig)
 
-            for stwig_dict_item in combinations_dict_final.items():
-                print(stwig_dict_item)
+
+
+            # Afisarea fiecarui STwig data impreuna cu label-urile fiecarui nod al sau.
+            # for stwig_dict_item in combinations_dict_final.items():
+            #     print(stwig_dict_item)
 
         # print("STWIG MATCHES: ")
         STwig_matches = sorted(R)
