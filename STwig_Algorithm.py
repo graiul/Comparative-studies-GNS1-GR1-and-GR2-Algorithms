@@ -706,8 +706,8 @@ class STwig_Algorithm(object):
             S = []
             S_child_lists = []
             for root_child_label in L:
-                # print("     Root_child_label: " + str(root_child_label))
-                # print("     " + str(type(root_child_label)))
+                print("     Root_child_label: " + str(root_child_label))
+                print("     " + str(type(root_child_label)))
                 for child in children:
                     if child not in S_child_lists:
                         # print("     child= " + str(child)) # Child, sau vecinii de ordinul 1.
@@ -723,17 +723,17 @@ class STwig_Algorithm(object):
                             # S[S.index(li)] = child
                             S_child_lists.append(child_id)
                 # print("S[li]= " + str(S[S.index(li)]))
-                # print("     S_child_lists= " + str(S_child_lists))
+                print("     S_child_lists= " + str(S_child_lists))
                 S.append(S_child_lists) # Sli, lista de children, pentru fiecare li care respecta conditia, adaugam in S
                 S_child_lists = []
 
 
-            # print("     Sets of children(for selected root " + str(root_node) + ") with labels  " + str(L) + ": ")
+            print("     Sets of children(for selected root " + str(root_node) + ") with labels  " + str(L) + ": ")
 
 
             S_one_elems = []
             for s in S:
-                # print("     " + str(s))
+                print("     " + str(s))
                 for s_temp in s:
                     S_one_elems.append(s_temp)
             S_one_elems.insert(0, root_node)
@@ -859,11 +859,11 @@ class STwig_Algorithm(object):
                 test_list_dict[key] = []
 
             for key in test_list_dict.keys():
-                print("key:" + str(key))
+                # print("key:" + str(key))
                 for el2 in combinations_list_with_leaf_permutations_for_comparison:
-                    print("el2: " + str(el2))
+                    # print("el2: " + str(el2))
                     result = all(elem in key for elem in el2)
-                    print("result: " + str(result))
+                    # print("result: " + str(result))
                     if result == True:
                         test_list_dict[key].append(el2)
 
@@ -879,10 +879,9 @@ class STwig_Algorithm(object):
                                     combinations_list_with_leaf_permutations_for_removal.remove(value)
                                     to_remove.append(value)
 
-            print("List of data STwigs without permutated leafs: ")
-            for final_stwig in combinations_list_with_leaf_permutations_for_removal:
-                print(final_stwig)
-            # final_stwigs = copy.deepcopy(combinations_list_with_leaf_permutations_for_removal)
+            # print("List of data STwigs without permutated leafs: ")
+            # for final_stwig in combinations_list_with_leaf_permutations_for_removal:
+            #     print(final_stwig)
 
 
             for stwig in combinations_list_with_leaf_permutations_for_removal:
