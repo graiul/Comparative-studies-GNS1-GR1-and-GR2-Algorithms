@@ -725,7 +725,11 @@ class STwig_Algorithm(object):
                 # print("     S_child_lists= " + str(S_child_lists))
                 S.append(S_child_lists) # Sli, lista de children, pentru fiecare li care respecta conditia, adaugam in S
                 S_child_lists = []
+
+
             # print("     Sets of children(for selected root " + str(root_node) + ") with labels  " + str(L) + ": ")
+
+
             S_one_elems = []
             for s in S:
                 # print("     " + str(s))
@@ -812,12 +816,8 @@ class STwig_Algorithm(object):
             #
             #     print()
 
-
-
                 if stwig_labels != val[1]:
                     combinations_dict_final.pop(val[0])
-                # print()
-
 
             for val2 in combinations_dict.items():
 
@@ -839,11 +839,25 @@ class STwig_Algorithm(object):
             # listele de frunza sub forma de permutari una fata de cealalta.
             if len(combinations_dict_final.keys()) != 0:
                 print("combinations_list_without_leaf_permutations: ")
-                for val2_key in combinations_dict_final.keys():
-                    print(val2_key)
-            # combinations_list_without_leaf_permutations = list(combinations_dict_final.keys())
-            # for comb_w_o_p_elem in combinations_list_without_leaf_permutations:
-            #     print(comb_w_o_p_elem)
+                # for val2_key in combinations_dict_final.keys():
+                #     print(val2_key)
+                combinations_list_without_leaf_permutations = list(combinations_dict_final.keys())
+                copy_of_combinations_dict_final_keys = list(combinations_dict_final.keys())
+                for comb_w_o_p_elem in combinations_list_without_leaf_permutations:
+                    # print(comb_w_o_p_elem)
+                    leafs_comb_w_o_p_elem = sorted(comb_w_o_p_elem[1:])
+                    print(leafs_comb_w_o_p_elem)
+                    # Daca se afla in lista originala dar elementele sunt in alta ordine decat cea sortata, ele trebuie eliminate
+                    # Adica de exemplu daca avem
+                    # [6523, [269, 1481, 6107]]
+                    # [6523, [269, 6107, 1481]], prima varianta ramane, iar a doua este eliminata.
+                    # Tinand cont de faptul ca ele sunt analoage, am ales sa pastrez varianta cu frunzele ordonate crescator dupa id.
+                    # La acest nivel al implementarii, nu vor apare mai multe frunze cu acelasi id, chiar daca au acelasi label.
+                    # Astfel, alegem varianta cu frunze sortate crescator, si comparam existenta acestor frunze
+                    # in lista cu celelalte STwig-uri data.
+                    # Daca radacina este aceeasi, si toate frunzele existente, stergem STwig-urile data care nu au aceste frunze
+                    # sortate crescator.
+                    if
 
             for stwig in combinations_dict_final.keys():
                 # print(stwig)
