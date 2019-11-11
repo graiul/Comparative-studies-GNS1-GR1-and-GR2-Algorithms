@@ -2,16 +2,14 @@ import copy
 from collections import OrderedDict
 
 test_list = [(6523, 269, 9382, 12230), (6523, 269, 12230, 9382)] # Chei pentru dictionar
-test_list2 = [(6523, 269, 9382, 12230), (6523, 269, 12230, 9382), (1, 2, 3, 4)] # Ambele sunt valori pentru fiecare cheie din dict
+test_list2 = [(6523, 269, 9382, 12230), (6523, 269, 12230, 9382), (1, 2, 3, 4)] # Se vor alege doar valorile care sunt analoage cu cheile.
+                                                                                # Aceasta diferentiere este importanta in cazul in care in lista avem
+                                                                                # rezultatele de la mai multe STwig-uri query.
 test_list2_for_removal = copy.deepcopy(test_list2)
 
 test_list_dict = OrderedDict().fromkeys(test_list)
 for key in test_list_dict.keys():
     test_list_dict[key] = []
-# for elem in test_list_dict.keys():
-#     print(elem)
-# test_result = all(elem in (6523, 269, 9382, 12230) for elem in (6523, 269, 9382, 12230))
-# print(test_result)
 
 for key in test_list_dict.keys():
     print("key:" + str(key))
@@ -23,8 +21,8 @@ for key in test_list_dict.keys():
             test_list_dict[key].append(el2)
         #     test_list2.remove(el)
 print()
-print(test_list_dict[(6523, 269, 9382, 12230)])
-print(test_list_dict[(6523, 269, 12230, 9382)])
+print("test_list_dict[(6523, 269, 9382, 12230)] values: " + str(test_list_dict[(6523, 269, 9382, 12230)]))
+print("test_list_dict[(6523, 269, 12230, 9382)] values: " + str(test_list_dict[(6523, 269, 12230, 9382)]))
 
 to_remove = []
 for key in test_list_dict.keys():
@@ -37,6 +35,8 @@ for key in test_list_dict.keys():
                     if value == el2:
                         test_list2_for_removal.remove(value)
                         to_remove.append(value)
+print()
+print("List of data STwigs without permutated leafs: ")
 print(test_list2_for_removal)
 
         # NU MAI TREB:Numara aparitiile primului stwig in a doua lista, indiferent de ordinea frunzelor
