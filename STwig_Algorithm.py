@@ -1,4 +1,5 @@
 import threading
+from collections import OrderedDict
 from concurrent.futures.thread import ThreadPoolExecutor
 from multiprocessing.dummy import Pool as ThreadPool
 
@@ -781,6 +782,7 @@ class STwig_Algorithm(object):
                 # >>> [0,1] == [0,1,2]
                 # False
                 # "Lists are equal if elements at the same index are equal. Ordering is taken into account then."
+
             stwig_labels = copy.deepcopy(L)
             rr = str(copy.deepcopy(r))
             stwig_labels.insert(0, rr)
@@ -822,7 +824,7 @@ class STwig_Algorithm(object):
             for val2 in combinations_dict.items():
 
                 # Cazul al doilea:
-                # Daca un id-ul unui nod frunza din stwig-ul data apare mai mult decat o singura data, eliminam stwig-ul data.
+                # Daca un id al unui nod frunza din stwig-ul data apare mai mult decat o singura data, eliminam stwig-ul data.
                 # print("\nSecond case: ")
                 from collections import Counter
                 # print("Counter for leafs of the data stwig: ")
@@ -837,27 +839,49 @@ class STwig_Algorithm(object):
 
             # Tot pentru cazul al doilea: dupa scoaterea duplicatelor, verificam daca doua STwig-uri au
             # listele de frunza sub forma de permutari una fata de cealalta.
+            # Daca se afla in lista originala dar elementele sunt in alta ordine decat cea sortata, ele trebuie eliminate
+            # Adica de exemplu daca avem
+            # [6523, [269, 1481, 6107]]
+            # [6523, [269, 6107, 1481]], prima varianta ramane, iar a doua este eliminata.
+            # La acest nivel al implementarii, nu vor apare mai multe frunze cu acelasi id, chiar daca au acelasi label.
+
             if len(combinations_dict_final.keys()) != 0:
-                print("combinations_list_without_leaf_permutations: ")
-                # for val2_key in combinations_dict_final.keys():
-                #     print(val2_key)
-                combinations_list_without_leaf_permutations = list(combinations_dict_final.keys())
-                copy_of_combinations_dict_final_keys = list(combinations_dict_final.keys())
-                for comb_w_o_p_elem in combinations_list_without_leaf_permutations:
-                    # print(comb_w_o_p_elem)
-                    leafs_comb_w_o_p_elem = sorted(comb_w_o_p_elem[1:])
-                    print(leafs_comb_w_o_p_elem)
-                    # Daca se afla in lista originala dar elementele sunt in alta ordine decat cea sortata, ele trebuie eliminate
-                    # Adica de exemplu daca avem
-                    # [6523, [269, 1481, 6107]]
-                    # [6523, [269, 6107, 1481]], prima varianta ramane, iar a doua este eliminata.
-                    # Tinand cont de faptul ca ele sunt analoage, am ales sa pastrez varianta cu frunzele ordonate crescator dupa id.
-                    # La acest nivel al implementarii, nu vor apare mai multe frunze cu acelasi id, chiar daca au acelasi label.
-                    # Astfel, alegem varianta cu frunze sortate crescator, si comparam existenta acestor frunze
-                    # in lista cu celelalte STwig-uri data.
-                    # Daca radacina este aceeasi, si toate frunzele existente, stergem STwig-urile data care nu au aceste frunze
-                    # sortate crescator.
-                    if
+                print("Data STwigs without leaf permutations: ")
+
+
+                combinations_list_with_leaf_permutations = list(combinations_dict_final.keys())
+                combinations_list_with_leaf_permutations_for_comparison = copy.deepcopy(list(combinations_dict_final.keys()))
+                combinations_list_with_leaf_permutations_for_removal = copy.deepcopy(list(combinations_dict_final.keys()))
+
+                test_list_dict = OrderedDict().fromkeys(combinations_list_with_leaf_permutations)
+                for key in test_list_dict.keys():
+                    test_list_dict[key] = []
+
+                for key in test_list_dict.keys():
+                    print("key:" + str(key))
+                    for el2 in combinations_list_with_leaf_permutations_for_comparison:
+                        print("el2: " + str(el2))
+                        result = all(elem in key for elem in el2)
+                        print("result: " + str(result))
+                        if result == True:
+                            test_list_dict[key].append(el2)
+
+                to_remove = []
+                for key in test_list_dict.keys():
+                    for value in test_list_dict[key]:
+                        if key in to_remove:
+                            continue
+                        else:
+                            if value != key:
+                                for el2 in combinations_list_with_leaf_permutations_for_comparison:
+                                    if value == el2:
+                                        combinations_list_with_leaf_permutations_for_removal.remove(value)
+                                        to_remove.append(value)
+
+                print("List of data STwigs without permutated leafs: ")
+                for final_stwig in combinations_list_with_leaf_permutations_for_removal:
+                    print(final_stwig)
+
 
             for stwig in combinations_dict_final.keys():
                 # print(stwig)
