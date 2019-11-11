@@ -757,6 +757,7 @@ class STwig_Algorithm(object):
                 elem_labels = []
             combinations_dict = dict(zip(combinations, elem_labels_total))
             combinations_dict_final = copy.deepcopy(combinations_dict)
+            final_stwigs = None
             # vals = list(combinations_dict.values())[0]
 
             # Aici am facut pentru exemplul de la pagina 792-jos din articolul p788_zhaosun_vldb2012.
@@ -845,45 +846,46 @@ class STwig_Algorithm(object):
             # [6523, [269, 6107, 1481]], prima varianta ramane, iar a doua este eliminata.
             # La acest nivel al implementarii, nu vor apare mai multe frunze cu acelasi id, chiar daca au acelasi label.
 
-            if len(combinations_dict_final.keys()) != 0:
-                print("Data STwigs without leaf permutations: ")
+            # if len(combinations_dict_final.keys()) != 0:
+            #     print("Data STwigs without leaf permutations: ")
 
 
-                combinations_list_with_leaf_permutations = list(combinations_dict_final.keys())
-                combinations_list_with_leaf_permutations_for_comparison = copy.deepcopy(list(combinations_dict_final.keys()))
-                combinations_list_with_leaf_permutations_for_removal = copy.deepcopy(list(combinations_dict_final.keys()))
+            combinations_list_with_leaf_permutations = list(combinations_dict_final.keys())
+            combinations_list_with_leaf_permutations_for_comparison = copy.deepcopy(list(combinations_dict_final.keys()))
+            combinations_list_with_leaf_permutations_for_removal = copy.deepcopy(list(combinations_dict_final.keys()))
 
-                test_list_dict = OrderedDict().fromkeys(combinations_list_with_leaf_permutations)
-                for key in test_list_dict.keys():
-                    test_list_dict[key] = []
+            test_list_dict = OrderedDict().fromkeys(combinations_list_with_leaf_permutations)
+            for key in test_list_dict.keys():
+                test_list_dict[key] = []
 
-                for key in test_list_dict.keys():
-                    print("key:" + str(key))
-                    for el2 in combinations_list_with_leaf_permutations_for_comparison:
-                        print("el2: " + str(el2))
-                        result = all(elem in key for elem in el2)
-                        print("result: " + str(result))
-                        if result == True:
-                            test_list_dict[key].append(el2)
+            for key in test_list_dict.keys():
+                print("key:" + str(key))
+                for el2 in combinations_list_with_leaf_permutations_for_comparison:
+                    print("el2: " + str(el2))
+                    result = all(elem in key for elem in el2)
+                    print("result: " + str(result))
+                    if result == True:
+                        test_list_dict[key].append(el2)
 
-                to_remove = []
-                for key in test_list_dict.keys():
-                    for value in test_list_dict[key]:
-                        if key in to_remove:
-                            continue
-                        else:
-                            if value != key:
-                                for el2 in combinations_list_with_leaf_permutations_for_comparison:
-                                    if value == el2:
-                                        combinations_list_with_leaf_permutations_for_removal.remove(value)
-                                        to_remove.append(value)
+            to_remove = []
+            for key in test_list_dict.keys():
+                for value in test_list_dict[key]:
+                    if key in to_remove:
+                        continue
+                    else:
+                        if value != key:
+                            for el2 in combinations_list_with_leaf_permutations_for_comparison:
+                                if value == el2:
+                                    combinations_list_with_leaf_permutations_for_removal.remove(value)
+                                    to_remove.append(value)
 
-                print("List of data STwigs without permutated leafs: ")
-                for final_stwig in combinations_list_with_leaf_permutations_for_removal:
-                    print(final_stwig)
+            print("List of data STwigs without permutated leafs: ")
+            for final_stwig in combinations_list_with_leaf_permutations_for_removal:
+                print(final_stwig)
+            # final_stwigs = copy.deepcopy(combinations_list_with_leaf_permutations_for_removal)
 
 
-            for stwig in combinations_dict_final.keys():
+            for stwig in combinations_list_with_leaf_permutations_for_removal:
                 # print(stwig)
                 R.append(stwig)
 
