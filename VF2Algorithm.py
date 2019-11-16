@@ -22,7 +22,7 @@ init()
 class VF2Algorithm(GenericQueryProc):
 
     # M = [] # Lista de asocieri intre noduri query si data / Matchings.
-           # Cum decurge procedura de asociere, dupa procedura de refinement?
+             # Cum decurge procedura de asociere, dupa procedura de refinement?
 
     # Solutie partiala curenta (prima corespondenta functioneaza tot timpul):
     # M.append(["u1", "v4"]) # Voi alege pentru prima asociere in mod aleator un nod data. Acesta va fi inceputul asocieriilor.
@@ -78,20 +78,21 @@ class VF2Algorithm(GenericQueryProc):
 
         # GRAFUL QUERY - FOLOSESTE NODURI CU ID DE TIPUL INT
         query_graph_gen = Query_Graph_Generator()
-        if graph_choice == "sm":
-            self.queryGraph = query_graph_gen.gen_small_graph_query_graph()
-            nx.set_node_attributes(self.queryGraph, False, 'matched')
+        # if graph_choice == "sm":
+        #     self.queryGraph = query_graph_gen.gen_small_graph_query_graph()
+        #     nx.set_node_attributes(self.queryGraph, False, 'matched')
 
-        if graph_choice == "ri":
-            self.queryGraph = query_graph_gen.gen_RI_query_graph()
-            nx.set_node_attributes(self.queryGraph, False, 'matched')
+        # if graph_choice == "ri":
+        graph_choice = "ri"
+        self.queryGraph = query_graph_gen.gen_RI_query_graph()
+        nx.set_node_attributes(self.queryGraph, False, 'matched')
 
         # GRAFUL DATA DIN NEO4J
-        neograph_data = Graph("bolt://127.0.0.1:7690", auth=("neo4j", "changeme"))  # Data Graph RI din READ_REPLICA
+        # neograph_data = Graph("bolt://127.0.0.1:7690", auth=("neo4j", "changeme"))  # Data Graph RI din READ_REPLICA
                                                                                     # din cluster Neo4J cu cinci instante.
                                                                                     # Patru 'core' si una 'read replica'.
 
-        # neograph_data = Graph("bolt://127.0.0.1:7687", auth=("neo4j", "changeme")) # Data Graph RI - O singura instanta de Neo4J
+        neograph_data = Graph("bolt://127.0.0.1:7687", auth=("neo4j", "changeme")) # Data Graph RI - O singura instanta de Neo4J
 
         cqlQuery = "MATCH p=(n)-[r:PPI]->(m) return n.node_id, m.node_id"
         result = neograph_data.run(cqlQuery).to_ndarray()
@@ -122,6 +123,7 @@ class VF2Algorithm(GenericQueryProc):
         nx.set_node_attributes(self.dataGraph, node_attr_dict, 'label')
         nx.set_node_attributes(self.dataGraph, False, 'matched')
         if len(M) > 0:
+            # Matching-ul trebuie sa fie fara id-uri, doar label-uri.
             self.queryGraph.node[M[0][0]]['matched'] = True
             self.dataGraph.node[M[0][1]]['matched'] = True
 
@@ -156,8 +158,6 @@ class VF2Algorithm(GenericQueryProc):
 
     # Trebuie sa vad ce folos are restoreState in context
     # Trebuie sa returnez toate instantele lui M, adica de fiecare data cand graful query a fost gasit in totalitate in graful data.
-
-
 
     def subGraphSearch(self, M):
         if M == None: # Termina executia programului.
