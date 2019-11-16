@@ -88,6 +88,8 @@ class VF2Algorithm(GenericQueryProc):
         graph_choice = "ri"
         self.queryGraph = query_graph_gen.gen_RI_query_graph()
         nx.set_node_attributes(self.queryGraph, False, 'matched')
+        print("Query graph nodes: " + str(self.queryGraph.nodes(data=True)))
+        print("Query graph edges: " + str(self.queryGraph.edges()))
 
         # GRAFUL DATA DIN NEO4J
         # neograph_data = Graph("bolt://127.0.0.1:7690", auth=("neo4j", "changeme"))  # Data Graph RI din READ_REPLICA
@@ -124,8 +126,12 @@ class VF2Algorithm(GenericQueryProc):
         node_attr_dict = OrderedDict(sorted(node_ids_as_integers_with_string_labels))
         nx.set_node_attributes(self.dataGraph, node_attr_dict, 'label')
         nx.set_node_attributes(self.dataGraph, False, 'matched')
+
         if len(M) > 0:
             # Matching-ul trebuie sa fie fara id-uri, doar label-uri.
+            print("M: ")
+            for m_item in M:
+                print(m_item)
             self.queryGraph.node[M[0][0]]['matched'] = True
             self.dataGraph.node[M[0][1]]['matched'] = True
 
@@ -142,7 +148,6 @@ class VF2Algorithm(GenericQueryProc):
         # print(self.dataGraph.nodes(data=True))
         # print(self.dataGraph.edges())
         # print()
-
 
     # Varianta in care lucram cu lista M in vederea verificarii daca un nod a fost asociat deja sau nu este dificil de implementat datorita contradictiei care apare:
     # in anumite cazuri, adica pentru unele noduri query sau data este nevoie doar de ultima asociere din lista, iar daca aceasta nu corespunde cerintelor, trebuie verificata toata lista.
