@@ -299,8 +299,8 @@ class VF2Algorithm(GenericQueryProc):
         # print()
         # print(M)
         if len(M) == 0:
-            print("\nNu avem valori pt Mq si Mg pentru ca nu avem o prima asociere inca.")
-            print("Astfel, Cq si Cg vor avea toate nodurile din grafurile query, respectiv cel data.")
+            # print("\nNu avem valori pt Mq si Mg pentru ca nu avem o prima asociere inca.")
+            # print("Astfel, Cq si Cg vor avea toate nodurile din grafurile query, respectiv cel data.")
             Cq = list(self.queryGraph.nodes())
             Cg = list(self.dataGraph.nodes())
 
@@ -340,20 +340,21 @@ class VF2Algorithm(GenericQueryProc):
             occurence_list = []
 
             if len(M) == 0:
-                print("Inca nu avem nici un matching, deci nu putem verifica 'such that candidate is not connected from already matched data vertices' ")
-                print("Dar verificam daca exista muchie intre nodul candidat si celelalte noduri data. Facem acest lucru pentru a verifica si urmatoarele doua conditii.")
-                print(
-                    "Pentru ca nu avem inca asocieri in lista M, nu avem Mq si Mg. De aceea nu putem verifica Conditia(2) sau Conditia(3) pentru ca are nevoie de aceleasi doua liste Mq si Mg.")
-                print(
-                    "Conform p133han pentru rularea algoritmului este nevoie deja de o asociere existenta in lista M.")
-                print(
-                    "Din articolul p133han, http://www.vldb.org/pvldb/vol6/p133-han.pdf, sectiunea 3.3 VF2 Algorithm, explicatii pentru metoda NextQueryVertex: ")
-                print(
-                    "NextQueryVertex: Unlike Ullmann, VF2 starts with the first vertex and selects a vertex connected from the already matched query vertices. Note that the original VF2 algorithm does not define any order in which query vertices are selected.")
-                print("'already matched query vertices.'")
-                print("Deci avem nevoie de un matching la inceputul executarii algoritmului.")
-                print(
-                    "Astfel returnam candidatii cu care putem face asocierea primului nod al grafului query. Cu alte cuvinte, radacinile-candidat.")
+                # Cateva detalii despre prima iteratie a rularii:
+                # print("Inca nu avem nici un matching, deci nu putem verifica 'such that candidate is not connected from already matched data vertices' ")
+                # print("Dar verificam daca exista muchie intre nodul candidat si celelalte noduri data. Facem acest lucru pentru a verifica si urmatoarele doua conditii.")
+                # print(
+                #     "Pentru ca nu avem inca asocieri in lista M, nu avem Mq si Mg. De aceea nu putem verifica Conditia(2) sau Conditia(3) pentru ca are nevoie de aceleasi doua liste Mq si Mg.")
+                # print(
+                #     "Conform p133han pentru rularea algoritmului este nevoie deja de o asociere existenta in lista M.")
+                # print(
+                #     "Din articolul p133han, http://www.vldb.org/pvldb/vol6/p133-han.pdf, sectiunea 3.3 VF2 Algorithm, explicatii pentru metoda NextQueryVertex: ")
+                # print(
+                #     "NextQueryVertex: Unlike Ullmann, VF2 starts with the first vertex and selects a vertex connected from the already matched query vertices. Note that the original VF2 algorithm does not define any order in which query vertices are selected.")
+                # print("'already matched query vertices.'")
+                # print("Deci avem nevoie de un matching la inceputul executarii algoritmului.")
+                # print(
+                #     "Astfel returnam candidatii cu care putem face asocierea primului nod al grafului query. Cu alte cuvinte, radacinile-candidat.")
 
                 return query_node_candidates
 
