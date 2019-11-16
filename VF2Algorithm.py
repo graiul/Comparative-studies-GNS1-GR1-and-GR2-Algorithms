@@ -44,7 +44,9 @@ class VF2Algorithm(GenericQueryProc):
     M_list = []
 
 
-    def __init__(self, M, graph_choice): #, queryGraphFile, dataGraphFile, graph_format_type):
+    # def __init__(self, M, graph_choice): #, queryGraphFile, dataGraphFile, graph_format_type):
+    def __init__(self, M): #, queryGraphFile, dataGraphFile):
+
         # self.queryGraph = query_graph
         # self.dataGraph = data_graph
         self.start_time = timer()
