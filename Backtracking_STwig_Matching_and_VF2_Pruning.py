@@ -799,7 +799,8 @@ def renew_node_list(old_node_list):
     print(old_node_list)
     return old_node_list
 
-# Va prelua din graful data nodurile pentru fiecare pozitie al solutiei partiale
+# Va prelua din graful data nodurile pentru fiecare pozitie al solutiei partiale.
+# Astfel cautarea nu se va mai face direct in graful data, ci in multimea de refined candidates.
 def filterCandidates(self, query_node):
         candidates = []
         # if query_node is None:
