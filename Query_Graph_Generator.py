@@ -87,13 +87,13 @@ class Query_Graph_Generator(object):
 
 
         # De testat: Indiferent de id-uri, diferite label-uri date de intrare pentru algoritmi, si cautare doar dupa label-uri.
-        # query_graph_edges = [[1, 2], [1, 3], [1, 4]]
+        query_graph_edges = [[1, 2], [1, 3], [1, 4]]
         # query_graph_edges = [[10, 7], [10, 5], [10, 3]]
-        query_graph_edges = [[6524, 2844], [6524, 6107], [6524, 12230]] # Pt VF2. Radacina are id-ul 6524 in loc de 6523(6523 este in graful data. 6524 nu exista in graful data).
+        # query_graph_edges = [[6524, 2844], [6524, 6107], [6524, 12230]] # Pt VF2. Radacina are id-ul 6524 in loc de 6523(6523 este in graful data. 6524 nu exista in graful data).
 
 
-
-        node_attr = ["20", "15", "32", "32"]
+        node_attr = ["20", "15", "32", "32"] # ok
+        # node_attr = ["29", "25", "19", "29"] # ok
         # node_attr = ["19", "15", "32", "32"]
         # node_attr = ["20", "15", "20", "32"]
         # node_attr = ["19", "15", "20", "32"]
