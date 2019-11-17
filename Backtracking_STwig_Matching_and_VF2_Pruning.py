@@ -665,19 +665,58 @@ def next_data_vertex(partial_solution, data_graph):
         # Filter candidates folosind label-ul acestei pozitii
         position_label = query_stwig_1_as_labels_source[0]
         print("Position [0] label: " + str(position_label))
-        filtered_candidates = filterCandidates(position_label)
+        filtered_candidates_pos_0 = filterCandidates(position_label)
         initial_match_values_pos_0_candidates = []
-        for im in filtered_candidates:
+        for im_0 in filtered_candidates_pos_0:
             initial_match_values_pos_0_candidates.append(False)
-        print("Candidates for position [0] and the mentioned label: " + str(filtered_candidates))
-        matched_true_false_data_nodes_pos_0_dict = OrderedDict(zip(filtered_candidates, initial_match_values_pos_0_candidates))
+        print("Candidates for position [0] and the mentioned label: " + str(filtered_candidates_pos_0))
+        matched_true_false_data_nodes_pos_0_dict = OrderedDict(zip(filtered_candidates_pos_0, initial_match_values_pos_0_candidates))
         print("matched_true_false_data_nodes_pos_0_dict: " + str(list(matched_true_false_data_nodes_pos_0_dict.items())))
 
 
-        # pt al primul element(radacina) la prima executie:
+        # Position 1:
+        # Filter candidates folosind label-ul acestei pozitii
+        position_label = query_stwig_1_as_labels_source[1]
+        print("Position [1] label: " + str(position_label))
+        filtered_candidates_pos_1 = filterCandidates(position_label)
+        initial_match_values_pos_1_candidates = []
+        for im_1 in filtered_candidates_pos_1:
+            initial_match_values_pos_1_candidates.append(False)
+        print("Candidates for position [1] and the mentioned label: " + str(filtered_candidates_pos_1))
+        matched_true_false_data_nodes_pos_1_dict = OrderedDict(zip(filtered_candidates_pos_1, initial_match_values_pos_1_candidates))
+        print("matched_true_false_data_nodes_pos_1_dict: " + str(list(matched_true_false_data_nodes_pos_1_dict.items())))
+
+
+        # Position 2:
+        # Filter candidates folosind label-ul acestei pozitii
+        position_label = query_stwig_1_as_labels_source[2]
+        print("Position [2] label: " + str(position_label))
+        filtered_candidates_pos_2 = filterCandidates(position_label)
+        initial_match_values_pos_2_candidates = []
+        for im_2 in filtered_candidates_pos_2:
+            initial_match_values_pos_2_candidates.append(False)
+        print("Candidates for position [2] and the mentioned label: " + str(filtered_candidates_pos_2))
+        matched_true_false_data_nodes_pos_2_dict = OrderedDict(zip(filtered_candidates_pos_2, initial_match_values_pos_2_candidates))
+        print("matched_true_false_data_nodes_pos_2_dict: " + str(list(matched_true_false_data_nodes_pos_2_dict.items())))
+
+
+        # Position 3:
+        # Filter candidates folosind label-ul acestei pozitii
+        position_label = query_stwig_1_as_labels_source[3]
+        print("Position [3] label: " + str(position_label))
+        filtered_candidates_pos_3 = filterCandidates(position_label)
+        initial_match_values_pos_3_candidates = []
+        for im_3 in filtered_candidates_pos_3:
+            initial_match_values_pos_3_candidates.append(False)
+        print("Candidates for position [3] and the mentioned label: " + str(filtered_candidates_pos_3))
+        matched_true_false_data_nodes_pos_3_dict = OrderedDict(zip(filtered_candidates_pos_3, initial_match_values_pos_3_candidates))
+        print("matched_true_false_data_nodes_pos_3_dict: " + str(list(matched_true_false_data_nodes_pos_3_dict.items())))
+
+
+        # pt primul element(radacina) la prima executie:
         if len(partial_solution) == 0:
 
-            for data_node_to_be_joined in filtered_candidates:
+            for data_node_to_be_joined in filtered_candidates_pos_0:
                 if data_node_to_be_joined not in partial_solution:
 
                     # Aici facem verificarea dupa id-ul nodurilor. Trebuie modificat pentru a verifica dupa label, fara noduri.
@@ -714,16 +753,9 @@ def next_data_vertex(partial_solution, data_graph):
                             # print()
 
         # pt al doilea element(prima frunza) la prima executie:
-        # if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
         if len(partial_solution) == 1:
             # print("We entered the execution for the second element (the first leaf)")
-            # Filter candidates folosind label-ul acestei pozitii
-            position_label = query_stwig_1_as_labels_source[1]
-            print("Position [1] label: " + str(position_label))
-            filtered_candidates = filterCandidates(position_label)
-            print("Candidates for position [1] and the mentioned label: " + str(filtered_candidates))
-            for data_node_to_be_joined in filtered_candidates:
-
+            for data_node_to_be_joined in filtered_candidates_pos_1:
                 if data_node_to_be_joined not in partial_solution:
 
                     aux = copy.deepcopy(partial_solution)
@@ -740,17 +772,15 @@ def next_data_vertex(partial_solution, data_graph):
                             # din log-ul nodurilor care se afla pe prima pozitie
                             if data_graph.has_edge(positions[0][len(positions[0]) - 1], data_node_to_be_joined):
 
-                                # if data_graph.node[data_node_to_be_joined]['label'] == query_stwig_as_dict[list(query_stwig_as_dict.keys())[1]]:
-
                                 # print("Label of the first leaf of the query STwig: " + str(list(query_stwig_as_dict.items())[1][1]))
                                 # print("Label of data node verified: " + str(data_node_label))
                                 # if list(query_stwig_as_dict.items())[1][1] == data_node_label:
 
-                                if data_graph.node[data_node_to_be_joined]['matched'] == False:
+                                if matched_true_false_data_nodes_pos_1_dict[data_node_to_be_joined] == False:
                                     found = True
                                     if aux[-1] not in positions[pos]:
                                         positions[pos].append(aux[-1])
-                                    data_graph.node[data_node_to_be_joined]['matched'] = True
+                                    matched_true_false_data_nodes_pos_1_dict[data_node_to_be_joined] = True
                                     # print("Positions log: " + str(list(positions.items())))
                                     # print()
 
@@ -979,7 +1009,7 @@ def next_data_vertex(partial_solution, data_graph):
     if found == True:
         return data_node_to_be_joined
 
-    return False
+    return None
 
 
     # for node in list(data_graph.nodes()):
