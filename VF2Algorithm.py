@@ -238,7 +238,6 @@ class VF2Algorithm(GenericQueryProc):
                     #     print("Not joinable!")
 
 
-    # Unele noduri pot avea eticheta compusa. Astfel verificam daca eticheta unui nod query SE AFLA IN eticheta unui nod data.
     def filterCandidates(self, query_node):
         candidates = []
         # if query_node is None:
@@ -247,6 +246,8 @@ class VF2Algorithm(GenericQueryProc):
             if self.queryGraph.node[query_node]['label'] == self.dataGraph.node[data_node]['label']:
                 candidates.append(data_node)
         return candidates
+
+        # Eticheta unui nod query SE AFLA IN eticheta unui nod data.
         # candidates = []
         # # for x in VF2QueryGraphDict.keys():
         # # print("Candidates for node: " + u.getVertexLabel())
@@ -257,6 +258,7 @@ class VF2Algorithm(GenericQueryProc):
         #         candidates.append(dataGraphDict.get(y).getVertexID())
         #
         # return candidates
+
     # def filterCandidates(self, q, g, u): # Poate avea si denumirea de c().
     #     self.q = q #Aici se folosesc variabilele din clasa abstracta atunci cand folosim "self"
     #     self.g = g
@@ -697,12 +699,13 @@ class VF2Algorithm(GenericQueryProc):
             # print(Style.RESET_ALL)
             return
 
-    # VARIANTA PROPRIE: Trebuie sa dau si valoarea False indicativului 'matched' nodurilor u si v.
     def restoreState(self, M, u, v): # Inlatur o asociere / match din M, care in acest caz, cautand perechea [u, v], ar trebui sa o elimine, si in acelasi timp, perechea eliminata sa fie cea adaugata de
                                      # updateState, adica ultima pereche.
         M.remove([u, v])
         # SAU pentru a elimina ultimul element:
         # M.remove(M[-1])
+
+     #SAU restoreState: Trebuie sa dau si valoarea False indicativului 'matched' nodurilor u si v.
 
     def adj(self, u, graph):
         return graph.neighbors(u)
