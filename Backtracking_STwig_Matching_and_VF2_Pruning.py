@@ -278,6 +278,7 @@ from timeit import default_timer as timer
     #     self.current_node = current_node
     #     self.data_graph = data_graph
 
+# data_node_to_be_joined trebuie luat din filter_candidates.
 def is_joinable(data_node_to_be_joined, partial_solution, data_graph, query_stwig_as_dict):
 
     found = False
@@ -327,9 +328,8 @@ def is_joinable(data_node_to_be_joined, partial_solution, data_graph, query_stwi
 
                                     if aux[-1] not in positions[pos]:
                                         positions[pos].append(aux[-1])
-                                    print("Positions log: ")
-                                    print(positions.items())
-                                    print()
+                                    # print("Positions log: " + str(list(positions.items())))
+                                    # print()
 
         # pt al treilea element(a doua frunza):
         if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
@@ -370,9 +370,8 @@ def is_joinable(data_node_to_be_joined, partial_solution, data_graph, query_stwi
 
                                     if aux[-1] not in positions[pos]:
                                         positions[pos].append(aux[-1])
-                                    print("Positions log: ")
-                                    print(positions.items())
-                                    print()
+                                    # print("Positions log: " + str(list(positions.items())))
+                                    # print()
 
         # pt al doilea element(prima frunza):
         if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
@@ -414,9 +413,8 @@ def is_joinable(data_node_to_be_joined, partial_solution, data_graph, query_stwi
                                         found = True
                                         if aux[-1] not in positions[pos]:
                                             positions[pos].append(aux[-1])
-                                        print("Positions log: ")
-                                        print(positions.items())
-                                        print()
+                                        # print("Positions log: " + str(list(positions.items())))
+                                        # print()
 
         # pt primul element, dupa mai multe executii. Trebuie schimbata radacina pentru noul STwig.
         if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
@@ -439,9 +437,8 @@ def is_joinable(data_node_to_be_joined, partial_solution, data_graph, query_stwi
                             found = True
                             if data_node_to_be_joined not in positions[0]:
                                 positions[0].append(data_node_to_be_joined)
-                                print("Positions log: ")
-                                print(positions.items())
-                                print()
+                                # print("Positions log: " + str(list(positions.items())))
+                                # print()
 
     # Pentru prima solutie la executie.
 
@@ -469,9 +466,9 @@ def is_joinable(data_node_to_be_joined, partial_solution, data_graph, query_stwi
 
                 if list(query_stwig_as_dict.items())[0][1] == data_node_label:
 
-                    print("Positions log before appending first node: ")
-                    print(positions[0])
-                    print(str(list(positions.items())))
+                    print("Positions log before appending first node: " + str(list(positions.items())))
+                    # print("Positions log for position[0] before appending first node: " + str(positions[0]))
+                    print()
 
                     if data_node_to_be_joined not in positions[0]:
                         found = True
@@ -481,9 +478,8 @@ def is_joinable(data_node_to_be_joined, partial_solution, data_graph, query_stwi
                         pos = aux.index(aux[-1])
 
                         positions[pos].append(data_node_to_be_joined)
-                        print("Positions log after appending first node: ")
-                        print(positions.items())
-                        print()
+                        # print("Positions log after appending first node: " + str(list(positions.items())))
+                        # print()
 
         # pt al doilea element(prima frunza) la prima executie:
         # if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
@@ -523,9 +519,8 @@ def is_joinable(data_node_to_be_joined, partial_solution, data_graph, query_stwi
                                     found = True
                                     if aux[-1] not in positions[pos]:
                                         positions[pos].append(aux[-1])
-                                    print("Positions log: ")
-                                    print(positions.items())
-                                    print()
+                                    # print("Positions log: " + str(list(positions.items())))
+                                    # print()
 
         # pt al treilea element(a doua frunza) la prima executie:
         # if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
@@ -566,9 +561,8 @@ def is_joinable(data_node_to_be_joined, partial_solution, data_graph, query_stwi
 
                                     if aux[-1] not in positions[pos]:
                                         positions[pos].append(aux[-1])
-                                    print("Positions log: ")
-                                    print(positions.items())
-                                    print()
+                                    # print("Positions log: " + str(list(positions.items())))
+                                    # print()
 
         # pt al patrulea element la prima executie:
         # if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
@@ -599,9 +593,8 @@ def is_joinable(data_node_to_be_joined, partial_solution, data_graph, query_stwi
 
                                     if aux[-1] not in positions[pos]:
                                         positions[pos].append(aux[-1])
-                                    print("Positions log: ")
-                                    print(positions.items())
-                                    print()
+                                    # print("Positions log: " + str(list(positions.items())))
+                                    # print()
 
 
     if found == True:
@@ -725,7 +718,7 @@ def subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph
         candidate = next_data_vertex(partial_solution, data_graph, query_stwig_dict)
         if candidate is not None:
             print("Candidate: " + str(candidate))
-            print("Position logs: " + str(positions.items()))
+            print("Positions log after choosing candidate: " + str(list(positions.items())))
 
         if candidate is None:  # go back a position with restore position()
 
@@ -801,14 +794,15 @@ def renew_node_list(old_node_list):
 
 # Va prelua din graful data nodurile pentru fiecare pozitie al solutiei partiale.
 # Astfel cautarea nu se va mai face direct in graful data, ci in multimea de refined candidates.
-def filterCandidates(self, query_node):
+def filterCandidates(self, query_node_label):
         candidates = []
         # if query_node is None:
         #     exit(0)
-        for data_node in self.dataGraph.nodes():
-            if self.queryGraph.node[query_node]['label'] == self.dataGraph.node[data_node]['label']:
+        for data_node in dataGraph.nodes():
+            if query_node_label == self.dataGraph.node[data_node]['label']:
                 candidates.append(data_node)
         return candidates
+
         # candidates = []
         # # for x in VF2QueryGraphDict.keys():
         # # print("Candidates for node: " + u.getVertexLabel())
@@ -1259,6 +1253,9 @@ for node in result2:
 
 node_attr_dict = OrderedDict(sorted(node_ids_as_integers_with_string_labels))
 nx.set_node_attributes(dataGraph, node_attr_dict, 'label')
+# Pentru conditiile VF2:
+nx.set_node_attributes(dataGraph, False, 'matched')
+
 #############################################################################
 
 # # FUNCTIONAL:
@@ -1301,22 +1298,28 @@ nx.set_node_attributes(dataGraph, node_attr_dict, 'label')
 # node_list_aux = copy.deepcopy(list(small_graph.nodes()))
 #######################################################################################
 
-# FUNCTIONAL:
-# query_stwig_1 = [1773, 1488, 1898, 2285]
-
-# Aici cream un obiect graf query:
+print()
+# GRAFUL QUERY. Algoritmul va lucra doar cu label-urile acestor noduri.:
 query_graph_gen = Query_Graph_Generator()
 query_graph = query_graph_gen.gen_RI_query_graph()
+# Pentru conditiile VF2:
+nx.set_node_attributes(query_graph, False, 'matched')
+
 query_stwig_1 = list(query_graph.nodes())
-print("Query STwig: " + str(query_stwig_1))
+print("Query STwig node id's: " + str(query_stwig_1))
+query_matched_attributes = []
+for n1 in list(query_graph.nodes()):
+    query_matched_attributes.append(query_graph.node[n1]['matched'])
+print("Query STwig node 'matched' attributes: " + str(query_matched_attributes))
+
 # Label-ul radacinii
 # root_label = dataGraph.node[query_stwig_1[0]]['label']
 root_label = query_graph.node[query_stwig_1[0]]['label']
 # Label-urile vecinilor din lista
 neighbor_labels = []
-for n in query_stwig_1[1:]:
+for n2 in query_stwig_1[1:]:
     # neighbor_labels.append(dataGraph.node[n]['label'])
-    neighbor_labels.append(query_graph.node[n]['label'])
+    neighbor_labels.append(query_graph.node[n2]['label'])
 
 query_stwig_1_as_labels = []
 query_stwig_1_as_labels.append(root_label)
@@ -1325,10 +1328,14 @@ for nl in neighbor_labels:
 print("query_stwig_1_as_labels: " + str(query_stwig_1_as_labels))
 print()
 query_stwig_1_as_labels_source = copy.deepcopy(query_stwig_1_as_labels)
+query_stwig_1_matched_attribute_source = copy.deepcopy(query_matched_attributes)
 
 query_stwig1_dict = OrderedDict(zip(query_stwig_1, query_stwig_1_as_labels_source))
+query_stwig1_dict_matched_attribute = OrderedDict(zip(query_stwig_1, query_stwig_1_matched_attribute_source))
 print("query_stwig1_dict: ")
-print(query_stwig1_dict.items())
+print(list(query_stwig1_dict.items()))
+print("query_stwig1_dict_matched_attribute: ")
+print(list(query_stwig1_dict_matched_attribute.items()))
 print()
 p_solution = []
 complete_solutions = []
@@ -1337,8 +1344,7 @@ positions[0] = []
 positions[1] = []
 positions[2] = []
 positions[3] = []
-print("Positions log: ")
-print(positions.items())
+print("Positions log before first iteration: " + str(list(positions.items())))
 node_list_aux = copy.deepcopy(list(dataGraph.nodes()))
 ####################################################################################
 
