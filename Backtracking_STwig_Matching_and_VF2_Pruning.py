@@ -991,6 +991,8 @@ def next_data_vertex(partial_solution, data_graph):
                                     # print("Positions log: " + str(list(positions.items())))
                                     # print()
 
+# Cand trecem la o pozitie precedenta, frunzele de pe pozitia pt care am cautat in data trebuie sa fie marcate ca fiind matched=False.
+
     if found == True:
         return data_node_to_be_joined
 
