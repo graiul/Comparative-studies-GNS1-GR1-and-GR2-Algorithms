@@ -536,8 +536,8 @@ def main():
 
             M = []
             results = []
-            print("Query graph choice: for Small data graph or RI data graph? (sm/ri)")
-            graph_choice = str(input())
+            # print("Query graph choice: for Small data graph or RI data graph? (sm/ri)")
+            # graph_choice = str(input())
             start_time = timer()
             if len(M) == 0:
                 # Pentru radacini nu am mai facut pruning!
@@ -551,7 +551,9 @@ def main():
                 # vf2 = VF2Algorithm(M, 'small_query_graph_VF2.txt', 'small_data_graph_VF2.txt', 'RI')
                 # exit(0)
 
-                vf2 = VF2Algorithm(M, graph_choice)
+                # vf2 = VF2Algorithm(M, graph_choice)
+                vf2 = VF2Algorithm(M)
+
 
                 roots = vf2.subGraphSearch(M)[1]
                 vf2.results_dict.clear()
@@ -572,17 +574,18 @@ def main():
                     # M2 = [[1773, root]] # Algoritmul va schimba al doilea element doar.
                     # print("M2 = " + str(M2))
 
-                    if graph_choice == "sm":
-                        M2 = [[1, root]]
+                    # if graph_choice == "sm":
+                    #     M2 = [[1, root]]
 
-                    if graph_choice == "ri":
-                        M2 = [[1773, root]]
+                    # if graph_choice == "ri":
+                        # M2 = [[1773, root]]
                         # M2 = [[1488, root]]
                         # M2 = [[1898, root]]
                         # M2 = [[0, root]]
                         # M2 = [[7190, root]]
                         # M2 = [[269, root]]
-                        # M2 = [[6523, root]]
+
+                    M2 = [[6523, root]]
 
 
 
@@ -590,7 +593,9 @@ def main():
                         # print("Query root node: " + str(root))
 
                     # vf2 = VF2Algorithm(M, 'small_query_graph_VF2.txt', 'small_data_graph_VF2.txt', 'RI')
-                    vf2_2 = VF2Algorithm(M2, graph_choice)
+                    # vf2_2 = VF2Algorithm(M2, graph_choice)
+                    vf2_2 = VF2Algorithm(M2)
+
                     execution_flag = vf2_2.subGraphSearch(M2)
                     M_list_main.append(execution_flag)
                     # vf2 = None
@@ -600,25 +605,25 @@ def main():
                     # Pentru RI graph
                     # results.append([["Query root: " + "1773"], ["Data root: " + str(root)], [list(vf2_2.results_dict.items())[1:]]])
                     if execution_flag == None:
-                        if graph_choice == "sm":
-                            print(Fore.LIGHTGREEN_EX + str([["Query root: " + "1"], ["Data root: " + str(root)],
-                                                            [list(vf2_2.results_dict.items())[1:]]]))
+                        # if graph_choice == "sm":
+                        #     print(Fore.LIGHTGREEN_EX + str([["Query root: " + "1"], ["Data root: " + str(root)],
+                        #                                     [list(vf2_2.results_dict.items())[1:]]]))
+                        #     print(Style.RESET_ALL)
+
+                        # if graph_choice == "ri":
+                        # if len(list(vf2_2.results_dict.items())) > 0:
+
+                        leafs = copy.deepcopy(list(vf2_2.results_dict.items()))
+                        leafs.insert(0, root)
+                        res = copy.deepcopy(leafs)
+                        print("Results from VF2 Algorithm: ")
+                        if len(res) == len(vf2_2.queryGraph.nodes()):
+                            print(Fore.LIGHTGREEN_EX + "Data root: " + str(root))
+                            print(res)
+                            # print(len(res))
+                            # print(list(vf2_2.results_dict.items())[0])
                             print(Style.RESET_ALL)
-
-                        if graph_choice == "ri":
-                            # if len(list(vf2_2.results_dict.items())) > 0:
-
-                            leafs = copy.deepcopy(list(vf2_2.results_dict.items()))
-                            leafs.insert(0, root)
-                            res = copy.deepcopy(leafs)
-                            print("Results from VF2 Algorithm: ")
-                            if len(res) == len(vf2_2.queryGraph.nodes()):
-                                print(Fore.LIGHTGREEN_EX + "Data root: " + str(root))
-                                print(res)
-                                # print(len(res))
-                                # print(list(vf2_2.results_dict.items())[0])
-                                print(Style.RESET_ALL)
-                                vf2_2.results_dict.clear()
+                            vf2_2.results_dict.clear()
 
 
             total_time_sec = timer() - start_time
