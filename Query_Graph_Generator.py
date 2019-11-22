@@ -87,16 +87,33 @@ class Query_Graph_Generator(object):
 
 
         # De testat: Indiferent de id-uri, diferite label-uri date de intrare pentru algoritmi, si cautare doar dupa label-uri.
-        query_graph_edges = [[1, 2], [1, 3], [1, 4]]
+        # query_graph_edges = [[1, 2], [1, 3], [1, 4]]
         # query_graph_edges = [[10, 7], [10, 5], [10, 3]]
         # query_graph_edges = [[6524, 2844], [6524, 6107], [6524, 12230]] # Pt VF2. Radacina are id-ul 6524 in loc de 6523(6523 este in graful data. 6524 nu exista in graful data).
 
 
-        node_attr = ["20", "15", "32", "32"] # ok
-        # node_attr = ["29", "25", "19", "29"] # ok
+        # node_attr = ["20", "15", "32", "32"]
+        # node_attr = ["29", "25", "19", "29"]
         # node_attr = ["19", "15", "32", "32"]
         # node_attr = ["20", "15", "20", "32"]
         # node_attr = ["19", "15", "20", "32"]
+
+        # Pentru graf mic
+        # query_graph_edges = [[1, 2], [1, 3], [1, 4]]
+        # node_attr = ["101", "102", "103", "104"]
+
+        # query_graph_edges = [[1, 2], [1,3]]
+        # node_attr = ["101", "102", "103"]
+
+        # query_graph_edges = [[2, 3], [2, 4]]
+        # node_attr = ["102", "103", "104"]
+
+        # query_graph_edges = [[1, 2]]
+        # node_attr = ["101", "102"]
+
+        query_graph_edges = [[1111, 545454], [1111, 990909090], [1111, 87454747]]
+        node_attr = ["101", "102", "104", "104"]
+
 
 
         # Folosit de STwig Alg pentru filtrarea secventiala si cu graful RI de 10000 de muchii.
@@ -108,6 +125,15 @@ class Query_Graph_Generator(object):
         # Pentru VF2 pentru compararea cu una si cinci instante neo4j. Doar primul STwig de mai sus.
         # query_graph_edges = [[1773, 1488], [1773, 1898], [1773, 2285]]
         # node_attr = ["25", "28", "29", "27"]
+
+        # OK - STWIG SI VF2 dau la fel - data graf RI cu 10000 muchii
+        # query_graph_edges = [[1773, 1488], [1773, 1898], [1773, 2285]]
+        # node_attr = ["25", "28", "29", "27"]
+
+        # OK - STWIG SI VF2 dau la fel - data graf RI cu 10000 muchii
+        # query_graph_edges = [[1488, 7465]]
+        # node_attr = ["28", "18"]
+
 
 
         # query_graph_edges = [[0,1773],[0,1817],[0,2428],[0,3719],[0,4426],[0,8214],[0,9148]]
@@ -121,13 +147,7 @@ class Query_Graph_Generator(object):
 
 
 
-        # OK - STWIG SI VF2 dau la fel - data graf RI cu 10000 muchii
-        # query_graph_edges = [[1773, 1488], [1773, 1898], [1773, 2285]]
-        # node_attr = ["25", "28", "29", "27"]
 
-        # OK - STWIG SI VF2 dau la fel - data graf RI cu 10000 muchii
-        # query_graph_edges = [[1488, 7465]]
-        # node_attr = ["28", "18"]
 
 
 
