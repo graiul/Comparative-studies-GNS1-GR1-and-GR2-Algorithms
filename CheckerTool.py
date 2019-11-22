@@ -44,6 +44,7 @@ for stwig_line in f2_string_lines:
 print()
 for item2 in f2_int_lines:
     print(item2)
+print()
 counter_stwig = 0
 counter_backtracking = 0
 counter = 0
@@ -57,13 +58,11 @@ for stwig_line in f2_int_lines:
     # print("STwig line: " + str(stwig_line))
     for backtracking_line in f1_int_lines:
         # print("Backtracking line: " + str(backtracking_line))
-        counter += 1
+        # counter += 1
         result = all(elem in stwig_line for elem in backtracking_line)
         if result:
             print("STwig line: " + str(stwig_line) + " | Backtracking line: " + str(backtracking_line) + " | " + str(result))
 print()
 print("counter_stwig: " + str(counter_stwig))
 print("counter_backtracking: " + str(counter_backtracking))
-print("number of comparisons made: " + str(counter))
-# print()
-# print(all(elem in [6523, 269, 1481, 6107] for elem in [6523, 269, 1481, 12230]))
+
