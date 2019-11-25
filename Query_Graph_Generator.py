@@ -98,7 +98,7 @@ class Query_Graph_Generator(object):
         # node_attr = ["20", "15", "20", "32"]
         # node_attr = ["19", "15", "20", "32"]
 
-        # Pentru graf mic
+        # Pentru graf mic cu 10 noduri.
         # query_graph_edges = [[1, 2], [1, 3], [1, 4]]
         # node_attr = ["101", "102", "103", "104"]
 
@@ -111,8 +111,15 @@ class Query_Graph_Generator(object):
         # query_graph_edges = [[1, 2]]
         # node_attr = ["101", "102"]
 
-        query_graph_edges = [[1111, 545454], [1111, 990909090], [1111, 87454747]]
-        node_attr = ["101", "102", "104", "104"]
+        # query_graph_edges = [[1111, 545454], [1111, 990909090], [1111, 87454747]]
+        # node_attr = ["101", "102", "104", "104"]
+
+        # query_graph_edges = [[1111, 545454], [1111, 990909090], [1111, 87454747]]
+        # node_attr = ["101", "102", "104", "103"]
+
+        # Pentru graf mic cu 12 noduri.
+        query_graph_edges = [[1, 2], [1, 4], [1, 3], [3, 5]] # Arbore cu doua nivele
+        node_attr = ["101", "102", "104", "103", "105"] # Cinci pozitii, iar fiecare pozitie are o pereche de noduri.
 
 
 
