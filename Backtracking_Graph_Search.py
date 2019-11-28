@@ -64,77 +64,115 @@ def next_data_vertex(partial_solution, data_graph):
 
     # Position 0:
     # Obtain candidates folosind label-ul acestei pozitii
-    position_label = query_node_labels_source[0]
-    print("Position [0] label: " + str(position_label))
-    obtained_candidates_pos_0 = obtainCandidates(position_label)
+    position_label = query_edges_dict[query_graph_edges[0]]
+    print("Position [0] nodes label: " + str(position_label))
+    obtained_candidates_pos_0_node_0 = obtainCandidates(position_label[0])
+    obtained_candidates_pos_0_node_1 = obtainCandidates(position_label[1])
+    obtained_candidate_edges = obtainCandidateEdges(position_label[0], position_label[1])
+    print("Candidate edges: " + str(obtained_candidate_edges))
+
     initial_match_values_pos_0_candidates = []
-    for im_0 in obtained_candidates_pos_0:
+    for im_0 in obtained_candidates_pos_0_node_0:
         initial_match_values_pos_0_candidates.append(False)
-    print("Candidates for position [0] and the mentioned label: " + str(obtained_candidates_pos_0))
-    matched_true_false_data_nodes_pos_0_dict = OrderedDict(
-        zip(obtained_candidates_pos_0, initial_match_values_pos_0_candidates))
-    print("matched_true_false_data_nodes_pos_0_dict: " + str(list(matched_true_false_data_nodes_pos_0_dict.items())))
+    print("Candidate nodes for first node of edge on position[0] and the mentioned labels: " + str(obtained_candidates_pos_0_node_0))
+    print("Candidate nodes for second node of edge on position[0] and the mentioned labels: " + str(obtained_candidates_pos_0_node_1))
+
+    matched_true_false_data_nodes_pos_0_dict = OrderedDict(zip(obtained_candidates_pos_0_node_0, initial_match_values_pos_0_candidates))
+    # print("matched_true_false_data_nodes_pos_0_dict: " + str(list(matched_true_false_data_nodes_pos_0_dict.items())))
+    print()
 
     # Position 1:
     # Obtain candidates folosind label-ul acestei pozitii
-    position_label = query_node_labels_source[1]
-    print("Position [1] label: " + str(position_label))
-    obtained_candidates_pos_1 = obtainCandidates(position_label)
+    position_label = query_edges_dict[query_graph_edges[1]]
+
+    print("Position [1] nodes label: " + str(position_label))
+    obtained_candidates_pos_1_node_0 = obtainCandidates(position_label[0])
+    obtained_candidates_pos_1_node_1 = obtainCandidates(position_label[1])
+    obtained_candidate_edges = obtainCandidateEdges(position_label[0], position_label[1])
+    print("Candidate edges: " + str(obtained_candidate_edges))
+
     initial_match_values_pos_1_candidates = []
-    for im_1 in obtained_candidates_pos_1:
+    for im_1 in obtained_candidates_pos_1_node_0:
         initial_match_values_pos_1_candidates.append(False)
-    print("Candidates for position [1] and the mentioned label: " + str(obtained_candidates_pos_1))
+
+    print("Candidate nodes for first node of edge on position [1] and the mentioned label: " + str(obtained_candidates_pos_1_node_0))
+    print("Candidate nodes for first node of edge on position [1] and the mentioned label: " + str(obtained_candidates_pos_1_node_1))
+
     matched_true_false_data_nodes_pos_1_dict = OrderedDict(
-        zip(obtained_candidates_pos_1, initial_match_values_pos_1_candidates))
-    print("matched_true_false_data_nodes_pos_1_dict: " + str(list(matched_true_false_data_nodes_pos_1_dict.items())))
+        zip(obtained_candidates_pos_1_node_0, initial_match_values_pos_1_candidates))
+    # print("matched_true_false_data_nodes_pos_1_dict: " + str(list(matched_true_false_data_nodes_pos_1_dict.items())))
+    print()
 
     # Position 2:
     # Obtain candidates folosind label-ul acestei pozitii
-    position_label = query_node_labels_source[2]
-    print("Position [2] label: " + str(position_label))
+    position_label = query_edges_dict[query_graph_edges[2]]
+
+    print("Position [2] nodes label: " + str(position_label))
     obtained_candidates_pos_2 = obtainCandidates(position_label)
+
+    obtained_candidates_pos_2_node_0 = obtainCandidates(position_label[0])
+    obtained_candidates_pos_2_node_1 = obtainCandidates(position_label[1])
+    obtained_candidate_edges = obtainCandidateEdges(position_label[0], position_label[1])
+    print("Candidate edges: " + str(obtained_candidate_edges))
+
     initial_match_values_pos_2_candidates = []
     for im_2 in obtained_candidates_pos_2:
         initial_match_values_pos_2_candidates.append(False)
-    print("Candidates for position [2] and the mentioned label: " + str(obtained_candidates_pos_2))
+
+    print("Candidate nodes for first node of edge on position [2] and the mentioned label: " + str(obtained_candidates_pos_2_node_0))
+    print("Candidate nodes for first node of edge on position [2] and the mentioned label: " + str(obtained_candidates_pos_2_node_1))
+
     matched_true_false_data_nodes_pos_2_dict = OrderedDict(
         zip(obtained_candidates_pos_2, initial_match_values_pos_2_candidates))
-    print("matched_true_false_data_nodes_pos_2_dict: " + str(list(matched_true_false_data_nodes_pos_2_dict.items())))
+    # print("matched_true_false_data_nodes_pos_2_dict: " + str(list(matched_true_false_data_nodes_pos_2_dict.items())))
+    print()
 
     # Position 3:
     # Obtain candidates folosind label-ul acestei pozitii
-    position_label = query_node_labels_source[3]
-    print("Position [3] label: " + str(position_label))
+    position_label = query_edges_dict[query_graph_edges[3]]
+    print("Position [3] nodes label: " + str(position_label))
     obtained_candidates_pos_3 = obtainCandidates(position_label)
+
+    obtained_candidates_pos_3_node_0 = obtainCandidates(position_label[0])
+    obtained_candidates_pos_3_node_1 = obtainCandidates(position_label[1])
+    obtained_candidate_edges = obtainCandidateEdges(position_label[0], position_label[1])
+    print("Candidate edges: " + str(obtained_candidate_edges))
+
     initial_match_values_pos_3_candidates = []
     for im_3 in obtained_candidates_pos_3:
         initial_match_values_pos_3_candidates.append(False)
-    print("Candidates for position [3] and the mentioned label: " + str(obtained_candidates_pos_3))
+
+    print("Candidate nodes for first node of edge on position [3] and the mentioned label: " + str(obtained_candidates_pos_3_node_0))
+    print("Candidate nodes for first node of edge on position [3] and the mentioned label: " + str(obtained_candidates_pos_3_node_1))
+
+
     matched_true_false_data_nodes_pos_3_dict = OrderedDict(
         zip(obtained_candidates_pos_3, initial_match_values_pos_3_candidates))
-    print("matched_true_false_data_nodes_pos_3_dict: " + str(list(matched_true_false_data_nodes_pos_3_dict.items())))
+    # print("matched_true_false_data_nodes_pos_3_dict: " + str(list(matched_true_false_data_nodes_pos_3_dict.items())))
+    print()
 
     # Pentru prima solutie la executie.
     if len(complete_solutions) == 0:
         # pt primul element(radacina) la prima executie:
         if len(partial_solution) == 0:
-            for data_node_to_be_joined in obtained_candidates_pos_0:
-                if data_node_to_be_joined not in partial_solution:
-                    print("Positions log before appending first node: " + str(list(positions.items())))
-                    print()
-                    if data_node_to_be_joined not in positions[0]:
-                        if matched_true_false_data_nodes_pos_0_dict[data_node_to_be_joined] == False:
-                            found = True
-                            aux = copy.deepcopy(partial_solution)
-                            aux.append(data_node_to_be_joined)
-                            pos = aux.index(aux[-1])
-                            positions[pos].append(data_node_to_be_joined)
-                            matched_true_false_data_nodes_pos_0_dict[data_node_to_be_joined] = True
-                            break
-                            # print("Positions log after appending first node: " + str(list(positions.items())))
-                            # print()
+            pass
+            # if potential_edge not in partial_solution:
+                        #     print("Positions log before appending first node: " + str(list(positions.items())))
+                        #     print()
+                        #     if potential_edge not in positions[0]:
+                        #         if matched_true_false_data_nodes_pos_0_dict[data_node_to_be_joined] == False:
+                        #             found = True
+                        #             aux = copy.deepcopy(partial_solution)
+                        #             aux.append(data_node_to_be_joined)
+                        #             pos = aux.index(aux[-1])
+                        #             positions[pos].append(data_node_to_be_joined)
+                        #             matched_true_false_data_nodes_pos_0_dict[data_node_to_be_joined] = True
+                        #             break
+                        #             # print("Positions log after appending first node: " + str(list(positions.items())))
+                        #             # print()
 
         # pt al doilea element(prima frunza) la prima executie:
+
         if len(partial_solution) == 1:
             # print("We entered the execution for the second element (the first leaf)")
             for data_node_to_be_joined in obtained_candidates_pos_1:
@@ -323,17 +361,21 @@ def next_data_vertex(partial_solution, data_graph):
 
     return None
 
-def subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph):
+def is_joinable(edge):
+    pass
+
+def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph):
     print()
     print("Started subgraph search: ")
     print(Back.WHITE + Fore.LIGHTBLUE_EX + Style.BRIGHT + "Partial solution given: " + str(partial_solution) + Style.RESET_ALL)
     i = False
-    if len(partial_solution) == len(list(query_stwig_dict.items())):
+    print(query_graph_dict)
+    if len(partial_solution) == len(list(query_graph_dict.items())):
         if partial_solution not in complete_solutions:
             i = True
             # if partial_solution not in complete_solutions:
             c_sol = copy.deepcopy(partial_solution)
-            # print(is_joinable(3, [1,2], data_graph, query_stwig_dict))
+            # print(is_joinable(3, [1,2], data_graph, query_graph_dict))
             complete_solutions.append(c_sol)
             for c_sol_elem in c_sol:
                 f1.write(str(c_sol_elem) + " ")
@@ -356,21 +398,21 @@ def subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph
             # current_node = []
 
             # print("New current node: " + str(current_node))
-            # print("Next query vertex for new current node: " + str(next_query_vertex(current_node, query_stwig_dict)))
+            # print("Next query vertex for new current node: " + str(next_query_vertex(current_node, query_graph_dict)))
             # print("OK")
             # print()
 
-            # next_d = next_data_vertex(partial_solution, data_graph, query_stwig_dict)
+            # next_d = next_data_vertex(partial_solution, data_graph, query_graph_dict)
 
             # print("Next data vertex: " + str(next_d))
-            # print(is_joinable(next_d, partial_solution, data_graph, query_stwig_dict))
+            # print(is_joinable(next_d, partial_solution, data_graph, query_graph_dict))
 
 
             # return partial_solution
             # partial_solution = []
             # candidate = []
             # restore_state(partial_solution)
-            subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph)
+            subgraph_search(partial_solution, query_graph_dict, current_node, data_graph)
 
         # if partial_solution in complete_solutions:
         #     print("Already found.")
@@ -379,7 +421,7 @@ def subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph
         #     print(partial_solution)
         #     current_node = copy.deepcopy(partial_solution[-1])
         #     print(current_node)
-        #     subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph)
+        #     subgraph_search(partial_solution, query_graph_dict, current_node, data_graph)
 
     else:
         # if len(partial_solution) == 2:
@@ -431,13 +473,13 @@ def subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph
                 positions[3] = []
 
             print("Current node: " + str(current_node))
-            subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph)
+            subgraph_search(partial_solution, query_graph_dict, current_node, data_graph)
 
 
         partial_solution = copy.deepcopy(update_state(candidate, partial_solution))
         print("PARTIAL SOLUTION: " + str(partial_solution))
 
-        subgraph_search(partial_solution, query_stwig_dict, candidate, data_graph)
+        subgraph_search(partial_solution, query_graph_dict, candidate, data_graph)
         # restore_state(partial_solution)
 
     if i == False:
@@ -484,6 +526,15 @@ def obtainCandidates(query_node_label):
         #         candidates.append(dataGraphDict.get(y).getVertexID())
         #
         # return candidates
+
+def obtainCandidateEdges(edge_node_0_label, edge_node_1_label):
+        candidate_edges = []
+        for data_edge in dataGraph.edges():
+            if edge_node_0_label == dataGraph.node[data_edge[0]]['label']:
+                if edge_node_1_label == dataGraph.node[data_edge[1]]['label']:
+                    candidate_edges.append(data_edge)
+        return candidate_edges
+
 
 def refineCandidates(self, M, query_node, query_node_candidates):
     Mq = []  # Set of matched query vertices
@@ -862,13 +913,13 @@ def refineCandidates(self, M, query_node, query_node_candidates):
 # data_graph = aux_graph
 #
 #
-# query_stwig_1 = ['1773', '1488', '1898', '2285']
-# print("Query STwig: " + str(query_stwig_1))
+# query_nodes = ['1773', '1488', '1898', '2285']
+# print("Query STwig: " + str(query_nodes))
 # # Label-ul radacinii
-# root_label = graph_for_bactracking_search.node[query_stwig_1[0]]['label']
+# root_label = graph_for_bactracking_search.node[query_nodes[0]]['label']
 # # Label-urile vecinilor din lista
 # neighbor_labels = []
-# for n in query_stwig_1[1:]:
+# for n in query_nodes[1:]:
 #     neighbor_labels.append(graph_for_bactracking_search.node[n]['label'])
 #
 # query_node_labels = []
@@ -929,20 +980,20 @@ nx.set_node_attributes(dataGraph, False, 'matched')
 
 #############################################################################
 # # FUNCTIONAL:
-# query_stwig_1 = [1, 2, 3, 4]
-# # query_stwig_1 = [1, 2, 3]
-# # query_stwig_1 = [2, 3, 4]
-# # query_stwig_1 = [1, 2]
-# # query_stwig_1 = [3, 10]
-# # query_stwig_1 = [4, 10]
+# query_nodes = [1, 2, 3, 4]
+# # query_nodes = [1, 2, 3]
+# # query_nodes = [2, 3, 4]
+# # query_nodes = [1, 2]
+# # query_nodes = [3, 10]
+# # query_nodes = [4, 10]
 #
 #
-# print("Query STwig: " + str(query_stwig_1))
+# print("Query STwig: " + str(query_nodes))
 # # Label-ul radacinii
-# root_label = small_graph.node[query_stwig_1[0]]['label']
+# root_label = small_graph.node[query_nodes[0]]['label']
 # # Label-urile vecinilor din lista
 # neighbor_labels = []
-# for n in query_stwig_1[1:]:
+# for n in query_nodes[1:]:
 #     neighbor_labels.append(small_graph.node[n]['label'])
 #
 # query_node_labels = []
@@ -953,7 +1004,7 @@ nx.set_node_attributes(dataGraph, False, 'matched')
 # print()
 # query_node_labels_source = copy.deepcopy(query_node_labels)
 #
-# query_edges_dict = OrderedDict(zip(query_stwig_1, query_node_labels_source))
+# query_edges_dict = OrderedDict(zip(query_nodes, query_node_labels_source))
 # print("query_edges_dict: ")
 # print(query_edges_dict.items())
 # print()
@@ -977,19 +1028,19 @@ print("Query graph edges: " + str(query_graph_edges))
 # Pentru conditiile VF2:
 nx.set_node_attributes(query_graph, False, 'matched')
 
-query_stwig_1 = list(query_graph.nodes())
-print("Query node id's: " + str(query_stwig_1))
+query_nodes = list(query_graph.nodes())
+print("Query node id's: " + str(query_nodes))
 query_matched_attributes = []
 for n1 in list(query_graph.nodes()):
     query_matched_attributes.append(query_graph.node[n1]['matched'])
 print("Query node 'matched' attributes: " + str(query_matched_attributes))
 
 # Label-ul radacinii
-# root_label = dataGraph.node[query_stwig_1[0]]['label']
-root_label = query_graph.node[query_stwig_1[0]]['label']
+# root_label = dataGraph.node[query_nodes[0]]['label']
+root_label = query_graph.node[query_nodes[0]]['label']
 # Label-urile vecinilor din lista
 neighbor_labels = []
-for n2 in query_stwig_1[1:]:
+for n2 in query_nodes[1:]:
     # neighbor_labels.append(dataGraph.node[n]['label'])
     neighbor_labels.append(query_graph.node[n2]['label'])
 
@@ -998,8 +1049,8 @@ query_node_labels.append(root_label)
 for nl in neighbor_labels:
     query_node_labels.append(nl)
 print("Query nodes labels: " + str(query_node_labels))
-query_nodes_dict = OrderedDict(zip(query_stwig_1, query_node_labels))
-# query_stwig1_dict_matched_attribute = OrderedDict(zip(query_stwig_1, query_node_matched_attribute_source))
+query_nodes_dict = OrderedDict(zip(query_nodes, query_node_labels))
+# query_stwig1_dict_matched_attribute = OrderedDict(zip(query_nodes, query_node_matched_attribute_source))
 print("Query nodes dict: " + str(list(query_nodes_dict.items())))
 query_edge_labels = []
 for q_edge in query_graph_edges:
@@ -1010,7 +1061,7 @@ query_node_labels_source = copy.deepcopy(query_node_labels)
 query_node_matched_attribute_source = copy.deepcopy(query_matched_attributes)
 
 query_edges_dict = OrderedDict(zip(query_graph_edges, query_edge_labels))
-query_stwig1_dict_matched_attribute = OrderedDict(zip(query_stwig_1, query_node_matched_attribute_source))
+query_stwig1_dict_matched_attribute = OrderedDict(zip(query_nodes, query_node_matched_attribute_source))
 print("Query graph edges dictionary: " + str(list(query_edges_dict.items())))
 print()
 print("query_stwig1_dict_matched_attribute: ")
