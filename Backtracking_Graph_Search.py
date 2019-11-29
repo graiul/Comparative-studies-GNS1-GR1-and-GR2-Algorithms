@@ -169,6 +169,7 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
     # # print("matched_true_false_data_nodes_pos_3_dict: " + str(list(matched_true_false_data_nodes_pos_3_dict.items())))
     # print()
     ######################################################################
+
     # Pentru prima solutie la executie.
 
     if len(complete_solutions) == 0:
@@ -185,26 +186,26 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
                     print("YES")
                     if list(query_edges_dict.items())[0][1][1] == data_edge_to_be_joined_node_1_label:
                         print("YES")
-
-
-
-            #     print("Positions log before appending first node: " + str(list(positions.items())))
-            #     print()
-            #     if potential_edge not in positions[0]:
-            #             found = True
-            #             aux = copy.deepcopy(partial_solution)
-            #             aux.append(data_node_to_be_joined)
-            #             pos = aux.index(aux[-1])
-            #             positions[pos].append(data_node_to_be_joined)
+                        print("Positions log before appending first node: " + str(list(positions.items())))
+                        print()
+                if data_edge_to_be_joined not in positions[0]:
+                        found = True
+                        aux = copy.deepcopy(partial_solution)
+                        aux.append(data_edge_to_be_joined)
+                        pos = aux.index(aux[-1])
+                        positions[pos].append(data_edge_to_be_joined)
+#####################################################################
             #             matched_true_false_data_nodes_pos_0_dict[data_node_to_be_joined] = True
             #             break
-            #             # print("Positions log after appending first node: " + str(list(positions.items())))
-            #             # print()
+#####################################################################
+
+                        print("Positions log after appending first edge: " + str(list(positions.items())))
+                        print()
 
         # pt al doilea element(prima frunza) la prima executie:
 
         if len(partial_solution) == 1:
-            # print("We entered the execution for the second element (the first leaf)")
+            print("\nWe entered the execution for the second element (the first leaf)")
             for data_node_to_be_joined in obtained_candidates_pos_1:
                 if data_node_to_be_joined not in partial_solution:
                     aux = copy.deepcopy(partial_solution)
@@ -387,7 +388,7 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
     # Cand trecem la o pozitie precedenta, frunzele de pe pozitia pt care am cautat in data trebuie sa fie marcate ca fiind matched=False.
 
     if found == True:
-        return data_node_to_be_joined
+        return data_edge_to_be_joined
 
     return None
 
