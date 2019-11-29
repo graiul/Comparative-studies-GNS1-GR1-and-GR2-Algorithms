@@ -59,6 +59,13 @@ def next_data_edge(partial_solution, data_graph):
 def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edges_dict_input):
 
     found = False
+    print("\nCandidate data edge: " + str(data_edge_to_be_joined))
+    data_edge_to_be_joined_node_0_label = data_graph.node[data_edge_to_be_joined[0]]['label']
+    data_edge_to_be_joined_node_1_label = data_graph.node[data_edge_to_be_joined[1]]['label']
+    print("Candidate data edge node 0 label: " + str(data_edge_to_be_joined_node_0_label))
+    print("Candidate data edge node 1 label: " + str(data_edge_to_be_joined_node_1_label))
+
+
     ########################################################################
 
     # print("\nis_joinable exec:")
@@ -167,10 +174,20 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
     if len(complete_solutions) == 0:
         # pt primul element(radacina) la prima executie:
         if len(partial_solution) == 0:
-
             if data_edge_to_be_joined not in partial_solution:
-                print(list(query_edges_dict_input.items())[0][1])
-                # if list(query_edges_dict_input.items())[0][1] == False:
+                ########################################################
+                # Pentru VF2
+                # print(list(query_  _input.items())[0][1])
+                # if list(query_   _input.items())[0][1] == False:
+                ########################################################
+                print(list(query_edges_dict.items())[0][1])
+                if list(query_edges_dict.items())[0][1][0] == data_edge_to_be_joined_node_0_label:
+                    print("YES")
+                    if list(query_edges_dict.items())[0][1][1] == data_edge_to_be_joined_node_1_label:
+                        print("YES")
+
+
+
             #     print("Positions log before appending first node: " + str(list(positions.items())))
             #     print()
             #     if potential_edge not in positions[0]:
