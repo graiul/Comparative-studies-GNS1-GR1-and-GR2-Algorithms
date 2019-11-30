@@ -206,32 +206,49 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
 
         if len(partial_solution) == 1:
             print("\nWe entered the execution for the second element (the first leaf)")
-            for data_node_to_be_joined in obtained_candidates_pos_1:
-                if data_node_to_be_joined not in partial_solution:
-                    aux = copy.deepcopy(partial_solution)
-                    aux.append(data_node_to_be_joined)
-                    pos = aux.index(aux[-1])
-                    if aux not in complete_solutions:
-                        if data_node_to_be_joined not in positions[1]:
+            ########################################################
+            # Pentru VF2
+            # for data_node_to_be_joined in obtained_candidates_pos_1:
+            ########################################################
+            if data_edge_to_be_joined not in partial_solution:
+                print(list(query_edges_dict.items())[1][1])
+                if list(query_edges_dict.items())[1][1][0] == data_edge_to_be_joined_node_0_label:
+                    print("YES")
+                    if list(query_edges_dict.items())[1][1][1] == data_edge_to_be_joined_node_1_label:
+                        print("YES")
+                        print("Positions log before appending edge: " + str(list(positions.items())))
+                        if data_edge_to_be_joined not in positions[1]:
+                            found = True
+
+                            aux = copy.deepcopy(partial_solution)
+                            aux.append(data_edge_to_be_joined)
+                            pos = aux.index(aux[-1])
+                            if aux not in complete_solutions:
                             # Verificam daca label-ul primei frunze al STwig-ului query are aceeasi valoare ca si label-ul nodului data primit ca si parametru
                             # si care sa cauta pentru pozitia primei frunze.
 
                             # Trebuie sa existe muchie intre nodul de pe prima poz a sol partiale actuale(radacina), deci tot timpul ultimul nod
                             # din log-ul nodurilor care se afla pe prima pozitie
-                            if data_graph.has_edge(positions[0][len(positions[0]) - 1], data_node_to_be_joined):
+
+                                for e in partial_solution:
+                                    # if data_graph.has_edge(positions[0][len(positions[0]) - 1], data_node_to_be_joined):
+                                    if data_graph.has_edge(e[0], data_edge_to_be_joined[0]) or data_graph.has_edge(e[0], data_edge_to_be_joined[1]) or data_graph.has_edge(e[1], data_edge_to_be_joined[0]) or data_graph.has_edge(e[1], data_edge_to_be_joined[1]):
+                                        print("Has edge with previous position(s)")
+
 
                                 # print("Label of the first leaf of the query STwig: " + str(list(query_stwig_as_dict.items())[1][1]))
                                 # print("Label of data node verified: " + str(data_node_label))
-                                # if list(query_stwig_as_dict.items())[1][1] == data_node_label:
+                            # if list(query_stwig_as_dict.items())[1][1] == data_node_label:
+                           #####################################################################
+                            # if matched_true_false_data_nodes_pos_1_dict[data_node_to_be_joined] == False:                        #####################################################################
 
-                                if matched_true_false_data_nodes_pos_1_dict[data_node_to_be_joined] == False:
-                                    found = True
-                                    if aux[-1] not in positions[pos]:
-                                        positions[pos].append(aux[-1])
-                                    matched_true_false_data_nodes_pos_1_dict[data_node_to_be_joined] = True
-                                    break
-                                    # print("Positions log: " + str(list(positions.items())))
-                                    # print()
+                                        found = True
+                                        if aux[-1] not in positions[pos]:
+                                            positions[pos].append(aux[-1])
+                                #     matched_true_false_data_nodes_pos_1_dict[data_node_to_be_joined] = True
+                                #     break
+                                    print("Positions log after appending edge: " + str(list(positions.items())))
+                                    print()
 
         # pt al treilea element(a doua frunza) la prima executie:
         # if len(partial_solution) <= len(list(query_stwig_as_dict.items())):
