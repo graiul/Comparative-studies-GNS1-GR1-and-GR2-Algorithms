@@ -118,8 +118,19 @@ class Query_Graph_Generator(object):
         # node_attr = ["101", "102", "104", "103"]
 
         # Pentru graf mic cu 12 noduri.
-        query_graph_edges = [[1, 2], [1, 4], [1, 3], [3, 5]] # Arbore cu doua nivele
-        node_attr = ["101", "102", "104", "103", "105"] # Cinci pozitii, iar fiecare pozitie are o pereche de noduri.
+        # query_graph_edges = [[1, 2], [1, 3], [3, 5]]  # Trei pozitii, iar fiecare pozitie are o pereche de noduri.
+                                                      # Arbore cu doua nivele
+        # node_attr = ["101", "102", "103", "105"]
+
+
+        # query_graph_edges = [[111, 444], [111, 1010], [111, 888], [1010, 1212]] # Patru pozitii, iar fiecare pozitie are o pereche de noduri.
+                                                                                # Arbore cu doua nivele
+
+        query_graph_edges = [[11111, 222222], [11111, 44444], [11111, 33333], [44444, 55555]]
+
+        # query_graph_edges = [[11111, 222222], [11111, 44444], [11111, 33333], [33333, 55555]] # Bucla infinita la BTR?!
+
+        node_attr = ["101", "102", "104", "103", "105"]
 
 
 
