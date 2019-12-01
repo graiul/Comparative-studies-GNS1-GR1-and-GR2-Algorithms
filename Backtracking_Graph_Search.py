@@ -171,7 +171,6 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
     ######################################################################
 
     # Pentru prima solutie la executie.
-
     if len(complete_solutions) == 0:
         # pt primul element(radacina) la prima executie:
         if len(partial_solution) == 0:
