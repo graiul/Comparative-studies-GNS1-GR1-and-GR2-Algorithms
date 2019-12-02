@@ -20,6 +20,8 @@ from py2neo import Graph, Subgraph
 
 from timeit import default_timer as timer
 
+import pandas as pd
+
 def update_state(node, partial_solution):
     print("update_state exec: ")
     c_node = copy.deepcopy(node)
@@ -744,20 +746,44 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
     print(query_graph_dict)
     if len(partial_solution) == len(list(query_graph_dict.items())):
         if partial_solution not in complete_solutions:
-            i = True
-            # if partial_solution not in complete_solutions:
-            c_sol = copy.deepcopy(partial_solution)
-            # print(is_joinable(3, [1,2], data_graph, query_graph_dict))
-            complete_solutions.append(c_sol)
-            for c_sol_elem in c_sol:
-                f1.write(str(c_sol_elem) + " ")
-            f1.write("\n")
-            print("One complete solution found!")
+
+
+            print("Query adjacency matrix: ")
+            print(adj_mat_query)
+            print()
+            adj_mat_query_elems = adj_mat_query.to_numpy()
+            print(adj_mat_query_elems)
+            partial_solution_data_subgraph = nx.Graph()
+            partial_solution_data_subgraph.add_edges_from(partial_solution)
+            adj_mat_data = nx.to_pandas_adjacency(partial_solution_data_subgraph, dtype=int)
+            print()
+            print(adj_mat_data)
+            adj_mat_data_elems = adj_mat_data.to_numpy()
+            print()
+            print(adj_mat_data_elems)
+            print()
+            mat_equal = False
+            if (adj_mat_query_elems==adj_mat_data_elems).all():
+                mat_equal = True
+
+                i = True
+                # if partial_solution not in complete_solutions:
+                c_sol = copy.deepcopy(partial_solution)
+                # print(is_joinable(3, [1,2], data_graph, query_graph_dict))
+                complete_solutions.append(c_sol)
+                for c_sol_elem in c_sol:
+                    f1.write(str(c_sol_elem) + " ")
+                f1.write("\n")
+                print()
+                print("One complete solution found!")
+
+            print()
             print(Fore.GREEN + Style.BRIGHT + "List of complete solutions: ")
             for cs in complete_solutions:
                 print(cs)
             print(Style.RESET_ALL)
             partial_solution = copy.deepcopy(restore_state(partial_solution))
+            mat_equal = False
             print("Restored state: " + str(partial_solution))
 
             print()
@@ -1433,6 +1459,10 @@ query_node_matched_attribute_source = copy.deepcopy(query_matched_attributes)
 query_edges_dict = OrderedDict(zip(query_graph_edges, query_edge_labels))
 query_stwig1_dict_matched_attribute = OrderedDict(zip(query_nodes, query_node_matched_attribute_source))
 print("Query graph edges dictionary: " + str(list(query_edges_dict.items())))
+print()
+adj_mat_query = nx.to_pandas_adjacency(query_graph, dtype=int)
+print("Adjacency matrix for query graph: ")
+print(adj_mat_query)
 print()
 print("query_stwig1_dict_matched_attribute: ")
 print(list(query_stwig1_dict_matched_attribute.items()))
