@@ -822,7 +822,7 @@ def obtainCandidateEdges(edge_node_0_label, edge_node_1_label):
         return candidate_edges
 
 
-def refineCandidates(self, M, query_node, query_node_candidates):
+def refineCandidates(M, query_node, query_node_candidates):
     Mq = []  # Set of matched query vertices
     Mg = []  # Set of matched data vertices
     Cq = []  # Set of adjacent and not-yet-matched query vertices connected from Mq
@@ -831,44 +831,55 @@ def refineCandidates(self, M, query_node, query_node_candidates):
     # Conditia (1): Prune out v belonging to c(u) such that a vertex v is not connected from already matched data vertices.
     # query_node = self.nextQueryVertex(query_graph)
     # query_node_candidates = self.obtainCandidates(query_node, query_graph, data_graph)
-    # print("------------INCEPUT EXECUTIE RAFINARE CANDIDATI-----------")
-    # print("QUERY NODE: " + str(query_node))
-    # print("CANDIDATES: " + str(query_node_candidates))
+    print("------------STARTED EXECUTION FOR CANDIDATE REFINEMENT-----------")
+    print("QUERY NODE: " + str(query_node))
+    print("CANDIDATES: " + str(query_node_candidates))
 
     # print()
     # print(M)
-    if len(M) == 0:
+    any_match_data = False
+    for candidate in obtained_candidates_pos_0:
+        if dataGraph.node[candidate]['matched'] == True:
+            any_match_data = True
+            break
+    if any_match_data == False:
+        print("\nIf no data nodes are yet matched:")
         # print("\nNu avem valori pt Mq si Mg pentru ca nu avem o prima asociere inca.")
+        print("     We do not have values for Mq and Mg because we do not have a first match yet.")
         # print("Astfel, Cq si Cg vor avea toate nodurile din grafurile query, respectiv cel data.")
-        Cq = list(self.queryGraph.nodes())
-        Cg = list(self.dataGraph.nodes())
+        print("     Thus, Cq and Cg will contain all the nodes from the query graph and the data graph respectively.")
+        Cq = list(query_nodes)
+        Cg = list(dataGraph.nodes())
+        print("     Set of adjacent and not-yet-matched query vertices connected from Mq => Cq = " + str(Cq))
+        print("     Set of adjacent and not-yet-matched data vertices connected from Mg => Cg = " + str(Cg))
 
-    if len(M) > 0:
+    if any_match_data == True:
+        print("\nIf we have at least one data node matched:")
         Mq.append(M[-1][0]) # Ce are a face cu ultima asociere?
         Mg.append(M[-1][1]) # Folosesc -1 pentru a returna ultimul element din lista (https://stackoverflow.com/questions/930397/getting-the-last-element-of-a-list-in-python).
         # Este necesar ca lista sa nu fie niciodata goala, ceea ce se rezolva foarte bine prin faptul ca lista va fi tot
         # timpul initializata cu o asociere.
-        Cq.append(list(self.adj(M[-1][0], self.queryGraph)))
-        Cg.append(list(self.adj(M[-1][1], self.dataGraph)))
-        # print("Mq = " + str(Mq))
-        # print("Mg = " + str(Mg))
-        # print("Cq = " + str(Cq))
-        # print("Cg = " + str(Cg))
+        Cq.append(list(adj(M[-1][0], query_graph)))
+        Cg.append(list(adj(M[-1][1], dataGraph)))
+        print("Mq = " + str(Mq))
+        print("Mg = " + str(Mg))
+        print("Cq = " + str(Cq))
+        print("Cg = " + str(Cg))
         # Pentru fiecare candidat verificam conditia (1)
 
     query_nodes_candidates_for_deletion = copy.deepcopy(query_node_candidates)
-    self.respectare_conditie_1 = False
-    self.respectare_conditie_2 = False
-    self.respectare_conditie_3 = False
+    respectare_conditie_1 = False
+    respectare_conditie_2 = False
+    respectare_conditie_3 = False
 
     # Conditia (1): Prune out candidate such that candidate is not connected from already matched data vertices.
                     # Prune out candidate such that candidate is connected
     # from not matched data vertices.
 
-    # print("\n     Conditia(1): ")
-    for candidate in query_node_candidates:
-        # print("\nCandidatul selectat: " + str(candidate))
-        # print("     Conditia(1):")
+    print("\n     Conditia(1): ")
+    for candidate in obtained_candidates_pos_0:
+        print("             Candidatul selectat: " + str(candidate))
+        print("             Follows Conditia(1)?")
         # for matching in M:
         # last_matching = M[-1]
         # print("     Matching (trebuie verificat pentru fiecare matching / asociere): " + str(matching))
@@ -879,6 +890,9 @@ def refineCandidates(self, M, query_node, query_node_candidates):
         occurence_list = []
 
         if len(M) == 0:
+            print("             For Conditia(1) if len M == 0 we return all the query node candidates (from the data graph).")
+            print("             " + str(obtained_candidates_pos_0))
+
             # Cateva detalii despre prima iteratie a rularii:
             # print("Inca nu avem nici un matching, deci nu putem verifica 'such that candidate is not connected from already matched data vertices' ")
             # print("Dar verificam daca exista muchie intre nodul candidat si celelalte noduri data. Facem acest lucru pentru a verifica si urmatoarele doua conditii.")
@@ -1418,6 +1432,9 @@ matched_true_false_data_nodes_pos_3_dict = OrderedDict(
     zip(obtained_candidates_pos_3, initial_match_values_pos_3_candidates))
 print("matched_true_false_data_nodes_pos_3_dict: " + str(list(matched_true_false_data_nodes_pos_3_dict.items())))
 print()
+print("Candidate refinement for the first position: ")
+M = []
+refineCandidates(M, obtained_candidates_pos_0, list(query_nodes_dict.keys())[0])
 ####################################################################################
 
 # Fisier text:
