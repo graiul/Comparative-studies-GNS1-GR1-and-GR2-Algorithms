@@ -52,6 +52,16 @@ def next_query_vertex(current_node, query_stwig_dict):
 
 def next_data_edge(partial_solution, data_graph):
 
+    position_for_new_edge = len(partial_solution) # Numerotarea incepe de la 0, astfel ca numarul elementelor este nr pozitiei ultimului element + 1, adica nr pozitiei urmatorului element.
+    print("candidate_nodes_lists for position " + str(position_for_new_edge) + ": " + str(candidate_nodes_lists[position_for_new_edge]))
+
+    # Aici va fi partea de candidate refinement, inainte de iterarea peste lista de muchii
+
+    refineCandidates()
+    for edge in list(data_graph.edges()):
+        if edge[0] in candidate_nodes_lists[position_for_new_edge] or edge[1] in candidate_nodes_lists[position_for_new_edge]:
+            print("One of the edge nodes (or both) is a candidate node(s).")
+
     for edge in list(data_graph.edges()):
         if is_joinable(edge, partial_solution, data_graph, query_edges_dict):
             return edge
@@ -822,7 +832,7 @@ def obtainCandidateEdges(edge_node_0_label, edge_node_1_label):
         return candidate_edges
 
 
-def refineCandidates(M, query_node, query_node_candidates):
+def refineCandidates(query_node, query_node_candidates):
     Mq = []  # Set of matched query vertices
     Mg = []  # Set of matched data vertices
     Cq = []  # Set of adjacent and not-yet-matched query vertices connected from Mq
@@ -855,12 +865,26 @@ def refineCandidates(M, query_node, query_node_candidates):
 
     if any_match_data == True:
         print("\nIf we have at least one data node matched:")
-        Mq.append(M[-1][0]) # Ce are a face cu ultima asociere?
-        Mg.append(M[-1][1]) # Folosesc -1 pentru a returna ultimul element din lista (https://stackoverflow.com/questions/930397/getting-the-last-element-of-a-list-in-python).
+        # Mq.append(M[-1][0]) # Ce are a face cu ultima asociere?
+        # Mg.append(M[-1][1]) # Folosesc -1 pentru a returna ultimul element din lista (https://stackoverflow.com/questions/930397/getting-the-last-element-of-a-list-in-python).
         # Este necesar ca lista sa nu fie niciodata goala, ceea ce se rezolva foarte bine prin faptul ca lista va fi tot
         # timpul initializata cu o asociere.
-        Cq.append(list(adj(M[-1][0], query_graph)))
-        Cg.append(list(adj(M[-1][1], dataGraph)))
+
+        # Cq.append(list(adj(M[-1][0], query_graph))) # adj inseamna neighbors.
+        # Cg.append(list(adj(M[-1][1], dataGraph)))
+
+        for query_node in query_nodes:
+            if query_graph.node[query_node]['matched'] == True:
+                for data_node in list(dataGraph.nodes()):
+                    if dataGraph.node[data_node]['matched'] == True:
+                        if query_node not in Mq:
+                            if data_node not in Mg:
+                                Mq.append(query_node)
+                                Mg.append(data_node)
+                                Cq.append(list(query_graph.neighbors()))
+                                Cg.append(list(dataGraph.neighbors(data_node)))
+
+
         print("Mq = " + str(Mq))
         print("Mg = " + str(Mg))
         print("Cq = " + str(Cq))
@@ -1350,7 +1374,7 @@ for nl in neighbor_labels:
     query_node_labels.append(nl)
 print("Query nodes labels: " + str(query_node_labels))
 query_nodes_dict = OrderedDict(zip(query_nodes, query_node_labels))
-# query_stwig1_dict_matched_attribute = OrderedDict(zip(query_nodes, query_node_matched_attribute_source))
+# query_graph_dict_matched_attribute = OrderedDict(zip(query_nodes, query_node_matched_attribute_source))
 print("Query nodes dict: " + str(list(query_nodes_dict.items())))
 query_edge_labels = []
 for q_edge in query_graph_edges:
@@ -1361,12 +1385,12 @@ query_node_labels_source = copy.deepcopy(query_node_labels)
 query_node_matched_attribute_source = copy.deepcopy(query_matched_attributes)
 
 query_edges_dict = OrderedDict(zip(query_graph_edges, query_edge_labels))
-query_stwig1_dict_matched_attribute = OrderedDict(zip(query_nodes, query_node_matched_attribute_source))
+query_graph_dict_matched_attribute = OrderedDict(zip(query_nodes, query_node_matched_attribute_source))
 print("Query graph edges dictionary: " + str(list(query_edges_dict.items())))
 print()
 adj_mat_query = nx.to_pandas_adjacency(query_graph, dtype=int)
-print("query_stwig1_dict_matched_attribute: ")
-print(list(query_stwig1_dict_matched_attribute.items()))
+print("query_graph_dict_matched_attribute: ")
+print(list(query_graph_dict_matched_attribute.items()))
 print()
 p_solution = []
 complete_solutions = []
@@ -1380,11 +1404,13 @@ node_list_aux = copy.deepcopy(list(dataGraph.nodes()))
 
 print()
 print("Candidate nodes: ")
+candidate_nodes_lists = []
 # Position 0:
 # Obtain candidates folosind label-ul acestei pozitii
 position_label = query_node_labels_source[0]
 print("Position [0] label: " + str(position_label))
 obtained_candidates_pos_0 = obtainCandidates(position_label)
+candidate_nodes_lists.append(obtained_candidates_pos_0)
 initial_match_values_pos_0_candidates = []
 for im_0 in obtained_candidates_pos_0:
     initial_match_values_pos_0_candidates.append(False)
@@ -1398,6 +1424,7 @@ print("matched_true_false_data_nodes_pos_0_dict: " + str(list(matched_true_false
 position_label = query_node_labels_source[1]
 print("Position [1] label: " + str(position_label))
 obtained_candidates_pos_1 = obtainCandidates(position_label)
+candidate_nodes_lists.append(obtained_candidates_pos_1)
 initial_match_values_pos_1_candidates = []
 for im_1 in obtained_candidates_pos_1:
     initial_match_values_pos_1_candidates.append(False)
@@ -1411,6 +1438,7 @@ print("matched_true_false_data_nodes_pos_1_dict: " + str(list(matched_true_false
 position_label = query_node_labels_source[2]
 print("Position [2] label: " + str(position_label))
 obtained_candidates_pos_2 = obtainCandidates(position_label)
+candidate_nodes_lists.append(obtained_candidates_pos_2)
 initial_match_values_pos_2_candidates = []
 for im_2 in obtained_candidates_pos_2:
     initial_match_values_pos_2_candidates.append(False)
@@ -1424,6 +1452,7 @@ print("matched_true_false_data_nodes_pos_2_dict: " + str(list(matched_true_false
 position_label = query_node_labels_source[3]
 print("Position [3] label: " + str(position_label))
 obtained_candidates_pos_3 = obtainCandidates(position_label)
+candidate_nodes_lists.append(obtained_candidates_pos_3)
 initial_match_values_pos_3_candidates = []
 for im_3 in obtained_candidates_pos_3:
     initial_match_values_pos_3_candidates.append(False)
@@ -1434,7 +1463,7 @@ print("matched_true_false_data_nodes_pos_3_dict: " + str(list(matched_true_false
 print()
 print("Candidate refinement for the first position: ")
 M = []
-refineCandidates(M, obtained_candidates_pos_0, list(query_nodes_dict.keys())[0])
+refineCandidates(obtained_candidates_pos_0, list(query_nodes_dict.keys())[0])
 ####################################################################################
 
 # Fisier text:
