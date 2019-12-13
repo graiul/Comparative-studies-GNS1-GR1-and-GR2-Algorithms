@@ -63,7 +63,7 @@ def next_data_edge(partial_solution, data_graph):
         candidate_nodes_lists[position_for_new_edge]))
 
     # Aici va fi partea de candidate refinement, inainte de iterarea peste lista de muchii
-    # refineCandidates()
+    refineCandidates()
 
     for edge in list(data_graph.edges()):
         if edge[0] in candidate_nodes_lists[position_for_new_edge] and edge[1] in candidate_nodes_lists[position_for_new_edge]:
@@ -874,10 +874,12 @@ def refineCandidates(query_node, query_node_candidates):
 
     if any_match_data == True:
         print("\nIf we have at least one data node matched:")
+        # https://stackoverflow.com/questions/930397/getting-the-last-element-of-a-list-in-python
         # Mq.append(M[-1][0]) # Ce are a face cu ultima asociere?
-        # Mg.append(M[-1][1]) # Folosesc -1 pentru a returna ultimul element din lista (https://stackoverflow.com/questions/930397/getting-the-last-element-of-a-list-in-python).
-        # Este necesar ca lista sa nu fie niciodata goala, ceea ce se rezolva foarte bine prin faptul ca lista va fi tot
-        # timpul initializata cu o asociere.
+        # Mg.append(M[-1][1]) # Folosesc -1 pentru a returna ultimul element din lista ().
+        # M[-1][0] este elementul de pe pozitia din query care coincide cu ultima muchie/nod adaugat in solutia partiala data.
+        # 
+
 
         # Cq.append(list(adj(M[-1][0], query_graph))) # adj inseamna neighbors.
         # Cg.append(list(adj(M[-1][1], dataGraph)))
