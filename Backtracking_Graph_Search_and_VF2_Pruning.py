@@ -56,11 +56,15 @@ def next_data_edge(partial_solution, data_graph):
     print("Position for new data edge: " + str(position_for_new_edge))
     print("Query edge for new partial solution data edge position [" + str(position_for_new_edge) + "]: ")
     print(list(query_edges_dict.items())[position_for_new_edge])
+
     print("Candidate node lists for position [" + str(position_for_new_edge) + "] of the partial solution, for first label of candidate data edge: " + str(candidate_nodes_lists[position_for_new_edge]))
+    print("Candidate node lists for position [" + str(
+        position_for_new_edge) + "] of the partial solution, for first label of candidate data edge: " + str(
+        candidate_nodes_lists[position_for_new_edge]))
 
     # Aici va fi partea de candidate refinement, inainte de iterarea peste lista de muchii
-
     # refineCandidates()
+
     for edge in list(data_graph.edges()):
         if edge[0] in candidate_nodes_lists[position_for_new_edge] and edge[1] in candidate_nodes_lists[position_for_new_edge]:
             print("One of the edge nodes (or both) is a candidate node(s).")
