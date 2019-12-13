@@ -1413,8 +1413,8 @@ node_list_aux = copy.deepcopy(list(dataGraph.nodes()))
 
 print()
 print("Candidate nodes: ")
-# candidate_nodes_lists = OrderedDict()
 candidate_nodes_lists = []
+candidate_nodes_lists_as_dict = OrderedDict()
 
 # Position 0:
 # Obtain candidates folosind label-ul acestei pozitii
@@ -1422,8 +1422,8 @@ position_label = query_node_labels_source[0]
 print("Position [0] label: " + str(position_label))
 obtained_candidates_pos_0 = obtainCandidates(position_label)
 
-# candidate_nodes_lists[position_label] = obtained_candidates_pos_0
 candidate_nodes_lists.append(obtained_candidates_pos_0)
+candidate_nodes_lists_as_dict[position_label] = obtained_candidates_pos_0
 
 initial_match_values_pos_0_candidates = []
 for im_0 in obtained_candidates_pos_0:
@@ -1439,8 +1439,8 @@ position_label = query_node_labels_source[1]
 print("Position [1] label: " + str(position_label))
 obtained_candidates_pos_1 = obtainCandidates(position_label)
 
-# candidate_nodes_lists[position_label] = obtained_candidates_pos_1
 candidate_nodes_lists.append(obtained_candidates_pos_1)
+candidate_nodes_lists_as_dict[position_label] = obtained_candidates_pos_1
 
 initial_match_values_pos_1_candidates = []
 for im_1 in obtained_candidates_pos_1:
@@ -1456,8 +1456,8 @@ position_label = query_node_labels_source[2]
 print("Position [2] label: " + str(position_label))
 obtained_candidates_pos_2 = obtainCandidates(position_label)
 
-# candidate_nodes_lists[position_label] = obtained_candidates_pos_2
 candidate_nodes_lists.append(obtained_candidates_pos_2)
+candidate_nodes_lists_as_dict[position_label] = obtained_candidates_pos_2
 
 initial_match_values_pos_2_candidates = []
 for im_2 in obtained_candidates_pos_2:
@@ -1473,8 +1473,8 @@ position_label = query_node_labels_source[3]
 print("Position [3] label: " + str(position_label))
 obtained_candidates_pos_3 = obtainCandidates(position_label)
 
-# candidate_nodes_lists[position_label] = obtained_candidates_pos_3
 candidate_nodes_lists.append(obtained_candidates_pos_3)
+candidate_nodes_lists_as_dict[position_label] = obtained_candidates_pos_3
 
 initial_match_values_pos_3_candidates = []
 for im_3 in obtained_candidates_pos_3:
@@ -1485,7 +1485,7 @@ matched_true_false_data_nodes_pos_3_dict = OrderedDict(
 print("matched_true_false_data_nodes_pos_3_dict: " + str(list(matched_true_false_data_nodes_pos_3_dict.items())))
 print()
 print("Candidate refinement for the first position: ")
-M = []
+
 refineCandidates(obtained_candidates_pos_0, list(query_nodes_dict.keys())[0])
 ####################################################################################
 
