@@ -53,13 +53,15 @@ def next_query_vertex(current_node, query_stwig_dict):
 def next_data_edge(partial_solution, data_graph):
 
     position_for_new_edge = len(partial_solution) # Numerotarea incepe de la 0, astfel ca numarul elementelor este nr pozitiei ultimului element + 1, adica nr pozitiei urmatorului element.
-    print("candidate_nodes_lists for position " + str(position_for_new_edge) + ": " + str(candidate_nodes_lists[position_for_new_edge]))
+    print("Query edge for new partial solution data edge position: ")
+    print(list(query_edges_dict.items())[position_for_new_edge])
+    print("Candidate node lists for position for first label of candidate edge: " + str(position_for_new_edge) + ": " + str(candidate_nodes_lists[position_for_new_edge]))
 
     # Aici va fi partea de candidate refinement, inainte de iterarea peste lista de muchii
 
-    refineCandidates()
+    # refineCandidates()
     for edge in list(data_graph.edges()):
-        if edge[0] in candidate_nodes_lists[position_for_new_edge] or edge[1] in candidate_nodes_lists[position_for_new_edge]:
+        if edge[0] in candidate_nodes_lists[position_for_new_edge] and edge[1] in candidate_nodes_lists[position_for_new_edge]:
             print("One of the edge nodes (or both) is a candidate node(s).")
 
     for edge in list(data_graph.edges()):
@@ -639,7 +641,9 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
     print("Started subgraph search: ")
     print(Back.WHITE + Fore.LIGHTBLUE_EX + Style.BRIGHT + "Partial solution given: " + str(partial_solution) + Style.RESET_ALL)
     i = False
+    print("Query graph dictionary: ")
     print(query_graph_dict)
+    print()
     if len(partial_solution) == len(list(query_graph_dict.items())):
         if partial_solution not in complete_solutions:
             # https://networkx.github.io/documentation/networkx-1.9/reference/generated/networkx.linalg.graphmatrix.adjacency_matrix.html
@@ -1404,13 +1408,18 @@ node_list_aux = copy.deepcopy(list(dataGraph.nodes()))
 
 print()
 print("Candidate nodes: ")
+# candidate_nodes_lists = OrderedDict()
 candidate_nodes_lists = []
+
 # Position 0:
 # Obtain candidates folosind label-ul acestei pozitii
 position_label = query_node_labels_source[0]
 print("Position [0] label: " + str(position_label))
 obtained_candidates_pos_0 = obtainCandidates(position_label)
+
+# candidate_nodes_lists[position_label] = obtained_candidates_pos_0
 candidate_nodes_lists.append(obtained_candidates_pos_0)
+
 initial_match_values_pos_0_candidates = []
 for im_0 in obtained_candidates_pos_0:
     initial_match_values_pos_0_candidates.append(False)
@@ -1424,7 +1433,10 @@ print("matched_true_false_data_nodes_pos_0_dict: " + str(list(matched_true_false
 position_label = query_node_labels_source[1]
 print("Position [1] label: " + str(position_label))
 obtained_candidates_pos_1 = obtainCandidates(position_label)
+
+# candidate_nodes_lists[position_label] = obtained_candidates_pos_1
 candidate_nodes_lists.append(obtained_candidates_pos_1)
+
 initial_match_values_pos_1_candidates = []
 for im_1 in obtained_candidates_pos_1:
     initial_match_values_pos_1_candidates.append(False)
@@ -1438,7 +1450,10 @@ print("matched_true_false_data_nodes_pos_1_dict: " + str(list(matched_true_false
 position_label = query_node_labels_source[2]
 print("Position [2] label: " + str(position_label))
 obtained_candidates_pos_2 = obtainCandidates(position_label)
+
+# candidate_nodes_lists[position_label] = obtained_candidates_pos_2
 candidate_nodes_lists.append(obtained_candidates_pos_2)
+
 initial_match_values_pos_2_candidates = []
 for im_2 in obtained_candidates_pos_2:
     initial_match_values_pos_2_candidates.append(False)
@@ -1452,7 +1467,10 @@ print("matched_true_false_data_nodes_pos_2_dict: " + str(list(matched_true_false
 position_label = query_node_labels_source[3]
 print("Position [3] label: " + str(position_label))
 obtained_candidates_pos_3 = obtainCandidates(position_label)
+
+# candidate_nodes_lists[position_label] = obtained_candidates_pos_3
 candidate_nodes_lists.append(obtained_candidates_pos_3)
+
 initial_match_values_pos_3_candidates = []
 for im_3 in obtained_candidates_pos_3:
     initial_match_values_pos_3_candidates.append(False)
