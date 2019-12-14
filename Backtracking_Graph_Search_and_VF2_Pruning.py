@@ -64,17 +64,50 @@ def next_data_edge(partial_solution, data_graph):
     # Aici va fi partea de candidate refinement, inainte de iterarea peste lista de muchii
     # Trebuie facuta cate o lista de noduri data candidate pentru fiecare muchie de pe pozitia care se va afla in solutia partiala.
     # De verificat daca am facut deja refinement pt noduri inainte de a rula metoda de refinement.
-    refineCandidates(obtained_candidates_pos_0, list(query_nodes_dict.keys())[0])
+    # Trebuie facut refinement pentru fiecare nod al muchiei query.
+    # Luam muchiile query, label-ul fiecarui nod al fiecarei muchii, apoi nodurile data candidat in functie de label, si le facem refinement la toate.
+    # De abia apoi continuam sa lucram cu muchii.
+    print("Before refinement: ")
+
 
     for edge in list(data_graph.edges()):
-        if edge[0] in candidate_nodes_lists[position_for_new_edge] and edge[1] in candidate_nodes_lists[position_for_new_edge]:
-            print("One of the edge nodes (or both) is a candidate node(s).")
-            print("Candidate node lists for position [" + str(
-                position_for_new_edge) + "] of the partial solution, for first label of candidate data edge: " + str(
-                candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]))
-            print("Candidate node lists for position [" + str(
-                position_for_new_edge) + "] of the partial solution, for second label of candidate data edge: " + str(
-                candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]]))
+        # refineCandidates(obtained_candidates_pos_0, list(query_nodes_dict.keys())[0])
+        # print("edge: ")
+        # print(edge)
+        print("edge[0]: ")
+        print(edge[0])
+        print("edge[1]: ")
+        print(edge[1])
+        print("query_edge_labels[position_for_new_edge]: ")
+        print(query_edge_labels[position_for_new_edge])
+        print("query_edge_labels[position_for_new_edge][0]: ")
+        print(query_edge_labels[position_for_new_edge][0])
+        print("query_edge_labels[position_for_new_edge][1]: ")
+        print(query_edge_labels[position_for_new_edge][1])
+
+        try:
+            print("candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]: ")
+            print(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]) # with node label as key and data node id's as values
+            print("candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]: ")
+            print(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]])
+        except AttributeError:
+            print("")
+
+        if edge[0] in candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]:
+            if edge[1] in candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]:
+                print("One of the edge nodes (or both) is a candidate node(s).")
+                print("Candidate node lists for position [" + str(
+                    position_for_new_edge) + "] of the partial solution, for first label of candidate data edge: " + str(
+                    candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]))
+                print("Candidate node lists for position [" + str(
+                    position_for_new_edge) + "] of the partial solution, for second label of candidate data edge: " + str(
+                    candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]]))
+            else:
+                print("Edge does not have both nodes in the candidate lists")
+                continue
+        else:
+            print("Edge does not have both nodes in the candidate lists")
+            continue
 
     for edge in list(data_graph.edges()):
         if is_joinable(edge, partial_solution, data_graph, query_edges_dict):
