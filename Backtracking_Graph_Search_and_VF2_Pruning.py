@@ -56,18 +56,23 @@ def next_data_edge(partial_solution, data_graph):
     print("Position for new data edge: " + str(position_for_new_edge))
     print("Query edge for new partial solution data edge position [" + str(position_for_new_edge) + "]: ")
     print(list(query_edges_dict.items())[position_for_new_edge])
+    print("candidate_nodes_lists_as_dict: ")
+    print(candidate_nodes_lists_as_dict.items())
+    print()
 
-    print("Candidate node lists for position [" + str(position_for_new_edge) + "] of the partial solution, for first label of candidate data edge: " + str(candidate_nodes_lists[position_for_new_edge]))
-    print("Candidate node lists for position [" + str(
-        position_for_new_edge) + "] of the partial solution, for first label of candidate data edge: " + str(
-        candidate_nodes_lists[position_for_new_edge]))
 
     # Aici va fi partea de candidate refinement, inainte de iterarea peste lista de muchii
-    refineCandidates()
+    # refineCandidates()
 
     for edge in list(data_graph.edges()):
         if edge[0] in candidate_nodes_lists[position_for_new_edge] and edge[1] in candidate_nodes_lists[position_for_new_edge]:
             print("One of the edge nodes (or both) is a candidate node(s).")
+            print("Candidate node lists for position [" + str(
+                position_for_new_edge) + "] of the partial solution, for first label of candidate data edge: " + str(
+                candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]))
+            print("Candidate node lists for position [" + str(
+                position_for_new_edge) + "] of the partial solution, for second label of candidate data edge: " + str(
+                candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]]))
 
     for edge in list(data_graph.edges()):
         if is_joinable(edge, partial_solution, data_graph, query_edges_dict):
@@ -841,7 +846,7 @@ def obtainCandidateEdges(edge_node_0_label, edge_node_1_label):
         return candidate_edges
 
 
-def refineCandidates(query_node, query_node_candidates):
+def refineCandidates(query_node_candidates, partial_solution):
     Mq = []  # Set of matched query vertices
     Mg = []  # Set of matched data vertices
     Cq = []  # Set of adjacent and not-yet-matched query vertices connected from Mq
@@ -851,7 +856,7 @@ def refineCandidates(query_node, query_node_candidates):
     # query_node = self.nextQueryVertex(query_graph)
     # query_node_candidates = self.obtainCandidates(query_node, query_graph, data_graph)
     print("------------STARTED EXECUTION FOR CANDIDATE REFINEMENT-----------")
-    print("QUERY NODE: " + str(query_node))
+    # print("QUERY NODE: " + str(query_node))
     print("CANDIDATES: " + str(query_node_candidates))
 
     # print()
@@ -875,25 +880,28 @@ def refineCandidates(query_node, query_node_candidates):
     if any_match_data == True:
         print("\nIf we have at least one data node matched:")
         # https://stackoverflow.com/questions/930397/getting-the-last-element-of-a-list-in-python
-        # Mq.append(M[-1][0]) # Ce are a face cu ultima asociere?
-        # Mg.append(M[-1][1]) # Folosesc -1 pentru a returna ultimul element din lista ().
+        # Folosesc -1 pentru a returna ultimul element din lista ().
+        # Mq.append(M[-1][0])
+        # Mg.append(M[-1][1])
         # M[-1][0] este elementul de pe pozitia din query care coincide cu ultima muchie/nod adaugat in solutia partiala data.
-        # 
+        #
 
+        Mq.append(query_graph_edges[len(partial_solution)-1])
+        Mg.qppend(partial_solution[-1])
 
         # Cq.append(list(adj(M[-1][0], query_graph))) # adj inseamna neighbors.
         # Cg.append(list(adj(M[-1][1], dataGraph)))
 
-        for query_node in query_nodes:
-            if query_graph.node[query_node]['matched'] == True:
-                for data_node in list(dataGraph.nodes()):
-                    if dataGraph.node[data_node]['matched'] == True:
-                        if query_node not in Mq:
-                            if data_node not in Mg:
-                                Mq.append(query_node)
-                                Mg.append(data_node)
-                                Cq.append(list(query_graph.neighbors()))
-                                Cg.append(list(dataGraph.neighbors(data_node)))
+        # for query_node in query_nodes:
+        #     if query_graph.node[query_node]['matched'] == True:
+        #         for data_node in list(dataGraph.nodes()):
+        #             if dataGraph.node[data_node]['matched'] == True:
+        #                 if query_node not in Mq:
+        #                     if data_node not in Mg:
+        #                         Mq.append(query_node)
+        #                         Mg.append(data_node)
+        #                         Cq.append(list(query_graph.neighbors()))
+        #                         Cg.append(list(dataGraph.neighbors(data_node)))
 
 
         print("Mq = " + str(Mq))
@@ -924,7 +932,7 @@ def refineCandidates(query_node, query_node_candidates):
         delete_indicator = False
         occurence_list = []
 
-        if len(M) == 0:
+        if any_match_data == False:
             print("             For Conditia(1) if len M == 0 we return all the query node candidates (from the data graph).")
             print("             " + str(obtained_candidates_pos_0))
 
