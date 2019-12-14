@@ -62,7 +62,7 @@ def next_data_edge(partial_solution, data_graph):
 
 
     # Aici va fi partea de candidate refinement, inainte de iterarea peste lista de muchii
-    # refineCandidates()
+    refineCandidates(obtained_candidates_pos_0, list(query_nodes_dict.keys())[0])
 
     for edge in list(data_graph.edges()):
         if edge[0] in candidate_nodes_lists[position_for_new_edge] and edge[1] in candidate_nodes_lists[position_for_new_edge]:
@@ -1494,9 +1494,9 @@ matched_true_false_data_nodes_pos_3_dict = OrderedDict(
     zip(obtained_candidates_pos_3, initial_match_values_pos_3_candidates))
 print("matched_true_false_data_nodes_pos_3_dict: " + str(list(matched_true_false_data_nodes_pos_3_dict.items())))
 print()
-print("Candidate refinement for the first position: ")
 
-refineCandidates(obtained_candidates_pos_0, list(query_nodes_dict.keys())[0])
+# print("Candidate refinement for the first position: ")
+# refineCandidates(obtained_candidates_pos_0, list(query_nodes_dict.keys())[0])
 ####################################################################################
 
 # Fisier text:
