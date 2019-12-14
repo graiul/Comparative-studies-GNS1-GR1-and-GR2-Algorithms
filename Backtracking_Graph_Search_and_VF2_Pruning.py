@@ -63,6 +63,7 @@ def next_data_edge(partial_solution, data_graph):
 
     # Aici va fi partea de candidate refinement, inainte de iterarea peste lista de muchii
     # Trebuie facuta cate o lista de noduri data candidate pentru fiecare muchie de pe pozitia care se va afla in solutia partiala.
+    # De verificat daca am facut deja refinement pt noduri inainte de a rula metoda de refinement.
     refineCandidates(obtained_candidates_pos_0, list(query_nodes_dict.keys())[0])
 
     for edge in list(data_graph.edges()):
