@@ -74,9 +74,9 @@ def next_data_edge(partial_solution, data_graph):
         # refineCandidates(obtained_candidates_pos_0, list(query_nodes_dict.keys())[0])
         # print("edge: ")
         # print(edge)
-        print("edge[0]: ")
+        print("\nData edge[0]: ")
         print(edge[0])
-        print("edge[1]: ")
+        print("Data edge[1]: ")
         print(edge[1])
         print("query_edge_labels[position_for_new_edge]: ")
         print(query_edge_labels[position_for_new_edge])
@@ -85,29 +85,38 @@ def next_data_edge(partial_solution, data_graph):
         print("query_edge_labels[position_for_new_edge][1]: ")
         print(query_edge_labels[position_for_new_edge][1])
 
-        try:
+        if query_edge_labels[position_for_new_edge][0] in candidate_nodes_lists_as_dict.keys():
+
             print("candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]: ")
             print(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]) # with node label as key and data node id's as values
-            print("candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]: ")
-            print(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]])
-        except AttributeError:
-            print("")
 
-        if edge[0] in candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]:
-            if edge[1] in candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]:
-                print("One of the edge nodes (or both) is a candidate node(s).")
-                print("Candidate node lists for position [" + str(
-                    position_for_new_edge) + "] of the partial solution, for first label of candidate data edge: " + str(
-                    candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]))
-                print("Candidate node lists for position [" + str(
-                    position_for_new_edge) + "] of the partial solution, for second label of candidate data edge: " + str(
-                    candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]]))
+            if query_edge_labels[position_for_new_edge][1] in candidate_nodes_lists_as_dict.keys():
+                print("candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]]: ")
+                print(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]])
+
+                if edge[0] in candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]:
+                    if edge[1] in candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]]:
+                        print("Both edge nodes are candidate nodes.")
+                        print("Candidate node lists for position [" + str(
+                            position_for_new_edge) + "] of the partial solution, for first label of candidate data edge: " + str(
+                            candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]))
+                        print("Candidate node lists for position [" + str(
+                            position_for_new_edge) + "] of the partial solution, for second label of candidate data edge: " + str(
+                            candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]]))
+                    else:
+                        print("Edge does not have both nodes in the candidate lists")
+                        continue
+                else:
+                    print("Edge does not have both nodes in the candidate lists")
+                    continue
+
+
             else:
-                print("Edge does not have both nodes in the candidate lists")
-                continue
+                print("No candidates found in the candidate lists for label")
         else:
-            print("Edge does not have both nodes in the candidate lists")
-            continue
+            print("No candidates found in the candidate lists for label")
+
+
 
     for edge in list(data_graph.edges()):
         if is_joinable(edge, partial_solution, data_graph, query_edges_dict):
