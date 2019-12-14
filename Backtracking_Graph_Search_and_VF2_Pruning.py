@@ -74,9 +74,9 @@ def next_data_edge(partial_solution, data_graph):
         # refineCandidates(obtained_candidates_pos_0, list(query_nodes_dict.keys())[0])
         # print("edge: ")
         # print(edge)
-        print("\nData edge[0]: ")
+        print("\nData edge[0] id: ")
         print(edge[0])
-        print("Data edge[1]: ")
+        print("Data edge[1] id: ")
         print(edge[1])
         print("query_edge_labels[position_for_new_edge]: ")
         print(query_edge_labels[position_for_new_edge])
@@ -103,6 +103,13 @@ def next_data_edge(partial_solution, data_graph):
                         print("Candidate node lists for position [" + str(
                             position_for_new_edge) + "] of the partial solution, for second label of candidate data edge: " + str(
                             candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]]))
+                        print("Refinement commencing...")
+                        # refineCandidates(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]], list(query_nodes_dict.keys())[0])
+                        refineCandidates(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]], partial_solution)
+                        refineCandidates(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]], partial_solution)
+
+
+
                     else:
                         print("Edge does not have both nodes in the candidate lists")
                         continue
@@ -906,7 +913,7 @@ def refineCandidates(query_node_candidates, partial_solution):
     # print()
     # print(M)
     any_match_data = False
-    for candidate in obtained_candidates_pos_0:
+    for candidate in query_node_candidates:
         if dataGraph.node[candidate]['matched'] == True:
             any_match_data = True
             break
@@ -931,7 +938,7 @@ def refineCandidates(query_node_candidates, partial_solution):
         #
 
         Mq.append(query_graph_edges[len(partial_solution)-1])
-        Mg.qppend(partial_solution[-1])
+        Mg.append(partial_solution[-1])
 
         # Cq.append(list(adj(M[-1][0], query_graph))) # adj inseamna neighbors.
         # Cg.append(list(adj(M[-1][1], dataGraph)))
@@ -964,8 +971,8 @@ def refineCandidates(query_node_candidates, partial_solution):
     # from not matched data vertices.
 
     print("\n     Conditia(1): ")
-    for candidate in obtained_candidates_pos_0:
-        print("             Candidatul selectat: " + str(candidate))
+    for candidate in query_node_candidates:
+        print("             Selected candidate: " + str(candidate))
         print("             Follows Conditia(1)?")
         # for matching in M:
         # last_matching = M[-1]
@@ -977,8 +984,8 @@ def refineCandidates(query_node_candidates, partial_solution):
         occurence_list = []
 
         if any_match_data == False:
-            print("             For Conditia(1) if len M == 0 we return all the query node candidates (from the data graph).")
-            print("             " + str(obtained_candidates_pos_0))
+            print("             For Conditia(1) if there are no matched data nodes we return all the query node candidates (from the data graph).")
+            print("             " + str(query_node_candidates))
 
             # Cateva detalii despre prima iteratie a rularii:
             # print("Inca nu avem nici un matching, deci nu putem verifica 'such that candidate is not connected from already matched data vertices' ")
@@ -998,16 +1005,16 @@ def refineCandidates(query_node_candidates, partial_solution):
 
             return query_node_candidates
 
-        if len(M) > 0:
+        if any_match_data == True:
 
-            for data_node in self.dataGraph.nodes():
+            for data_node in dataGraph.nodes():
                 # print("Nod data selectat pentru verificare: " + str(data_node))
                 # Daca nodul data selectat a mai fost folosit
-                if self.dataGraph.node[data_node]['matched'] == True:
+                if dataGraph.node[data_node]['matched'] == True:
                     # print("Nodul " + str(data_node) + " este deja marcat ca fiind 'matched' ")
                     # Atunci verificam sa nu fie adiacent lui
                     # print("Lipseste in graful data muchia " + str([candidate, data_node]) + " ?")
-                    if self.dataGraph.has_edge(data_node, candidate) == False:
+                    if dataGraph.has_edge(data_node, candidate) == False:
                         if candidate in query_nodes_candidates_for_deletion:
                             delete_indicator = True
                             # print("Lipseste.")
@@ -1057,13 +1064,13 @@ def refineCandidates(query_node_candidates, partial_solution):
                 # print("Nu exista muchie. Eliminam candidatul conform Conditiei 1.")
                 # print("Muchia care nu exista: " + str([candidate, data_node]))
                 query_nodes_candidates_for_deletion.remove(candidate)
-                self.respectare_conditie_1 = False
+                respectare_conditie_1 = False
 
         if len(occurence_list) == 1:
             if occurence_list[0] == "Exista":
                 # print("Exista muchia. Trece Conditia (1).")
                 # print()
-                self.respectare_conditie_1 = True
+                respectare_conditie_1 = True
 
 
         if len(occurence_list) > 1:
@@ -1072,17 +1079,17 @@ def refineCandidates(query_node_candidates, partial_solution):
                     # print("Nu exista muchie. Eliminam candidatul conform Conditiei 1.")
                     # print("Muchia care nu exista: " + str([candidate, data_node]))
                     query_nodes_candidates_for_deletion.remove(candidate)
-                    self.respectare_conditie_1 = False
+                    respectare_conditie_1 = False
 
                 if occurence_list[-2] == "Exista":
                     # print("Exista muchia. Trece Conditia (1).")
                     # print()
-                    self.respectare_conditie_1 = True
+                    respectare_conditie_1 = True
 
             if occurence_list[-1] == "Exista":
                 # print("Exista muchia. Trece Conditia (1).")
                 # print()
-                self.respectare_conditie_1 = True
+                respectare_conditie_1 = True
             # if occurence_list.count("Exista") > occurence_list.count("Lipseste"):
             #     print("Exista muchia. Trece Conditia (1).")
             #     print()
