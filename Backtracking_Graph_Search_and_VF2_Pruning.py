@@ -22,18 +22,20 @@ from timeit import default_timer as timer
 
 import pandas as pd
 
-def update_state(node, partial_solution):
+def update_state(node, partial_solution, M):
     # print("update_state exec: ")
-    c_node = copy.deepcopy(node)
+    candidate_edge = copy.deepcopy(node)
     s = copy.deepcopy(partial_solution)
-    s.append(c_node)
+    s.append(candidate_edge)
+    M.append(candidate_edge)
     # print(s)
     return s
 
 
-def restore_state(partial_solution):
+def restore_state(partial_solution, M):
     if len(partial_solution) > 0:
         del partial_solution[-1]
+        del M[-1]
         p_solution = copy.deepcopy(partial_solution)
         # print("Restored state: " + str(p_solution))
         return p_solution
@@ -747,7 +749,7 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
                 print("Adjacency matrix sizes do not match.")
 
 
-            partial_solution = copy.deepcopy(restore_state(partial_solution))
+            partial_solution = copy.deepcopy(restore_state(partial_solution, M))
             mat_equal = False
             print("\nRestored state: " + str(partial_solution))
 
@@ -773,7 +775,7 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
 
             # return partial_solution
             # partial_solution = []
-            # candidate = []
+            # candidate_data_edge = []
             # restore_state(partial_solution)
             subgraph_search(partial_solution, query_graph_dict, current_node, data_graph, M)
 
@@ -790,15 +792,15 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
         # if len(partial_solution) == 2:
 
         i = True
-        candidate = next_data_edge(partial_solution, data_graph, M)
-        # if candidate is not None:
-        #     print("Candidate edge (data node id's): " + str(candidate))
-        #     print("Candidate edge (data nodes label): " + str([data_graph.node[candidate[0]]['label'], data_graph.node[candidate[1]]['label']]))
-        #     print("Positions log after choosing candidate: " + str(list(positions.items())))
+        candidate_data_edge = next_data_edge(partial_solution, data_graph, M)
+        # if candidate_data_edge is not None:
+        #     print("Candidate edge (data node id's): " + str(candidate_data_edge))
+        #     print("Candidate edge (data nodes label): " + str([data_graph.node[candidate_data_edge[0]]['label'], data_graph.node[candidate_data_edge[1]]['label']]))
+        #     print("Positions log after choosing candidate_data_edge: " + str(list(positions.items())))
 
-        if candidate is None:  # go back a position with restore position()
+        if candidate_data_edge is None:  # go back a position with restore position()
 
-            print("Candidate: " + Fore.LIGHTRED_EX + str(candidate) + Style.RESET_ALL)
+            print("Candidate: " + Fore.LIGHTRED_EX + str(candidate_data_edge) + Style.RESET_ALL)
             # print()
 
             if partial_solution == []:
@@ -815,7 +817,7 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
             # go back a position with restore position()
             print("Going back a position.")
             # input("Continue execution?")
-            partial_solution = copy.deepcopy(restore_state(partial_solution)) #partial_solution[:1])
+            partial_solution = copy.deepcopy(restore_state(partial_solution, M)) #partial_solution[:1])
             print("Restored partial solution: " + str(partial_solution))
             if len(partial_solution) == 0:  # poz 0 = []
                 current_node = []
@@ -837,10 +839,10 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
             subgraph_search(partial_solution, query_graph_dict, current_node, data_graph, M)
 
 
-        partial_solution = copy.deepcopy(update_state(candidate, partial_solution))
+        partial_solution = copy.deepcopy(update_state(candidate_data_edge, partial_solution, M))
         # print("PARTIAL SOLUTION: " + str(partial_solution))
 
-        subgraph_search(partial_solution, query_graph_dict, candidate, data_graph, M)
+        subgraph_search(partial_solution, query_graph_dict, candidate_data_edge, data_graph, M)
         # restore_state(partial_solution)
 
     if i == False:
@@ -911,7 +913,7 @@ def refineCandidates(query_node_candidates, partial_solution, M):
     print("CANDIDATES: " + str(query_node_candidates))
 
     print()
-    print("Match list: ")
+    print("Match list. Must form data edge before adding: ")
     print(M)
     any_match_data = False
     for candidate in query_node_candidates:
@@ -929,6 +931,7 @@ def refineCandidates(query_node_candidates, partial_solution, M):
         Cg = list(dataGraph.nodes())
         print("     Set of adjacent and not-yet-matched query vertices connected from Mq => Cq = " + str(Cq))
         print("     Set of adjacent and not-yet-matched data vertices connected from Mg => Cg = " + str(Cg))
+        M[0].append()
 
     # if any_match_data == True:
     if len(M) > 0:
