@@ -72,14 +72,14 @@ def next_data_edge(partial_solution, data_graph, M):
     print("Before refinement: ")
 
 
-    for edge in list(data_graph.edges()):
+    for data_edge in list(data_graph.edges()):
         # refineCandidates(obtained_candidates_pos_0, list(query_nodes_dict.keys())[0])
-        # print("edge: ")
-        # print(edge)
+        # print("data_edge: ")
+        # print(data_edge)
         print("\nData edge[0] id: ")
-        print(edge[0])
+        print(data_edge[0])
         print("Data edge[1] id: ")
-        print(edge[1])
+        print(data_edge[1])
         print("query_edge_labels[position_for_new_edge]: ")
         print(query_edge_labels[position_for_new_edge])
         print("query_edge_labels[position_for_new_edge][0]: ")
@@ -96,8 +96,8 @@ def next_data_edge(partial_solution, data_graph, M):
                 print("candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]]: ")
                 print(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]])
 
-                if edge[0] in candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]:
-                    if edge[1] in candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]]:
+                if data_edge[0] in candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]:
+                    if data_edge[1] in candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]]:
                         print("Both edge nodes are candidate nodes.")
                         print("Candidate node lists for position [" + str(
                             position_for_new_edge) + "] of the partial solution, for first label of candidate data edge: " + str(
@@ -107,8 +107,8 @@ def next_data_edge(partial_solution, data_graph, M):
                             candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]]))
                         print("Refinement commencing...")
                         # refineCandidates(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]], list(query_nodes_dict.keys())[0])
-                        refineCandidates(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]], partial_solution, M)
-                        refineCandidates(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]], partial_solution, M)
+                        refineCandidates(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]], partial_solution, M, query_graph_edges[position_for_new_edge], data_edge)
+                        # refineCandidates(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]], partial_solution, M)
 
 
 
@@ -899,7 +899,7 @@ def obtainCandidateEdges(edge_node_0_label, edge_node_1_label):
         return candidate_edges
 
 
-def refineCandidates(query_node_candidates, partial_solution, M):
+def refineCandidates(query_node_candidates, partial_solution, M, query_edge_ref_input, data_edge_ref_input):
     Mq = []  # Set of matched query vertices
     Mg = []  # Set of matched data vertices
     Cq = []  # Set of adjacent and not-yet-matched query vertices connected from Mq
@@ -931,7 +931,10 @@ def refineCandidates(query_node_candidates, partial_solution, M):
         Cg = list(dataGraph.nodes())
         print("     Set of adjacent and not-yet-matched query vertices connected from Mq => Cq = " + str(Cq))
         print("     Set of adjacent and not-yet-matched data vertices connected from Mg => Cg = " + str(Cg))
-        M[0].append()
+        print("     \nMust append to M")
+        # print("     From here: " + str(query_node_candidates))
+        M.append([query_edge_ref_input, data_edge_ref_input])
+        print("M = " + str(M))
 
     # if any_match_data == True:
     if len(M) > 0:
