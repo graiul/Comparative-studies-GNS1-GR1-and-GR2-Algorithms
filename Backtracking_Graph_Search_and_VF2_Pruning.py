@@ -58,69 +58,81 @@ def next_query_vertex(current_node, query_stwig_dict):
 
 def next_data_edge(partial_solution, data_graph, M):
 
-    position_for_new_edge = len(partial_solution) # Numerotarea incepe de la 0, astfel ca numarul elementelor este nr pozitiei ultimului element + 1, adica nr pozitiei urmatorului element.
-    print("Position for new data edge: " + str(position_for_new_edge))
-    print("Query edge for new partial solution data edge position [" + str(position_for_new_edge) + "]: ")
-    print(list(query_edges_dict.items())[position_for_new_edge])
-    print("candidate_nodes_lists_as_dict: ")
-    print(candidate_nodes_lists_as_dict.items())
-    print()
+    if len(partial_solution) > 0: # Daca avem deja o muchie match in M.
+        position_for_new_edge = len(partial_solution) # Numerotarea incepe de la 0, astfel ca numarul elementelor este nr pozitiei ultimului element + 1, adica nr pozitiei urmatorului element.
+        print("Position for new data edge: " + str(position_for_new_edge))
+        print("Query edge for new partial solution data edge position [" + str(position_for_new_edge) + "]: ")
+        print(list(query_edges_dict.items())[position_for_new_edge])
+        print("candidate_nodes_lists_as_dict: ")
+        print(candidate_nodes_lists_as_dict.items())
+        print()
 
+        # Aici va fi partea de candidate refinement, inainte de iterarea peste lista de muchii
+        # Trebuie facuta cate o lista de noduri data candidate pentru fiecare muchie de pe pozitia care se va afla in solutia partiala.
+        # De verificat daca am facut deja refinement pt noduri inainte de a rula metoda de refinement.
+        # Trebuie facut refinement pentru fiecare nod al muchiei query.
+        # Luam muchiile query, label-ul fiecarui nod al fiecarei muchii, apoi nodurile data candidat in functie de label, si le facem refinement la toate.
+        # De abia apoi continuam sa lucram cu muchii.
+        if len(M) > 0:
+            print("Candidate node lists for position [" + str(
+                position_for_new_edge) + "] of the partial solution, for first label of candidate data edge: " + str(
+                candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]))
+            print("Candidate node lists for position [" + str(
+                position_for_new_edge) + "] of the partial solution, for second label of candidate data edge: " + str(
+                candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]]))
+            print("Refinement commencing...")
+            # refineCandidates(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]], list(query_nodes_dict.keys())[0])
+            refineCandidates(query_graph_edges[position_for_new_edge][0], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]],
+                             partial_solution, M)
+            refineCandidates(query_graph_edges[position_for_new_edge][0], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]],
+                             partial_solution, M)
 
-    # Aici va fi partea de candidate refinement, inainte de iterarea peste lista de muchii
-    # Trebuie facuta cate o lista de noduri data candidate pentru fiecare muchie de pe pozitia care se va afla in solutia partiala.
-    # De verificat daca am facut deja refinement pt noduri inainte de a rula metoda de refinement.
-    # Trebuie facut refinement pentru fiecare nod al muchiei query.
-    # Luam muchiile query, label-ul fiecarui nod al fiecarei muchii, apoi nodurile data candidat in functie de label, si le facem refinement la toate.
-    # De abia apoi continuam sa lucram cu muchii.
-    if len(M) > 0:
-        for data_edge in list(data_graph.edges()):
-            # refineCandidates(obtained_candidates_pos_0, list(query_nodes_dict.keys())[0])
-            # print("data_edge: ")
-            # print(data_edge)
-            print("\nData edge[0] id: ")
-            print(data_edge[0])
-            print("Data edge[1] id: ")
-            print(data_edge[1])
-            print("query_edge_labels[position_for_new_edge]: ")
-            print(query_edge_labels[position_for_new_edge])
-            print("query_edge_labels[position_for_new_edge][0]: ")
-            print(query_edge_labels[position_for_new_edge][0])
-            print("query_edge_labels[position_for_new_edge][1]: ")
-            print(query_edge_labels[position_for_new_edge][1])
-
-            if query_edge_labels[position_for_new_edge][0] in candidate_nodes_lists_as_dict.keys():
-
-                print("candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]: ")
-                print(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]) # with node label as key and data node id's as values
-
-                if query_edge_labels[position_for_new_edge][1] in candidate_nodes_lists_as_dict.keys():
-                    print("candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]]: ")
-                    print(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]])
-
-                    if data_edge[0] in candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]:
-                        if data_edge[1] in candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]]:
-                            print("Both edge nodes are candidate nodes.")
-                            print("Candidate node lists for position [" + str(
-                                position_for_new_edge) + "] of the partial solution, for first label of candidate data edge: " + str(
-                                candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]))
-                            print("Candidate node lists for position [" + str(
-                                position_for_new_edge) + "] of the partial solution, for second label of candidate data edge: " + str(
-                                candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]]))
-                            print("Refinement commencing...")
-                            # refineCandidates(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]], list(query_nodes_dict.keys())[0])
-                            refineCandidates(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]], partial_solution, M)
-                            refineCandidates(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]], partial_solution, M)
-                        else:
-                            print("Edge does not have both nodes in the candidate lists")
-                            continue
-                    else:
-                        print("Edge does not have both nodes in the candidate lists")
-                        continue
-                else:
-                    print("No candidates found in the candidate lists for label")
-            else:
-                print("No candidates found in the candidate lists for label")
+        # for data_edge in list(data_graph.edges()):
+                # print("data_edge: ")
+                # print(data_edge)
+                # print("\nData edge[0] id: ")
+                # print(data_edge[0])
+                # print("Data edge[1] id: ")
+                # print(data_edge[1])
+                # print("query_edge_labels[position_for_new_edge]: ")
+                # print(query_edge_labels[position_for_new_edge])
+                # print("query_edge_labels[position_for_new_edge][0]: ")
+                # print(query_edge_labels[position_for_new_edge][0])
+                # print("query_edge_labels[position_for_new_edge][1]: ")
+                # print(query_edge_labels[position_for_new_edge][1])
+                #
+                # if query_edge_labels[position_for_new_edge][0] in candidate_nodes_lists_as_dict.keys():
+                #
+                #     print("candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]: ")
+                #     print(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]) # with node label as key and data node id's as values
+                #
+                #     if query_edge_labels[position_for_new_edge][1] in candidate_nodes_lists_as_dict.keys():
+                #         print("candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]]: ")
+                #         print(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]])
+                #
+                #         if data_edge[0] in candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]:
+                #             if data_edge[1] in candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]]:
+                #                 print("Both edge nodes are candidate nodes.")
+                #                 print("Candidate node lists for position [" + str(
+                #                     position_for_new_edge) + "] of the partial solution, for first label of candidate data edge: " + str(
+                #                     candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]))
+                #                 print("Candidate node lists for position [" + str(
+                #                     position_for_new_edge) + "] of the partial solution, for second label of candidate data edge: " + str(
+                #                     candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]]))
+                #                 print("Refinement commencing...")
+                #                 # refineCandidates(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]], list(query_nodes_dict.keys())[0])
+                #                 refineCandidates(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]], partial_solution, M)
+                #                 refineCandidates(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]], partial_solution, M)
+                #             else:
+                #                 print("Edge does not have both nodes in the candidate lists")
+                #                 continue
+                #         else:
+                #             print("Edge does not have both nodes in the candidate lists")
+                #             continue
+                #     else:
+                #         print("No candidates found in the candidate lists for label")
+                # else:
+                #     print("No candidates found in the candidate lists for label")
 
 
 
@@ -896,7 +908,7 @@ def obtainCandidateEdges(edge_node_0_label, edge_node_1_label):
         return candidate_edges
 
 
-def refineCandidates(query_node_candidates, partial_solution, M):
+def refineCandidates(query_node, query_node_candidates, partial_solution, M):
     Mq = []  # Set of matched query vertices
     Mg = []  # Set of matched data vertices
     Cq = []  # Set of adjacent and not-yet-matched query vertices connected from Mq
@@ -912,17 +924,6 @@ def refineCandidates(query_node_candidates, partial_solution, M):
     print()
     print("Match list, (query node, data node): ")
     print(M)
-
-    # if len(M) == 0:
-    #     print("\nIf no data nodes are yet matched:")
-    #     # print("\nNu avem valori pt Mq si Mg pentru ca nu avem o prima asociere inca.")
-    #     print("     We do not have values for Mq and Mg because we do not have a first match yet.")
-    #     # print("Astfel, Cq si Cg vor avea toate nodurile din grafurile query, respectiv cel data.")
-    #     print("     Thus, Cq and Cg will contain all the nodes from the query graph and the data graph respectively.")
-    #     Cq = list(query_nodes)
-    #     Cg = list(dataGraph.nodes())
-    #     print("     Set of adjacent and not-yet-matched query vertices connected from Mq => Cq = " + str(Cq))
-    #     print("     Set of adjacent and not-yet-matched data vertices connected from Mg => Cg = " + str(Cg))
 
     if len(M) > 0:
         print("\nIf len(M) > 0:")
@@ -951,6 +952,7 @@ def refineCandidates(query_node_candidates, partial_solution, M):
         # Pentru fiecare candidat verificam conditia (1)
 
     query_nodes_candidates_for_deletion = copy.deepcopy(query_node_candidates)
+    # query_nodes_candidates_for_deletion = []
     respectare_conditie_1 = False
     respectare_conditie_2 = False
     respectare_conditie_3 = False
@@ -963,9 +965,7 @@ def refineCandidates(query_node_candidates, partial_solution, M):
     for candidate in query_node_candidates:
         print("             Selected candidate: " + str(candidate))
         print("             Follows Conditia(1)?")
-        # for matching in M:
-        # last_matching = M[-1]
-        # print("     Matching (trebuie verificat pentru fiecare matching / asociere): " + str(matching))
+
         # print("M: " + str(M))
         # print(candidate)
 
@@ -995,18 +995,16 @@ def refineCandidates(query_node_candidates, partial_solution, M):
             # return query_node_candidates
 
         if len(M) > 0:
-            for data_node in dataGraph.nodes():
-                print("                 Nod data selectat pentru verificare: " + str(data_node))
+            for matched_data_vertex in Mg:
+                print("                 Matched data vertex selected for verification: " + str(matched_data_vertex))
                 # Daca nodul data selectat a mai fost folosit
-
-                # if dataGraph.node[data_node]['matched'] == True:
                 for m in M:
-                    if data_node != m[1]: # Aici este esenta Conditiei(1)!
+                    if candidate != m[1]: # Aici este esenta Conditiei(1)!
                         # print("Nodul " + str(data_node) + " este deja marcat ca fiind 'matched' ")
-                        print("                     Nodul " + str(data_node) + " este deja parte dintr-un match. ")
+                        print("                     Candidate node " + str(candidate) + " is already part of a match. ")
                         # Atunci verificam sa nu fie adiacent lui
-                        print("                     Lipseste in graful data muchia " + str([candidate, data_node]) + " ?")
-                        if dataGraph.has_edge(candidate, data_node) == False:
+                        print("                     Lipseste in graful data muchia " + str([candidate, matched_data_vertex]) + " ?")
+                        if dataGraph.has_edge(candidate, matched_data_vertex) == False:
                             if candidate in query_nodes_candidates_for_deletion:
                                 delete_indicator = True
                                 print("                         Lipseste.")
@@ -1015,35 +1013,8 @@ def refineCandidates(query_node_candidates, partial_solution, M):
                         else:
                             delete_indicator = False
                             print("                         Exista.")
-                            print("                         Edge " + str([candidate, data_node]) + " exists.")
+                            print("                         Edge " + str([candidate, matched_data_vertex]) + " exists.")
                             occurence_list.append("Exista")
-                                # print("Nu exista muchie. Eliminam candidatul conform Conditiei 1.")
-                                # print("Muchia care nu exista: " + str([candidate, data_node]))
-                                # query_nodes_candidates_for_deletion.remove(candidate)
-                                # self.respectare_conditie_1 = False
-                                # break
-            # # A DOUA VARIANTA VECHE: foloseste lista M inversata.
-            # for matching in reversed(M):
-            #     print("Candidate: " + str(candidate))
-            #     print("Refinement: " + str(matching))
-            #     # # PRIMA VARIANTA VECHE: cautarea in lista M care contine elementele in ordinea inserarii.
-            #     # if self.data_graph.has_edge(candidate, matching[1]) is False:
-            #     #     # print("         Conditia(1) intra in vigoare, astfel avem:")
-            #     #     # print("         *Nu exista muchie intre " + str(candidate) + " si " + str(matching[1]) + ". Se va sterge candidatul " + str(candidate) + ".")
-            #     #     # print("         *Nu se mai verifica pentru Conditia(2), ci verificam Conditia(2) pentru candidatii care au trecut.")
-            #     #     for neighbor in self.data_graph.neighbors(matching[1]):
-            #     #         if neighbor is matching[1]:
-            #     #             if self.data_graph.has_edge(candidate, neighbor) is True:
-            #     #                 print("Has edge. Trece regula 1.\n")
-            #     #                 self.respectare_conditie_1 = True
-            #     #                 break
-            #     # else:
-            #     #     break
-            #
-            #     if self.data_graph.has_edge(candidate, matching[1]) is False:
-            #         if candidate in query_nodes_candidates_for_deletion:
-            #             query_nodes_candidates_for_deletion.remove(candidate) # Am putut sa fac remove unui element din lista direct in bucla foreach. NU SE FAC STERGERI DIN LISTA IN ACELASI TIMP CU ITERAREA!
-            #             self.respectare_conditie_1 = False
 
         print()
         print("                         Occurence list: " + str(occurence_list))
@@ -1062,53 +1033,49 @@ def refineCandidates(query_node_candidates, partial_solution, M):
 
         if len(occurence_list) == 1:
             if occurence_list[0] == "Exista":
-                # print("                         Exista muchia. Trece Conditia (1).")
-                # print()
+                print("                         Exista muchia. Trece Conditia (1).")
+                print()
                 respectare_conditie_1 = True
 
 
         if len(occurence_list) > 1:
-            if occurence_list[-1] == "Lipseste":
-                if occurence_list[-2] == "Lipseste":
-                    # print("                         Nu exista muchie. Eliminam candidatul conform Conditiei 1.")
-                    # print("                         Muchia care nu exista: " + str([candidate, data_node]))
-                    query_nodes_candidates_for_deletion.remove(candidate)
-                    respectare_conditie_1 = False
-
-                if occurence_list[-2] == "Exista":
-                    # print("                         Exista muchia. Trece Conditia (1).")
-                    # print()
-                    respectare_conditie_1 = True
-
-            if occurence_list[-1] == "Exista":
-                # print("                         Exista muchia. Trece Conditia (1).")
-                # print()
-                respectare_conditie_1 = True
-            # if occurence_list.count("Exista") > occurence_list.count("Lipseste"):
-            #     print("Exista muchia. Trece Conditia (1).")
-            #     print()
-            #     self.respectare_conditie_1 = True
-            # if occurence_list.count("Exista") < occurence_list.count("Lipseste"):
-            #     if candidate in query_nodes_candidates_for_deletion:
-            #
-            #         print("Nu exista muchie. Eliminam candidatul conform Conditiei 1.")
-            #         print("Muchia care nu exista: " + str([candidate, data_node]))
+            # if occurence_list[-1] == "Lipseste":
+            #     if occurence_list[-2] == "Lipseste":
+            #         print("                         Nu exista muchie. Eliminam candidatul conform Conditiei 1.")
+            #         # print("                         Muchia care nu exista: " + str([candidate, matched_data_vertex]))
             #         query_nodes_candidates_for_deletion.remove(candidate)
-            #         self.respectare_conditie_1 = False
+            #         respectare_conditie_1 = False
+            #
+            #     if occurence_list[-2] == "Exista":
+            #         print("                         Exista muchia. Trece Conditia (1).")
+            #         print()
+            #         respectare_conditie_1 = True
+            #
+            # if occurence_list[-1] == "Exista":
+            #     print("                         Exista muchia. Trece Conditia (1).")
+            #     print()
+            #     respectare_conditie_1 = True
+            occurence_exista_count = occurence_list.count("Exista")
+            occurence_lipseste_count = occurence_list.count("Lipseste")
+            if occurence_exista_count == occurence_lipseste_count:
+                respectare_conditie_1 = True
+            if occurence_exista_count > occurence_lipseste_count:
+                respectare_conditie_1 = True
+            if occurence_exista_count < occurence_lipseste_count:
+                query_nodes_candidates_for_deletion.remove(candidate)
+                respectare_conditie_1 = False
 
 
-
-        # print("         Candidatii lui " + str(query_node) + " dupa Conditia(1)")# + " actualizati in functie de conditia (1) al VF2: ")
-        print("         Candidates that will be deleted according to Conditia(1): ")
+        print("         Candidatii lui " + str(query_node) + " dupa Conditia(1)")# + " actualizati in functie de conditia (1) al VF2: ")
         print("         " + str(query_nodes_candidates_for_deletion))
-        print()
+        # print()
 
         # Pentru fiecare candidat trebuie verificata si Conditia (2): Prune out any vertex v in c(u) such that |Cq intersected with adj(u)| > |Cg intersected with adj(v)|
         if respectare_conditie_1:
             # print("     Conditia(2):")
 
             first_intersection = []
-            adjQueryNode = list(adj(query_node, queryGraph)) # Retin candidatii in ordine lexicografic crescatoare.
+            adjQueryNode = list(adj(query_node, query_graph)) # Retin candidatii in ordine lexicografic crescatoare.
             for xx in adjQueryNode:
                 for yy in Cq[-1]:
                     if xx == yy:
@@ -1139,10 +1106,9 @@ def refineCandidates(query_node_candidates, partial_solution, M):
                 respectare_conditie_2 = True
 
             # print("         Candidatii lui " + str(query_node) + " dupa Conditia (2):")
-            print("         Candidates that will be deleted according to Conditia(1): ")
-            print("         " + str(query_nodes_candidates_for_deletion))
-            print()
-            exit(0)
+            # print("         Candidates that will be deleted according to Conditia(2): ")
+            # print("         " + str(query_nodes_candidates_for_deletion))
+            # print()
 
             if respectare_conditie_2 is True:
                 # print("     Conditia(3):")
