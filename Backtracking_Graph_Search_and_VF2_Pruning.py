@@ -1001,12 +1001,12 @@ def refineCandidates(query_node_candidates, partial_solution, M):
 
                 # if dataGraph.node[data_node]['matched'] == True:
                 for m in M:
-                    if data_node == m[1]:
+                    if data_node != m[1]: # Aici este esenta Conditiei(1)!
                         # print("Nodul " + str(data_node) + " este deja marcat ca fiind 'matched' ")
                         print("                     Nodul " + str(data_node) + " este deja parte dintr-un match. ")
                         # Atunci verificam sa nu fie adiacent lui
                         print("                     Lipseste in graful data muchia " + str([candidate, data_node]) + " ?")
-                        if dataGraph.has_edge(data_node, candidate) == False:
+                        if dataGraph.has_edge(candidate, data_node) == False:
                             if candidate in query_nodes_candidates_for_deletion:
                                 delete_indicator = True
                                 print("                         Lipseste.")
@@ -1045,42 +1045,44 @@ def refineCandidates(query_node_candidates, partial_solution, M):
             #             query_nodes_candidates_for_deletion.remove(candidate) # Am putut sa fac remove unui element din lista direct in bucla foreach. NU SE FAC STERGERI DIN LISTA IN ACELASI TIMP CU ITERAREA!
             #             self.respectare_conditie_1 = False
 
-        print("                         \nOccurence list: ")
-        print(occurence_list)
+        print()
+        print("                         Occurence list: " + str(occurence_list))
+        print()
+        # print("                         Occurence list conditions: ")
 
         if len(occurence_list) == 0:
             return query_node_candidates
 
         if len(occurence_list) == 1:
             if occurence_list[0] == "Lipseste":
-                print("                         Nu exista muchie. Eliminam candidatul conform Conditiei 1.")
-                print("                         Muchia care nu exista: " + str([candidate, data_node]))
+                # print("                         Nu exista muchie. Eliminam candidatul conform Conditiei 1.")
+                # print("                         Muchia care nu exista: " + str([candidate, data_node]))
                 query_nodes_candidates_for_deletion.remove(candidate)
                 respectare_conditie_1 = False
 
         if len(occurence_list) == 1:
             if occurence_list[0] == "Exista":
-                print("                         Exista muchia. Trece Conditia (1).")
-                print()
+                # print("                         Exista muchia. Trece Conditia (1).")
+                # print()
                 respectare_conditie_1 = True
 
 
         if len(occurence_list) > 1:
             if occurence_list[-1] == "Lipseste":
                 if occurence_list[-2] == "Lipseste":
-                    print("                         Nu exista muchie. Eliminam candidatul conform Conditiei 1.")
-                    print("                         Muchia care nu exista: " + str([candidate, data_node]))
+                    # print("                         Nu exista muchie. Eliminam candidatul conform Conditiei 1.")
+                    # print("                         Muchia care nu exista: " + str([candidate, data_node]))
                     query_nodes_candidates_for_deletion.remove(candidate)
                     respectare_conditie_1 = False
 
                 if occurence_list[-2] == "Exista":
-                    print("                         Exista muchia. Trece Conditia (1).")
-                    print()
+                    # print("                         Exista muchia. Trece Conditia (1).")
+                    # print()
                     respectare_conditie_1 = True
 
             if occurence_list[-1] == "Exista":
-                print("                         Exista muchia. Trece Conditia (1).")
-                print()
+                # print("                         Exista muchia. Trece Conditia (1).")
+                # print()
                 respectare_conditie_1 = True
             # if occurence_list.count("Exista") > occurence_list.count("Lipseste"):
             #     print("Exista muchia. Trece Conditia (1).")
@@ -1096,10 +1098,10 @@ def refineCandidates(query_node_candidates, partial_solution, M):
 
 
 
-        print("         Candidatii lui " + str(query_node) + " dupa Conditia(1)")# + " actualizati in functie de conditia (1) al VF2: ")
+        # print("         Candidatii lui " + str(query_node) + " dupa Conditia(1)")# + " actualizati in functie de conditia (1) al VF2: ")
+        print("         Candidates that will be deleted according to Conditia(1): ")
         print("         " + str(query_nodes_candidates_for_deletion))
         print()
-        exit(0)
 
         # Pentru fiecare candidat trebuie verificata si Conditia (2): Prune out any vertex v in c(u) such that |Cq intersected with adj(u)| > |Cg intersected with adj(v)|
         if respectare_conditie_1:
@@ -1137,8 +1139,11 @@ def refineCandidates(query_node_candidates, partial_solution, M):
                 respectare_conditie_2 = True
 
             # print("         Candidatii lui " + str(query_node) + " dupa Conditia (2):")
-            # print("         " + str(query_nodes_candidates_for_deletion))
-            # print()
+            print("         Candidates that will be deleted according to Conditia(1): ")
+            print("         " + str(query_nodes_candidates_for_deletion))
+            print()
+            exit(0)
+
             if respectare_conditie_2 is True:
                 # print("     Conditia(3):")
 
