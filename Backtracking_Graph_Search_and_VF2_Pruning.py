@@ -22,12 +22,13 @@ from timeit import default_timer as timer
 
 import pandas as pd
 
-def update_state(node, partial_solution, M):
+def update_state(candidate_edge, partial_solution, M):
     # print("update_state exec: ")
-    candidate_edge = copy.deepcopy(node)
+    cand_edge = copy.deepcopy(candidate_edge)
+    position_for_new_edge = len(partial_solution)
     s = copy.deepcopy(partial_solution)
-    s.append(candidate_edge)
-    M.append(candidate_edge)
+    s.append(cand_edge)
+    M.append([query_graph_edges[position_for_new_edge],cand_edge])
     # print(s)
     return s
 
@@ -69,61 +70,54 @@ def next_data_edge(partial_solution, data_graph, M):
     # Trebuie facut refinement pentru fiecare nod al muchiei query.
     # Luam muchiile query, label-ul fiecarui nod al fiecarei muchii, apoi nodurile data candidat in functie de label, si le facem refinement la toate.
     # De abia apoi continuam sa lucram cu muchii.
-    print("Before refinement: ")
+    if len(M) > 0:
+        for data_edge in list(data_graph.edges()):
+            # refineCandidates(obtained_candidates_pos_0, list(query_nodes_dict.keys())[0])
+            # print("data_edge: ")
+            # print(data_edge)
+            print("\nData edge[0] id: ")
+            print(data_edge[0])
+            print("Data edge[1] id: ")
+            print(data_edge[1])
+            print("query_edge_labels[position_for_new_edge]: ")
+            print(query_edge_labels[position_for_new_edge])
+            print("query_edge_labels[position_for_new_edge][0]: ")
+            print(query_edge_labels[position_for_new_edge][0])
+            print("query_edge_labels[position_for_new_edge][1]: ")
+            print(query_edge_labels[position_for_new_edge][1])
 
+            if query_edge_labels[position_for_new_edge][0] in candidate_nodes_lists_as_dict.keys():
 
-    for data_edge in list(data_graph.edges()):
-        # refineCandidates(obtained_candidates_pos_0, list(query_nodes_dict.keys())[0])
-        # print("data_edge: ")
-        # print(data_edge)
-        print("\nData edge[0] id: ")
-        print(data_edge[0])
-        print("Data edge[1] id: ")
-        print(data_edge[1])
-        print("query_edge_labels[position_for_new_edge]: ")
-        print(query_edge_labels[position_for_new_edge])
-        print("query_edge_labels[position_for_new_edge][0]: ")
-        print(query_edge_labels[position_for_new_edge][0])
-        print("query_edge_labels[position_for_new_edge][1]: ")
-        print(query_edge_labels[position_for_new_edge][1])
+                print("candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]: ")
+                print(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]) # with node label as key and data node id's as values
 
-        if query_edge_labels[position_for_new_edge][0] in candidate_nodes_lists_as_dict.keys():
+                if query_edge_labels[position_for_new_edge][1] in candidate_nodes_lists_as_dict.keys():
+                    print("candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]]: ")
+                    print(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]])
 
-            print("candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]: ")
-            print(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]) # with node label as key and data node id's as values
-
-            if query_edge_labels[position_for_new_edge][1] in candidate_nodes_lists_as_dict.keys():
-                print("candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]]: ")
-                print(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]])
-
-                if data_edge[0] in candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]:
-                    if data_edge[1] in candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]]:
-                        print("Both edge nodes are candidate nodes.")
-                        print("Candidate node lists for position [" + str(
-                            position_for_new_edge) + "] of the partial solution, for first label of candidate data edge: " + str(
-                            candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]))
-                        print("Candidate node lists for position [" + str(
-                            position_for_new_edge) + "] of the partial solution, for second label of candidate data edge: " + str(
-                            candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]]))
-                        print("Refinement commencing...")
-                        # refineCandidates(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]], list(query_nodes_dict.keys())[0])
-                        refineCandidates(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]], partial_solution, M, query_graph_edges[position_for_new_edge], data_edge)
-                        # refineCandidates(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]], partial_solution, M)
-
-
-
+                    if data_edge[0] in candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]:
+                        if data_edge[1] in candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]]:
+                            print("Both edge nodes are candidate nodes.")
+                            print("Candidate node lists for position [" + str(
+                                position_for_new_edge) + "] of the partial solution, for first label of candidate data edge: " + str(
+                                candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]))
+                            print("Candidate node lists for position [" + str(
+                                position_for_new_edge) + "] of the partial solution, for second label of candidate data edge: " + str(
+                                candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]]))
+                            print("Refinement commencing...")
+                            # refineCandidates(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]], list(query_nodes_dict.keys())[0])
+                            refineCandidates(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]], partial_solution, M)
+                            refineCandidates(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]], partial_solution, M)
+                        else:
+                            print("Edge does not have both nodes in the candidate lists")
+                            continue
                     else:
                         print("Edge does not have both nodes in the candidate lists")
                         continue
                 else:
-                    print("Edge does not have both nodes in the candidate lists")
-                    continue
-
-
+                    print("No candidates found in the candidate lists for label")
             else:
                 print("No candidates found in the candidate lists for label")
-        else:
-            print("No candidates found in the candidate lists for label")
 
 
 
@@ -252,7 +246,6 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
     # pt primul element(radacina) la prima executie:
     if len(partial_solution) == 0:
         print("\nWe entered the execution for the first element: ")
-
         if data_edge_to_be_joined not in partial_solution:
             ########################################################
             # Pentru VF2
@@ -277,7 +270,8 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
                         aux.append(data_edge_to_be_joined)
                         pos = aux.index(aux[-1])
                         positions[pos].append(data_edge_to_be_joined)
-                                        #####################################################################
+                        # M.append([query_graph_edges[0], data_edge_to_be_joined])
+                        #####################################################################
                                         #             matched_true_false_data_nodes_pos_0_dict[data_node_to_be_joined] = True
                                         #             break
                                         #####################################################################
@@ -899,7 +893,7 @@ def obtainCandidateEdges(edge_node_0_label, edge_node_1_label):
         return candidate_edges
 
 
-def refineCandidates(query_node_candidates, partial_solution, M, query_edge_ref_input, data_edge_ref_input):
+def refineCandidates(query_node_candidates, partial_solution, M):
     Mq = []  # Set of matched query vertices
     Mg = []  # Set of matched data vertices
     Cq = []  # Set of adjacent and not-yet-matched query vertices connected from Mq
@@ -913,41 +907,31 @@ def refineCandidates(query_node_candidates, partial_solution, M, query_edge_ref_
     print("CANDIDATES: " + str(query_node_candidates))
 
     print()
-    print("Match list. Must form data edge before adding: ")
+    print("Match list: ")
     print(M)
-    any_match_data = False
-    for candidate in query_node_candidates:
-        if dataGraph.node[candidate]['matched'] == True:
-            any_match_data = True
-            break
-    # if any_match_data == False:
-    if len(M) == 0:
-        print("\nIf no data nodes are yet matched:")
-        # print("\nNu avem valori pt Mq si Mg pentru ca nu avem o prima asociere inca.")
-        print("     We do not have values for Mq and Mg because we do not have a first match yet.")
-        # print("Astfel, Cq si Cg vor avea toate nodurile din grafurile query, respectiv cel data.")
-        print("     Thus, Cq and Cg will contain all the nodes from the query graph and the data graph respectively.")
-        Cq = list(query_nodes)
-        Cg = list(dataGraph.nodes())
-        print("     Set of adjacent and not-yet-matched query vertices connected from Mq => Cq = " + str(Cq))
-        print("     Set of adjacent and not-yet-matched data vertices connected from Mg => Cg = " + str(Cg))
-        print("     \nMust append to M")
-        # print("     From here: " + str(query_node_candidates))
-        M.append([query_edge_ref_input, data_edge_ref_input])
-        print("M = " + str(M))
 
-    # if any_match_data == True:
+    # if len(M) == 0:
+    #     print("\nIf no data nodes are yet matched:")
+    #     # print("\nNu avem valori pt Mq si Mg pentru ca nu avem o prima asociere inca.")
+    #     print("     We do not have values for Mq and Mg because we do not have a first match yet.")
+    #     # print("Astfel, Cq si Cg vor avea toate nodurile din grafurile query, respectiv cel data.")
+    #     print("     Thus, Cq and Cg will contain all the nodes from the query graph and the data graph respectively.")
+    #     Cq = list(query_nodes)
+    #     Cg = list(dataGraph.nodes())
+    #     print("     Set of adjacent and not-yet-matched query vertices connected from Mq => Cq = " + str(Cq))
+    #     print("     Set of adjacent and not-yet-matched data vertices connected from Mg => Cg = " + str(Cg))
+
     if len(M) > 0:
-        print("\nIf we have at least one data node matched:")
+        print("\nIf len(M) > 0:")
         # https://stackoverflow.com/questions/930397/getting-the-last-element-of-a-list-in-python
         # Folosesc -1 pentru a returna ultimul element din lista ().
-        # Mq.append(M[-1][0])
-        # Mg.append(M[-1][1])
+        Mq.append(M[-1][0])
+        Mg.append(M[-1][1])
         # M[-1][0] este elementul de pe pozitia din query care coincide cu ultima muchie/nod adaugat in solutia partiala data.
-        #
 
-        Mq.append(query_graph_edges[len(partial_solution)-1])
-        Mg.append(partial_solution[-1])
+
+        # Mq.append(query_graph_edges[len(partial_solution)-1])
+        # Mg.append(partial_solution[-1])
 
         # Cq.append(list(adj(M[-1][0], query_graph))) # adj inseamna neighbors.
         # Cg.append(list(adj(M[-1][1], dataGraph)))
@@ -966,8 +950,8 @@ def refineCandidates(query_node_candidates, partial_solution, M, query_edge_ref_
 
         print("Mq = " + str(Mq))
         print("Mg = " + str(Mg))
-        print("Cq = " + str(Cq))
-        print("Cg = " + str(Cg))
+        # print("Cq = " + str(Cq))
+        # print("Cg = " + str(Cg))
         # Pentru fiecare candidat verificam conditia (1)
 
     query_nodes_candidates_for_deletion = copy.deepcopy(query_node_candidates)
