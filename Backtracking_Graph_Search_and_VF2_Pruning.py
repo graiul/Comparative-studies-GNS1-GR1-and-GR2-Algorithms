@@ -1072,7 +1072,7 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
 
         # Pentru fiecare candidat trebuie verificata si Conditia (2): Prune out any vertex v in c(u) such that |Cq intersected with adj(u)| > |Cg intersected with adj(v)|
         if respectare_conditie_1:
-            # print("     Conditia(2):")
+            print("     Conditia(2):")
 
             first_intersection = []
             adjQueryNode = list(adj(query_node, query_graph)) # Retin candidatii in ordine lexicografic crescatoare.
@@ -1086,29 +1086,71 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
                 for yy in Cg[-1]:
                     if xx == yy:
                         second_intersection.append(xx)
-            # print("         Facut intersectiile de la Conditia (2)")
-            # print("         " + str(len(first_intersection)))
-            # print("         " + str(len(second_intersection)))
 
-            # print("Cardinalul primei intersectii > decat celei de a doua?")
+            print("         Facut intersectiile de la Conditia (2)")
+            print("         " + str(len(first_intersection)))
+            print("         " + str(len(second_intersection)))
+
+            print("         Cardinalul primei intersectii > decat celei de a doua?")
             if len(first_intersection) > len(second_intersection):
-                # print("         Conditia(2) intra in vigoare, astfel avem:")
-                # print("         Cardinalul primei intersectii este mai mare decat cea de-a doua. Se va sterge candidatul " + str(candidate) + ".")
+                print("         Conditia(2) intra in vigoare, astfel avem:")
+                print("         Cardinalul primei intersectii este mai mare decat cea de-a doua. Se va sterge candidatul " + str(candidate) + ".")
                 if candidate in query_nodes_candidates_for_deletion:
                     query_nodes_candidates_for_deletion.remove(candidate)
-                    # print("         Candidatii lui " + str(query_node))
-                    # print("         " + str(query_nodes_candidates_for_deletion))
+                    print("         Candidatii lui " + str(query_node))
+                    print("         " + str(query_nodes_candidates_for_deletion))
                     # print()
                     respectare_conditie_2 = False
             else:
-                # print("         Nu. Trece Conditia (2).")
-                # print()
+                print("         Nodul data candidat trece Conditia(2).")
+                print()
                 respectare_conditie_2 = True
 
-            # print("         Candidatii lui " + str(query_node) + " dupa Conditia (2):")
-            # print("         Candidates that will be deleted according to Conditia(2): ")
-            # print("         " + str(query_nodes_candidates_for_deletion))
+            print("         Candidatii lui " + str(query_node) + " dupa Conditia(2):")
+            print("         " + str(query_nodes_candidates_for_deletion))
             # print()
+
+            if respectare_conditie_2 == False: # De verificat corectitudinea acestei idei.
+                                                # Din moment ce adaugam in M cate doua matches, trebuie amandoua verificate.
+                                                # Dar nu trebuie incrucisata verificarea.
+                                                # Adica daca ultimul match trece verificarea sau nu,
+                                                # trebuie verificat si penultimul match. Altfel va sari peste verificarea unui nod candidat cu un nod query.
+
+                first_intersection = []
+                adjQueryNode = list(adj(query_node, query_graph)) # Retin candidatii in ordine lexicografic crescatoare.
+                for xx in adjQueryNode:
+                    for yy in Cq[-2]:
+                        if xx == yy:
+                            first_intersection.append(xx)
+                second_intersection = []
+                adjCandidate = list(adj(candidate, dataGraph))
+                for xx in adjCandidate:
+                    for yy in Cg[-2]:
+                        if xx == yy:
+                            second_intersection.append(xx)
+
+                print("         Facut intersectiile de la Conditia (2)")
+                print("         " + str(len(first_intersection)))
+                print("         " + str(len(second_intersection)))
+
+                print("         Cardinalul primei intersectii > decat celei de a doua?")
+                if len(first_intersection) > len(second_intersection):
+                    print("         Conditia(2) intra in vigoare, astfel avem:")
+                    print("         Cardinalul primei intersectii este mai mare decat cea de-a doua. Se va sterge candidatul " + str(candidate) + ".")
+                    if candidate in query_nodes_candidates_for_deletion:
+                        query_nodes_candidates_for_deletion.remove(candidate)
+                        print("         Candidatii lui " + str(query_node))
+                        print("         " + str(query_nodes_candidates_for_deletion))
+                        # print()
+                        respectare_conditie_2 = False
+                else:
+                    print("         Nodul data candidat trece Conditia(2).")
+                    print()
+                    respectare_conditie_2 = True
+
+                print("         Candidatii lui " + str(query_node) + " dupa Conditia(2):")
+                print("         " + str(query_nodes_candidates_for_deletion))
+                # print()
 
             if respectare_conditie_2 is True:
                 # print("     Conditia(3):")
