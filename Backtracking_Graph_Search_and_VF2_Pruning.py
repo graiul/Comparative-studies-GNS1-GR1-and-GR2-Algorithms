@@ -1554,7 +1554,7 @@ M = []
 ####################################################################################
 
 # Fisier text:
-f1 = open("f1.txt", "w+")
+f1 = open("f3.txt", "w+")
 
 # Executia algoritmului Backtracking:
 try:
