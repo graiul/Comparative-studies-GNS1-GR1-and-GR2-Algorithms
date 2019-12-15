@@ -50,7 +50,7 @@ def next_query_vertex(current_node, query_stwig_dict):
     except IndexError:
         print("No more elements after this one in dict.")
 
-def next_data_edge(partial_solution, data_graph):
+def next_data_edge(partial_solution, data_graph, M):
 
     position_for_new_edge = len(partial_solution) # Numerotarea incepe de la 0, astfel ca numarul elementelor este nr pozitiei ultimului element + 1, adica nr pozitiei urmatorului element.
     print("Position for new data edge: " + str(position_for_new_edge))
@@ -105,8 +105,8 @@ def next_data_edge(partial_solution, data_graph):
                             candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]]))
                         print("Refinement commencing...")
                         # refineCandidates(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]], list(query_nodes_dict.keys())[0])
-                        refineCandidates(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]], partial_solution)
-                        refineCandidates(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]], partial_solution)
+                        refineCandidates(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]], partial_solution, M)
+                        refineCandidates(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]], partial_solution, M)
 
 
 
@@ -126,11 +126,11 @@ def next_data_edge(partial_solution, data_graph):
 
 
     for edge in list(data_graph.edges()):
-        if is_joinable(edge, partial_solution, data_graph, query_edges_dict):
+        if is_joinable(edge, partial_solution, data_graph, query_edges_dict, M):
             return edge
     return None
 
-def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edges_dict_input):
+def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edges_dict_input, M):
 
     found = False
     data_edge_to_be_joined_node_0_label = data_graph.node[data_edge_to_be_joined[0]]['label']
@@ -697,7 +697,7 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
 
     return None
 
-def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph):
+def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph, M):
     print()
     print("Started subgraph search: ")
     print(Back.WHITE + Fore.LIGHTBLUE_EX + Style.BRIGHT + "Partial solution given: " + str(partial_solution) + Style.RESET_ALL)
@@ -775,7 +775,7 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
             # partial_solution = []
             # candidate = []
             # restore_state(partial_solution)
-            subgraph_search(partial_solution, query_graph_dict, current_node, data_graph)
+            subgraph_search(partial_solution, query_graph_dict, current_node, data_graph, M)
 
         # if partial_solution in complete_solutions:
         #     print("Already found.")
@@ -790,7 +790,7 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
         # if len(partial_solution) == 2:
 
         i = True
-        candidate = next_data_edge(partial_solution, data_graph)
+        candidate = next_data_edge(partial_solution, data_graph, M)
         # if candidate is not None:
         #     print("Candidate edge (data node id's): " + str(candidate))
         #     print("Candidate edge (data nodes label): " + str([data_graph.node[candidate[0]]['label'], data_graph.node[candidate[1]]['label']]))
@@ -834,13 +834,13 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
                 positions[3] = []
 
             print("Current node: " + str(current_node))
-            subgraph_search(partial_solution, query_graph_dict, current_node, data_graph)
+            subgraph_search(partial_solution, query_graph_dict, current_node, data_graph, M)
 
 
         partial_solution = copy.deepcopy(update_state(candidate, partial_solution))
         # print("PARTIAL SOLUTION: " + str(partial_solution))
 
-        subgraph_search(partial_solution, query_graph_dict, candidate, data_graph)
+        subgraph_search(partial_solution, query_graph_dict, candidate, data_graph, M)
         # restore_state(partial_solution)
 
     if i == False:
@@ -897,7 +897,7 @@ def obtainCandidateEdges(edge_node_0_label, edge_node_1_label):
         return candidate_edges
 
 
-def refineCandidates(query_node_candidates, partial_solution):
+def refineCandidates(query_node_candidates, partial_solution, M):
     Mq = []  # Set of matched query vertices
     Mg = []  # Set of matched data vertices
     Cq = []  # Set of adjacent and not-yet-matched query vertices connected from Mq
@@ -910,14 +910,16 @@ def refineCandidates(query_node_candidates, partial_solution):
     # print("QUERY NODE: " + str(query_node))
     print("CANDIDATES: " + str(query_node_candidates))
 
-    # print()
-    # print(M)
+    print()
+    print("Match list: ")
+    print(M)
     any_match_data = False
     for candidate in query_node_candidates:
         if dataGraph.node[candidate]['matched'] == True:
             any_match_data = True
             break
-    if any_match_data == False:
+    # if any_match_data == False:
+    if len(M) == 0:
         print("\nIf no data nodes are yet matched:")
         # print("\nNu avem valori pt Mq si Mg pentru ca nu avem o prima asociere inca.")
         print("     We do not have values for Mq and Mg because we do not have a first match yet.")
@@ -928,7 +930,8 @@ def refineCandidates(query_node_candidates, partial_solution):
         print("     Set of adjacent and not-yet-matched query vertices connected from Mq => Cq = " + str(Cq))
         print("     Set of adjacent and not-yet-matched data vertices connected from Mg => Cg = " + str(Cg))
 
-    if any_match_data == True:
+    # if any_match_data == True:
+    if len(M) > 0:
         print("\nIf we have at least one data node matched:")
         # https://stackoverflow.com/questions/930397/getting-the-last-element-of-a-list-in-python
         # Folosesc -1 pentru a returna ultimul element din lista ().
@@ -983,7 +986,8 @@ def refineCandidates(query_node_candidates, partial_solution):
         delete_indicator = False
         occurence_list = []
 
-        if any_match_data == False:
+        # if any_match_data == False:
+        if len(M) == 0:
             print("             For Conditia(1) if there are no matched data nodes we return all the query node candidates (from the data graph).")
             print("             " + str(query_node_candidates))
 
@@ -1005,8 +1009,8 @@ def refineCandidates(query_node_candidates, partial_solution):
 
             return query_node_candidates
 
-        if any_match_data == True:
-
+        # if any_match_data == True:
+        if len(M) > 0:
             for data_node in dataGraph.nodes():
                 # print("Nod data selectat pentru verificare: " + str(data_node))
                 # Daca nodul data selectat a mai fost folosit
@@ -1545,7 +1549,7 @@ matched_true_false_data_nodes_pos_3_dict = OrderedDict(
     zip(obtained_candidates_pos_3, initial_match_values_pos_3_candidates))
 print("matched_true_false_data_nodes_pos_3_dict: " + str(list(matched_true_false_data_nodes_pos_3_dict.items())))
 print()
-
+M = []
 # print("Candidate refinement for the first position: ")
 # refineCandidates(obtained_candidates_pos_0, list(query_nodes_dict.keys())[0])
 ####################################################################################
@@ -1557,7 +1561,7 @@ f1 = open("f1.txt", "w+")
 try:
     # subgraph_search(p_solution, query_edges_dict, [], small_graph)
     start_time = timer()
-    subgraph_search(p_solution, query_edges_dict, [], dataGraph)
+    subgraph_search(p_solution, query_edges_dict, [], dataGraph, M)
     total_time = timer() - start_time
     print("Timp total de executare algoritm Backtracking: " + str(total_time) + " secunde.")
 except IndexError:
