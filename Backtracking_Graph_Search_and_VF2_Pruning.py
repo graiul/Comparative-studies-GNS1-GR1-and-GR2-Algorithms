@@ -933,8 +933,12 @@ def refineCandidates(query_node_candidates, partial_solution, M):
         # Mq.append(query_graph_edges[len(partial_solution)-1])
         # Mg.append(partial_solution[-1])
 
-        # Cq.append(list(adj(M[-1][0], query_graph))) # adj inseamna neighbors.
-        # Cg.append(list(adj(M[-1][1], dataGraph)))
+        Cq.append(list(adj(M[-1][0][0], query_graph))) # adj inseamna neighbors.
+        Cq.append(list(adj(M[-1][0][1], query_graph))) # adj inseamna neighbors.
+
+        Cg.append(list(adj(M[-1][1][0], dataGraph)))
+        Cg.append(list(adj(M[-1][1][1], dataGraph)))
+
 
         # for query_node in query_nodes:
         #     if query_graph.node[query_node]['matched'] == True:
@@ -950,8 +954,8 @@ def refineCandidates(query_node_candidates, partial_solution, M):
 
         print("Mq = " + str(Mq))
         print("Mg = " + str(Mg))
-        # print("Cq = " + str(Cq))
-        # print("Cg = " + str(Cg))
+        print("Cq = " + str(Cq))
+        print("Cg = " + str(Cg))
         # Pentru fiecare candidat verificam conditia (1)
 
     query_nodes_candidates_for_deletion = copy.deepcopy(query_node_candidates)
@@ -976,10 +980,9 @@ def refineCandidates(query_node_candidates, partial_solution, M):
         delete_indicator = False
         occurence_list = []
 
-        # if any_match_data == False:
-        if len(M) == 0:
-            print("             For Conditia(1) if there are no matched data nodes we return all the query node candidates (from the data graph).")
-            print("             " + str(query_node_candidates))
+        # if len(M) == 0:
+        #     print("             For Conditia(1) if there are no matched data nodes we return all the query node candidates (from the data graph).")
+        #     print("             " + str(query_node_candidates))
 
             # Cateva detalii despre prima iteratie a rularii:
             # print("Inca nu avem nici un matching, deci nu putem verifica 'such that candidate is not connected from already matched data vertices' ")
@@ -997,12 +1000,11 @@ def refineCandidates(query_node_candidates, partial_solution, M):
             # print(
             #     "Astfel returnam candidatii cu care putem face asocierea primului nod al grafului query. Cu alte cuvinte, radacinile-candidat.")
 
-            return query_node_candidates
+            # return query_node_candidates
 
-        # if any_match_data == True:
         if len(M) > 0:
             for data_node in dataGraph.nodes():
-                # print("Nod data selectat pentru verificare: " + str(data_node))
+                print("                 Nod data selectat pentru verificare: " + str(data_node))
                 # Daca nodul data selectat a mai fost folosit
                 if dataGraph.node[data_node]['matched'] == True:
                     # print("Nodul " + str(data_node) + " este deja marcat ca fiind 'matched' ")
@@ -1266,6 +1268,9 @@ def refineCandidates(query_node_candidates, partial_solution, M):
 
     # Adaug in M o noua asociere. Voi alege doar primul candidat din lista de candidati care au ramas dupa regulile de refinement.
     # self.M.append([query_node, query_node_candidates[0]])
+
+def adj(u, graph):
+    return graph.neighbors(u)
 
 # # Cream graful de 1000 de muchii.
 # # Il inseram in NetworkX
