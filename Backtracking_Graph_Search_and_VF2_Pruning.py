@@ -28,7 +28,9 @@ def update_state(candidate_edge, partial_solution, M):
     position_for_new_edge = len(partial_solution)
     s = copy.deepcopy(partial_solution)
     s.append(cand_edge)
-    M.append([query_graph_edges[position_for_new_edge],cand_edge])
+    M.append([query_graph_edges[position_for_new_edge][0],cand_edge[0]])
+    M.append([query_graph_edges[position_for_new_edge][1],cand_edge[1]])
+
     # print(s)
     return s
 
@@ -36,6 +38,7 @@ def update_state(candidate_edge, partial_solution, M):
 def restore_state(partial_solution, M):
     if len(partial_solution) > 0:
         del partial_solution[-1]
+        del M[-1]
         del M[-1]
         p_solution = copy.deepcopy(partial_solution)
         # print("Restored state: " + str(p_solution))
@@ -907,7 +910,7 @@ def refineCandidates(query_node_candidates, partial_solution, M):
     print("CANDIDATES: " + str(query_node_candidates))
 
     print()
-    print("Match list: ")
+    print("Match list, (query node, data node): ")
     print(M)
 
     # if len(M) == 0:
@@ -925,7 +928,9 @@ def refineCandidates(query_node_candidates, partial_solution, M):
         print("\nIf len(M) > 0:")
         # https://stackoverflow.com/questions/930397/getting-the-last-element-of-a-list-in-python
         # Folosesc -1 pentru a returna ultimul element din lista ().
+        Mq.append(M[-2][0])
         Mq.append(M[-1][0])
+        Mg.append(M[-2][1])
         Mg.append(M[-1][1])
         # M[-1][0] este elementul de pe pozitia din query care coincide cu ultima muchie/nod adaugat in solutia partiala data.
 
@@ -933,24 +938,11 @@ def refineCandidates(query_node_candidates, partial_solution, M):
         # Mq.append(query_graph_edges[len(partial_solution)-1])
         # Mg.append(partial_solution[-1])
 
-        Cq.append(list(adj(M[-1][0][0], query_graph))) # adj inseamna neighbors.
-        Cq.append(list(adj(M[-1][0][1], query_graph))) # adj inseamna neighbors.
+        Cq.append(list(adj(M[-2][0], query_graph))) # adj inseamna neighbors.
+        Cq.append(list(adj(M[-1][0], query_graph))) # adj inseamna neighbors.
 
-        Cg.append(list(adj(M[-1][1][0], dataGraph)))
-        Cg.append(list(adj(M[-1][1][1], dataGraph)))
-
-
-        # for query_node in query_nodes:
-        #     if query_graph.node[query_node]['matched'] == True:
-        #         for data_node in list(dataGraph.nodes()):
-        #             if dataGraph.node[data_node]['matched'] == True:
-        #                 if query_node not in Mq:
-        #                     if data_node not in Mg:
-        #                         Mq.append(query_node)
-        #                         Mg.append(data_node)
-        #                         Cq.append(list(query_graph.neighbors()))
-        #                         Cg.append(list(dataGraph.neighbors(data_node)))
-
+        Cg.append(list(adj(M[-2][1], dataGraph)))
+        Cg.append(list(adj(M[-1][1], dataGraph)))
 
         print("Mq = " + str(Mq))
         print("Mg = " + str(Mg))
@@ -1006,26 +998,30 @@ def refineCandidates(query_node_candidates, partial_solution, M):
             for data_node in dataGraph.nodes():
                 print("                 Nod data selectat pentru verificare: " + str(data_node))
                 # Daca nodul data selectat a mai fost folosit
-                if dataGraph.node[data_node]['matched'] == True:
-                    # print("Nodul " + str(data_node) + " este deja marcat ca fiind 'matched' ")
-                    # Atunci verificam sa nu fie adiacent lui
-                    # print("Lipseste in graful data muchia " + str([candidate, data_node]) + " ?")
-                    if dataGraph.has_edge(data_node, candidate) == False:
-                        if candidate in query_nodes_candidates_for_deletion:
-                            delete_indicator = True
-                            # print("Lipseste.")
-                            occurence_list.append("Lipseste")
 
-                    else:
-                        delete_indicator = False
-                        # print("Exista.")
-                        # print("Edge " + str([data_node, candidate]) + " exists.")
-                        occurence_list.append("Exista")
-                            # print("Nu exista muchie. Eliminam candidatul conform Conditiei 1.")
-                            # print("Muchia care nu exista: " + str([candidate, data_node]))
-                            # query_nodes_candidates_for_deletion.remove(candidate)
-                            # self.respectare_conditie_1 = False
-                            # break
+                # if dataGraph.node[data_node]['matched'] == True:
+                for m in M:
+                    if data_node == m[1]:
+                        # print("Nodul " + str(data_node) + " este deja marcat ca fiind 'matched' ")
+                        print("                     Nodul " + str(data_node) + " este deja parte dintr-un match. ")
+                        # Atunci verificam sa nu fie adiacent lui
+                        print("                     Lipseste in graful data muchia " + str([candidate, data_node]) + " ?")
+                        if dataGraph.has_edge(data_node, candidate) == False:
+                            if candidate in query_nodes_candidates_for_deletion:
+                                delete_indicator = True
+                                print("                         Lipseste.")
+                                occurence_list.append("Lipseste")
+
+                        else:
+                            delete_indicator = False
+                            print("                         Exista.")
+                            print("                         Edge " + str([candidate, data_node]) + " exists.")
+                            occurence_list.append("Exista")
+                                # print("Nu exista muchie. Eliminam candidatul conform Conditiei 1.")
+                                # print("Muchia care nu exista: " + str([candidate, data_node]))
+                                # query_nodes_candidates_for_deletion.remove(candidate)
+                                # self.respectare_conditie_1 = False
+                                # break
             # # A DOUA VARIANTA VECHE: foloseste lista M inversata.
             # for matching in reversed(M):
             #     print("Candidate: " + str(candidate))
@@ -1049,42 +1045,42 @@ def refineCandidates(query_node_candidates, partial_solution, M):
             #             query_nodes_candidates_for_deletion.remove(candidate) # Am putut sa fac remove unui element din lista direct in bucla foreach. NU SE FAC STERGERI DIN LISTA IN ACELASI TIMP CU ITERAREA!
             #             self.respectare_conditie_1 = False
 
-        # print(occurence_list)
-        # exit(0)
+        print("                         \nOccurence list: ")
+        print(occurence_list)
 
         if len(occurence_list) == 0:
             return query_node_candidates
 
         if len(occurence_list) == 1:
             if occurence_list[0] == "Lipseste":
-                # print("Nu exista muchie. Eliminam candidatul conform Conditiei 1.")
-                # print("Muchia care nu exista: " + str([candidate, data_node]))
+                print("                         Nu exista muchie. Eliminam candidatul conform Conditiei 1.")
+                print("                         Muchia care nu exista: " + str([candidate, data_node]))
                 query_nodes_candidates_for_deletion.remove(candidate)
                 respectare_conditie_1 = False
 
         if len(occurence_list) == 1:
             if occurence_list[0] == "Exista":
-                # print("Exista muchia. Trece Conditia (1).")
-                # print()
+                print("                         Exista muchia. Trece Conditia (1).")
+                print()
                 respectare_conditie_1 = True
 
 
         if len(occurence_list) > 1:
             if occurence_list[-1] == "Lipseste":
                 if occurence_list[-2] == "Lipseste":
-                    # print("Nu exista muchie. Eliminam candidatul conform Conditiei 1.")
-                    # print("Muchia care nu exista: " + str([candidate, data_node]))
+                    print("                         Nu exista muchie. Eliminam candidatul conform Conditiei 1.")
+                    print("                         Muchia care nu exista: " + str([candidate, data_node]))
                     query_nodes_candidates_for_deletion.remove(candidate)
                     respectare_conditie_1 = False
 
                 if occurence_list[-2] == "Exista":
-                    # print("Exista muchia. Trece Conditia (1).")
-                    # print()
+                    print("                         Exista muchia. Trece Conditia (1).")
+                    print()
                     respectare_conditie_1 = True
 
             if occurence_list[-1] == "Exista":
-                # print("Exista muchia. Trece Conditia (1).")
-                # print()
+                print("                         Exista muchia. Trece Conditia (1).")
+                print()
                 respectare_conditie_1 = True
             # if occurence_list.count("Exista") > occurence_list.count("Lipseste"):
             #     print("Exista muchia. Trece Conditia (1).")
@@ -1098,22 +1094,25 @@ def refineCandidates(query_node_candidates, partial_solution, M):
             #         query_nodes_candidates_for_deletion.remove(candidate)
             #         self.respectare_conditie_1 = False
 
-        # print("         Candidatii lui " + str(query_node) + " dupa Conditia(1)")# + " actualizati in functie de conditia (1) al VF2: ")
-        # print("         " + str(query_nodes_candidates_for_deletion))
-        # print()
+
+
+        print("         Candidatii lui " + str(query_node) + " dupa Conditia(1)")# + " actualizati in functie de conditia (1) al VF2: ")
+        print("         " + str(query_nodes_candidates_for_deletion))
+        print()
+        exit(0)
 
         # Pentru fiecare candidat trebuie verificata si Conditia (2): Prune out any vertex v in c(u) such that |Cq intersected with adj(u)| > |Cg intersected with adj(v)|
-        if self.respectare_conditie_1:
+        if respectare_conditie_1:
             # print("     Conditia(2):")
 
             first_intersection = []
-            adjQueryNode = list(self.adj(query_node, self.queryGraph)) # Retin candidatii in ordine lexicografic crescatoare.
+            adjQueryNode = list(adj(query_node, queryGraph)) # Retin candidatii in ordine lexicografic crescatoare.
             for xx in adjQueryNode:
                 for yy in Cq[-1]:
                     if xx == yy:
                         first_intersection.append(xx)
             second_intersection = []
-            adjCandidate = list(self.adj(candidate, self.dataGraph))
+            adjCandidate = list(adj(candidate, dataGraph))
             for xx in adjCandidate:
                 for yy in Cg[-1]:
                     if xx == yy:
@@ -1131,16 +1130,16 @@ def refineCandidates(query_node_candidates, partial_solution, M):
                     # print("         Candidatii lui " + str(query_node))
                     # print("         " + str(query_nodes_candidates_for_deletion))
                     # print()
-                    self.respectare_conditie_2 = False
+                    respectare_conditie_2 = False
             else:
                 # print("         Nu. Trece Conditia (2).")
                 # print()
-                self.respectare_conditie_2 = True
+                respectare_conditie_2 = True
 
             # print("         Candidatii lui " + str(query_node) + " dupa Conditia (2):")
             # print("         " + str(query_nodes_candidates_for_deletion))
             # print()
-            if self.respectare_conditie_2 is True:
+            if respectare_conditie_2 is True:
                 # print("     Conditia(3):")
 
                 for cq_elem in Cq:
@@ -1168,13 +1167,13 @@ def refineCandidates(query_node_candidates, partial_solution, M):
                     # print("         *Cardinalul primei intersectii cu scaderi este mai mare decat cea de-a doua. Se va sterge candidatul " + str(candidate) + ".")
                     if candidate in query_nodes_candidates_for_deletion:
                         query_nodes_candidates_for_deletion.remove(candidate)
-                        self.respectare_conditie_3 = False
+                        respectare_conditie_3 = False
                         # print("         Candidatii lui " + str(query_node))
                         # print("         " + str(query_nodes_candidates_for_deletion))
                         # print()
                         # self.respectare_conditie_2 = False
                 else:
-                    self.respectare_conditie_3 = True
+                    respectare_conditie_3 = True
                     # print("         Nu. Candidatul " + str(candidate) + " a trecut de toate cele 3 filtre / conditii.")
                 # print("         Candidatii finali ai lui " + str(query_node))
                 # print("         " + str(query_nodes_candidates_for_deletion))
