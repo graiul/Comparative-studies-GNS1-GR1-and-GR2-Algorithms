@@ -19,6 +19,8 @@ import traceback
 from py2neo import Graph, Subgraph
 # Neo4J package with Conda interpreter
 from neo4j import GraphDatabase
+# CUDA programming with python using numba. With Conda interpreter.
+from numba import cuda
 
 from timeit import default_timer as timer
 
