@@ -16,15 +16,18 @@ init()
 # https://stackoverflow.com/questions/4564559/get-exception-description-and-stack-trace-which-caused-an-exception-all-as-a-st
 import traceback
 
-from py2neo import Graph, Subgraph
-# Neo4J package with Conda interpreter
+from timeit import default_timer as timer
+
+import pandas as pd
+
+# Neo4J package with Python interpreter
+# from py2neo import Graph, Subgraph
+
+# Neo4J package with Conda Python interpreter
 from neo4j import GraphDatabase
 # CUDA programming with python using numba. With Conda interpreter.
 from numba import cuda
 
-from timeit import default_timer as timer
-
-import pandas as pd
 
 def update_state(candidate_edge, partial_solution, M):
     # print("update_state exec: ")
@@ -37,7 +40,6 @@ def update_state(candidate_edge, partial_solution, M):
 
     # print(s)
     return s
-
 
 def restore_state(partial_solution, M):
     if len(partial_solution) > 0:
@@ -911,7 +913,6 @@ def obtainCandidateEdges(edge_node_0_label, edge_node_1_label):
                     candidate_edges.append(data_edge)
         return candidate_edges
 
-
 def refineCandidates(query_node, query_node_candidates, partial_solution, M):
     Mq = []  # Set of matched query vertices
     Mg = []  # Set of matched data vertices
@@ -1354,13 +1355,28 @@ def adj(u, graph):
 # print(small_graph.edges())
 ##################################################################
 ##################################################################
-# GRAFUL DATA DIN NEO4J
+# GRAFUL DATA DIN NEO4J folosind interpretor Python 3.7 normal
 # neograph_data = Graph("bolt://127.0.0.1:7690", auth=("neo4j", "changeme")) # Data Graph RI - Cluster Neo4J
-neograph_data = Graph("bolt://127.0.0.1:7687", auth=("neo4j", "changeme"))  # Data Graph RI - O singura instanta de Neo4J
+# neograph_data = Graph("bolt://127.0.0.1:7687", auth=("neo4j", "changeme"))  # Data Graph RI - O singura instanta de Neo4J
+# cqlQuery = "MATCH p=(n)-[r:PPI]->(m) return n.node_id, m.node_id"
+# result = neograph_data.run(cqlQuery).to_ndarray()
+# edge_list = result.tolist()
 
-cqlQuery = "MATCH p=(n)-[r:PPI]->(m) return n.node_id, m.node_id"
-result = neograph_data.run(cqlQuery).to_ndarray()
-edge_list = result.tolist()
+# GRAFUL DATA DIN NEO4J folosind interpretor Python 3.7 Conda
+# https://anaconda.org/conda-forge/neo4j-python-driver, in terminal executand comanda 'conda install -c conda-forge neo4j-python-driver' vom putea instala ultima versiune care nu da erori. Versiunea din conda package manager in PyCharm nu este cea mai noua, iar cea mai noua este necesara.
+# https://github.com/neo4j/neo4j-python-driver
+# https://github.com/neo4j-examples/movies-python-bolt/blob/master/movies.py, linia 55 pentru detalii despre accesarea datelor dintr-un 'record'.
+
+neograph_driver = GraphDatabase.driver("bolt://127.0.0.1:7687", auth=("neo4j", "changeme"))
+def get_data_graph_from_neo4j(tx):
+    result = tx.run("MATCH p=(n)-[r:PPI]->(m) return n.node_id, m.node_id")
+    return result
+with neograph_driver.session() as session:
+    result = session.read_transaction(get_data_graph_from_neo4j)
+# neograph_driver.close()
+edge_list = []
+for record in result:
+    edge_list.append([record["n.node_id"], record["m.node_id"]])
 # print("edge_list: ")
 # print(edge_list)
 edge_list_integer_ids = []
@@ -1371,16 +1387,34 @@ for string_edge in edge_list:
 
 dataGraph = nx.Graph()
 dataGraph.add_edges_from(sorted(edge_list_integer_ids))
-cqlQuery2 = "MATCH (n) return n.node_id, n.node_label"
-result2 = neograph_data.run(cqlQuery2).to_ndarray()
-# print("result2: ")
-# print(result2)
-node_ids_as_integers_with_string_labels = []
-for node in result2:
+
+# folosind interpretor Python 3.7 normal
+# cqlQuery2 = "MATCH (n) return n.node_id, n.node_label"
+# result2 = neograph_data.run(cqlQuery2).to_ndarray()
+# node_ids_as_integers_with_string_labels = []
+# for node in result2:
     # print(node[0])
-    node_ids_as_integers_with_string_labels.append([int(node[0]), node[1]])
+    # node_ids_as_integers_with_string_labels.append([int(node[0]), node[1]])
 # print("node_ids_as_integers_with_string_labels: ")
 # print(node_ids_as_integers_with_string_labels)
+
+# folosind interpretor Python 3.7 Conda
+def get_data_graph_node_labels_from_neo4j(tx):
+    result2 = tx.run("MATCH (n) return n.node_id, n.node_label")
+    return result2
+with neograph_driver.session() as session:
+    result2 = session.read_transaction(get_data_graph_node_labels_from_neo4j)
+neograph_driver.close()
+node_ids_with_string_labels = []
+node_ids_as_integers_with_string_labels = []
+for record in result2:
+    node_ids_with_string_labels.append([record["n.node_id"], record["n.node_label"]])
+
+for node in node_ids_with_string_labels:
+    node_ids_as_integers_with_string_labels.append([int(node[0]), node[1]])
+
+for node in node_ids_as_integers_with_string_labels:
+    print(node)
 
 node_attr_dict = OrderedDict(sorted(node_ids_as_integers_with_string_labels))
 nx.set_node_attributes(dataGraph, node_attr_dict, 'label')
@@ -1440,9 +1474,9 @@ nx.set_node_attributes(query_graph, False, 'matched')
 query_nodes = list(query_graph.nodes())
 print("Query node id's: " + str(query_nodes))
 query_matched_attributes = []
-for n1 in list(query_graph.nodes()):
-    query_matched_attributes.append(query_graph.node[n1]['matched'])
-print("Query node 'matched' attributes: " + str(query_matched_attributes))
+# for n1 in list(query_graph.nodes()):
+#     query_matched_attributes.append(query_graph.node[n1]['matched'])
+# print("Query node 'matched' attributes: " + str(query_matched_attributes))
 
 # Label-ul radacinii
 # root_label = dataGraph.node[query_nodes[0]]['label']
