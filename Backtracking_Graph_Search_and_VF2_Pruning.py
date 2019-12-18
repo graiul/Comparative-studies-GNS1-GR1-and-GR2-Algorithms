@@ -150,8 +150,12 @@ def next_data_edge(partial_solution, data_graph, M):
 def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edges_dict_input, M):
 
     found = False
-    data_edge_to_be_joined_node_0_label = data_graph.node[data_edge_to_be_joined[0]]['label']
-    data_edge_to_be_joined_node_1_label = data_graph.node[data_edge_to_be_joined[1]]['label']
+    # data_edge_to_be_joined_node_0_label = data_graph.node[data_edge_to_be_joined[0]]['label']
+    data_edge_to_be_joined_node_0_label = data_graph.nodes[data_edge_to_be_joined[0]]['label'] # nx conda (https://networkx.github.io/documentation/networkx-2.1/reference/classes/generated/networkx.Graph.nodes.html, chiar daca conda are instalat nx 2.4, nx 2.4 si 2.1 folosesc graph.nodes[][]pentru accesarea atributelor unui nod, spre deosebire de graph.node[][] in versiunea mai veche pe care o foloseam cu interpretorul Python 3.7 normal.)
+
+    # data_edge_to_be_joined_node_1_label = data_graph.node[data_edge_to_be_joined[1]]['label']
+    data_edge_to_be_joined_node_1_label = data_graph.nodes[data_edge_to_be_joined[1]]['label'] # nx conda
+
     # print("Candidate data edge node 0 label: " + str(data_edge_to_be_joined_node_0_label))
     # print("Candidate data edge node 1 label: " + str(data_edge_to_be_joined_node_1_label))
 
@@ -275,9 +279,12 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
             ########################################################
             print("     Query edge node labels for the first position: ")
             print("     " + str(list(query_edges_dict.items())[0][1]))
+            # print("     Candidate data graph edge (data nodes label): " + str(
+            #     [data_graph.node[data_edge_to_be_joined[0]]['label'],
+            #      data_graph.node[data_edge_to_be_joined[1]]['label']]))
             print("     Candidate data graph edge (data nodes label): " + str(
-                [data_graph.node[data_edge_to_be_joined[0]]['label'],
-                 data_graph.node[data_edge_to_be_joined[1]]['label']]))
+                [data_graph.nodes[data_edge_to_be_joined[0]]['label'],
+                 data_graph.nodes[data_edge_to_be_joined[1]]['label']])) # nx conda
             print("     Candidate data graph edge nodes id: " + str(data_edge_to_be_joined))
             if list(query_edges_dict.items())[0][1][0] == data_edge_to_be_joined_node_0_label:
                 # print("YES")
@@ -312,9 +319,12 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
         if data_edge_to_be_joined not in partial_solution:
             print("     Query edge for the second element: ")
             print("     " + str(list(query_edges_dict.items())[1][1]))
+            # print("     Candidate data graph edge (data nodes label): " + str(
+            #     [data_graph.node[data_edge_to_be_joined[0]]['label'],
+            #      data_graph.node[data_edge_to_be_joined[1]]['label']]))
             print("     Candidate data graph edge (data nodes label): " + str(
-                [data_graph.node[data_edge_to_be_joined[0]]['label'],
-                 data_graph.node[data_edge_to_be_joined[1]]['label']]))
+                [data_graph.nodes[data_edge_to_be_joined[0]]['label'],
+                 data_graph.nodes[data_edge_to_be_joined[1]]['label']])) # nx conda
             if list(query_edges_dict.items())[1][1][0] == data_edge_to_be_joined_node_0_label:
                 # print("YES")
                 if list(query_edges_dict.items())[1][1][1] == data_edge_to_be_joined_node_1_label:
@@ -374,9 +384,12 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
         if data_edge_to_be_joined not in partial_solution:
             print("     Query edge for the third element: ")
             print("     " + str(list(query_edges_dict.items())[2][1]))
+            # print("     Candidate data graph edge (data nodes label): " + str(
+            #     [data_graph.node[data_edge_to_be_joined[0]]['label'],
+            #      data_graph.node[data_edge_to_be_joined[1]]['label']]))
             print("     Candidate data graph edge (data nodes label): " + str(
-                [data_graph.node[data_edge_to_be_joined[0]]['label'],
-                 data_graph.node[data_edge_to_be_joined[1]]['label']]))
+                [data_graph.nodes[data_edge_to_be_joined[0]]['label'],
+                 data_graph.nodes[data_edge_to_be_joined[1]]['label']])) # nx conda
             if list(query_edges_dict.items())[2][1][0] == data_edge_to_be_joined_node_0_label:
                 # print("YES")
                 if list(query_edges_dict.items())[2][1][1] == data_edge_to_be_joined_node_1_label:
@@ -890,7 +903,8 @@ def obtainCandidates(query_node_label):
         # if query_node is None:
         #     exit(0)
         for data_node in dataGraph.nodes():
-            if query_node_label == dataGraph.node[data_node]['label']:
+            # if query_node_label == dataGraph.node[data_node]['label']:
+            if query_node_label == dataGraph.nodes[data_node]['label']: # nx conda
                 candidates.append(data_node)
         return candidates
 
@@ -1479,13 +1493,13 @@ query_matched_attributes = []
 # print("Query node 'matched' attributes: " + str(query_matched_attributes))
 
 # Label-ul radacinii
-# root_label = dataGraph.node[query_nodes[0]]['label']
-root_label = query_graph.node[query_nodes[0]]['label']
+# root_label = query_graph.node[query_nodes[0]]['label']
+root_label = query_graph.nodes[query_nodes[0]]['label'] # nx conda
 # Label-urile vecinilor din lista
 neighbor_labels = []
 for n2 in query_nodes[1:]:
-    # neighbor_labels.append(dataGraph.node[n]['label'])
-    neighbor_labels.append(query_graph.node[n2]['label'])
+    # neighbor_labels.append(query_graph.node[n2]['label'])
+    neighbor_labels.append(query_graph.nodes[n2]['label']) # nx conda
 
 query_node_labels = []
 query_node_labels.append(root_label)
@@ -1493,7 +1507,6 @@ for nl in neighbor_labels:
     query_node_labels.append(nl)
 print("Query nodes labels: " + str(query_node_labels))
 query_nodes_dict = OrderedDict(zip(query_nodes, query_node_labels))
-# query_graph_dict_matched_attribute = OrderedDict(zip(query_nodes, query_node_matched_attribute_source))
 print("Query nodes dict: " + str(list(query_nodes_dict.items())))
 query_edge_labels = []
 for q_edge in query_graph_edges:
@@ -1504,13 +1517,9 @@ query_node_labels_source = copy.deepcopy(query_node_labels)
 query_node_matched_attribute_source = copy.deepcopy(query_matched_attributes)
 
 query_edges_dict = OrderedDict(zip(query_graph_edges, query_edge_labels))
-query_graph_dict_matched_attribute = OrderedDict(zip(query_nodes, query_node_matched_attribute_source))
 print("Query graph edges dictionary: " + str(list(query_edges_dict.items())))
 print()
 adj_mat_query = nx.to_pandas_adjacency(query_graph, dtype=int)
-print("query_graph_dict_matched_attribute: ")
-print(list(query_graph_dict_matched_attribute.items()))
-print()
 p_solution = []
 complete_solutions = []
 positions = OrderedDict().fromkeys([0,1,2,3])
