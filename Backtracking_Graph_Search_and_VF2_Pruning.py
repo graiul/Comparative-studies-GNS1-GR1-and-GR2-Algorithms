@@ -1535,74 +1535,86 @@ print("Candidate nodes: ")
 candidate_nodes_lists = []
 candidate_nodes_lists_as_dict = OrderedDict()
 
-# Position 0:
-# Obtain candidates folosind label-ul acestei pozitii
-position_label = query_node_labels_source[0]
-print("Position [0] label: " + str(position_label))
-obtained_candidates_pos_0 = obtainCandidates(position_label)
-
-candidate_nodes_lists.append(obtained_candidates_pos_0)
-candidate_nodes_lists_as_dict[position_label] = obtained_candidates_pos_0
-
-initial_match_values_pos_0_candidates = []
-for im_0 in obtained_candidates_pos_0:
-    initial_match_values_pos_0_candidates.append(False)
-print("Candidates for position [0] and the mentioned label: " + str(obtained_candidates_pos_0))
-matched_true_false_data_nodes_pos_0_dict = OrderedDict(
-    zip(obtained_candidates_pos_0, initial_match_values_pos_0_candidates))
-print("matched_true_false_data_nodes_pos_0_dict: " + str(list(matched_true_false_data_nodes_pos_0_dict.items())))
-
-# Position 1:
-# Obtain candidates folosind label-ul acestei pozitii
-position_label = query_node_labels_source[1]
-print("Position [1] label: " + str(position_label))
-obtained_candidates_pos_1 = obtainCandidates(position_label)
-
-candidate_nodes_lists.append(obtained_candidates_pos_1)
-candidate_nodes_lists_as_dict[position_label] = obtained_candidates_pos_1
-
-initial_match_values_pos_1_candidates = []
-for im_1 in obtained_candidates_pos_1:
-    initial_match_values_pos_1_candidates.append(False)
-print("Candidates for position [1] and the mentioned label: " + str(obtained_candidates_pos_1))
-matched_true_false_data_nodes_pos_1_dict = OrderedDict(
-    zip(obtained_candidates_pos_1, initial_match_values_pos_1_candidates))
-print("matched_true_false_data_nodes_pos_1_dict: " + str(list(matched_true_false_data_nodes_pos_1_dict.items())))
-
-# Position 2:
-# Obtain candidates folosind label-ul acestei pozitii
-position_label = query_node_labels_source[2]
-print("Position [2] label: " + str(position_label))
-obtained_candidates_pos_2 = obtainCandidates(position_label)
-
-candidate_nodes_lists.append(obtained_candidates_pos_2)
-candidate_nodes_lists_as_dict[position_label] = obtained_candidates_pos_2
-
-initial_match_values_pos_2_candidates = []
-for im_2 in obtained_candidates_pos_2:
-    initial_match_values_pos_2_candidates.append(False)
-print("Candidates for position [2] and the mentioned label: " + str(obtained_candidates_pos_2))
-matched_true_false_data_nodes_pos_2_dict = OrderedDict(
-    zip(obtained_candidates_pos_2, initial_match_values_pos_2_candidates))
-print("matched_true_false_data_nodes_pos_2_dict: " + str(list(matched_true_false_data_nodes_pos_2_dict.items())))
-
-# Position 3:
-# Obtain candidates folosind label-ul acestei pozitii
-position_label = query_node_labels_source[3]
-print("Position [3] label: " + str(position_label))
-obtained_candidates_pos_3 = obtainCandidates(position_label)
-
-candidate_nodes_lists.append(obtained_candidates_pos_3)
-candidate_nodes_lists_as_dict[position_label] = obtained_candidates_pos_3
-
-initial_match_values_pos_3_candidates = []
-for im_3 in obtained_candidates_pos_3:
-    initial_match_values_pos_3_candidates.append(False)
-print("Candidates for position [3] and the mentioned label: " + str(obtained_candidates_pos_3))
-matched_true_false_data_nodes_pos_3_dict = OrderedDict(
-    zip(obtained_candidates_pos_3, initial_match_values_pos_3_candidates))
-print("matched_true_false_data_nodes_pos_3_dict: " + str(list(matched_true_false_data_nodes_pos_3_dict.items())))
 print()
+for position_label in query_node_labels_source:
+    print("Candidate data nodes for label " + str(position_label))
+    obtained_candidates = obtainCandidates(position_label)
+    print(obtained_candidates)
+    candidate_nodes_lists.append(obtained_candidates)
+    candidate_nodes_lists_as_dict[position_label] = obtained_candidates
+print(list(candidate_nodes_lists_as_dict.items()))
+print()
+# exit(0)
+
+# # Position 0:
+# # Obtain candidates folosind label-ul acestei pozitii
+# position_label = query_node_labels_source[0]
+# print("Position [0] label: " + str(position_label))
+# obtained_candidates_pos_0 = obtainCandidates(position_label)
+#
+# candidate_nodes_lists.append(obtained_candidates_pos_0)
+# candidate_nodes_lists_as_dict[position_label] = obtained_candidates_pos_0
+#
+# initial_match_values_pos_0_candidates = []
+# for im_0 in obtained_candidates_pos_0:
+#     initial_match_values_pos_0_candidates.append(False)
+# print("Candidates for position [0] and the mentioned label: " + str(obtained_candidates_pos_0))
+# matched_true_false_data_nodes_pos_0_dict = OrderedDict(
+#     zip(obtained_candidates_pos_0, initial_match_values_pos_0_candidates))
+# print("matched_true_false_data_nodes_pos_0_dict: " + str(list(matched_true_false_data_nodes_pos_0_dict.items())))
+#
+# # Position 1:
+# # Obtain candidates folosind label-ul acestei pozitii
+# position_label = query_node_labels_source[1]
+# print("Position [1] label: " + str(position_label))
+# obtained_candidates_pos_1 = obtainCandidates(position_label)
+#
+# candidate_nodes_lists.append(obtained_candidates_pos_1)
+# candidate_nodes_lists_as_dict[position_label] = obtained_candidates_pos_1
+#
+# initial_match_values_pos_1_candidates = []
+# for im_1 in obtained_candidates_pos_1:
+#     initial_match_values_pos_1_candidates.append(False)
+# print("Candidates for position [1] and the mentioned label: " + str(obtained_candidates_pos_1))
+# matched_true_false_data_nodes_pos_1_dict = OrderedDict(
+#     zip(obtained_candidates_pos_1, initial_match_values_pos_1_candidates))
+# print("matched_true_false_data_nodes_pos_1_dict: " + str(list(matched_true_false_data_nodes_pos_1_dict.items())))
+#
+# # Position 2:
+# # Obtain candidates folosind label-ul acestei pozitii
+# position_label = query_node_labels_source[2]
+# print("Position [2] label: " + str(position_label))
+# obtained_candidates_pos_2 = obtainCandidates(position_label)
+#
+# candidate_nodes_lists.append(obtained_candidates_pos_2)
+# candidate_nodes_lists_as_dict[position_label] = obtained_candidates_pos_2
+#
+# initial_match_values_pos_2_candidates = []
+# for im_2 in obtained_candidates_pos_2:
+#     initial_match_values_pos_2_candidates.append(False)
+# print("Candidates for position [2] and the mentioned label: " + str(obtained_candidates_pos_2))
+# matched_true_false_data_nodes_pos_2_dict = OrderedDict(
+#     zip(obtained_candidates_pos_2, initial_match_values_pos_2_candidates))
+# print("matched_true_false_data_nodes_pos_2_dict: " + str(list(matched_true_false_data_nodes_pos_2_dict.items())))
+#
+# # Position 3:
+# # Obtain candidates folosind label-ul acestei pozitii
+# position_label = query_node_labels_source[3]
+# print("Position [3] label: " + str(position_label))
+# obtained_candidates_pos_3 = obtainCandidates(position_label)
+#
+# candidate_nodes_lists.append(obtained_candidates_pos_3)
+# candidate_nodes_lists_as_dict[position_label] = obtained_candidates_pos_3
+#
+# initial_match_values_pos_3_candidates = []
+# for im_3 in obtained_candidates_pos_3:
+#     initial_match_values_pos_3_candidates.append(False)
+# print("Candidates for position [3] and the mentioned label: " + str(obtained_candidates_pos_3))
+# matched_true_false_data_nodes_pos_3_dict = OrderedDict(
+#     zip(obtained_candidates_pos_3, initial_match_values_pos_3_candidates))
+# print("matched_true_false_data_nodes_pos_3_dict: " + str(list(matched_true_false_data_nodes_pos_3_dict.items())))
+# print()
+
 M = []
 # print("Candidate refinement for the first position: ")
 # refineCandidates(obtained_candidates_pos_0, list(query_nodes_dict.keys())[0])
