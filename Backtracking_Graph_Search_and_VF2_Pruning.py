@@ -67,10 +67,10 @@ def next_data_edge(partial_solution, data_graph, M):
     if len(partial_solution) > 0: # Daca avem deja o muchie match in M.
         position_for_new_edge = len(partial_solution) # Numerotarea incepe de la 0, astfel ca numarul elementelor este nr pozitiei ultimului element + 1, adica nr pozitiei urmatorului element.
         print("Position for new data edge: " + str(position_for_new_edge))
-        print("Query edge for new partial solution data edge position [" + str(position_for_new_edge) + "]: ")
+        print("Query edge (id pair, and label for each id) for new partial solution data edge position [" + str(position_for_new_edge) + "]: ")
         print(list(query_edges_dict.items())[position_for_new_edge])
-        print("candidate_nodes_lists_as_dict: ")
-        print(candidate_nodes_lists_as_dict.items())
+        print("Candidate data nodes dictionary (key = node label, values = data graph nodes for each label): ")
+        print(list(candidate_nodes_lists_as_dict.items()))
         print()
 
         # Aici va fi partea de candidate refinement, inainte de iterarea peste lista de muchii
@@ -88,9 +88,11 @@ def next_data_edge(partial_solution, data_graph, M):
                 candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]]))
             print("Refinement commencing...")
             # refineCandidates(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]], list(query_nodes_dict.keys())[0])
+            print("First node of the query edge of current position: ")
             refineCandidates(query_graph_edges[position_for_new_edge][0], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]],
                              partial_solution, M)
-            refineCandidates(query_graph_edges[position_for_new_edge][0], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]],
+            print("Second node of the query edge of current position: ")
+            refineCandidates(query_graph_edges[position_for_new_edge][1], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]],
                              partial_solution, M)
 
         # for data_edge in list(data_graph.edges()):
@@ -937,7 +939,7 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
     # query_node = self.nextQueryVertex(query_graph)
     # query_node_candidates = self.obtainCandidates(query_node, query_graph, data_graph)
     print("------------STARTED EXECUTION FOR CANDIDATE REFINEMENT-----------")
-    # print("QUERY NODE: " + str(query_node))
+    print("QUERY NODE: " + str(query_node))
     print("CANDIDATES: " + str(query_node_candidates))
 
     print()
@@ -970,8 +972,8 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
         print("Cg = " + str(Cg))
         # Pentru fiecare candidat verificam conditia (1)
 
-    query_nodes_candidates_for_deletion = copy.deepcopy(query_node_candidates)
-    # query_nodes_candidates_for_deletion = []
+    query_nodes_candidates_list_we_can_delete_from = copy.deepcopy(query_node_candidates)
+    # query_nodes_candidates_list_we_can_delete_from = []
     respectare_conditie_1 = False
     respectare_conditie_2 = False
     respectare_conditie_3 = False
@@ -1024,7 +1026,7 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
                         # Atunci verificam sa nu fie adiacent lui
                         print("                     Lipseste in graful data muchia " + str([candidate, matched_data_vertex]) + " ?")
                         if dataGraph.has_edge(candidate, matched_data_vertex) == False:
-                            if candidate in query_nodes_candidates_for_deletion:
+                            if candidate in query_nodes_candidates_list_we_can_delete_from:
                                 delete_indicator = True
                                 print("                         Lipseste.")
                                 occurence_list.append("Lipseste")
@@ -1047,7 +1049,7 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
             if occurence_list[0] == "Lipseste":
                 # print("                         Nu exista muchie. Eliminam candidatul conform Conditiei 1.")
                 # print("                         Muchia care nu exista: " + str([candidate, data_node]))
-                query_nodes_candidates_for_deletion.remove(candidate)
+                query_nodes_candidates_list_we_can_delete_from.remove(candidate)
                 respectare_conditie_1 = False
 
         if len(occurence_list) == 1:
@@ -1062,7 +1064,7 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
             #     if occurence_list[-2] == "Lipseste":
             #         print("                         Nu exista muchie. Eliminam candidatul conform Conditiei 1.")
             #         # print("                         Muchia care nu exista: " + str([candidate, matched_data_vertex]))
-            #         query_nodes_candidates_for_deletion.remove(candidate)
+            #         query_nodes_candidates_list_we_can_delete_from.remove(candidate)
             #         respectare_conditie_1 = False
             #
             #     if occurence_list[-2] == "Exista":
@@ -1081,12 +1083,12 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
             if occurence_exista_count > occurence_lipseste_count:
                 respectare_conditie_1 = True
             if occurence_exista_count < occurence_lipseste_count:
-                query_nodes_candidates_for_deletion.remove(candidate)
+                query_nodes_candidates_list_we_can_delete_from.remove(candidate)
                 respectare_conditie_1 = False
 
 
         print("         Candidatii lui " + str(query_node) + " dupa Conditia(1)")# + " actualizati in functie de conditia (1) al VF2: ")
-        print("         " + str(query_nodes_candidates_for_deletion))
+        print("         " + str(query_nodes_candidates_list_we_can_delete_from))
         # print()
 
         # Pentru fiecare candidat trebuie verificata si Conditia (2): Prune out any vertex v in c(u) such that |Cq intersected with adj(u)| > |Cg intersected with adj(v)|
@@ -1114,10 +1116,10 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
             if len(first_intersection) > len(second_intersection):
                 print("         Conditia(2) intra in vigoare, astfel avem:")
                 print("         Cardinalul primei intersectii este mai mare decat cea de-a doua. Se va sterge candidatul " + str(candidate) + ".")
-                if candidate in query_nodes_candidates_for_deletion:
-                    query_nodes_candidates_for_deletion.remove(candidate)
+                if candidate in query_nodes_candidates_list_we_can_delete_from:
+                    query_nodes_candidates_list_we_can_delete_from.remove(candidate)
                     print("         Candidatii lui " + str(query_node))
-                    print("         " + str(query_nodes_candidates_for_deletion))
+                    print("         " + str(query_nodes_candidates_list_we_can_delete_from))
                     # print()
                     respectare_conditie_2 = False
             else:
@@ -1126,7 +1128,7 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
                 respectare_conditie_2 = True
 
             print("         Candidatii lui " + str(query_node) + " dupa Conditia(2):")
-            print("         " + str(query_nodes_candidates_for_deletion))
+            print("         " + str(query_nodes_candidates_list_we_can_delete_from))
             # print()
 
             if respectare_conditie_2 == False: # De verificat corectitudinea acestei idei.
@@ -1156,10 +1158,10 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
                 if len(first_intersection) > len(second_intersection):
                     print("         Conditia(2) intra in vigoare, astfel avem:")
                     print("         Cardinalul primei intersectii este mai mare decat cea de-a doua. Se va sterge candidatul " + str(candidate) + ".")
-                    if candidate in query_nodes_candidates_for_deletion:
-                        query_nodes_candidates_for_deletion.remove(candidate)
+                    if candidate in query_nodes_candidates_list_we_can_delete_from:
+                        query_nodes_candidates_list_we_can_delete_from.remove(candidate)
                         print("         Candidatii lui " + str(query_node))
-                        print("         " + str(query_nodes_candidates_for_deletion))
+                        print("         " + str(query_nodes_candidates_list_we_can_delete_from))
                         # print()
                         respectare_conditie_2 = False
                 else:
@@ -1168,7 +1170,7 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
                     respectare_conditie_2 = True
 
                 print("         Candidatii lui " + str(query_node) + " dupa Conditia(2):")
-                print("         " + str(query_nodes_candidates_for_deletion))
+                print("         " + str(query_nodes_candidates_list_we_can_delete_from))
                 # print()
 
             if respectare_conditie_2 is True:
@@ -1197,20 +1199,20 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
                     # print("         " + str(len(adjCandidate)))
                     # print("         Conditia(3) intra in vigoare, astfel avem:")
                     # print("         *Cardinalul primei intersectii cu scaderi este mai mare decat cea de-a doua. Se va sterge candidatul " + str(candidate) + ".")
-                    if candidate in query_nodes_candidates_for_deletion:
-                        query_nodes_candidates_for_deletion.remove(candidate)
+                    if candidate in query_nodes_candidates_list_we_can_delete_from:
+                        query_nodes_candidates_list_we_can_delete_from.remove(candidate)
                         respectare_conditie_3 = False
                         # print("         Candidatii lui " + str(query_node))
-                        # print("         " + str(query_nodes_candidates_for_deletion))
+                        # print("         " + str(query_nodes_candidates_list_we_can_delete_from))
                         # print()
                         # self.respectare_conditie_2 = False
                 else:
                     respectare_conditie_3 = True
                     # print("         Nu. Candidatul " + str(candidate) + " a trecut de toate cele 3 filtre / conditii.")
                 # print("         Candidatii finali ai lui " + str(query_node))
-                # print("         " + str(query_nodes_candidates_for_deletion))
+                # print("         " + str(query_nodes_candidates_list_we_can_delete_from))
                 # print()
-    if len(query_nodes_candidates_for_deletion) == 0:
+    if len(query_nodes_candidates_list_we_can_delete_from) == 0:
         return None
     # VECHI: Conditia 1 am adaptat-o pe loc mai sus.
     # Mai jos se afla si Conditia 2 si 3 functionale, dar fara blocari(trecerea la candidatul urmator) daca un candidat nu a trecut de o conditie, si fara verificari daca exista candidatul care trebuie eliminat.
@@ -1295,7 +1297,7 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
     # # print(query_node_candidates)
     # print("---------------------\n")
     # print("------------SFARSIT EXECUTIE RAFINARE CANDIDATI-----------")
-    return query_nodes_candidates_for_deletion
+    return query_nodes_candidates_list_we_can_delete_from
 
     # Adaug in M o noua asociere. Voi alege doar primul candidat din lista de candidati care au ramas dupa regulile de refinement.
     # self.M.append([query_node, query_node_candidates[0]])
