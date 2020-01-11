@@ -1100,21 +1100,21 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
             print("     Conditia(2):")
 
             first_intersection = []
-            adjQueryNode = list(adj(query_node, query_graph)) # Retin candidatii in ordine lexicografic crescatoare.
-            for xx in adjQueryNode:
+            adjQueryNode_last = list(adj(query_node, query_graph)) # Retin candidatii in ordine lexicografic crescatoare.
+            for xx in adjQueryNode_last:
                 for yy in Cq[-1]:
                     if xx == yy:
                         first_intersection.append(xx)
             second_intersection = []
-            adjCandidate = list(adj(candidate, dataGraph))
-            for xx in adjCandidate:
+            adjCandidate_last = list(adj(candidate, dataGraph))
+            for xx in adjCandidate_last:
                 for yy in Cg[-1]:
                     if xx == yy:
                         second_intersection.append(xx)
 
             print("         Facut intersectiile de la Conditia (2)")
-            print("         " + str(len(first_intersection)))
-            print("         " + str(len(second_intersection)))
+            print("         First intersection, last elements of Cq" + str(len(first_intersection)))
+            print("         Second intersection, last elements of Cg" + str(len(second_intersection)))
 
             print("         Cardinalul primei intersectii > decat celei de a doua?")
             if len(first_intersection) > len(second_intersection):
@@ -1145,22 +1145,22 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
                 print("     Execution for Conditia(2), next to last elems: ")
                 first_intersection = []
                 # adjQueryNode = None
-                adjQueryNode = list(adj(query_node, query_graph)) # Retin candidatii in ordine lexicografic crescatoare.
-                for xx in adjQueryNode:
+                adjQueryNode_penultim = list(adj(query_node, query_graph)) # Retin candidatii in ordine lexicografic crescatoare.
+                for xx in adjQueryNode_penultim:
                     for yy in Cq[-2]:
                         if xx == yy:
                             first_intersection.append(xx)
                 second_intersection = []
                 # adjCandidate = None
-                adjCandidate = list(adj(candidate, dataGraph))
-                for xx in adjCandidate:
+                adjCandidate_penultim = list(adj(candidate, dataGraph))
+                for xx in adjCandidate_penultim:
                     for yy in Cg[-2]:
                         if xx == yy:
                             second_intersection.append(xx)
 
                 print("         Facut intersectiile de la Conditia (2)")
-                print("         " + str(len(first_intersection)))
-                print("         " + str(len(second_intersection)))
+                print("         First intersection, penultim elements Cq" + str(len(first_intersection)))
+                print("         Second intersection, penultim elements of Cg" + str(len(second_intersection)))
 
                 print("         Cardinalul primei intersectii > decat celei de a doua?")
                 if len(first_intersection) > len(second_intersection):
@@ -1184,7 +1184,10 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
             if respectare_conditie_2 is True:
                 print()
                 print("     Conditia(3):")
-                print("         adjQueryNode before removal: " + str(adjQueryNode)) # Trebuie un adjQueryNode care este Cq[-1] si un adjQueryNode separat pt Cq[-2]. Analog pt adjCandidate si Cg. 
+                print("     For last elements of Cq and Cg") # Aici este vorba despre ultimul si penultimul match din M, care sunt nodurile unei muchii
+                                                             # query cu o muchie data. Am ales sa lucrez cu muchii in loc de noduri cand vine vorba de lista M
+                
+                print("         adjQueryNode before removal: " + str(adjQueryNode)) # Trebuie un adjQueryNode care este Cq[-1] si un adjQueryNode separat pt Cq[-2]. Analog pt adjCandidate si Cg.
 
                 for cq_elem in Cq:
                     print("         cq_elem = " + str(cq_elem))
