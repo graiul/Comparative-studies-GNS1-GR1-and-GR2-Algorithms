@@ -1131,8 +1131,8 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
                 print()
                 respectare_conditie_2 = True
 
-            print("         Candidatii lui " + str(query_node) + " dupa Conditia(2):")
-            print("         " + str(query_nodes_candidates_list_we_can_delete_from))
+            # print("         Candidatii lui " + str(query_node) + " dupa Conditia(2):")
+            # print("         " + str(query_nodes_candidates_list_we_can_delete_from))
             # print()
 
             if respectare_conditie_2 == False: # De verificat corectitudinea acestei idei.
@@ -1141,13 +1141,17 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
                                                 # Adica daca ultimul match trece verificarea sau nu,
                                                 # trebuie verificat si penultimul match. Altfel va sari peste verificarea unui nod candidat cu un nod query.
 
+                print()
+                print("     Execution for Conditia(2), next to last elems: ")
                 first_intersection = []
+                # adjQueryNode = None
                 adjQueryNode = list(adj(query_node, query_graph)) # Retin candidatii in ordine lexicografic crescatoare.
                 for xx in adjQueryNode:
                     for yy in Cq[-2]:
                         if xx == yy:
                             first_intersection.append(xx)
                 second_intersection = []
+                # adjCandidate = None
                 adjCandidate = list(adj(candidate, dataGraph))
                 for xx in adjCandidate:
                     for yy in Cg[-2]:
@@ -1178,12 +1182,17 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
                 # print()
 
             if respectare_conditie_2 is True:
-                # print("     Conditia(3):")
+                print()
+                print("     Conditia(3):")
+                print("         adjQueryNode before removal: " + str(adjQueryNode)) # Trebuie un adjQueryNode care este Cq[-1] si un adjQueryNode separat pt Cq[-2]. Analog pt adjCandidate si Cg. 
 
                 for cq_elem in Cq:
+                    print("         cq_elem = " + str(cq_elem))
                     for cq_elem_node in cq_elem:
+                        print("         cq_elem_node = " + str(cq_elem_node))
                         if cq_elem_node in adjQueryNode:
                             adjQueryNode.remove(cq_elem_node)
+                            print("adjQueryNode after removal of cq_elem_node: " + str(adjQueryNode))
                 for mq_elem_node in Mq:
                     if mq_elem_node in adjQueryNode:
                         adjQueryNode.remove(mq_elem_node)
@@ -1196,13 +1205,14 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
                     if mg_elem_node in adjCandidate:
                         adjCandidate.remove(mg_elem_node)
 
-                # print("Este primul cardinal mai mare decat al doilea?")
+                print("         Este primul cardinal mai mare decat al doilea?")
+                print("         Primul cardinal: " + str(adjQueryNode))
                 if len(adjQueryNode) > len(adjCandidate):
-                    # print("         Facut intersectiile si scaderile de la c3")
-                    # print("         " + str(len(adjQueryNode)))
-                    # print("         " + str(len(adjCandidate)))
-                    # print("         Conditia(3) intra in vigoare, astfel avem:")
-                    # print("         *Cardinalul primei intersectii cu scaderi este mai mare decat cea de-a doua. Se va sterge candidatul " + str(candidate) + ".")
+                    print("         Facut intersectiile si scaderile de la c3")
+                    print("         " + str(len(adjQueryNode)))
+                    print("         " + str(len(adjCandidate)))
+                    print("         Conditia(3) intra in vigoare, astfel avem:")
+                    print("         *Cardinalul primei intersectii cu scaderi este mai mare decat cea de-a doua. Se va sterge candidatul " + str(candidate) + ".")
                     if candidate in query_nodes_candidates_list_we_can_delete_from:
                         query_nodes_candidates_list_we_can_delete_from.remove(candidate)
                         respectare_conditie_3 = False
@@ -1213,9 +1223,9 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
                 else:
                     respectare_conditie_3 = True
                     # print("         Nu. Candidatul " + str(candidate) + " a trecut de toate cele 3 filtre / conditii.")
-                # print("         Candidatii finali ai lui " + str(query_node))
-                # print("         " + str(query_nodes_candidates_list_we_can_delete_from))
-                # print()
+                print("         Candidatii finali ai lui " + str(query_node))
+                print("         " + str(query_nodes_candidates_list_we_can_delete_from))
+                print()
     if len(query_nodes_candidates_list_we_can_delete_from) == 0:
         return None
     # VECHI: Conditia 1 am adaptat-o pe loc mai sus.
