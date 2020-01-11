@@ -88,10 +88,10 @@ def next_data_edge(partial_solution, data_graph, M):
                 candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]]))
             print("Refinement commencing...")
             # refineCandidates(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]], list(query_nodes_dict.keys())[0])
-            print("First node of the query edge of current position: ")
+            print("\nFirst node of the query edge of current position: " + str(query_graph_edges[position_for_new_edge][0]))
             refineCandidates(query_graph_edges[position_for_new_edge][0], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]],
                              partial_solution, M)
-            print("Second node of the query edge of current position: ")
+            print("\nSecond node of the query edge of current position: " + str(query_graph_edges[position_for_new_edge][1]))
             refineCandidates(query_graph_edges[position_for_new_edge][1], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]],
                              partial_solution, M)
 
@@ -436,9 +436,12 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
         if data_edge_to_be_joined not in partial_solution:
             print("     Query edge for the fourth element: ")
             print("     " + str(list(query_edges_dict.items())[3][1]))
+            # print("     Candidate data graph edge (data nodes label): " + str(
+            #     [data_graph.nodes[data_edge_to_be_joined[0]]['label'],
+            #      data_graph.nodes[data_edge_to_be_joined[1]]['label']]))
             print("     Candidate data graph edge (data nodes label): " + str(
-                [data_graph.node[data_edge_to_be_joined[0]]['label'],
-                 data_graph.node[data_edge_to_be_joined[1]]['label']]))
+                [data_graph.nodes[data_edge_to_be_joined[0]]['label'],
+                 data_graph.nodes[data_edge_to_be_joined[1]]['label']])) # nx conda
             if list(query_edges_dict.items())[3][1][0] == data_edge_to_be_joined_node_0_label:
                 # print("YES")
                 if list(query_edges_dict.items())[3][1][1] == data_edge_to_be_joined_node_1_label:
@@ -865,7 +868,7 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
                 current_node = copy.deepcopy(partial_solution[-1])
                 positions[3] = []
 
-            print("Current node: " + str(current_node))
+            print("Current edge: " + str(current_node))
             subgraph_search(partial_solution, query_graph_dict, current_node, data_graph, M)
 
 
@@ -1020,9 +1023,10 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
                 print("                 Matched data vertex selected for verification: " + str(matched_data_vertex))
                 # Daca nodul data selectat a mai fost folosit
                 for m in M:
+                    # print("m = " + str(m))
                     if candidate != m[1]: # Aici este esenta Conditiei(1)!
                         # print("Nodul " + str(data_node) + " este deja marcat ca fiind 'matched' ")
-                        print("                     Candidate node " + str(candidate) + " is already part of a match. ")
+                        print("                     Candidate node " + str(candidate) + " is NOT already part of a match. ")
                         # Atunci verificam sa nu fie adiacent lui
                         print("                     Lipseste in graful data muchia " + str([candidate, matched_data_vertex]) + " ?")
                         if dataGraph.has_edge(candidate, matched_data_vertex) == False:
