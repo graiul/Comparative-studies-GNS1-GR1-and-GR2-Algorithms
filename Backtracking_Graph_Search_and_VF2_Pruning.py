@@ -1186,34 +1186,38 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
                 print("     Conditia(3):")
                 print("     For last elements of Cq and Cg") # Aici este vorba despre ultimul si penultimul match din M, care sunt nodurile unei muchii
                                                              # query cu o muchie data. Am ales sa lucrez cu muchii in loc de noduri cand vine vorba de lista M
-                
-                print("         adjQueryNode before removal: " + str(adjQueryNode)) # Trebuie un adjQueryNode care este Cq[-1] si un adjQueryNode separat pt Cq[-2]. Analog pt adjCandidate si Cg.
 
-                for cq_elem in Cq:
-                    print("         cq_elem = " + str(cq_elem))
-                    for cq_elem_node in cq_elem:
-                        print("         cq_elem_node = " + str(cq_elem_node))
-                        if cq_elem_node in adjQueryNode:
-                            adjQueryNode.remove(cq_elem_node)
-                            print("adjQueryNode after removal of cq_elem_node: " + str(adjQueryNode))
+                print("         adjQueryNode before removal: " + str(adjQueryNode_last)) # Trebuie un adjQueryNode care este Cq[-1] si un adjQueryNode separat pt Cq[-2]. Analog pt adjCandidate si Cg.
+
+                # for cq_elem in Cq:
+                #     print("         cq_elem = " + str(cq_elem))
+                #     for cq_elem_node in cq_elem:
+                for cq_elem_node in Cq[-1]:
+                    print("         cq_elem_node = " + str(cq_elem_node))
+                    if cq_elem_node in adjQueryNode_last:
+                        adjQueryNode_last.remove(cq_elem_node)
+                        print("adjQueryNode_last after removal of cq_elem_node: " + str(adjQueryNode_last))
                 for mq_elem_node in Mq:
-                    if mq_elem_node in adjQueryNode:
-                        adjQueryNode.remove(mq_elem_node)
+                    if mq_elem_node in adjQueryNode_last:
+                        adjQueryNode_last.remove(mq_elem_node)
 
-                for cg_elem in Cg:
-                    for cg_elem_node in cg_elem:
-                        if cg_elem_node in adjCandidate:
-                            adjCandidate.remove(cg_elem_node)
+                # for cg_elem in Cg:
+                #     for cg_elem_node in cg_elem:
+                for cg_elem_node in Cg[-1]:
+                    if cg_elem_node in adjCandidate_last:
+                        adjCandidate_last.remove(cg_elem_node)
                 for mg_elem_node in Mg:
-                    if mg_elem_node in adjCandidate:
-                        adjCandidate.remove(mg_elem_node)
+                    if mg_elem_node in adjCandidate_last:
+                        adjCandidate_last.remove(mg_elem_node)
 
                 print("         Este primul cardinal mai mare decat al doilea?")
-                print("         Primul cardinal: " + str(adjQueryNode))
-                if len(adjQueryNode) > len(adjCandidate):
+                print("         Primul cardinal: " + str(len(adjQueryNode_last)))
+                print("         Al doilea cardinal: " + str(len(adjCandidate_last)))
+
+                if len(adjQueryNode_last) > len(adjCandidate_last):
                     print("         Facut intersectiile si scaderile de la c3")
-                    print("         " + str(len(adjQueryNode)))
-                    print("         " + str(len(adjCandidate)))
+                    print("         " + str(len(adjQueryNode_last)))
+                    print("         " + str(len(adjCandidate_last)))
                     print("         Conditia(3) intra in vigoare, astfel avem:")
                     print("         *Cardinalul primei intersectii cu scaderi este mai mare decat cea de-a doua. Se va sterge candidatul " + str(candidate) + ".")
                     if candidate in query_nodes_candidates_list_we_can_delete_from:
