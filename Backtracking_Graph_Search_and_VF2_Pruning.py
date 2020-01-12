@@ -1227,9 +1227,38 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
                         # print("         " + str(query_nodes_candidates_list_we_can_delete_from))
                         # print()
                         # self.respectare_conditie_2 = False
-                else:
-                    respectare_conditie_3 = True
+                # else:
+                #     respectare_conditie_3 = True
                     # print("         Nu. Candidatul " + str(candidate) + " a trecut de toate cele 3 filtre / conditii.")
+
+                #-------------------------------------------------------------------------------------------------------
+
+                for cq_elem_node in Cq[-2]:
+                    print("         cq_elem_node = " + str(cq_elem_node))
+                    if cq_elem_node in adjQueryNode_penultim:
+                        adjQueryNode_penultim.remove(cq_elem_node)
+                        print("adjQueryNode_last after removal of cq_elem_node: " + str(adjQueryNode_penultim))
+                for mq_elem_node in Mq:
+                    if mq_elem_node in adjQueryNode_penultim:
+                        adjQueryNode_penultim.remove(mq_elem_node)
+
+                for cg_elem_node in Cg[-2]:
+                    if cg_elem_node in adjCandidate_penultim:
+                        adjCandidate_penultim.remove(cg_elem_node)
+                for mg_elem_node in Mg:
+                    if mg_elem_node in adjCandidate_penultim:
+                        adjCandidate_penultim.remove(mg_elem_node)
+
+                print("         Este primul cardinal mai mare decat al doilea?")
+                print("         Primul cardinal: " + str(len(adjCandidate_penultim)))
+                print("         Al doilea cardinal: " + str(len(adjCandidate_penultim)))
+
+                if len(adjQueryNode_penultim) > len(adjCandidate_penultim):
+                    print("         Facut intersectiile si scaderile de la c3")
+                    print("         " + str(len(adjQueryNode_penultim)))
+                    print("         " + str(len(adjCandidate_penultim)))
+                    print("         Conditia(3) intra in vigoare, astfel avem:")
+                    print("         *Cardinalul primei intersectii cu scaderi este mai mare decat cea de-a doua. Se va sterge candidatul " + str(candidate) + ".")
                 print("         Candidatii finali ai lui " + str(query_node))
                 print("         " + str(query_nodes_candidates_list_we_can_delete_from))
                 print()
