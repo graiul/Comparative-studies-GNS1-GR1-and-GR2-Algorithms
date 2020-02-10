@@ -45,7 +45,7 @@ class STwig_Algorithm(object):
     # neograph_data = Graph(port="7687", user="neo4j", password="graph") # Data Graph Zhaosun
     # neograph_query = Graph("bolt://127.0.0.1:7693", auth=("neo4j", "changeme")) # Query Graph Zhaosun din READ_REPLICA
     # neograph_data = Graph("bolt://127.0.0.1:7690", auth=("neo4j", "changeme")) # Data Graph RI din READ_REPLICA - Cluster Neo4J cu 5 instante
-    neograph_data = Graph("bolt://127.0.0.1:7687", auth=("neo4j", "changeme")) # Data Graph RI - O singura instanta de Neo4J
+    neograph_data = Graph("bolt://127.0.0.1:7687", auth=("neo4j", "password")) # Data Graph RI - O singura instanta de Neo4J
 
     def Cloud_Load(self, node_id):  # Pot rula inca o metoda?
         # print("Cloud_Load:")
@@ -257,7 +257,7 @@ class STwig_Algorithm(object):
 
             # #Trebuie returnate toate frunzele de tipul:
             # # Label-ul radacinii stwig-ului dat ca si parametru pentru Index.getID!
-            stwig_query_root_type = self.query_graph.node[stwig_query[0]]['label']
+            stwig_query_root_type = self.query_graph.nodes[stwig_query[0]]['label']
 
             # print("Current iteration STwig query root type: " + str(stwig_query_root_type))
             new_roots = []
@@ -290,7 +290,7 @@ class STwig_Algorithm(object):
             for child in stwig_query[1]:
                 # print(child)
                 # print(self.query_graph.node[child]['label'])
-                child_node_label = self.query_graph.node[child]['label']
+                child_node_label = self.query_graph.nodes[child]['label']
                 current_stwig_childred_node_labels.append(child_node_label)
             # print("current_stwig_childred_node_labels: " + str(current_stwig_childred_node_labels))
 
@@ -485,7 +485,7 @@ class STwig_Algorithm(object):
 
         # #Trebuie returnate toate frunzele de tipul:
         # # Label-ul radacinii stwig-ului dat ca si parametru pentru Index.getID!
-        stwig_query_root_type = self.query_graph.node[stwig_query[0]]['label']
+        stwig_query_root_type = self.query_graph.nodes[stwig_query[0]]['label']
 
         # print("Current iteration STwig query root type: " + str(stwig_query_root_type))
         new_roots = []
@@ -517,7 +517,7 @@ class STwig_Algorithm(object):
         for child in stwig_query[1]:
             # print(child)
             # print(self.query_graph.node[child]['label'])
-            child_node_label = self.query_graph.node[child]['label']
+            child_node_label = self.query_graph.nodes[child]['label']
             current_stwig_childred_node_labels.append(child_node_label)
         # print("current_stwig_childred_node_labels: " + str(current_stwig_childred_node_labels))
 
@@ -584,7 +584,7 @@ class STwig_Algorithm(object):
     def Index_getID_NX(self, label, query_graph_nx):
         result = []
         for query_node in query_graph_nx.nodes():
-            if query_graph_nx.node[query_node]['label'] is label:
+            if query_graph_nx.nodes[query_node]['label'] is label:
                 result.append(query_node)
             return result
 
@@ -618,7 +618,7 @@ class STwig_Algorithm(object):
     def Index_hasLabel_NX(self, node_id, label, query_graph_nx):
         for query_node in query_graph_nx.nodes():
             if query_node is node_id:
-                if query_graph_nx.node[query_node]['label'] is label:
+                if query_graph_nx.nodes[query_node]['label'] is label:
                     return True
                 else:
                     return False
@@ -666,17 +666,17 @@ class STwig_Algorithm(object):
 
         # Aici transformam un stwig query ([b1, [a1, d1, e1]]) intr-unul generic,
         # lasand doar label-urile: [b, [a, d, e]], in Sr intra doar cu label-uri, indiferent de nr iteratiei.
-        q_labels_start = [self.query_graph.node[q[0]]['label'], []]
+        q_labels_start = [self.query_graph.nodes[q[0]]['label'], []]
         # print(q_labels_start)
         for leaf_id in q[1]:
-            q_labels_start[1].append(self.query_graph.node[leaf_id]['label'])
+            q_labels_start[1].append(self.query_graph.nodes[leaf_id]['label'])
         # print("Query STwig labels: " + str(q_labels_start))
 
 
         # print("STwig query labels - must be only the labels: " + str(q_labels_start))
         # print("Number of leaf labels: " + str(len(q[1])))
 
-        r = int(self.query_graph.node[q[0]]['label'])
+        r = int(self.query_graph.nodes[q[0]]['label'])
         # print("STwig root label: " + str(r))
         L = q_labels_start[1]
         # print("Children labels: " + str(L))
@@ -972,7 +972,7 @@ class STwig_Algorithm(object):
         # print("deg: " + str(deg))
         # print("neighbors: " + str(list(query_graph.neighbors(v))))
         # print(query_graph.node[v_id]['label'])
-        return deg / self.freq_NX(self.query_graph.node[v_id]['label'], self.query_graph)
+        return deg / self.freq_NX(self.query_graph.nodes[v_id]['label'], self.query_graph)
 
     def freq(self, v_label):
         # tx = self.neograph_data.begin() # Pentru graful data Zhaosun, in cazul Neo4j single instance, not Neo4j cluster!
@@ -998,7 +998,7 @@ class STwig_Algorithm(object):
         # print("label=" + str(label))
         for node in query_graph_nx.nodes():
             # print("query_graph_nx.node[node]['label']=" + str(query_graph_nx.node[node]['label']))
-            if query_graph_nx.node[node]['label'] is str(label):
+            if query_graph_nx.nodes[node]['label'] is str(label):
                 counter += 1
         return counter
 
