@@ -89,11 +89,15 @@ def next_data_edge(partial_solution, data_graph, M):
             print("Refinement commencing...")
             # refineCandidates(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]], list(query_nodes_dict.keys())[0])
             print("\nFirst node of the query edge of current position: " + str(query_graph_edges[position_for_new_edge][0]))
-            refineCandidates(query_graph_edges[position_for_new_edge][0], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]],
-                             partial_solution, M)
+            cand1 = copy.deepcopy(refineCandidates(query_graph_edges[position_for_new_edge][0], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]],
+                             partial_solution, M))
+            candidate_results.append([query_graph_edges[position_for_new_edge][0], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]], cand1])
             print("\nSecond node of the query edge of current position: " + str(query_graph_edges[position_for_new_edge][1]))
-            refineCandidates(query_graph_edges[position_for_new_edge][1], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]],
-                             partial_solution, M)
+            cand2 = copy.deepcopy(refineCandidates(query_graph_edges[position_for_new_edge][1], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]],
+                             partial_solution, M))
+            candidate_results.append([query_graph_edges[position_for_new_edge][1], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]], cand2])
+
+
 
         # for data_edge in list(data_graph.edges()):
                 # print("data_edge: ")
@@ -845,6 +849,11 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
                 print(Style.RESET_ALL)
                 # print("Finished. Press 'Enter' to close the window.")
                 # input()
+                print("Candidate results: ")
+                print("Format of the results")
+                print("[Query node, [Candidate data nodes], [Refined candidate data nodes]]")
+                for cand_res in candidate_results:
+                    print(cand_res)
                 exit(0)
 
             # go back a position with restore position()
@@ -1670,7 +1679,7 @@ M = []
 
 # Fisier text:
 f1 = open("f3.txt", "w+")
-
+candidate_results = []
 # Executia algoritmului Backtracking:
 try:
     # subgraph_search(p_solution, query_edges_dict, [], small_graph)
