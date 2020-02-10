@@ -22,11 +22,11 @@ from timeit import default_timer as timer
 
 import pandas as pd
 
-def update_state(node, partial_solution):
+def update_state(edge, partial_solution):
     # print("update_state exec: ")
-    c_node = copy.deepcopy(node)
+    c_edge = copy.deepcopy(edge)
     s = copy.deepcopy(partial_solution)
-    s.append(c_node)
+    s.append(c_edge)
     # print(s)
     return s
 
@@ -52,14 +52,15 @@ def next_query_vertex(current_node, query_stwig_dict):
 
 def next_data_edge(partial_solution, data_graph):
 
-    for edge in list(data_graph.edges()):
+    for edge in sorted(list(data_graph.edges())):
         if is_joinable(edge, partial_solution, data_graph, query_edges_dict):
             return edge
     return None
 
-def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edges_dict_input):
+def is_joinable(data_edge_to_be_joined_unsorted, partial_solution, data_graph, query_edges_dict_input):
 
     found = False
+    data_edge_to_be_joined = sorted(data_edge_to_be_joined_unsorted)
     data_edge_to_be_joined_node_0_label = data_graph.nodes[data_edge_to_be_joined[0]]['label']
     data_edge_to_be_joined_node_1_label = data_graph.nodes[data_edge_to_be_joined[1]]['label']
     # print("Candidate data edge node 0 label: " + str(data_edge_to_be_joined_node_0_label))
@@ -648,9 +649,13 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
             adj_mat_data = nx.to_pandas_adjacency(partial_solution_data_subgraph, dtype=int)
             print()
             adj_mat_data_elems = adj_mat_data.to_numpy()
-            print("Data subgraph adjacency matrix: ")
+            print("Data subgraph/partial solution adjacency matrix: ")
             print(adj_mat_data_elems)
             print()
+            temp = nx.Graph()
+            temp.add_edges_from([(5, 6), (5, 7)])
+            temp_mat = nx.to_pandas_adjacency(temp, dtype=int)
+
             mat_equal = False
             if (adj_mat_query_elems.shape[0] * adj_mat_query_elems.shape[1]) == (adj_mat_data_elems.shape[0] * adj_mat_data_elems.shape[1]):
                 if (adj_mat_query_elems==adj_mat_data_elems).all():
@@ -1355,6 +1360,8 @@ adj_mat_query = nx.to_pandas_adjacency(query_graph, dtype=int)
 print("query_stwig1_dict_matched_attribute: ")
 print(list(query_stwig1_dict_matched_attribute.items()))
 print()
+print("Data graph edges: ")
+print(list(dataGraph.edges()))
 p_solution = []
 complete_solutions = []
 positions = OrderedDict().fromkeys([0,1,2,3])
