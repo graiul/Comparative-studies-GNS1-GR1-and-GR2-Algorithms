@@ -284,7 +284,7 @@ def is_joinable(data_node_to_be_joined, partial_solution, data_graph, query_stwi
 
     # print("\nis_joinable exec:")
     # print("input data node id: " + str(data_node_to_be_joined))
-    data_node_label = data_graph.node[data_node_to_be_joined]['label']
+    data_node_label = data_graph.nodes[data_node_to_be_joined]['label']
     # print("data node label: " + str(data_node_label))
     # print("query_stwig_as_dict: ")
     # print(query_stwig_as_dict.items())
@@ -650,7 +650,7 @@ def next_data_vertex(partial_solution, data_graph, query_stwig_dict):
     # print("partial_solution: " + str(partial_solution))
     for node in list(data_graph.nodes()):
         # print("data node id: " + str(node))
-        data_node_label = data_graph.node[node]['label']
+        data_node_label = data_graph.nodes[node]['label']
         # print("data node label: " + str(data_node_label))
         # print("is joinable, true/false:")
         # print(is_joinable(node, partial_solution, data_graph, query_stwig_dict))
@@ -867,7 +867,7 @@ def renew_node_list(old_node_list):
 
 # GRAFUL DATA DIN NEO4J
 # neograph_data = Graph("bolt://127.0.0.1:7690", auth=("neo4j", "changeme")) # Data Graph RI - Cluster Neo4J
-neograph_data = Graph("bolt://127.0.0.1:7687", auth=("neo4j", "changeme"))  # Data Graph RI - O singura instanta de Neo4J
+neograph_data = Graph("bolt://127.0.0.1:7687", auth=("neo4j", "password"))  # Data Graph RI - O singura instanta de Neo4J
 
 cqlQuery = "MATCH p=(n)-[r:PPI]->(m) return n.node_id, m.node_id"
 result = neograph_data.run(cqlQuery).to_ndarray()
@@ -947,12 +947,12 @@ query_stwig_1 = list(query_graph.nodes())
 print("Query STwig: " + str(query_stwig_1))
 # Label-ul radacinii
 # root_label = dataGraph.node[query_stwig_1[0]]['label']
-root_label = query_graph.node[query_stwig_1[0]]['label']
+root_label = query_graph.nodes[query_stwig_1[0]]['label']
 # Label-urile vecinilor din lista
 neighbor_labels = []
 for n in query_stwig_1[1:]:
     # neighbor_labels.append(dataGraph.node[n]['label'])
-    neighbor_labels.append(query_graph.node[n]['label'])
+    neighbor_labels.append(query_graph.nodes[n]['label'])
 
 query_stwig_1_as_labels = []
 query_stwig_1_as_labels.append(root_label)
