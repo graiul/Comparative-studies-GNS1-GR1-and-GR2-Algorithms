@@ -96,7 +96,7 @@ def next_data_edge(partial_solution, data_graph, M):
             cand2 = copy.deepcopy(refineCandidates(query_graph_edges[position_for_new_edge][1], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]],
                              partial_solution, M))
             candidate_results.append([query_graph_edges[position_for_new_edge][1], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]], cand2])
-
+            candidate_results.append("----------------------")
 
 
         # for data_edge in list(data_graph.edges()):
