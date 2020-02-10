@@ -60,8 +60,8 @@ def next_data_edge(partial_solution, data_graph):
 def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edges_dict_input):
 
     found = False
-    data_edge_to_be_joined_node_0_label = data_graph.node[data_edge_to_be_joined[0]]['label']
-    data_edge_to_be_joined_node_1_label = data_graph.node[data_edge_to_be_joined[1]]['label']
+    data_edge_to_be_joined_node_0_label = data_graph.nodes[data_edge_to_be_joined[0]]['label']
+    data_edge_to_be_joined_node_1_label = data_graph.nodes[data_edge_to_be_joined[1]]['label']
     # print("Candidate data edge node 0 label: " + str(data_edge_to_be_joined_node_0_label))
     # print("Candidate data edge node 1 label: " + str(data_edge_to_be_joined_node_1_label))
 
@@ -187,8 +187,8 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
             print("     Query edge node labels for the first position: ")
             print("     " + str(list(query_edges_dict.items())[0][1]))
             print("     Candidate data graph edge (data nodes label): " + str(
-                [data_graph.node[data_edge_to_be_joined[0]]['label'],
-                 data_graph.node[data_edge_to_be_joined[1]]['label']]))
+                [data_graph.nodes[data_edge_to_be_joined[0]]['label'],
+                 data_graph.nodes[data_edge_to_be_joined[1]]['label']]))
             print("     Candidate data graph edge nodes id: " + str(data_edge_to_be_joined))
             if list(query_edges_dict.items())[0][1][0] == data_edge_to_be_joined_node_0_label:
                 # print("YES")
@@ -223,8 +223,8 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
             print("     Query edge for the second element: ")
             print("     " + str(list(query_edges_dict.items())[1][1]))
             print("     Candidate data graph edge (data nodes label): " + str(
-                [data_graph.node[data_edge_to_be_joined[0]]['label'],
-                 data_graph.node[data_edge_to_be_joined[1]]['label']]))
+                [data_graph.nodes[data_edge_to_be_joined[0]]['label'],
+                 data_graph.nodes[data_edge_to_be_joined[1]]['label']]))
             if list(query_edges_dict.items())[1][1][0] == data_edge_to_be_joined_node_0_label:
                 # print("YES")
                 if list(query_edges_dict.items())[1][1][1] == data_edge_to_be_joined_node_1_label:
@@ -285,8 +285,8 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
             print("     Query edge for the third element: ")
             print("     " + str(list(query_edges_dict.items())[2][1]))
             print("     Candidate data graph edge (data nodes label): " + str(
-                [data_graph.node[data_edge_to_be_joined[0]]['label'],
-                 data_graph.node[data_edge_to_be_joined[1]]['label']]))
+                [data_graph.nodes[data_edge_to_be_joined[0]]['label'],
+                 data_graph.nodes[data_edge_to_be_joined[1]]['label']]))
             if list(query_edges_dict.items())[2][1][0] == data_edge_to_be_joined_node_0_label:
                 # print("YES")
                 if list(query_edges_dict.items())[2][1][1] == data_edge_to_be_joined_node_1_label:
@@ -332,8 +332,8 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
             print("     Query edge for the fourth element: ")
             print("     " + str(list(query_edges_dict.items())[3][1]))
             print("     Candidate data graph edge (data nodes label): " + str(
-                [data_graph.node[data_edge_to_be_joined[0]]['label'],
-                 data_graph.node[data_edge_to_be_joined[1]]['label']]))
+                [data_graph.nodes[data_edge_to_be_joined[0]]['label'],
+                 data_graph.nodes[data_edge_to_be_joined[1]]['label']]))
             if list(query_edges_dict.items())[3][1][0] == data_edge_to_be_joined_node_0_label:
                 # print("YES")
                 if list(query_edges_dict.items())[3][1][1] == data_edge_to_be_joined_node_1_label:
@@ -1234,7 +1234,7 @@ def refineCandidates(self, M, query_node, query_node_candidates):
 ##################################################################
 # GRAFUL DATA DIN NEO4J
 # neograph_data = Graph("bolt://127.0.0.1:7690", auth=("neo4j", "changeme")) # Data Graph RI - Cluster Neo4J
-neograph_data = Graph("bolt://127.0.0.1:7687", auth=("neo4j", "changeme"))  # Data Graph RI - O singura instanta de Neo4J
+neograph_data = Graph("bolt://127.0.0.1:7687", auth=("neo4j", "password"))  # Data Graph RI - O singura instanta de Neo4J
 
 cqlQuery = "MATCH p=(n)-[r:PPI]->(m) return n.node_id, m.node_id"
 result = neograph_data.run(cqlQuery).to_ndarray()
@@ -1319,17 +1319,17 @@ query_nodes = list(query_graph.nodes())
 print("Query node id's: " + str(query_nodes))
 query_matched_attributes = []
 for n1 in list(query_graph.nodes()):
-    query_matched_attributes.append(query_graph.node[n1]['matched'])
+    query_matched_attributes.append(query_graph.nodes[n1]['matched'])
 print("Query node 'matched' attributes: " + str(query_matched_attributes))
 
 # Label-ul radacinii
 # root_label = dataGraph.node[query_nodes[0]]['label']
-root_label = query_graph.node[query_nodes[0]]['label']
+root_label = query_graph.nodes[query_nodes[0]]['label']
 # Label-urile vecinilor din lista
 neighbor_labels = []
 for n2 in query_nodes[1:]:
     # neighbor_labels.append(dataGraph.node[n]['label'])
-    neighbor_labels.append(query_graph.node[n2]['label'])
+    neighbor_labels.append(query_graph.nodes[n2]['label'])
 
 query_node_labels = []
 query_node_labels.append(root_label)
