@@ -102,8 +102,8 @@ class Query_Graph_Generator(object):
         # query_graph_edges = [[1, 2], [1, 3], [1, 4]]
         # node_attr = ["101", "102", "103", "104"]
 
-        # query_graph_edges = [[1, 2], [1,3]]
-        # node_attr = ["101", "102", "103"]
+        query_graph_edges = [[1, 2], [1,3]]
+        node_attr = ["101", "102", "103"]
 
         # query_graph_edges = [[2, 3], [2, 4]]
         # node_attr = ["102", "103", "104"]
@@ -116,22 +116,6 @@ class Query_Graph_Generator(object):
 
         # query_graph_edges = [[1111, 545454], [1111, 990909090], [1111, 87454747]]
         # node_attr = ["101", "102", "104", "103"]
-
-        # Pentru graf mic cu 12 noduri.
-        # query_graph_edges = [[1, 2], [1, 3], [3, 5]]  # Trei pozitii, iar fiecare pozitie are o pereche de noduri.
-                                                      # Arbore cu doua nivele
-        # node_attr = ["101", "102", "103", "105"]
-
-
-        # query_graph_edges = [[111, 444], [111, 1010], [111, 888], [1010, 1212]] # Patru pozitii, iar fiecare pozitie are o pereche de noduri.
-                                                                                # Arbore cu doua nivele
-
-        query_graph_edges = [[11111, 222222], [11111, 44444], [11111, 33333], [44444, 55555]]
-
-        # query_graph_edges = [[11111, 222222], [11111, 44444], [11111, 33333], [33333, 55555]] # Bucla infinita la BTR?!
-
-        node_attr = ["101", "102", "104", "103", "105"]
-
 
 
         # Folosit de STwig Alg pentru filtrarea secventiala si cu graful RI de 10000 de muchii.
@@ -153,21 +137,24 @@ class Query_Graph_Generator(object):
         # node_attr = ["28", "18"]
 
 
-
+########################################################################################################################
         # query_graph_edges = [[0,1773],[0,1817],[0,2428],[0,3719],[0,4426],[0,8214],[0,9148]]
         # node_attr = ["29", "25", "19", "6", "29", "13", "15", "20"]
 
+        # Pentru graf mic cu 12 noduri.
+        # query_graph_edges = [[1, 2], [1, 3], [3, 5]]  # Trei pozitii, iar fiecare pozitie are o pereche de noduri.
+        # Arbore cu doua nivele
+        # node_attr = ["101", "102", "103", "105"]
 
+        # query_graph_edges = [[111, 444], [111, 1010], [111, 888], [1010, 1212]] # Patru pozitii, iar fiecare pozitie are o pereche de noduri.
+        # Arbore cu doua nivele
 
+        # query_graph_edges = [[11111, 222222], [11111, 44444], [11111, 33333], [33333, 55555]] # Bucla infinita la BTR?!
 
-
-
-
-
-
-
-
-
+        # Folosit:
+        # query_graph_edges = [[11111, 222222], [11111, 44444], [11111, 33333], [44444, 55555]]
+        # node_attr = ["101", "102", "104", "103", "105"]
+########################################################################################################################
 
         query_graph.add_edges_from(query_graph_edges)
 
