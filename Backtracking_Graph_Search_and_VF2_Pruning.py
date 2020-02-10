@@ -938,6 +938,12 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
     Cq = []  # Set of adjacent and not-yet-matched query vertices connected from Mq
     Cg = []  # Set of adjacent and not-yet-matched data vertices connected from Mg
 
+    global adjQueryNode_last
+    global adjQueryNode_penultim
+    adjQueryNode_last = copy.deepcopy(list(adj(query_node, query_graph)))  # Retin candidatii in ordine lexicografic crescatoare.
+    adjQueryNode_penultim = copy.deepcopy(list(adj(query_node, query_graph)))
+
+
     # Conditia (1): Prune out v belonging to c(u) such that a vertex v is not connected from already matched data vertices.
     # query_node = self.nextQueryVertex(query_graph)
     # query_node_candidates = self.obtainCandidates(query_node, query_graph, data_graph)
@@ -1100,13 +1106,14 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
             print("     Conditia(2):")
 
             first_intersection = []
-            adjQueryNode_last = list(adj(query_node, query_graph)) # Retin candidatii in ordine lexicografic crescatoare.
+
             for xx in adjQueryNode_last:
                 for yy in Cq[-1]:
                     if xx == yy:
                         first_intersection.append(xx)
             second_intersection = []
             adjCandidate_last = list(adj(candidate, dataGraph))
+            adjCandidate_penultim = list(adj(candidate, dataGraph))
             for xx in adjCandidate_last:
                 for yy in Cg[-1]:
                     if xx == yy:
@@ -1145,14 +1152,14 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
                 print("     Execution for Conditia(2), next to last elems: ")
                 first_intersection = []
                 # adjQueryNode = None
-                adjQueryNode_penultim = list(adj(query_node, query_graph)) # Retin candidatii in ordine lexicografic crescatoare.
+                # adjQueryNode_penultim = list(adj(query_node, query_graph)) # Retin candidatii in ordine lexicografic crescatoare.
                 for xx in adjQueryNode_penultim:
                     for yy in Cq[-2]:
                         if xx == yy:
                             first_intersection.append(xx)
                 second_intersection = []
                 # adjCandidate = None
-                adjCandidate_penultim = list(adj(candidate, dataGraph))
+                # adjCandidate_penultim = list(adj(candidate, dataGraph))
                 for xx in adjCandidate_penultim:
                     for yy in Cg[-2]:
                         if xx == yy:
@@ -1241,6 +1248,8 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
                 for mq_elem_node in Mq:
                     if mq_elem_node in adjQueryNode_penultim:
                         adjQueryNode_penultim.remove(mq_elem_node)
+
+                adjQueryNode_penultim = copy.deepcopy(list(adj(query_node, query_graph)))
 
                 for cg_elem_node in Cg[-2]:
                     if cg_elem_node in adjCandidate_penultim:
