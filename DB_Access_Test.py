@@ -3,7 +3,7 @@ import os
 import sys
 import threading
 # from multiprocessing import Pool
-from pathos.multiprocessing import ProcessingPool as Pool
+# from pathos.multiprocessing import ProcessingPool as Pool
 from py2neo import Graph
 from timeit import default_timer as timer
 
