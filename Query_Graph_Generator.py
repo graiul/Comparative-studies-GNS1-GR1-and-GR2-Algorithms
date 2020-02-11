@@ -102,7 +102,7 @@ class Query_Graph_Generator(object):
         # query_graph_edges = [[1, 2], [1, 3], [1, 4]]
         # node_attr = ["101", "102", "103", "104"]
 
-        query_graph_edges = [[1, 2], [1,3]]
+        query_graph_edges = [[11111, 22222222222], [11111,333]]
         node_attr = ["101", "102", "103"]
 
         # query_graph_edges = [[2, 3], [2, 4]]
