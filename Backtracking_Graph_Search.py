@@ -191,9 +191,9 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
                 [data_graph.nodes[data_edge_to_be_joined[0]]['label'],
                  data_graph.nodes[data_edge_to_be_joined[1]]['label']]))
             print("     Candidate data graph edge nodes id: " + str(data_edge_to_be_joined))
-            if list(query_edges_dict.items())[0][1][0] == data_edge_to_be_joined_node_0_label:
+            if list(query_edges_dict.items())[0][1][0] == data_edge_to_be_joined_node_0_label or list(query_edges_dict.items())[0][1][0] == data_edge_to_be_joined_node_1_label:
                 # print("YES")
-                if list(query_edges_dict.items())[0][1][1] == data_edge_to_be_joined_node_1_label:
+                if list(query_edges_dict.items())[0][1][1] == data_edge_to_be_joined_node_1_label or list(query_edges_dict.items())[0][1][1] == data_edge_to_be_joined_node_0_label:
                     # print("YES")
                     print("     " + Fore.GREEN + Style.BRIGHT +  "Positions log before appending first position data edge: " + str(list(positions.items())) + Style.RESET_ALL)
                     print()
@@ -226,9 +226,9 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
             print("     Candidate data graph edge (data nodes label): " + str(
                 [data_graph.nodes[data_edge_to_be_joined[0]]['label'],
                  data_graph.nodes[data_edge_to_be_joined[1]]['label']]))
-            if list(query_edges_dict.items())[1][1][0] == data_edge_to_be_joined_node_0_label:
+            if list(query_edges_dict.items())[1][1][0] == data_edge_to_be_joined_node_0_label or list(query_edges_dict.items())[1][1][0] == data_edge_to_be_joined_node_1_label:
                 # print("YES")
-                if list(query_edges_dict.items())[1][1][1] == data_edge_to_be_joined_node_1_label:
+                if list(query_edges_dict.items())[1][1][1] == data_edge_to_be_joined_node_1_label or list(query_edges_dict.items())[1][1][1] == data_edge_to_be_joined_node_0_label:
                     # print("YES")
                     print("     " + Fore.GREEN + Style.BRIGHT +  "Positions log before appending second edge: " + str(list(positions.items())) + Style.RESET_ALL)
                     if data_edge_to_be_joined not in positions[1]:
@@ -288,9 +288,9 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
             print("     Candidate data graph edge (data nodes label): " + str(
                 [data_graph.nodes[data_edge_to_be_joined[0]]['label'],
                  data_graph.nodes[data_edge_to_be_joined[1]]['label']]))
-            if list(query_edges_dict.items())[2][1][0] == data_edge_to_be_joined_node_0_label:
+            if list(query_edges_dict.items())[2][1][0] == data_edge_to_be_joined_node_0_label or list(query_edges_dict.items())[2][1][0] == data_edge_to_be_joined_node_1_label:
                 # print("YES")
-                if list(query_edges_dict.items())[2][1][1] == data_edge_to_be_joined_node_1_label:
+                if list(query_edges_dict.items())[2][1][1] == data_edge_to_be_joined_node_1_label or list(query_edges_dict.items())[2][1][1] == data_edge_to_be_joined_node_0_label:
                     # print("YES")
                     print("     " + Fore.GREEN + Style.BRIGHT +  "Positions log before appending third edge: " + str(list(positions.items())) + Style.RESET_ALL)
                     aux = copy.deepcopy(partial_solution)
@@ -335,9 +335,9 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
             print("     Candidate data graph edge (data nodes label): " + str(
                 [data_graph.nodes[data_edge_to_be_joined[0]]['label'],
                  data_graph.nodes[data_edge_to_be_joined[1]]['label']]))
-            if list(query_edges_dict.items())[3][1][0] == data_edge_to_be_joined_node_0_label:
+            if list(query_edges_dict.items())[3][1][0] == data_edge_to_be_joined_node_0_label or list(query_edges_dict.items())[3][1][0] == data_edge_to_be_joined_node_1_label:
                 # print("YES")
-                if list(query_edges_dict.items())[3][1][1] == data_edge_to_be_joined_node_1_label:
+                if list(query_edges_dict.items())[3][1][1] == data_edge_to_be_joined_node_1_label or list(query_edges_dict.items())[3][1][1] == data_edge_to_be_joined_node_0_label:
                     # print("YES")
                     print("     " + Fore.GREEN + Style.BRIGHT +  "Positions log before appending fourth edge: " + str(list(positions.items())) + Style.RESET_ALL)
                     aux = copy.deepcopy(partial_solution)
@@ -653,34 +653,44 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
             print(adj_mat_data_elems)
             print()
 
+            # Problema NetworkX - unele matrice de adiacenta nu corespund cu grafurile aferente.
             # temp = nx.Graph()
             # temp.add_edges_from([(5, 6), (5, 7)])
             # temp_mat = nx.to_pandas_adjacency(temp, dtype=int)
 
-            mat_equal = False
-            if (adj_mat_query_elems.shape[0] * adj_mat_query_elems.shape[1]) == (adj_mat_data_elems.shape[0] * adj_mat_data_elems.shape[1]):
-                if (adj_mat_query_elems==adj_mat_data_elems).all():
-                    mat_equal = True
-                    i = True
-                    # if partial_solution not in complete_solutions:
-                    c_sol = copy.deepcopy(partial_solution)
-                    # print(is_joinable(3, [1,2], data_graph, query_graph_dict))
-                    complete_solutions.append(c_sol)
-                    for c_sol_elem in c_sol:
-                        f1.write(str(c_sol_elem) + " ")
-                    f1.write("\n")
-                    print("One complete solution found!")
-                    print()
-                    print(Fore.GREEN + Style.BRIGHT + "List of complete solutions: ")
-                    for cs in complete_solutions:
-                        print(cs)
-                    print(Style.RESET_ALL)
+            # Pentru lucrul cu matrice de adiacenta. Problema este descrisa mai sus.
+            # mat_equal = False
+            # if (adj_mat_query_elems.shape[0] * adj_mat_query_elems.shape[1]) == (adj_mat_data_elems.shape[0] * adj_mat_data_elems.shape[1]):
+            #     if (adj_mat_query_elems==adj_mat_data_elems).all():
+            #         mat_equal = True
+
+            print()
+            print(query_graph.edges)
+            print(partial_solution)
+            gr_isomorphic = False
+            if nx.is_isomorphic(query_graph, partial_solution_data_subgraph):
+                gr_isomorphic = True
+                i = True
+                # if partial_solution not in complete_solutions:
+                c_sol = copy.deepcopy(partial_solution)
+                # print(is_joinable(3, [1,2], data_graph, query_graph_dict))
+                complete_solutions.append(c_sol)
+                for c_sol_elem in c_sol:
+                    f1.write(str(c_sol_elem) + " ")
+                f1.write("\n")
+                print("One complete solution found!")
+                print()
+                print(Fore.GREEN + Style.BRIGHT + "List of complete solutions: ")
+                for cs in complete_solutions:
+                    print(cs)
+                print(Style.RESET_ALL)
             else:
                 print("Adjacency matrix sizes do not match.")
 
 
             partial_solution = copy.deepcopy(restore_state(partial_solution))
-            mat_equal = False
+            # mat_equal = False # Pentru lucrul cu matrice de adiacenta. Problema este descrisa mai sus.
+            gr_isomorphic = False
             print("\nRestored state: " + str(partial_solution))
 
             print()
@@ -1256,7 +1266,7 @@ for string_edge in edge_list:
 # print("edge_list_integer_ids: ")
 # print(edge_list_integer_ids)
 
-dataGraph = nx.DiGraph()
+dataGraph = nx.Graph()
 # Muchiile grafului data sortate dupa id noduri. Nu e ok.
 # dataGraph.add_edges_from(sorted(edge_list_integer_ids))
 # RASPUNS: Muchiile grafului data nesortate dupa id noduri. Ordinea corecta al nodurilor din muchii, si anume ordinea originala din fisierul CSV si Neo4J.
