@@ -57,10 +57,10 @@ def next_data_edge(partial_solution, data_graph):
             return edge
     return None
 
-def is_joinable(data_edge_to_be_joined_unsorted, partial_solution, data_graph, query_edges_dict_input):
+def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edges_dict_input):
 
     found = False
-    data_edge_to_be_joined = sorted(data_edge_to_be_joined_unsorted)
+    # Nu mai este necesara sortarea: data_edge_to_be_joined = sorted(data_edge_to_be_joined_unsorted)
     data_edge_to_be_joined_node_0_label = data_graph.nodes[data_edge_to_be_joined[0]]['label']
     data_edge_to_be_joined_node_1_label = data_graph.nodes[data_edge_to_be_joined[1]]['label']
     # print("Candidate data edge node 0 label: " + str(data_edge_to_be_joined_node_0_label))
@@ -652,9 +652,10 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
             print("Data subgraph/partial solution adjacency matrix: ")
             print(adj_mat_data_elems)
             print()
-            temp = nx.Graph()
-            temp.add_edges_from([(5, 6), (5, 7)])
-            temp_mat = nx.to_pandas_adjacency(temp, dtype=int)
+
+            # temp = nx.Graph()
+            # temp.add_edges_from([(5, 6), (5, 7)])
+            # temp_mat = nx.to_pandas_adjacency(temp, dtype=int)
 
             mat_equal = False
             if (adj_mat_query_elems.shape[0] * adj_mat_query_elems.shape[1]) == (adj_mat_data_elems.shape[0] * adj_mat_data_elems.shape[1]):
@@ -1248,12 +1249,26 @@ edge_list = result.tolist()
 # print(edge_list)
 edge_list_integer_ids = []
 for string_edge in edge_list:
-    edge_list_integer_ids.append([int(i) for i in string_edge])
+    node1_int = int(string_edge[0])
+    node2_int = int(string_edge[1])
+    # edge_list_integer_ids.append([int(i) for i in string_edge]) # Problema
+    edge_list_integer_ids.append([node1_int, node2_int])
 # print("edge_list_integer_ids: ")
 # print(edge_list_integer_ids)
 
-dataGraph = nx.Graph()
-dataGraph.add_edges_from(sorted(edge_list_integer_ids))
+dataGraph = nx.DiGraph()
+# Muchiile grafului data sortate dupa id noduri. Nu e ok.
+# dataGraph.add_edges_from(sorted(edge_list_integer_ids))
+# RASPUNS: Muchiile grafului data nesortate dupa id noduri. Ordinea corecta al nodurilor din muchii, si anume ordinea originala din fisierul CSV si Neo4J.
+# dataGraph.add_edges_from(edge_list_integer_ids)
+for edge in edge_list_integer_ids:
+    dataGraph.add_edge(edge[0], edge[1])
+
+data_edges = dataGraph.edges()
+
+dataGraph_undirected = nx.Graph() # Problema
+dataGraph_undirected.add_edges_from(dataGraph.edges())
+
 cqlQuery2 = "MATCH (n) return n.node_id, n.node_label"
 result2 = neograph_data.run(cqlQuery2).to_ndarray()
 # print("result2: ")
