@@ -6,9 +6,17 @@ class EdgeFinderTool(object):
         self.list_of_edges = list_of_edges
 
     def edge_found(self):
-        for edge in self.list_of_edges:
+        if len(self.list_of_edges) == 0:
+            return False
+        if len(self.list_of_edges) > 0:
             found = False
-            if self.input_edge[0] in edge and self.input_edge[1] in edge:
-                return True
-            else:
-                return False
+            for edge in self.list_of_edges:
+                node1 = self.input_edge[0]
+                node2 = self.input_edge[1]
+                if self.input_edge[0] in edge and self.input_edge[1] in edge:
+                    # found = True
+                    return True
+                else:
+                    found = False
+            return found
+
