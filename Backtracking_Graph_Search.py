@@ -22,6 +22,8 @@ from timeit import default_timer as timer
 
 import pandas as pd
 
+from EdgeFinderTool import EdgeFinderTool
+
 def update_state(edge, partial_solution):
     # print("update_state exec: ")
     c_edge = copy.deepcopy(edge)
@@ -59,7 +61,7 @@ def next_data_edge(partial_solution, data_graph):
 
 def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edges_dict_input):
 
-    found = False
+    found_valid_data_edge = False
     # Nu mai este necesara sortarea: data_edge_to_be_joined = sorted(data_edge_to_be_joined_unsorted)
     data_edge_to_be_joined_node_0_label = data_graph.nodes[data_edge_to_be_joined[0]]['label']
     data_edge_to_be_joined_node_1_label = data_graph.nodes[data_edge_to_be_joined[1]]['label']
@@ -195,14 +197,28 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
                 # print("YES")
                 if list(query_edges_dict.items())[0][1][1] == data_edge_to_be_joined_node_1_label or list(query_edges_dict.items())[0][1][1] == data_edge_to_be_joined_node_0_label:
                     # print("YES")
-                    print("     " + Fore.GREEN + Style.BRIGHT +  "Positions log before appending first position data edge: " + str(list(positions.items())) + Style.RESET_ALL)
+                    # print("     " + Fore.GREEN + Style.BRIGHT +  "Positions log before appending first position data edge: " + str(list(positions.items())) + Style.RESET_ALL)
                     print()
-                    if data_edge_to_be_joined not in positions[0]:
-                        found = True
+
+                    finder = EdgeFinderTool(data_edge_to_be_joined, positions[0])
+                    found = finder.edge_found()
+                    if found is False:
+                    # if data_edge_to_be_joined not in positions[0]:
+                        found_valid_data_edge = True
                         aux = copy.deepcopy(partial_solution)
                         aux.append(data_edge_to_be_joined)
+                        # print("Appended data edge: ")
+                        # print(data_edge_to_be_joined)
+                        # print("Reversed data edge to avoid final results duplicates: ")
+                        # reversed_data_edge = (data_edge_to_be_joined[1], data_edge_to_be_joined[0])
+                        # print(reversed_data_edge)
+                        # print()
                         pos = aux.index(aux[-1])
                         positions[pos].append(data_edge_to_be_joined)
+                        # positions[pos].append(reversed_data_edge)
+                        print("Log for position 0: ")
+                        print(positions[pos])
+
                                         #####################################################################
                                         #             matched_true_false_data_nodes_pos_0_dict[data_node_to_be_joined] = True
                                         #             break
@@ -231,9 +247,13 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
                 if list(query_edges_dict.items())[1][1][1] == data_edge_to_be_joined_node_1_label or list(query_edges_dict.items())[1][1][1] == data_edge_to_be_joined_node_0_label:
                     # print("YES")
                     print("     " + Fore.GREEN + Style.BRIGHT +  "Positions log before appending second edge: " + str(list(positions.items())) + Style.RESET_ALL)
-                    if data_edge_to_be_joined not in positions[1]:
+                    finder = EdgeFinderTool(data_edge_to_be_joined, positions[1])
+                    found = finder.edge_found()
+                    if found is False:
+                    # if data_edge_to_be_joined not in positions[1]:
                         aux = copy.deepcopy(partial_solution)
                         aux.append(data_edge_to_be_joined)
+
                         pos = aux.index(aux[-1])
                         if aux not in complete_solutions:
                             # Verificam daca label-ul primei frunze al STwig-ului query are aceeasi valoare ca si label-ul nodului data primit ca si parametru
@@ -257,9 +277,19 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
                                     # if matched_true_false_data_nodes_pos_1_dict[data_node_to_be_joined] == False:
                                     ######################################################################
 
-                                    found = True
-                                    if aux[-1] not in positions[pos]:
-                                        positions[pos].append(aux[-1])
+                                    found_valid_data_edge = True
+                                    finder2 = EdgeFinderTool(aux[-1], positions[pos])
+                                    found2 = finder2.edge_found()
+                                    if found2 is False:
+                                    # if aux[-1] not in positions[pos]:
+                                        positions[pos].append(aux[-1]) # aux[-1] e data_edge_to_be_joined
+                                        # print("Appended data edge: ")
+                                        # print(aux[-1])
+                                        # print("Reversed data edge to avoid final results duplicates: ")
+                                        # reversed_data_edge = (data_edge_to_be_joined[1], data_edge_to_be_joined[0])
+                                        # print(reversed_data_edge)
+                                        # print()
+                                        # positions[pos].append(reversed_data_edge)
 
                                 #####################################################################
                                 #     matched_true_false_data_nodes_pos_1_dict[data_node_to_be_joined] = True
@@ -295,9 +325,13 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
                     print("     " + Fore.GREEN + Style.BRIGHT +  "Positions log before appending third edge: " + str(list(positions.items())) + Style.RESET_ALL)
                     aux = copy.deepcopy(partial_solution)
                     aux.append(data_edge_to_be_joined)
+
                     pos = aux.index(aux[-1])
                     if aux not in complete_solutions:
-                        if data_edge_to_be_joined not in positions[2]:
+                        finder = EdgeFinderTool(data_edge_to_be_joined, positions[2])
+                        found = finder.edge_found()
+                        if found is False:
+                        # if data_edge_to_be_joined not in positions[2]:
                             for e in partial_solution:
                                 if data_graph.has_edge(e[0], data_edge_to_be_joined[0]) or \
                                         data_graph.has_edge(e[0], data_edge_to_be_joined[1]) or \
@@ -308,9 +342,19 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
                                     ###############################################################################
                                     # if matched_true_false_data_nodes_pos_2_dict[data_node_to_be_joined] == False:
                                     ###############################################################################
-                                    found = True
-                                    if aux[-1] not in positions[pos]:
+                                    found_valid_data_edge = True
+                                    finder2 = EdgeFinderTool(aux[-1], positions[pos])
+                                    found2 = finder2.edge_found()
+                                    if found2 is False:
+                                    # if aux[-1] not in positions[pos]:
                                         positions[pos].append(aux[-1])
+                                        # print("Appended data edge: ")
+                                        # print(aux[-1])
+                                        # print("Reversed data edge to avoid final results duplicates: ")
+                                        # reversed_data_edge = (data_edge_to_be_joined[1], data_edge_to_be_joined[0])
+                                        # print(reversed_data_edge)
+                                        # print()
+                                        # positions[pos].append(reversed_data_edge)
                                     ###############################################################################
                                     # matched_true_false_data_nodes_pos_2_dict[data_node_to_be_joined] = True
                                     # break
@@ -344,7 +388,10 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
                     aux.append(data_edge_to_be_joined)
                     pos = aux.index(aux[-1])
                     if aux not in complete_solutions:
-                        if data_edge_to_be_joined not in positions[3]:
+                        finder = EdgeFinderTool(data_edge_to_be_joined, positions[3])
+                        found = finder.edge_found()
+                        if found is False:
+                        # if data_edge_to_be_joined not in positions[3]:
                             for e in partial_solution:
                                 if data_graph.has_edge(e[0], data_edge_to_be_joined[0]) or \
                                         data_graph.has_edge(e[0], data_edge_to_be_joined[1]) or \
@@ -352,9 +399,19 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
                                         data_graph.has_edge(e[1], data_edge_to_be_joined[1]):
                                     print("     Has edge with previous position(s)")
                                     # if matched_true_false_data_nodes_pos_3_dict[data_node_to_be_joined] == False:
-                                    found = True
-                                    if aux[-1] not in positions[pos]:
+                                    found_valid_data_edge = True
+                                    finder2 = EdgeFinderTool(aux[-1], positions[pos])
+                                    found2 = finder2.edge_found()
+                                    if found2 is False:
+                                    # if aux[-1] not in positions[pos]:
                                         positions[pos].append(aux[-1])
+                                        # print("Appended data edge: ")
+                                        # print(aux[-1])
+                                        # print("Reversed data edge to avoid final results duplicates: ")
+                                        # reversed_data_edge = (data_edge_to_be_joined[1], data_edge_to_be_joined[0])
+                                        # print(reversed_data_edge)
+                                        # print()
+                                        # positions[pos].append(reversed_data_edge)
                                     # matched_true_false_data_nodes_pos_3_dict[data_node_to_be_joined] = True
                                     # break
                                     print("     " + Fore.GREEN + Style.BRIGHT + "Positions log after appending fourth edge: " + str(list(positions.items())) + Style.RESET_ALL)
@@ -620,7 +677,7 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
 
     # # Cand trecem la o pozitie precedenta, frunzele de pe pozitia pt care am cautat in data trebuie sa fie marcate ca fiind matched=False.
 
-    if found == True:
+    if found_valid_data_edge == True:
         return data_edge_to_be_joined
 
     return None
@@ -641,17 +698,18 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
             # Obtinerea valorilor dintr-un DataFrame pandas: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_numpy.html#pandas.DataFrame.to_numpy
             # https://stackoverflow.com/questions/10580676/comparing-two-numpy-arrays-for-equality-element-wise
 
-            print("\nQuery adjacency matrix: ")
-            adj_mat_query_elems = adj_mat_query.to_numpy()
-            print(adj_mat_query_elems)
-            partial_solution_data_subgraph = nx.Graph()
-            partial_solution_data_subgraph.add_edges_from(partial_solution)
-            adj_mat_data = nx.to_pandas_adjacency(partial_solution_data_subgraph, dtype=int)
-            print()
-            adj_mat_data_elems = adj_mat_data.to_numpy()
-            print("Data subgraph/partial solution adjacency matrix: ")
-            print(adj_mat_data_elems)
-            print()
+            # Pentru lucrul cu matrice de adiacenta.
+            # print("\nQuery adjacency matrix: ")
+            # adj_mat_query_elems = adj_mat_query.to_numpy()
+            # print(adj_mat_query_elems)
+            # partial_solution_data_subgraph = nx.Graph()
+            # partial_solution_data_subgraph.add_edges_from(partial_solution)
+            # adj_mat_data = nx.to_pandas_adjacency(partial_solution_data_subgraph, dtype=int)
+            # print()
+            # adj_mat_data_elems = adj_mat_data.to_numpy()
+            # print("Data subgraph/partial solution adjacency matrix: ")
+            # print(adj_mat_data_elems)
+            # print()
 
             # Problema NetworkX - unele matrice de adiacenta nu corespund cu grafurile aferente.
             # temp = nx.Graph()
@@ -667,25 +725,56 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
             print()
             print(query_graph.edges)
             print(partial_solution)
+
+
             gr_isomorphic = False
+            partial_solution_data_subgraph = nx.Graph()
+            partial_solution_data_subgraph.add_edges_from(partial_solution)
             if nx.is_isomorphic(query_graph, partial_solution_data_subgraph):
-                gr_isomorphic = True
-                i = True
-                # if partial_solution not in complete_solutions:
-                c_sol = copy.deepcopy(partial_solution)
-                # print(is_joinable(3, [1,2], data_graph, query_graph_dict))
-                complete_solutions.append(c_sol)
-                for c_sol_elem in c_sol:
-                    f1.write(str(c_sol_elem) + " ")
-                f1.write("\n")
-                print("One complete solution found!")
-                print()
-                print(Fore.GREEN + Style.BRIGHT + "List of complete solutions: ")
-                for cs in complete_solutions:
-                    print(cs)
-                print(Style.RESET_ALL)
+                duplicate_occurence_list = []
+                duplicate_occurence_indicator = False
+
+                for complete_solution in complete_solutions:
+                    duplicate_occurence_list.clear()
+                    for partial_solution_edge in partial_solution:
+                        finder = EdgeFinderTool(partial_solution_edge, complete_solution)
+                        finder_value = finder.edge_found()
+                        duplicate_occurence_list.append(finder_value)
+                    duplicate_edge_counter = 0
+                    for dup in duplicate_occurence_list:
+                        if dup == True:
+                            duplicate_edge_counter = duplicate_edge_counter + 1
+                    if duplicate_edge_counter == len(duplicate_occurence_list):
+                        duplicate_occurence_indicator = True
+                        duplicate_occurence_list.clear()
+
+                        # duplicate_edge_counter = 0
+                        break
+
+                if duplicate_occurence_indicator == False:
+                    duplicate_occurence_list.clear()
+                    gr_isomorphic = True
+                    i = True
+                    # if partial_solution not in complete_solutions:
+                    c_sol = copy.deepcopy(partial_solution)
+                    # print(is_joinable(3, [1,2], data_graph, query_graph_dict))
+                    complete_solutions.append(c_sol)
+                    for c_sol_elem in c_sol:
+                        f1.write(str(c_sol_elem) + " ")
+                    f1.write("\n")
+                    print("One complete solution found!")
+                    print()
+                    print(Fore.GREEN + Style.BRIGHT + "List of complete solutions: ")
+                    for cs in complete_solutions:
+                        print(cs)
+                    print(Style.RESET_ALL)
+                else:
+                    print("Duplicate found")
+                    duplicate_occurence_list.clear()
+
             else:
-                print("Adjacency matrix sizes do not match.")
+                # print("Adjacency matrix sizes do not match.")
+                print("Not isomorphic")
 
 
             partial_solution = copy.deepcopy(restore_state(partial_solution))
@@ -815,7 +904,7 @@ def obtainCandidates(query_node_label):
         # if query_node is None:
         #     exit(0)
         for data_node in dataGraph.nodes():
-            if query_node_label == dataGraph.node[data_node]['label']:
+            if query_node_label == dataGraph.nodes[data_node]['label']:
                 candidates.append(data_node)
         return candidates
 
@@ -833,8 +922,8 @@ def obtainCandidates(query_node_label):
 def obtainCandidateEdges(edge_node_0_label, edge_node_1_label):
         candidate_edges = []
         for data_edge in dataGraph.edges():
-            if edge_node_0_label == dataGraph.node[data_edge[0]]['label']:
-                if edge_node_1_label == dataGraph.node[data_edge[1]]['label']:
+            if edge_node_0_label == dataGraph.nodes[data_edge[0]]['label']:
+                if edge_node_1_label == dataGraph.nodes[data_edge[1]]['label']:
                     candidate_edges.append(data_edge)
         return candidate_edges
 
