@@ -1211,9 +1211,10 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
             #     if (adj_mat_query_elems==adj_mat_data_elems).all():
             #         mat_equal = True
 
-            print()
-            print(query_graph.edges)
-            print(partial_solution)
+            # Print-uri
+            # print()
+            # print(query_graph.edges)
+            # print(partial_solution)
 
 
             gr_isomorphic = False
@@ -1251,29 +1252,28 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
                     for c_sol_elem in c_sol:
                         f1.write(str(c_sol_elem) + " ")
                     f1.write("\n")
-                    print("One complete solution found!")
-                    print()
+                    # print("One complete solution found!")
+                    # print()
                     print(Fore.GREEN + Style.BRIGHT + "List of complete solutions: ")
                     for cs in complete_solutions:
                         print(cs)
                     print(Style.RESET_ALL)
                 else:
-                    print("Duplicate found")
+                    # print("Duplicate found")
                     duplicate_occurence_list.clear()
 
-            else:
+            # else:
                 # print("Adjacency matrix sizes do not match.")
-                print("Not isomorphic")
+                # print("Not isomorphic")
 
 
             partial_solution = copy.deepcopy(restore_state(partial_solution, M))
             # mat_equal = False # Pentru lucrul cu matrice de adiacenta. Problema este descrisa mai sus.
             gr_isomorphic = False
-            print("\nRestored state: " + str(partial_solution))
+            # print("\nRestored state: " + str(partial_solution))
+            # print()
 
-            print()
             # partial_solution = []
-
             # print("Sliced partial solution: " + str(partial_solution))
             # print("Old current node: " + str(current_node))
 
@@ -1358,7 +1358,7 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
                 current_node = copy.deepcopy(partial_solution[-1])
                 positions[3] = []
 
-            print("Current node: " + str(current_node))
+            # print("Current node: " + str(current_node))
             subgraph_search(partial_solution, query_graph_dict, current_node, data_graph, M)
 
 
