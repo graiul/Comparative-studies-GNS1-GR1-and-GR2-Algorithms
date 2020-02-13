@@ -111,8 +111,13 @@ class Query_Graph_Generator(object):
         # query_graph_edges = [[1, 2]]
         # node_attr = ["101", "102"]
 
+        # Functional cu STwig Algorithm si VF2 Algorithm cu graful de 10 noduri.
         query_graph_edges = [[1111, 545454], [1111, 990909090], [1111, 87454747]]
         node_attr = ["101", "102", "104", "104"]
+
+        # Functional cu STwig Algorithm si VF2 Algorithm cu graful de 10 noduri.
+        # query_graph_edges = [[1111, 545454], [1111, 990909090], [1111, 87454747]]
+        # node_attr = ["104", "101", "101", "101"]
 
         # query_graph_edges = [[1111, 545454], [1111, 990909090], [1111, 87454747]]
         # node_attr = ["101", "102", "104", "103"]
