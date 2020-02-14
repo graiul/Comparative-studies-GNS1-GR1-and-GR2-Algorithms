@@ -62,6 +62,41 @@ def next_query_vertex(current_node, query_stwig_dict):
 
 
 def next_data_edge(partial_solution, data_graph, M):
+    if len(M) == 0:
+        position_for_new_edge = len(partial_solution) # Numerotarea incepe de la 0, astfel ca numarul elementelor este nr pozitiei ultimului element + 1, adica nr pozitiei urmatorului element.
+        print()
+        print(Fore.GREEN + Style.BRIGHT + "For Conditia(1) for the first position candidate edges of the partial solution we return all the query node candidates (from the data graph).")
+        print("Candidate nodes for first node of the edge: " + str(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]))
+        print("Candidate nodes for second node of the edge: " + str(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]]))
+        print()
+        print("Candidate edges for the first position of the partial solution: ")
+        for c1 in candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]:
+            for c2 in candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]]:
+                finder = EdgeFinderTool((c1, c2), list(dataGraph.edges()))
+                if finder.edge_found():
+                    print((c1, c2))
+
+        print(Style.RESET_ALL)
+        print()
+        # exit()
+
+        # Cateva detalii despre prima iteratie a rularii:
+        # print("Inca nu avem nici un matching, deci nu putem verifica 'such that candidate is not connected from already matched data vertices' ")
+        # print("Dar verificam daca exista muchie intre nodul candidat si celelalte noduri data. Facem acest lucru pentru a verifica si urmatoarele doua conditii.")
+        # print(
+        #     "Pentru ca nu avem inca asocieri in lista M, nu avem Mq si Mg. De aceea nu putem verifica Conditia(2) sau Conditia(3) pentru ca are nevoie de aceleasi doua liste Mq si Mg.")
+        # print(
+        #     "Conform p133han pentru rularea algoritmului este nevoie deja de o asociere existenta in lista M.")
+        # print(
+        #     "Din articolul p133han, http://www.vldb.org/pvldb/vol6/p133-han.pdf, sectiunea 3.3 VF2 Algorithm, explicatii pentru metoda NextQueryVertex: ")
+        # print(
+        #     "NextQueryVertex: Unlike Ullmann, VF2 starts with the first vertex and selects a vertex connected from the already matched query vertices. Note that the original VF2 algorithm does not define any order in which query vertices are selected.")
+        # print("'already matched query vertices.'")
+        # print("Deci avem nevoie de un matching la inceputul executarii algoritmului.")
+        # print(
+        #     "Astfel returnam candidatii cu care putem face asocierea primului nod al grafului query. Cu alte cuvinte, radacinile-candidat.")
+
+        # return query_node_candidates
 
     if len(partial_solution) > 0: # Daca avem deja o muchie match in M.
         position_for_new_edge = len(partial_solution) # Numerotarea incepe de la 0, astfel ca numarul elementelor este nr pozitiei ultimului element + 1, adica nr pozitiei urmatorului element.
@@ -104,10 +139,16 @@ def next_data_edge(partial_solution, data_graph, M):
             print("For breakpoint.")
             # exit(0)
 
-
-    for edge in sorted(list(data_graph.edges())):
+    # AICI dam ca si parametru de intrare muchiile candidat rafinate in loc de "data_graph.edges()", adica in loc de toate muchiile.
+    # Datorita regulilor de pruning,
+    # muchiile date care vor fi date ca si date de intrare mai jos sunt deja adiacente cu muchii precedent gasite.
+    # Se va mai verifica in is_joinable mai jos daca si label-urile nodurilor corespund pentru pozitia curenta din solutia partiala.
+    # Adica pentru pozitia care are label-urile nodurilor muchiei de pe aceeasi pozitie din graful query. Pentru pozitia din solutia partiala pentru care se cauta muchie.
+    for edge in sorted(list(data_graph.edges())): # AICI TREBUIE MODIFICAT.
         if is_joinable(edge, partial_solution, data_graph, query_edges_dict):
-            return edge
+            return edge # Aici trebuie returnata muchia candidata rafinata dupa ce am verificat daca are label-urile potrivite pentru pozitia curenta din solutia partiala.
+                        # ATUNCI rafinarea candidatilor nu ar trebui sa se mai repete de atatea ori.
+                        # Cateodata nu apare cate un nod canidat rafinat in lista de rezultate al candidatilor rafinati???
     return None
 
 def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edges_dict_input):
@@ -1006,6 +1047,8 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
     print("Match list, (query node, data node): ")
     print(M)
 
+
+
     if len(M) > 0:
         print("\nIf len(M) > 0:")
         # https://stackoverflow.com/questions/930397/getting-the-last-element-of-a-list-in-python
@@ -1052,28 +1095,6 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
 
         delete_indicator = False
         occurence_list = []
-
-        # if len(M) == 0:
-        #     print("             For Conditia(1) if there are no matched data nodes we return all the query node candidates (from the data graph).")
-        #     print("             " + str(query_node_candidates))
-
-            # Cateva detalii despre prima iteratie a rularii:
-            # print("Inca nu avem nici un matching, deci nu putem verifica 'such that candidate is not connected from already matched data vertices' ")
-            # print("Dar verificam daca exista muchie intre nodul candidat si celelalte noduri data. Facem acest lucru pentru a verifica si urmatoarele doua conditii.")
-            # print(
-            #     "Pentru ca nu avem inca asocieri in lista M, nu avem Mq si Mg. De aceea nu putem verifica Conditia(2) sau Conditia(3) pentru ca are nevoie de aceleasi doua liste Mq si Mg.")
-            # print(
-            #     "Conform p133han pentru rularea algoritmului este nevoie deja de o asociere existenta in lista M.")
-            # print(
-            #     "Din articolul p133han, http://www.vldb.org/pvldb/vol6/p133-han.pdf, sectiunea 3.3 VF2 Algorithm, explicatii pentru metoda NextQueryVertex: ")
-            # print(
-            #     "NextQueryVertex: Unlike Ullmann, VF2 starts with the first vertex and selects a vertex connected from the already matched query vertices. Note that the original VF2 algorithm does not define any order in which query vertices are selected.")
-            # print("'already matched query vertices.'")
-            # print("Deci avem nevoie de un matching la inceputul executarii algoritmului.")
-            # print(
-            #     "Astfel returnam candidatii cu care putem face asocierea primului nod al grafului query. Cu alte cuvinte, radacinile-candidat.")
-
-            # return query_node_candidates
 
         if len(M) > 0:
             for matched_data_vertex in Mg:
