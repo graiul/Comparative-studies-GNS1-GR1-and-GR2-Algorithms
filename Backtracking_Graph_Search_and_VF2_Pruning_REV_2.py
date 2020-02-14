@@ -75,6 +75,7 @@ def next_data_edge(partial_solution, data_graph, M):
                 finder = EdgeFinderTool((c1, c2), list(dataGraph.edges()))
                 if finder.edge_found():
                     print((c1, c2))
+                    candidate_edges_for_first_pos_of_part_sol.append((c1, c2))
 
         print(Style.RESET_ALL)
         print()
@@ -127,15 +128,29 @@ def next_data_edge(partial_solution, data_graph, M):
                 candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]]))
             print("Refinement commencing...")
 
-            cand1 = copy.deepcopy(refineCandidates(query_graph_edges[position_for_new_edge][0], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]], partial_solution, M))
-            candidate_results.append([query_graph_edges[position_for_new_edge][0], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]], cand1])
+            candidate_edge_node_1_ref_candidate_list = copy.deepcopy(refineCandidates(query_graph_edges[position_for_new_edge][0], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]], partial_solution, M))
+            candidate_results.append([query_graph_edges[position_for_new_edge][0], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]], candidate_edge_node_1_ref_candidate_list])
 
 
             print("\nSecond node of the query edge of current position: " + str(query_graph_edges[position_for_new_edge][1]))
-            cand2 = copy.deepcopy(refineCandidates(query_graph_edges[position_for_new_edge][1], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]], partial_solution, M))
-            candidate_results.append([query_graph_edges[position_for_new_edge][1], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]], cand2])
+            candidate_edge_node_2_ref_candidate_list = copy.deepcopy(refineCandidates(query_graph_edges[position_for_new_edge][1], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]], partial_solution, M))
+            candidate_results.append([query_graph_edges[position_for_new_edge][1], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]], candidate_edge_node_2_ref_candidate_list])
             candidate_results.append("----------------------")
 
+            aux1 = candidate_edge_node_1_ref_candidate_list
+            aux2 = candidate_edge_node_2_ref_candidate_list
+            refined_final_solutions_for_second_pos_onwards_for_part_sol = []
+            # for first_pos_edge in candidate_edges_for_first_pos_of_part_sol:
+            #     refined_final_solution.append(first_pos_edge)
+            for a1 in aux1:
+                for a2 in aux2:
+                    finder = EdgeFinderTool((a1, a2), list(dataGraph.edges()))
+                    if finder.edge_found():
+                        refined_final_solutions_for_second_pos_onwards_for_part_sol.append((a1, a2)) # Cu aceasta cred ca se poate finaliza
+                                                                # implementarea algoritmului!
+                                                                # La watches trebuie "partial_solution"
+                                                                # si "refined_final_solutions_for_second_pos_onwards_for_part_sol"
+            print(refined_final_solutions_for_second_pos_onwards_for_part_sol)
             print("For breakpoint.")
             # exit(0)
 
@@ -1677,6 +1692,8 @@ M = []
 # Fisier text:
 f1 = open("f1.txt", "w+")
 candidate_results = []
+refined_final_solutions = []
+candidate_edges_for_first_pos_of_part_sol = []
 
 # Executia algoritmului Backtracking:
 try:
