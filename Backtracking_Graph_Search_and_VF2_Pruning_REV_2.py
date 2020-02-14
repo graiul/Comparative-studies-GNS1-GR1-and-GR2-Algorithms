@@ -150,6 +150,7 @@ def next_data_edge(partial_solution, data_graph, M):
                                                                 # implementarea algoritmului!
                                                                 # La watches trebuie "partial_solution"
                                                                 # si "refined_final_solutions_for_second_pos_onwards_for_part_sol"
+                                                                # Vom folosi si metaoda "is_joinable" cu aceste muchii rafinate.
             print(refined_final_solutions_for_second_pos_onwards_for_part_sol)
             print("For breakpoint.")
             # exit(0)
