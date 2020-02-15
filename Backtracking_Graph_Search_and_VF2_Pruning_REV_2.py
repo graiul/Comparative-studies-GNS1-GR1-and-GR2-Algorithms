@@ -160,9 +160,18 @@ def next_data_edge(partial_solution, data_graph, M):
     # muchiile date care vor fi date ca si date de intrare mai jos sunt deja adiacente cu muchii precedent gasite.
     # Se va mai verifica in is_joinable mai jos daca si label-urile nodurilor corespund pentru pozitia curenta din solutia partiala.
     # Adica pentru pozitia care are label-urile nodurilor muchiei de pe aceeasi pozitie din graful query. Pentru pozitia din solutia partiala pentru care se cauta muchie.
-    for edge in sorted(list(data_graph.edges())): # AICI TREBUIE MODIFICAT.
-        if is_joinable(edge, partial_solution, data_graph, query_edges_dict):
-            return edge # Aici trebuie returnata muchia candidata rafinata dupa ce am verificat daca are label-urile potrivite pentru pozitia curenta din solutia partiala.
+
+    if len(M) == 0:
+        for edge in sorted(list(data_graph.edges())):
+            if is_joinable(edge, partial_solution, data_graph, query_edges_dict):
+                return edge
+
+    if len(M) > 0:
+    # for edge in sorted(list(data_graph.edges())): # AICI TREBUIE MODIFICAT.
+        for edge in sorted(refined_final_solutions_for_second_pos_onwards_for_part_sol):
+
+            if is_joinable(edge, partial_solution, data_graph, query_edges_dict):
+                return edge # Aici trebuie returnata muchia candidata rafinata dupa ce am verificat daca are label-urile potrivite pentru pozitia curenta din solutia partiala.
                         # ATUNCI rafinarea candidatilor nu ar trebui sa se mai repete de atatea ori.
                         # Cateodata nu apare cate un nod canidat rafinat in lista de rezultate al candidatilor rafinati???
     return None
