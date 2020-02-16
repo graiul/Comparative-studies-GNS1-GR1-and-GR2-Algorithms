@@ -180,7 +180,8 @@ def next_data_edge(partial_solution, data_graph, M):
                                                                     # La watches trebuie "partial_solution"
                                                                     # si "refined_final_solutions_for_second_pos_onwards_for_part_sol"
                                                                     # Vom folosi si metaoda "is_joinable" cu aceste muchii rafinate.
-                print(refined_final_solutions_for_second_pos_onwards_for_part_sol)
+
+                print(refined_final_solutions_for_second_pos_onwards_for_part_sol) #  AICI LOGUL query_nodes_for_whom_candidates_were_refined
                 print("For breakpoint.")
                 # exit(0)
 
@@ -199,7 +200,7 @@ def next_data_edge(partial_solution, data_graph, M):
 
     if len(M) > 0:
     # for edge in sorted(list(data_graph.edges())): # AICI TREBUIE MODIFICAT.
-        for edge in sorted(refined_final_solutions_for_second_pos_onwards_for_part_sol):
+        for edge in sorted(refined_final_solutions_for_second_pos_onwards_for_part_sol): # AICI LOGUL query_nodes_for_whom_candidates_were_refined
 
             if is_joinable(edge, partial_solution, data_graph, query_edges_dict):
                 return edge # Aici trebuie returnata muchia candidata rafinata dupa ce am verificat daca are label-urile potrivite pentru pozitia curenta din solutia partiala.
