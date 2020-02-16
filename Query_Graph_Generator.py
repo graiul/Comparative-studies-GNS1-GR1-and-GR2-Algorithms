@@ -115,8 +115,8 @@ class Query_Graph_Generator(object):
         # query_graph_edges = [[1111, 545454], [1111, 990909090], [1111, 87454747]]
         # node_attr = ["101", "102", "104", "104"]
 
-        query_graph_edges = [[1111, 2222], [1111, 3333], [1111, 4444]]
-        node_attr = ["101", "102", "104", "104"]
+        # query_graph_edges = [[1111, 2222], [1111, 3333], [1111, 4444]]
+        # node_attr = ["101", "102", "104", "104"]
 
         # Functional cu STwig Algorithm si VF2 Algorithm cu graful de 10 noduri.
         # query_graph_edges = [[1111, 545454], [1111, 990909090], [1111, 87454747]]
@@ -125,6 +125,8 @@ class Query_Graph_Generator(object):
         # query_graph_edges = [[1111, 545454], [1111, 990909090], [1111, 87454747]]
         # node_attr = ["101", "102", "104", "103"]
 
+        query_graph_edges = [[1111, 2222], [1111, 3333], [1111, 4444]]
+        node_attr = ["101", "102", "103", "104"]
 
         # Folosit de STwig Alg pentru filtrarea secventiala si cu graful RI de 10000 de muchii.
         # Folosit de acelasi algoritm si cu acelasi graf data pentru cautarea in paralel folosind trei procese
