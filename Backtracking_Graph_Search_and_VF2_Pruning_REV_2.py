@@ -76,6 +76,8 @@ def next_data_edge(partial_solution, data_graph, M):
                 if finder.edge_found():
                     print((c1, c2))
                     candidate_edges_for_first_pos_of_part_sol.append((c1, c2))
+        query_nodes_for_whom_candidates_were_refined.append(list(query_graph.edges())[0][0])
+        query_nodes_for_whom_candidates_were_refined.append(list(query_graph.edges())[0][1])
 
         print(Style.RESET_ALL)
         print()
@@ -135,16 +137,18 @@ def next_data_edge(partial_solution, data_graph, M):
             # Aici facandu-se cautarea dupa MUCHII, unele noduri se pot repeta.
             # ASA CA INAINTE DE A RULA REFINEMENT PT UN NOD, TREBUIE VERIFICAT
             # DACA A MAI FOST CAUTAT ODATA PENTRU ***SOLUTIA PARTIALA CURENTA***!
-            if query_graph_edges[position_for_new_edge][0] not in refinement_log:
+            if query_graph_edges[position_for_new_edge][0] not in query_nodes_for_whom_candidates_were_refined:
                 candidate_edge_node_1_ref_candidate_list = copy.deepcopy(refineCandidates(query_graph_edges[position_for_new_edge][0], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]], partial_solution, M))
-                refinement_log.append(query_graph_edges[position_for_new_edge][0])
+                query_nodes_for_whom_candidates_were_refined.append(query_graph_edges[position_for_new_edge][0])
                 candidate_results.append([query_graph_edges[position_for_new_edge][0], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]], candidate_edge_node_1_ref_candidate_list])
 
 
             print("\nSecond node of the query edge of current position: " + str(query_graph_edges[position_for_new_edge][1]))
-            candidate_edge_node_2_ref_candidate_list = copy.deepcopy(refineCandidates(query_graph_edges[position_for_new_edge][1], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]], partial_solution, M))
-            candidate_results.append([query_graph_edges[position_for_new_edge][1], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]], candidate_edge_node_2_ref_candidate_list])
-            candidate_results.append("----------------------")
+
+            if query_graph_edges[position_for_new_edge][1] not in query_nodes_for_whom_candidates_were_refined:
+                candidate_edge_node_2_ref_candidate_list = copy.deepcopy(refineCandidates(query_graph_edges[position_for_new_edge][1], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]], partial_solution, M))
+                candidate_results.append([query_graph_edges[position_for_new_edge][1], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]], candidate_edge_node_2_ref_candidate_list])
+                candidate_results.append("----------------------")
 
             aux1 = candidate_edge_node_1_ref_candidate_list
             aux2 = candidate_edge_node_2_ref_candidate_list
@@ -1740,7 +1744,7 @@ f1 = open("f1.txt", "w+")
 candidate_results = []
 refined_final_solutions = []
 candidate_edges_for_first_pos_of_part_sol = []
-refinement_log = []
+query_nodes_for_whom_candidates_were_refined = []
 
 # Executia algoritmului Backtracking:
 try:
