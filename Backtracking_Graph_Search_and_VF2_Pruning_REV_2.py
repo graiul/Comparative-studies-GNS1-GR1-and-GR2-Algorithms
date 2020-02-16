@@ -1214,8 +1214,9 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
             adjQueryNode_penultim = copy.deepcopy(list(adj(query_node, query_graph)))
 
             for xx in adjQueryNode_last:
+
                 for yy in Cq[-1]: # AICI TREBUIE ADAPTAT FATA DE VARIANTA DE ANUL TRECUT, CLASA VF2ALGORITHM, LINIA 476.
-                    
+
                     if xx == yy:
                         first_intersection.append(xx)
             second_intersection = []
