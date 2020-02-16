@@ -121,10 +121,10 @@ def next_data_edge(partial_solution, data_graph, M):
             print(Fore.GREEN + Style.BRIGHT + "Query edge selected: " + str(query_graph_edges[position_for_new_edge]) + Style.RESET_ALL)
             print(Fore.GREEN + Style.BRIGHT + "First node of the query edge of current position: " + str(query_graph_edges[position_for_new_edge][0]) + Style.RESET_ALL)
             print("Candidate node lists for position [" + str(
-                position_for_new_edge) + "] of the partial solution, for first label of candidate data edge: " + str(
+                position_for_new_edge) + "] of the partial solution, for first node of candidate data edge: " + str(
                 candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]]))
             print("Candidate node lists for position [" + str(
-                position_for_new_edge) + "] of the partial solution, for second label of candidate data edge: " + str(
+                position_for_new_edge) + "] of the partial solution, for second node of candidate data edge: " + str(
                 candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]]))
             print("Refinement commencing...")
 
@@ -162,8 +162,10 @@ def next_data_edge(partial_solution, data_graph, M):
     # Adica pentru pozitia care are label-urile nodurilor muchiei de pe aceeasi pozitie din graful query. Pentru pozitia din solutia partiala pentru care se cauta muchie.
 
     if len(M) == 0:
-        for edge in sorted(list(data_graph.edges())):
+        # for edge in sorted(list(data_graph.edges())):
+        for edge in sorted(candidate_edges_for_first_pos_of_part_sol):
             if is_joinable(edge, partial_solution, data_graph, query_edges_dict):
+                candidate_edges_for_first_pos_of_part_sol.clear()
                 return edge
 
     if len(M) > 0:
@@ -1050,15 +1052,15 @@ def obtainCandidateEdges(edge_node_0_label, edge_node_1_label):
         return candidate_edges
 
 def refineCandidates(query_node, query_node_candidates, partial_solution, M):
-    Mq = []  # Set of matched query vertices
-    Mg = []  # Set of matched data vertices
+    Mq = [[], []]  # Set of matched query vertices
+    Mg = [[], []]  # Set of matched data vertices
     Cq = []  # Set of adjacent and not-yet-matched query vertices connected from Mq
     Cg = []  # Set of adjacent and not-yet-matched data vertices connected from Mg
 
-    global adjQueryNode_last
-    global adjQueryNode_penultim
-    adjQueryNode_last = copy.deepcopy(list(adj(query_node, query_graph)))  # Retin candidatii in ordine lexicografic crescatoare.
-    adjQueryNode_penultim = copy.deepcopy(list(adj(query_node, query_graph)))
+    # global adjQueryNode_last
+    # global adjQueryNode_penultim
+    # adjQueryNode_last = copy.deepcopy(list(adj(query_node, query_graph)))  # Retin candidatii in ordine lexicografic crescatoare.
+    # adjQueryNode_penultim = copy.deepcopy(list(adj(query_node, query_graph)))
 
 
     # Conditia (1): Prune out v belonging to c(u) such that a vertex v is not connected from already matched data vertices.
@@ -1078,10 +1080,10 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
         print("\nIf len(M) > 0:")
         # https://stackoverflow.com/questions/930397/getting-the-last-element-of-a-list-in-python
         # Folosesc -1 pentru a returna ultimul element din lista ().
-        Mq.append(M[-2][0])
-        Mq.append(M[-1][0])
-        Mg.append(M[-2][1])
-        Mg.append(M[-1][1])
+        Mq[-2].append(M[-2][0])
+        Mq[-1].append(M[-1][0])
+        Mg[-2].append(M[-2][1])
+        Mg[-1].append(M[-1][1])
         # M[-1][0] este elementul de pe pozitia din query care coincide cu ultima muchie/nod adaugat in solutia partiala data.
 
 
@@ -1122,7 +1124,12 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
         occurence_list = []
 
         if len(M) > 0:
-            for matched_data_vertex in Mg:
+            Mg_general = []
+            for mg_last in Mg[-1]:
+                Mg_general.append(mg_last)
+            for mg_penultim in Mg[-2]:
+                Mg_general.append(mg_penultim)
+            for matched_data_vertex in Mg_general:
                 print("                 Matched data vertex selected for verification: " + str(matched_data_vertex))
                 # Daca nodul data selectat a mai fost folosit
                 for m in M:
@@ -1203,9 +1210,12 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
             print("     Conditia(2):")
 
             first_intersection = []
+            adjQueryNode_last = copy.deepcopy(list(adj(query_node, query_graph)))  # Retin candidatii in ordine lexicografic crescatoare.
+            adjQueryNode_penultim = copy.deepcopy(list(adj(query_node, query_graph)))
 
             for xx in adjQueryNode_last:
-                for yy in Cq[-1]:
+                for yy in Cq[-1]: # AICI TREBUIE ADAPTAT FATA DE VARIANTA DE ANUL TRECUT, CLASA VF2ALGORITHM, LINIA 476.
+                    
                     if xx == yy:
                         first_intersection.append(xx)
             second_intersection = []
@@ -1223,7 +1233,7 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
             print("         Cardinalul primei intersectii > decat celei de a doua?")
             print("         Cardinalul primei intersectii este: " + str(len(first_intersection)))
             print("         Cardinalul celei de-a doua intersectii este: " + str(len(second_intersection)))
-
+            print("For breakpoint")
             if len(first_intersection) > len(second_intersection):
                 print("         Conditia(2) intra in vigoare, astfel avem:")
                 print("         Cardinalul primei intersectii este mai mare decat cea de-a doua. Se va sterge candidatul " + str(candidate) + ".")
@@ -1242,51 +1252,51 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
             # print("         " + str(query_nodes_candidates_list_we_can_delete_from))
             # print()
 
-            if respectare_conditie_2 == False: # De verificat corectitudinea acestei idei.
-                                                # Din moment ce adaugam in M cate doua matches, trebuie amandoua verificate.
-                                                # Dar nu trebuie incrucisata verificarea.
-                                                # Adica daca ultimul match trece verificarea sau nu,
-                                                # trebuie verificat si penultimul match. Altfel va sari peste verificarea unui nod candidat cu un nod query.
-
-                print()
-                print("     Execution for Conditia(2), next to last elems: ")
-                first_intersection = []
-                # adjQueryNode = None
-                # adjQueryNode_penultim = list(adj(query_node, query_graph)) # Retin candidatii in ordine lexicografic crescatoare.
-                for xx in adjQueryNode_penultim:
-                    for yy in Cq[-2]:
-                        if xx == yy:
-                            first_intersection.append(xx)
-                second_intersection = []
-                # adjCandidate = None
-                # adjCandidate_penultim = list(adj(candidate, dataGraph))
-                for xx in adjCandidate_penultim:
-                    for yy in Cg[-2]:
-                        if xx == yy:
-                            second_intersection.append(xx)
-
-                print("         Facut intersectiile de la Conditia (2)")
-                print("         First intersection, penultim elements Cq" + str(len(first_intersection)))
-                print("         Second intersection, penultim elements of Cg" + str(len(second_intersection)))
-
-                print("         Cardinalul primei intersectii > decat celei de a doua?")
-                if len(first_intersection) > len(second_intersection):
-                    print("         Conditia(2) intra in vigoare, astfel avem:")
-                    print("         Cardinalul primei intersectii este mai mare decat cea de-a doua. Se va sterge candidatul " + str(candidate) + ".")
-                    if candidate in query_nodes_candidates_list_we_can_delete_from:
-                        query_nodes_candidates_list_we_can_delete_from.remove(candidate)
-                        print("         Candidatii lui " + str(query_node))
-                        print("         " + str(query_nodes_candidates_list_we_can_delete_from))
-                        # print()
-                        respectare_conditie_2 = False
-                else:
-                    print("         Nodul data candidat trece Conditia(2).")
-                    print()
-                    respectare_conditie_2 = True
-
-                print("         Candidatii lui " + str(query_node) + " dupa Conditia(2):")
-                print("         " + str(query_nodes_candidates_list_we_can_delete_from))
-                # print()
+            # if respectare_conditie_2 == False: # De verificat corectitudinea acestei idei.
+            #                                     # Din moment ce adaugam in M cate doua matches, trebuie amandoua verificate.
+            #                                     # Dar nu trebuie incrucisata verificarea.
+            #                                     # Adica daca ultimul match trece verificarea sau nu,
+            #                                     # trebuie verificat si penultimul match. Altfel va sari peste verificarea unui nod candidat cu un nod query.
+            #
+            #     print()
+            #     print("     Execution for Conditia(2), next to last elems: ")
+            #     first_intersection = []
+            #     # adjQueryNode = None
+            #     # adjQueryNode_penultim = list(adj(query_node, query_graph)) # Retin candidatii in ordine lexicografic crescatoare.
+            #     for xx in adjQueryNode_penultim:
+            #         for yy in Cq[-2]:
+            #             if xx == yy:
+            #                 first_intersection.append(xx)
+            #     second_intersection = []
+            #     # adjCandidate = None
+            #     # adjCandidate_penultim = list(adj(candidate, dataGraph))
+            #     for xx in adjCandidate_penultim:
+            #         for yy in Cg[-2]:
+            #             if xx == yy:
+            #                 second_intersection.append(xx)
+            #
+            #     print("         Facut intersectiile de la Conditia (2)")
+            #     print("         First intersection, penultim elements Cq" + str(len(first_intersection)))
+            #     print("         Second intersection, penultim elements of Cg" + str(len(second_intersection)))
+            #
+            #     print("         Cardinalul primei intersectii > decat celei de a doua?")
+            #     if len(first_intersection) > len(second_intersection):
+            #         print("         Conditia(2) intra in vigoare, astfel avem:")
+            #         print("         Cardinalul primei intersectii este mai mare decat cea de-a doua. Se va sterge candidatul " + str(candidate) + ".")
+            #         if candidate in query_nodes_candidates_list_we_can_delete_from:
+            #             query_nodes_candidates_list_we_can_delete_from.remove(candidate)
+            #             print("         Candidatii lui " + str(query_node))
+            #             print("         " + str(query_nodes_candidates_list_we_can_delete_from))
+            #             # print()
+            #             respectare_conditie_2 = False
+            #     else:
+            #         print("         Nodul data candidat trece Conditia(2).")
+            #         print()
+            #         respectare_conditie_2 = True
+            #
+            #     print("         Candidatii lui " + str(query_node) + " dupa Conditia(2):")
+            #     print("         " + str(query_nodes_candidates_list_we_can_delete_from))
+            #     # print()
 
             if respectare_conditie_2 is True:
                 print()
@@ -1304,7 +1314,7 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
                     if cq_elem_node in adjQueryNode_last:
                         adjQueryNode_last.remove(cq_elem_node)
                         print("adjQueryNode_last after removal of cq_elem_node: " + str(adjQueryNode_last))
-                for mq_elem_node in Mq:
+                for mq_elem_node in Mq[-1]:
                     if mq_elem_node in adjQueryNode_last:
                         adjQueryNode_last.remove(mq_elem_node)
 
@@ -1313,7 +1323,7 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
                 for cg_elem_node in Cg[-1]:
                     if cg_elem_node in adjCandidate_last:
                         adjCandidate_last.remove(cg_elem_node)
-                for mg_elem_node in Mg:
+                for mg_elem_node in Mg[-1]:
                     if mg_elem_node in adjCandidate_last:
                         adjCandidate_last.remove(mg_elem_node)
 
@@ -1340,12 +1350,13 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
 
                 #-------------------------------------------------------------------------------------------------------
 
+                print("     For next to last elements of Cq and Cg")
                 for cq_elem_node in Cq[-2]:
                     print("         cq_elem_node = " + str(cq_elem_node))
                     if cq_elem_node in adjQueryNode_penultim:
                         adjQueryNode_penultim.remove(cq_elem_node)
                         print("adjQueryNode_last after removal of cq_elem_node: " + str(adjQueryNode_penultim))
-                for mq_elem_node in Mq:
+                for mq_elem_node in Mq[-2]:
                     if mq_elem_node in adjQueryNode_penultim:
                         adjQueryNode_penultim.remove(mq_elem_node)
 
@@ -1354,12 +1365,12 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
                 for cg_elem_node in Cg[-2]:
                     if cg_elem_node in adjCandidate_penultim:
                         adjCandidate_penultim.remove(cg_elem_node)
-                for mg_elem_node in Mg:
+                for mg_elem_node in Mg[-2]:
                     if mg_elem_node in adjCandidate_penultim:
                         adjCandidate_penultim.remove(mg_elem_node)
 
                 print("         Este primul cardinal mai mare decat al doilea?")
-                print("         Primul cardinal: " + str(len(adjCandidate_penultim)))
+                print("         Primul cardinal: " + str(len(adjQueryNode_penultim)))
                 print("         Al doilea cardinal: " + str(len(adjCandidate_penultim)))
 
                 if len(adjQueryNode_penultim) > len(adjCandidate_penultim):
