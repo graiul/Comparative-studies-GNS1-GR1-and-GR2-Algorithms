@@ -128,8 +128,17 @@ def next_data_edge(partial_solution, data_graph, M):
                 candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]]))
             print("Refinement commencing...")
 
-            candidate_edge_node_1_ref_candidate_list = copy.deepcopy(refineCandidates(query_graph_edges[position_for_new_edge][0], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]], partial_solution, M))
-            candidate_results.append([query_graph_edges[position_for_new_edge][0], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]], candidate_edge_node_1_ref_candidate_list])
+            # Daca pentru nodul query curent pt care cautam refined candidates,
+            # a mai fost rulata rafinarea o data, nu mai trebuie facuta.
+            # ALTFEL SE VA FACE REFINEMENT SI PENTRU VREUN NOD DIN PRIMA POZITIE AL SOLUTIEI PARTIALE PENTRU CARE NU TREBUIE REFINEMENT!!!
+            # In varianta cu STwig al VF2, nodurile erau unice.
+            # Aici facandu-se cautarea dupa MUCHII, unele noduri se pot repeta.
+            # ASA CA INAINTE DE A RULA REFINEMENT PT UN NOD, TREBUIE VERIFICAT
+            # DACA A MAI FOST CAUTAT ODATA PENTRU ***SOLUTIA PARTIALA CURENTA***!
+            if query_graph_edges[position_for_new_edge][0] not in refinement_log:
+                candidate_edge_node_1_ref_candidate_list = copy.deepcopy(refineCandidates(query_graph_edges[position_for_new_edge][0], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]], partial_solution, M))
+                refinement_log.append(query_graph_edges[position_for_new_edge][0])
+                candidate_results.append([query_graph_edges[position_for_new_edge][0], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]], candidate_edge_node_1_ref_candidate_list])
 
 
             print("\nSecond node of the query edge of current position: " + str(query_graph_edges[position_for_new_edge][1]))
@@ -1210,13 +1219,16 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
             print("     Conditia(2):")
 
             first_intersection = []
+
+            # NU TREBUIE RULAT PRUNING PENTRU PRIMUL MATCH, ADICA PENTRU PRIMA POZITIE AL SOLUTIEI PARTIALE!!!
+
             adjQueryNode_last = copy.deepcopy(list(adj(query_node, query_graph)))  # Retin candidatii in ordine lexicografic crescatoare.
             adjQueryNode_penultim = copy.deepcopy(list(adj(query_node, query_graph)))
 
             for xx in adjQueryNode_last:
-
                 for yy in Cq[-1]: # AICI TREBUIE ADAPTAT FATA DE VARIANTA DE ANUL TRECUT, CLASA VF2ALGORITHM, LINIA 476.
-
+                                  # Aici nu e lista in lista.
+                                  # Aici Cq[-1] este lista pentru ultimul match.
                     if xx == yy:
                         first_intersection.append(xx)
             second_intersection = []
@@ -1252,6 +1264,14 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
             # print("         Candidatii lui " + str(query_node) + " dupa Conditia(2):")
             # print("         " + str(query_nodes_candidates_list_we_can_delete_from))
             # print()
+
+
+
+
+            # MAI ESTE NECESARA SECTIUNEA DE MAI JOS?
+
+
+
 
             # if respectare_conditie_2 == False: # De verificat corectitudinea acestei idei.
             #                                     # Din moment ce adaugam in M cate doua matches, trebuie amandoua verificate.
@@ -1332,15 +1352,19 @@ def refineCandidates(query_node, query_node_candidates, partial_solution, M):
                 print("         Primul cardinal: " + str(len(adjQueryNode_last)))
                 print("         Al doilea cardinal: " + str(len(adjCandidate_last)))
 
+                # ACESTE VALORI SUNT PROBLEMA.
                 if len(adjQueryNode_last) > len(adjCandidate_last):
                     print("         Facut intersectiile si scaderile de la c3")
                     print("         " + str(len(adjQueryNode_last)))
                     print("         " + str(len(adjCandidate_last)))
                     print("         Conditia(3) intra in vigoare, astfel avem:")
                     print("         *Cardinalul primei intersectii cu scaderi este mai mare decat cea de-a doua. Se va sterge candidatul " + str(candidate) + ".")
+
+                    # AICI IL ELIMINA PE NODUL 9.
                     if candidate in query_nodes_candidates_list_we_can_delete_from:
                         query_nodes_candidates_list_we_can_delete_from.remove(candidate)
-                        respectare_conditie_3 = False
+
+                        # respectare_conditie_3 = False
                         # print("         Candidatii lui " + str(query_node))
                         # print("         " + str(query_nodes_candidates_list_we_can_delete_from))
                         # print()
@@ -1716,6 +1740,7 @@ f1 = open("f1.txt", "w+")
 candidate_results = []
 refined_final_solutions = []
 candidate_edges_for_first_pos_of_part_sol = []
+refinement_log = []
 
 # Executia algoritmului Backtracking:
 try:
