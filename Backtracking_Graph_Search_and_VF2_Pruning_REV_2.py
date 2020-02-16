@@ -76,12 +76,10 @@ def next_data_edge(partial_solution, data_graph, M):
                 if finder.edge_found():
                     print((c1, c2))
                     candidate_edges_for_first_pos_of_part_sol.append((c1, c2))
-        # candidate_edges_for_first_pos_of_part_sol_final = copy.deepcopy(candidate_edges_for_first_pos_of_part_sol)
-        # print(candidate_edges_for_first_pos_of_part_sol_final)
+
         key = list(query_graph.edges())[0]
-        query_nodes_for_whom_candidates_were_refined[key] = copy.deepcopy(candidate_edges_for_first_pos_of_part_sol)
-        # query_nodes_for_whom_candidates_were_refined.append(list(query_graph.edges())[0][0])
-        # query_nodes_for_whom_candidates_were_refined.append(list(query_graph.edges())[0][1])
+        query_nodes_for_whom_candidates_were_refined[key[0]] = copy.deepcopy(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]])
+        query_nodes_for_whom_candidates_were_refined[key[1]] = copy.deepcopy(candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]])
 
         print(Style.RESET_ALL)
         print()
@@ -144,12 +142,21 @@ def next_data_edge(partial_solution, data_graph, M):
             print(query_nodes_for_whom_candidates_were_refined)
             aux1 = []
             aux2 = []
-            if query_graph_edges[position_for_new_edge][0] not in list(query_nodes_for_whom_candidates_were_refined.keys())[0]:
+            print(query_graph_edges[position_for_new_edge][0])
+            print(list(query_nodes_for_whom_candidates_were_refined.keys()))
+            if query_graph_edges[position_for_new_edge][0] not in list(query_nodes_for_whom_candidates_were_refined.keys()):
                 candidate_edge_node_1_ref_candidate_list = copy.deepcopy(refineCandidates(query_graph_edges[position_for_new_edge][0], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]], partial_solution, M))
                 # query_nodes_for_whom_candidates_were_refined.append(query_graph_edges[position_for_new_edge][0])
                 candidate_results.append([query_graph_edges[position_for_new_edge][0], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]], candidate_edge_node_1_ref_candidate_list])
                 aux1 = copy.deepcopy(candidate_edge_node_1_ref_candidate_list)
-
+            else:
+                # Daca nodul query face parte din prima pozitie pt care nu e nevoie de refinement,
+                # voi atribui direct nodurile candidate respective gasite.
+                if query_graph_edges[position_for_new_edge][0] in list(query_nodes_for_whom_candidates_were_refined.keys()):
+                    # print([query_graph_edges[position_for_new_edge][0]][0])
+                    # print(query_nodes_for_whom_candidates_were_refined[[query_graph_edges[position_for_new_edge][0]][0]])
+                    candidate_results.append([query_graph_edges[position_for_new_edge][0], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][0]], query_nodes_for_whom_candidates_were_refined[[query_graph_edges[position_for_new_edge][0]][0]]])
+                    aux1 = copy.deepcopy(query_nodes_for_whom_candidates_were_refined[[query_graph_edges[position_for_new_edge][0]][0]])
 
             print("\nSecond node of the query edge of current position: " + str(query_graph_edges[position_for_new_edge][1]))
 
@@ -166,24 +173,24 @@ def next_data_edge(partial_solution, data_graph, M):
             print(query_nodes_for_whom_candidates_were_refined.items())
             print(aux1)
             print(aux2)
-            if len(aux1) > 0:
-                query_nodes_for_whom_candidates_were_refined[query_graph_edges[position_for_new_edge][0]] = aux1
-            if len(aux2) > 0:
-                query_nodes_for_whom_candidates_were_refined[query_graph_edges[position_for_new_edge][1]] = aux2
-            if len(aux1) > 0 and len(aux2) > 0:
-                for a1 in aux1:
-                    for a2 in aux2:
-                        finder = EdgeFinderTool((a1, a2), list(dataGraph.edges()))
-                        if finder.edge_found():
-                            refined_final_solutions_for_second_pos_onwards_for_part_sol.append((a1, a2)) # Cu aceasta cred ca se poate finaliza
-                                                                    # implementarea algoritmului!
-                                                                    # La watches trebuie "partial_solution"
-                                                                    # si "refined_final_solutions_for_second_pos_onwards_for_part_sol"
-                                                                    # Vom folosi si metaoda "is_joinable" cu aceste muchii rafinate.
+            # if len(aux1) > 0:
+            #     query_nodes_for_whom_candidates_were_refined[query_graph_edges[position_for_new_edge][0]] = aux1
+            # if len(aux2) > 0:
+            #     query_nodes_for_whom_candidates_were_refined[query_graph_edges[position_for_new_edge][1]] = aux2
+            # if len(aux1) > 0 and len(aux2) > 0:
+            for a1 in aux1:
+                for a2 in aux2:
+                    finder = EdgeFinderTool((a1, a2), list(dataGraph.edges()))
+                    if finder.edge_found():
+                        refined_final_solutions_for_second_pos_onwards_for_part_sol.append((a1, a2)) # Cu aceasta cred ca se poate finaliza
+                                                                # implementarea algoritmului!
+                                                                # La watches trebuie "partial_solution"
+                                                                # si "refined_final_solutions_for_second_pos_onwards_for_part_sol"
+                                                                # Vom folosi si metaoda "is_joinable" cu aceste muchii rafinate.
 
-                print(refined_final_solutions_for_second_pos_onwards_for_part_sol) #  AICI LOGUL query_nodes_for_whom_candidates_were_refined
-                print("For breakpoint.")
-                # exit(0)
+            print(refined_final_solutions_for_second_pos_onwards_for_part_sol) #  AICI LOGUL query_nodes_for_whom_candidates_were_refined
+            print("For breakpoint.")
+            # exit(0)
 
     # AICI dam ca si parametru de intrare muchiile candidat rafinate in loc de "data_graph.edges()", adica in loc de toate muchiile.
     # Datorita regulilor de pruning,
@@ -200,8 +207,7 @@ def next_data_edge(partial_solution, data_graph, M):
 
     if len(M) > 0:
     # for edge in sorted(list(data_graph.edges())): # AICI TREBUIE MODIFICAT.
-        for edge in sorted(refined_final_solutions_for_second_pos_onwards_for_part_sol): # AICI LOGUL query_nodes_for_whom_candidates_were_refined
-
+        for edge in sorted(refined_final_solutions_for_second_pos_onwards_for_part_sol):
             if is_joinable(edge, partial_solution, data_graph, query_edges_dict):
                 return edge # Aici trebuie returnata muchia candidata rafinata dupa ce am verificat daca are label-urile potrivite pentru pozitia curenta din solutia partiala.
                         # ATUNCI rafinarea candidatilor nu ar trebui sa se mai repete de atatea ori.
