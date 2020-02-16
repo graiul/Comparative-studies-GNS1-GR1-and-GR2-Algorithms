@@ -473,7 +473,7 @@ class VF2Algorithm(GenericQueryProc):
                 first_intersection = []
                 adjQueryNode = list(self.adj(query_node, self.queryGraph)) # Retin candidatii in ordine lexicografic crescatoare.
                 for xx in adjQueryNode:
-                    for yy in Cq[-1]:
+                    for yy in Cq[-1]: # Aici e lista in lista.
                         if xx == yy:
                             first_intersection.append(xx)
                 second_intersection = []
