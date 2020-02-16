@@ -96,7 +96,7 @@ class VF2Algorithm(GenericQueryProc):
                                                                                     # din cluster Neo4J cu cinci instante.
                                                                                     # Patru 'core' si una 'read replica'.
 
-        neograph_data = Graph("bolt://127.0.0.1:7687", auth=("neo4j", "changeme")) # Data Graph RI - O singura instanta de Neo4J
+        neograph_data = Graph("bolt://127.0.0.1:7687", auth=("neo4j", "password")) # Data Graph RI - O singura instanta de Neo4J
 
         cqlQuery = "MATCH p=(n)-[r:PPI]->(m) return n.node_id, m.node_id"
         result = neograph_data.run(cqlQuery).to_ndarray()
@@ -132,8 +132,8 @@ class VF2Algorithm(GenericQueryProc):
             print("M: ")
             for m_item in M:
                 print(m_item)
-            self.queryGraph.node[M[0][0]]['matched'] = True
-            self.dataGraph.node[M[0][1]]['matched'] = True
+            self.queryGraph.nodes[M[0][0]]['matched'] = True
+            self.dataGraph.nodes[M[0][1]]['matched'] = True
 
         # GM = isomorphism.GraphMatcher(self.queryGraph, self.dataGraph)
         # print(GM.is_isomorphic())
@@ -243,7 +243,7 @@ class VF2Algorithm(GenericQueryProc):
         # if query_node is None:
         #     exit(0)
         for data_node in self.dataGraph.nodes():
-            if self.queryGraph.node[query_node]['label'] == self.dataGraph.node[data_node]['label']:
+            if self.queryGraph.nodes[query_node]['label'] == self.dataGraph.nodes[data_node]['label']:
                 candidates.append(data_node)
         return candidates
 
@@ -277,7 +277,7 @@ class VF2Algorithm(GenericQueryProc):
         # for matching in reversed(M):
         #     print("matching from reversed matching list: " + str(matching))
         for node in queryNodes:
-            if self.queryGraph.node[node]['matched'] is False:
+            if self.queryGraph.nodes[node]['matched'] is False:
                 # print("Returnam nodul query: " + str(node))
                 return node  # Returneaza primul nod query care nu se afla
 
@@ -370,7 +370,7 @@ class VF2Algorithm(GenericQueryProc):
                 for data_node in self.dataGraph.nodes():
                     # print("Nod data selectat pentru verificare: " + str(data_node))
                     # Daca nodul data selectat a mai fost folosit
-                    if self.dataGraph.node[data_node]['matched'] == True:
+                    if self.dataGraph.nodes[data_node]['matched'] == True:
                         # print("Nodul " + str(data_node) + " este deja marcat ca fiind 'matched' ")
                         # Atunci verificam sa nu fie adiacent lui
                         # print("Lipseste in graful data muchia " + str([candidate, data_node]) + " ?")
@@ -485,7 +485,7 @@ class VF2Algorithm(GenericQueryProc):
                 # print("         Facut intersectiile de la Conditia (2)")
                 # print("         " + str(len(first_intersection)))
                 # print("         " + str(len(second_intersection)))
-
+                print("For breakpoint.")
                 # print("Cardinalul primei intersectii > decat celei de a doua?")
                 if len(first_intersection) > len(second_intersection):
                     # print("         Conditia(2) intra in vigoare, astfel avem:")
@@ -645,11 +645,11 @@ class VF2Algorithm(GenericQueryProc):
         # IsJoinable iterates through all adjacent query vertices of u.
         for query_neighbor in self.queryGraph.neighbors(u):
             # If the adjacent query vertex u' is already matched
-            if self.queryGraph.node[query_neighbor]['matched'] is True:
+            if self.queryGraph.nodes[query_neighbor]['matched'] is True:
                 # print("ALREADY MATCHED query_neighbor = " + str(query_neighbor))
                 # then it checks whether there is a corresponding edge (v, v') in the data graph.
                 for data_node in self.dataGraph.nodes():
-                    if self.dataGraph.node[data_node]['matched'] is True:
+                    if self.dataGraph.nodes[data_node]['matched'] is True:
                         # print("NEW DATA NODE v = " + str(v))
                         # print("ALREADY MATCHED data_node = " + str(data_node))
                         if self.dataGraph.has_edge(v, data_node):
@@ -678,7 +678,7 @@ class VF2Algorithm(GenericQueryProc):
 
     def updateState(self, M, u, v): # Adaug o asociere / match la sfarsitul lui M.
         # print("updateState exec: ")
-        self.queryGraph.node[u]['matched'] = True
+        self.queryGraph.nodes[u]['matched'] = True
         # self.dataGraph.node[v]['matched'] = True # Am declarat si nodul data ca fiind MATCHED. In p133-han se lucreaza cu lista M, exista nextQueryVertex, dar prea putin se ocupa de nodurile data din acest pct de vedere.
         # print(Fore.BLUE + str([u,v]))
         M.append([u, v])
@@ -688,7 +688,7 @@ class VF2Algorithm(GenericQueryProc):
         # print("updateState exec finish")
         end_program = True
         for query_node in self.queryGraph.nodes():
-            if self.queryGraph.node[query_node]['matched'] == False:
+            if self.queryGraph.nodes[query_node]['matched'] == False:
                 end_program = False
         if end_program == False:
             return M
