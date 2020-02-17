@@ -160,12 +160,16 @@ def next_data_edge(partial_solution, data_graph, M):
 
             print("\nSecond node of the query edge of current position: " + str(query_graph_edges[position_for_new_edge][1]))
 
-            if query_graph_edges[position_for_new_edge][1] not in list(query_nodes_for_whom_candidates_were_refined.keys())[0]:
+            if query_graph_edges[position_for_new_edge][1] not in list(query_nodes_for_whom_candidates_were_refined.keys()):
                 candidate_edge_node_2_ref_candidate_list = copy.deepcopy(refineCandidates(query_graph_edges[position_for_new_edge][1], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]], partial_solution, M))
                 candidate_results.append([query_graph_edges[position_for_new_edge][1], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]], candidate_edge_node_2_ref_candidate_list])
                 candidate_results.append("----------------------")
                 aux2 = copy.deepcopy(candidate_edge_node_2_ref_candidate_list)
-
+            else:
+                if query_graph_edges[position_for_new_edge][1] in list(query_nodes_for_whom_candidates_were_refined.keys()):
+                    candidate_results.append([query_graph_edges[position_for_new_edge][1], candidate_nodes_lists_as_dict[query_edge_labels[position_for_new_edge][1]], query_nodes_for_whom_candidates_were_refined[[query_graph_edges[position_for_new_edge][0]][1]]])
+                    candidate_results.append("----------------------")
+                    aux2 = copy.deepcopy(query_nodes_for_whom_candidates_were_refined[[query_graph_edges[position_for_new_edge][0]][1]])
             refined_final_solutions_for_second_pos_onwards_for_part_sol = []
             # for first_pos_edge in candidate_edges_for_first_pos_of_part_sol:
             #     refined_final_solution.append(first_pos_edge)
