@@ -1767,7 +1767,7 @@ M = []
 ####################################################################################
 
 # Fisier text:
-f1 = open("f1.txt", "w+")
+f1 = open("file_VF2 Algorithm output.txt", "w+")
 candidate_results = []
 refined_final_solutions = []
 candidate_edges_for_first_pos_of_part_sol = []
