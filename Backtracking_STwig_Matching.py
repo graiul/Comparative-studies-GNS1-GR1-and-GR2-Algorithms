@@ -740,6 +740,9 @@ def subgraph_search(partial_solution, query_stwig_dict, current_node, data_graph
                 for cs in complete_solutions:
                     print(cs)
                 print(Style.RESET_ALL)
+                print("Execution time for Backtracking Algorithm (seconds): ")
+                total_time = timer() - start_time
+                print(total_time)
                 print("Finished. Press 'Enter' to close the window.")
                 input()
                 exit(0)
@@ -986,8 +989,8 @@ try:
     # subgraph_search(p_solution, query_stwig1_dict, [], small_graph)
     start_time = timer()
     subgraph_search(p_solution, query_stwig1_dict, [], dataGraph)
-    total_time = timer() - start_time
-    print("Timp total de executare algoritm Backtracking: " + str(total_time) + " secunde.")
+    # total_time = timer() - start_time
+    # print("Timp total de executare algoritm Backtracking: " + str(total_time) + " secunde.")
 except IndexError:
     tb = traceback.format_exc()
     print(tb)
