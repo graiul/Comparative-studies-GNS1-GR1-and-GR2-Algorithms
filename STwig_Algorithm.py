@@ -896,7 +896,7 @@ class STwig_Algorithm(object):
 
         # print("STWIG MATCHES: ")
         STwig_matches = sorted(R)
-        f2 = open("f2.txt", "w+")
+        f2 = open("file_STwig Algorithm output.txt", "w+")
         for match in STwig_matches:
             for match_element in match:
                 f2.write(str(match_element) + " ")
