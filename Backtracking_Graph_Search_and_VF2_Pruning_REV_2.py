@@ -1005,6 +1005,13 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
                 print("[Query node, [Candidate data nodes], [Refined candidate data nodes]]")
                 for cand_res in candidate_results:
                     print(cand_res)
+                print("Execution time for VF2 Algorithm (seconds): ")
+                total_time = timer() - start_time
+                print(total_time)
+                f2 = open("file_VF2 Algorithm execution times.txt", "a")
+                f2.write(str(total_time) + " ")
+                f2.write("\n")
+                f2.close()
                 exit(0)
 
             # go back a position with restore position()
@@ -1780,7 +1787,7 @@ try:
     # subgraph_search(p_solution, query_edges_dict, [], small_graph)
     start_time = timer()
     subgraph_search(p_solution, query_edges_dict, [], dataGraph, M)
-    total_time = timer() - start_time
+    # total_time = timer() - start_time
     print("Timp total de executare algoritm Backtracking: " + str(total_time) + " secunde.")
 except IndexError:
     tb = traceback.format_exc()
