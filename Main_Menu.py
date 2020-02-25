@@ -412,7 +412,7 @@ def main():
             # query_graph = query_graph_gen.gen_zhaosun_query_graph()
             # query_graph = query_graph_gen.gen_small_graph_query_graph()
             query_graph = query_graph_gen.gen_RI_query_graph()
-            print("Query graph nodes and labels: ")
+            print("Query graph node ID's and labels: ")
             print(query_graph.nodes(data=True))
 
             manager = Manager()
