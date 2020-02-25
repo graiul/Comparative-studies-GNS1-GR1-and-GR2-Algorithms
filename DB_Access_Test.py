@@ -135,6 +135,10 @@ class DB_Access_Test(object):
         with lock:
             print("Execution time for STwig Algorithm (seconds): ")
             print(total_time_sec)
+            f2 = open("file_STwig Algorithm execution times.txt", "a")
+            f2.write(str(total_time_sec) + " ")
+            f2.write("\n")
+            f2.close()
         return_dict[repr(query_stwig)] = matches
 
     def filter_results_process(self, query_stwig, return_dict, STwig_query_neighbors, query_graph, used_stwigs, lock, shared_sorted_leafs_to_be_roots):
