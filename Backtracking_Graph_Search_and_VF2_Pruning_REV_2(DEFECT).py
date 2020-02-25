@@ -1788,7 +1788,7 @@ try:
     start_time = timer()
     subgraph_search(p_solution, query_edges_dict, [], dataGraph, M)
     # total_time = timer() - start_time
-    print("Timp total de executare algoritm Backtracking: " + str(total_time) + " secunde.")
+    # print("Timp total de executare algoritm Backtracking: " + str(total_time) + " secunde.")
 except IndexError:
     tb = traceback.format_exc()
     print(tb)
