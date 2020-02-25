@@ -1145,7 +1145,7 @@ node_list_aux = copy.deepcopy(list(dataGraph.nodes()))
 ####################################################################################
 
 # Fisier text:
-f1 = open("f1.txt", "w+")
+f1 = open("file_Backtracking Algorithm output.txt", "w+")
 
 # Executia algoritmului Backtracking:
 try:
