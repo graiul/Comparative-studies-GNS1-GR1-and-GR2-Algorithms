@@ -50,7 +50,8 @@ def next_query_vertex(current_node, query_stwig_dict):
     try:
         return list(query_stwig_dict.keys())[next_node_pos]
     except IndexError:
-        print("No more elements after this one in dict.")
+        # print("No more elements after this one in dict.")
+        pass
 
 def next_data_edge(partial_solution, data_graph):
 
@@ -179,7 +180,7 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
 
     # pt primul element(radacina) la prima executie:
     if len(partial_solution) == 0:
-        print("\nWe entered the execution for the first element: ")
+        # print("\nWe entered the execution for the first element: ")
 
         if data_edge_to_be_joined not in partial_solution:
             ########################################################
@@ -187,18 +188,18 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
             # print(list(query_  _input.items())[0][1])
             # if list(query_   _input.items())[0][1] == False:
             ########################################################
-            print("     Query edge node labels for the first position: ")
-            print("     " + str(list(query_edges_dict.items())[0][1]))
-            print("     Candidate data graph edge (data nodes label): " + str(
-                [data_graph.nodes[data_edge_to_be_joined[0]]['label'],
-                 data_graph.nodes[data_edge_to_be_joined[1]]['label']]))
-            print("     Candidate data graph edge nodes id: " + str(data_edge_to_be_joined))
+            # print("     Query edge node labels for the first position: ")
+            # print("     " + str(list(query_edges_dict.items())[0][1]))
+            # print("     Candidate data graph edge (data nodes label): " + str(
+            #     [data_graph.nodes[data_edge_to_be_joined[0]]['label'],
+            #      data_graph.nodes[data_edge_to_be_joined[1]]['label']]))
+            # print("     Candidate data graph edge nodes id: " + str(data_edge_to_be_joined))
             if list(query_edges_dict.items())[0][1][0] == data_edge_to_be_joined_node_0_label or list(query_edges_dict.items())[0][1][0] == data_edge_to_be_joined_node_1_label:
                 # print("YES")
                 if list(query_edges_dict.items())[0][1][1] == data_edge_to_be_joined_node_1_label or list(query_edges_dict.items())[0][1][1] == data_edge_to_be_joined_node_0_label:
                     # print("YES")
                     # print("     " + Fore.GREEN + Style.BRIGHT +  "Positions log before appending first position data edge: " + str(list(positions.items())) + Style.RESET_ALL)
-                    print()
+                    # print()
 
                     finder = EdgeFinderTool(data_edge_to_be_joined, positions[0])
                     found = finder.edge_found()
@@ -216,37 +217,39 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
                         pos = aux.index(aux[-1])
                         positions[pos].append(data_edge_to_be_joined)
                         # positions[pos].append(reversed_data_edge)
-                        print("Log for position 0: ")
-                        print(positions[pos])
+                        # print("Log for position 0: ")
+                        # print(positions[pos])
 
                                         #####################################################################
                                         #             matched_true_false_data_nodes_pos_0_dict[data_node_to_be_joined] = True
                                         #             break
                                         #####################################################################
-                        print("     " + Fore.GREEN + Style.BRIGHT + "Positions log after appending first position data edge: " + str(list(positions.items())) + Style.RESET_ALL)
-                        print()
+                        # print("     " + Fore.GREEN + Style.BRIGHT + "Positions log after appending first position data edge: " + str(list(positions.items())) + Style.RESET_ALL)
+                        # print()
                 else:
-                    print("     Data edge is not valid for this.")
+                    # print("     Data edge is not valid for this.")
+                    pass
             else:
-                print("     Data edge is not valid for this.")
+                # print("     Data edge is not valid for this.")
+                pass
 
     if len(partial_solution) == 1:
-        print("\nWe entered the execution for the second element: ")
+        # print("\nWe entered the execution for the second element: ")
         ########################################################
         # Pentru VF2
         # for data_node_to_be_joined in obtained_candidates_pos_1:
         ########################################################
         if data_edge_to_be_joined not in partial_solution:
-            print("     Query edge for the second element: ")
-            print("     " + str(list(query_edges_dict.items())[1][1]))
-            print("     Candidate data graph edge (data nodes label): " + str(
-                [data_graph.nodes[data_edge_to_be_joined[0]]['label'],
-                 data_graph.nodes[data_edge_to_be_joined[1]]['label']]))
+            # print("     Query edge for the second element: ")
+            # print("     " + str(list(query_edges_dict.items())[1][1]))
+            # print("     Candidate data graph edge (data nodes label): " + str(
+            #     [data_graph.nodes[data_edge_to_be_joined[0]]['label'],
+            #      data_graph.nodes[data_edge_to_be_joined[1]]['label']]))
             if list(query_edges_dict.items())[1][1][0] == data_edge_to_be_joined_node_0_label or list(query_edges_dict.items())[1][1][0] == data_edge_to_be_joined_node_1_label:
                 # print("YES")
                 if list(query_edges_dict.items())[1][1][1] == data_edge_to_be_joined_node_1_label or list(query_edges_dict.items())[1][1][1] == data_edge_to_be_joined_node_0_label:
                     # print("YES")
-                    print("     " + Fore.GREEN + Style.BRIGHT +  "Positions log before appending second edge: " + str(list(positions.items())) + Style.RESET_ALL)
+                    # print("     " + Fore.GREEN + Style.BRIGHT +  "Positions log before appending second edge: " + str(list(positions.items())) + Style.RESET_ALL)
                     finder = EdgeFinderTool(data_edge_to_be_joined, positions[1])
                     found = finder.edge_found()
                     if found is False:
@@ -267,7 +270,7 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
                                         data_graph.has_edge(e[0], data_edge_to_be_joined[1]) or \
                                         data_graph.has_edge(e[1], data_edge_to_be_joined[0]) or \
                                         data_graph.has_edge(e[1], data_edge_to_be_joined[1]):
-                                    print("     Has edge with previous position(s)")
+                                    # print("     Has edge with previous position(s)")
 
                                     # print("Label of the first leaf of the query STwig: " + str(list(query_stwig_as_dict.items())[1][1]))
                                     # print("Label of data node verified: " + str(data_node_label))
@@ -296,33 +299,36 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
                                 #     break
                                 #####################################################################
 
-                                print("     " + Fore.GREEN + Style.BRIGHT + "Positions log after appending second edge: " + str(
-                                    list(positions.items())) + Style.RESET_ALL)
-                                print()
+                                # print("     " + Fore.GREEN + Style.BRIGHT + "Positions log after appending second edge: " + str(
+                                #     list(positions.items())) + Style.RESET_ALL)
+                                # print()
                 else:
-                    print("     Data edge is not valid for this.")
+                    # print("     Data edge is not valid for this.")
+                    pass
             else:
-                print("     Data edge is not valid for this.")
+                # print("     Data edge is not valid for this.")
+                pass
 
         else:
-            print("     Already in partial solution.")
+            # print("     Already in partial solution.")
+            pass
 
     if len(partial_solution) == 2:
-        print("\nWe entered the execution for the third element: ")
+        # print("\nWe entered the execution for the third element: ")
         #####################################################################
         # for data_node_to_be_joined in obtained_candidates_pos_2:
         #####################################################################
         if data_edge_to_be_joined not in partial_solution:
-            print("     Query edge for the third element: ")
-            print("     " + str(list(query_edges_dict.items())[2][1]))
-            print("     Candidate data graph edge (data nodes label): " + str(
-                [data_graph.nodes[data_edge_to_be_joined[0]]['label'],
-                 data_graph.nodes[data_edge_to_be_joined[1]]['label']]))
+            # print("     Query edge for the third element: ")
+            # print("     " + str(list(query_edges_dict.items())[2][1]))
+            # print("     Candidate data graph edge (data nodes label): " + str(
+            #     [data_graph.nodes[data_edge_to_be_joined[0]]['label'],
+            #      data_graph.nodes[data_edge_to_be_joined[1]]['label']]))
             if list(query_edges_dict.items())[2][1][0] == data_edge_to_be_joined_node_0_label or list(query_edges_dict.items())[2][1][0] == data_edge_to_be_joined_node_1_label:
                 # print("YES")
                 if list(query_edges_dict.items())[2][1][1] == data_edge_to_be_joined_node_1_label or list(query_edges_dict.items())[2][1][1] == data_edge_to_be_joined_node_0_label:
                     # print("YES")
-                    print("     " + Fore.GREEN + Style.BRIGHT +  "Positions log before appending third edge: " + str(list(positions.items())) + Style.RESET_ALL)
+                    # print("     " + Fore.GREEN + Style.BRIGHT +  "Positions log before appending third edge: " + str(list(positions.items())) + Style.RESET_ALL)
                     aux = copy.deepcopy(partial_solution)
                     aux.append(data_edge_to_be_joined)
 
@@ -337,7 +343,7 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
                                         data_graph.has_edge(e[0], data_edge_to_be_joined[1]) or \
                                         data_graph.has_edge(e[1], data_edge_to_be_joined[0]) or \
                                         data_graph.has_edge(e[1], data_edge_to_be_joined[1]):
-                                    print("     Has edge with previous position(s)")
+                                    # print("     Has edge with previous position(s)")
                                     # print("Label of data node verified: " + str(data_node_label))
                                     ###############################################################################
                                     # if matched_true_false_data_nodes_pos_2_dict[data_node_to_be_joined] == False:
@@ -360,30 +366,33 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
                                     # break
                                     ###############################################################################
 
-                                    print("     " + Fore.GREEN + Style.BRIGHT + "Positions log after appending third edge: " + str(list(positions.items())) + Style.RESET_ALL)
-                                    print()
+                                    # print("     " + Fore.GREEN + Style.BRIGHT + "Positions log after appending third edge: " + str(list(positions.items())) + Style.RESET_ALL)
+                                    # print()
                 else:
-                    print("     Data edge is not valid for this.")
+                    # print("     Data edge is not valid for this.")
+                    pass
             else:
-                print("     Data edge is not valid for this.")
+                # print("     Data edge is not valid for this.")
+                pass
 
         else:
-            print("     Already in partial solution.")
+            # print("     Already in partial solution.")
+            pass
 
     if len(partial_solution) == 3:
-        print("\nWe entered the execution for the fourth element: ")
+        # print("\nWe entered the execution for the fourth element: ")
         # for data_node_to_be_joined in obtained_candidates_pos_3:
         if data_edge_to_be_joined not in partial_solution:
-            print("     Query edge for the fourth element: ")
-            print("     " + str(list(query_edges_dict.items())[3][1]))
-            print("     Candidate data graph edge (data nodes label): " + str(
-                [data_graph.nodes[data_edge_to_be_joined[0]]['label'],
-                 data_graph.nodes[data_edge_to_be_joined[1]]['label']]))
+            # print("     Query edge for the fourth element: ")
+            # print("     " + str(list(query_edges_dict.items())[3][1]))
+            # print("     Candidate data graph edge (data nodes label): " + str(
+            #     [data_graph.nodes[data_edge_to_be_joined[0]]['label'],
+            #      data_graph.nodes[data_edge_to_be_joined[1]]['label']]))
             if list(query_edges_dict.items())[3][1][0] == data_edge_to_be_joined_node_0_label or list(query_edges_dict.items())[3][1][0] == data_edge_to_be_joined_node_1_label:
                 # print("YES")
                 if list(query_edges_dict.items())[3][1][1] == data_edge_to_be_joined_node_1_label or list(query_edges_dict.items())[3][1][1] == data_edge_to_be_joined_node_0_label:
                     # print("YES")
-                    print("     " + Fore.GREEN + Style.BRIGHT +  "Positions log before appending fourth edge: " + str(list(positions.items())) + Style.RESET_ALL)
+                    # print("     " + Fore.GREEN + Style.BRIGHT +  "Positions log before appending fourth edge: " + str(list(positions.items())) + Style.RESET_ALL)
                     aux = copy.deepcopy(partial_solution)
                     aux.append(data_edge_to_be_joined)
                     pos = aux.index(aux[-1])
@@ -397,7 +406,7 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
                                         data_graph.has_edge(e[0], data_edge_to_be_joined[1]) or \
                                         data_graph.has_edge(e[1], data_edge_to_be_joined[0]) or \
                                         data_graph.has_edge(e[1], data_edge_to_be_joined[1]):
-                                    print("     Has edge with previous position(s)")
+                                    # print("     Has edge with previous position(s)")
                                     # if matched_true_false_data_nodes_pos_3_dict[data_node_to_be_joined] == False:
                                     found_valid_data_edge = True
                                     finder2 = EdgeFinderTool(aux[-1], positions[pos])
@@ -414,16 +423,17 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
                                         # positions[pos].append(reversed_data_edge)
                                     # matched_true_false_data_nodes_pos_3_dict[data_node_to_be_joined] = True
                                     # break
-                                    print("     " + Fore.GREEN + Style.BRIGHT + "Positions log after appending fourth edge: " + str(list(positions.items())) + Style.RESET_ALL)
-                                    print()
+                                    # print("     " + Fore.GREEN + Style.BRIGHT + "Positions log after appending fourth edge: " + str(list(positions.items())) + Style.RESET_ALL)
+                                    # print()
                 else:
-                    print("     Data edge is not valid for this.")
+                    # print("     Data edge is not valid for this.")
+                    pass
             else:
-                print("     Data edge is not valid for this.")
-
+                # print("     Data edge is not valid for this.")
+                pass
         else:
-            print("     Already in partial solution.")
-
+            # print("     Already in partial solution.")
+            pass
 
     # if len(complete_solutions) > 0:
     #     if len(partial_solution) == 0:
@@ -683,11 +693,11 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
     return None
 
 def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph):
-    print()
-    print("Started subgraph search: ")
-    print(Back.WHITE + Fore.LIGHTBLUE_EX + Style.BRIGHT + "Partial solution given: " + str(partial_solution) + Style.RESET_ALL)
+    # print()
+    # print("Started subgraph search: ")
+    # print(Back.WHITE + Fore.LIGHTBLUE_EX + Style.BRIGHT + "Partial solution given: " + str(partial_solution) + Style.RESET_ALL)
     i = False
-    print(query_graph_dict)
+    # print(query_graph_dict)
     if len(partial_solution) == len(list(query_graph_dict.items())):
         if partial_solution not in complete_solutions:
             # https://networkx.github.io/documentation/networkx-1.9/reference/generated/networkx.linalg.graphmatrix.adjacency_matrix.html
@@ -722,9 +732,9 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
             #     if (adj_mat_query_elems==adj_mat_data_elems).all():
             #         mat_equal = True
 
-            print()
-            print(query_graph.edges)
-            print(partial_solution)
+            # print()
+            # print(query_graph.edges)
+            # print(partial_solution)
 
 
             gr_isomorphic = False
@@ -762,27 +772,28 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
                     for c_sol_elem in c_sol:
                         f1.write(str(c_sol_elem) + " ")
                     f1.write("\n")
-                    print("One complete solution found!")
-                    print()
-                    print(Fore.GREEN + Style.BRIGHT + "List of complete solutions: ")
-                    for cs in complete_solutions:
-                        print(cs)
-                    print(Style.RESET_ALL)
+                    # print("One complete solution found!")
+                    # print()
+                    # print(Fore.GREEN + Style.BRIGHT + "List of complete solutions: ")
+                    # for cs in complete_solutions:
+                    #     print(cs)
+                    # print(Style.RESET_ALL)
                 else:
-                    print("Duplicate found")
+                    # print("Duplicate found")
                     duplicate_occurence_list.clear()
 
             else:
                 # print("Adjacency matrix sizes do not match.")
-                print("Not isomorphic")
+                # print("Not isomorphic")
+                pass
 
 
             partial_solution = copy.deepcopy(restore_state(partial_solution))
             # mat_equal = False # Pentru lucrul cu matrice de adiacenta. Problema este descrisa mai sus.
             gr_isomorphic = False
-            print("\nRestored state: " + str(partial_solution))
+            # print("\nRestored state: " + str(partial_solution))
 
-            print()
+            # print()
             # partial_solution = []
 
             # print("Sliced partial solution: " + str(partial_solution))
@@ -829,7 +840,7 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
 
         if candidate is None:  # go back a position with restore position()
 
-            print("Candidate: " + Fore.LIGHTRED_EX + str(candidate) + Style.RESET_ALL)
+            # print("Candidate: " + Fore.LIGHTRED_EX + str(candidate) + Style.RESET_ALL)
             # print()
 
             if partial_solution == []:
@@ -851,10 +862,10 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
                 exit(0)
 
             # go back a position with restore position()
-            print("Going back a position.")
+            # print("Going back a position.")
             # input("Continue execution?")
             partial_solution = copy.deepcopy(restore_state(partial_solution)) #partial_solution[:1])
-            print("Restored partial solution: " + str(partial_solution))
+            # print("Restored partial solution: " + str(partial_solution))
             if len(partial_solution) == 0:  # poz 0 = []
                 current_node = []
                 positions[1] = [] # poz 1 = []
@@ -871,7 +882,7 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
                 current_node = copy.deepcopy(partial_solution[-1])
                 positions[3] = []
 
-            print("Current node: " + str(current_node))
+            # print("Current node: " + str(current_node))
             subgraph_search(partial_solution, query_graph_dict, current_node, data_graph)
 
 
@@ -1160,12 +1171,12 @@ try:
     start_time = timer()
     subgraph_search(p_solution, query_edges_dict, [], dataGraph)
     # total_time = timer() - start_time
-    print("Timp total de executare algoritm Backtracking: " + str(total_time) + " secunde.")
+    # print("Timp total de executare algoritm Backtracking: " + str(total_time) + " secunde.")
 except IndexError:
     tb = traceback.format_exc()
     print(tb)
-except SystemExit:
-    exit(0)
+# except SystemExit:
+#     exit(0)
 
 
 
