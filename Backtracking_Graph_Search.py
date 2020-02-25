@@ -841,6 +841,13 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
                 print(Style.RESET_ALL)
                 # print("Finished. Press 'Enter' to close the window.")
                 # input()
+                print("Execution time for Backtracking Algorithm (seconds): ")
+                total_time = timer() - start_time
+                print(total_time)
+                f2 = open("file_Backtracking Algorithm execution times.txt", "a")
+                f2.write(str(total_time) + " ")
+                f2.write("\n")
+                f2.close()
                 exit(0)
 
             # go back a position with restore position()
@@ -1152,7 +1159,7 @@ try:
     # subgraph_search(p_solution, query_edges_dict, [], small_graph)
     start_time = timer()
     subgraph_search(p_solution, query_edges_dict, [], dataGraph)
-    total_time = timer() - start_time
+    # total_time = timer() - start_time
     print("Timp total de executare algoritm Backtracking: " + str(total_time) + " secunde.")
 except IndexError:
     tb = traceback.format_exc()
