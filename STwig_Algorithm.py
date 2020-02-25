@@ -706,8 +706,8 @@ class STwig_Algorithm(object):
             S = []
             S_child_lists = []
             for root_child_label in L:
-                print("     Root_child_label: " + str(root_child_label))
-                print("     " + str(type(root_child_label)))
+                # print("     Root_child_label: " + str(root_child_label))
+                # print("     " + str(type(root_child_label)))
                 for child in children:
                     if child not in S_child_lists:
                         # print("     child= " + str(child)) # Child, sau vecinii de ordinul 1.
@@ -723,17 +723,17 @@ class STwig_Algorithm(object):
                             # S[S.index(li)] = child
                             S_child_lists.append(child_id)
                 # print("S[li]= " + str(S[S.index(li)]))
-                print("     S_child_lists= " + str(S_child_lists))
+                # print("     S_child_lists= " + str(S_child_lists))
                 S.append(S_child_lists) # Sli, lista de children, pentru fiecare li care respecta conditia, adaugam in S
                 S_child_lists = []
 
 
-            print("     Sets of children(for selected root " + str(root_node) + ") with labels  " + str(L) + ": ")
+            # print("     Sets of children(for selected root " + str(root_node) + ") with labels  " + str(L) + ": ")
 
 
             S_one_elems = []
             for s in S:
-                print("     " + str(s))
+                # print("     " + str(s))
                 for s_temp in s:
                     S_one_elems.append(s_temp)
             S_one_elems.insert(0, root_node)
@@ -896,14 +896,15 @@ class STwig_Algorithm(object):
 
         # print("STWIG MATCHES: ")
         STwig_matches = sorted(R)
-        f2 = open("file_STwig Algorithm output.txt", "w+")
+        f1 = open("file_STwig Algorithm output.txt", "w+")
         for match in STwig_matches:
             for match_element in match:
-                f2.write(str(match_element) + " ")
-            f2.write("\n")
-        f2.close()
+                f1.write(str(match_element) + " ")
+            f1.write("\n")
+        f1.close()
         # for stwig in STwigs:
         #     print(stwig)
+
 
 
         # Am schimbat graful astfel: am inlaturat muchia a3,b3: MATCH (n:a)-[r:RELTYPE]-(m:b) WHERE n.id = 'a3' AND m.id = 'b3' DELETE r
