@@ -1,4 +1,5 @@
 import copy
+import itertools
 import traceback
 from collections import OrderedDict
 
@@ -8,6 +9,7 @@ from Dataset_Operator import Dataset_Operator
 from STwig_Algorithm import STwig_Algorithm
 # from Backtracking_STwig_Matching import Backtracking_STwig_Matching
 from VF2Algorithm import VF2Algorithm
+from VF2Algorithm_FARA_PRUNING import VF2Algorithm_FARA_PRUNING
 from neo4j_test_2 import neo4j_test_2
 import os
 from multiprocessing import Pool, Process, Manager, Lock
@@ -43,6 +45,8 @@ def main():
         ["10. Query graph zhaosun split prototype, single threaded"],
         ["11. Configure db"],
         ["12. VF2 Algorithm"],
+        ["13. VF2 Algorithm NO PRUNING"],
+
         ["0. Exit"]
     ]
     print()
@@ -515,6 +519,7 @@ def main():
 
         elif option == 12:
             print("\nVF2 Algorithm: ")
+            f_12 = open("file_VF2 Algorithm output.txt", "w+")
 
             # TRANSFORMA IN INT DIN STR IN CREAREA GRAFULUI NX! - Facut.
 
@@ -566,27 +571,15 @@ def main():
                 for root in roots:
                     # print(root)
 
-                    # Alegem noi primul nod al grafului query:
-                    # Pentru small graph
-                    # M2 = [[1, root]]
-
-                    # Pentru RI graph
                     # M2 = [[1773, root]] # Algoritmul va schimba al doilea element doar.
                     # print("M2 = " + str(M2))
 
-                    # if graph_choice == "sm":
-                    #     M2 = [[1, root]]
-
                     # if graph_choice == "ri":
-                        # M2 = [[1773, root]]
-                        # M2 = [[1488, root]]
-                        # M2 = [[1898, root]]
-                        # M2 = [[0, root]]
-                        # M2 = [[7190, root]]
-                        # M2 = [[269, root]]
+                    # M2 = [[1773, root]]
+                    # M2 = [[2462, root]]
+                    # M2 = [[0, root]]
+                    M2 = [[7711, root]]
 
-                    # M2 = [[6523, root]]
-                    M2 = [[1111, root]]
 
 
 
@@ -618,9 +611,22 @@ def main():
                         leafs.insert(0, root)
                         res = copy.deepcopy(leafs)
                         print("Results from VF2 Algorithm: ")
+                        res_general = []
                         if len(res) == len(vf2_2.queryGraph.nodes()):
                             print(Fore.LIGHTGREEN_EX + "Data root: " + str(root))
-                            print(res)
+                            for res_element in res[1:]:
+                                res_general.append(res_element[1])
+                            print(res_general)
+                            root_as_list = [root]
+                            res_general.insert(0, root_as_list)
+                            # for cartesian_prod_element in itertools.product(res_general[0], res_general[1], res_general[2]):
+                            for cartesian_prod_element in itertools.product(*res_general): # Folosire asterisk pentru ca functia de produs cartezian sa ia in considerare sublistele din lista res_general:
+                                                                                           # https://stackoverflow.com/questions/533905/get-the-cartesian-product-of-a-series-of-lists
+
+                                print(cartesian_prod_element)
+                                for cpe_elem in cartesian_prod_element:
+                                    f_12.write(str(cpe_elem) + " ")
+                                f_12.write("\n")
                             # print(len(res))
                             # print(list(vf2_2.results_dict.items())[0])
                             print(Style.RESET_ALL)
@@ -630,12 +636,149 @@ def main():
             total_time_sec = timer() - start_time
             print("Execution time for VF2 Algorithm (seconds): ")
             print(total_time_sec)
+            f_12_2 = open("file_VF2 Algorithm execution times.txt", "a")
+            f_12_2.write(str(total_time_sec) + " ")
+            f_12_2.write("\n")
+            f_12_2.close()
 
                     # print(Fore.LIGHTBLUE_EX + "\nShow results found until now? (y/n): ")
                     # i = input()
                     # if i == "y":
                     #     break
                     # print(Style.RESET_ALL)
+
+            # print(Fore.GREEN + "\nFinal results: ")
+            # for result in results:
+            #     print(result)
+            # print(Style.RESET_ALL)
+
+        elif option == 13:
+            print("\nVF2 Algorithm NO PRUNING: ")
+            f_13 = open("file_VF2 Algorithm NO PRUNING output.txt", "w+")
+
+            # TRANSFORMA IN INT DIN STR IN CREAREA GRAFULUI NX! - Facut.
+
+            # M = [["0", "0"]]  # Test de corectitudine. Ar trebui sa dea un M in care toate match-urile sa aiba elemente egale, practic sa imi returneze toate nodurile query asociate cu ele insasi.
+            # M = [["0", "1173"]] # Test al timpului de executie.
+            # vf2 = VF2Algorithm(M, 'graph_to_RI_db.txt', 'Homo_sapiens_udistr_32.gfd', 'RI')
+
+            # M = [["1","1"]]
+            # M = [[1, 5]]
+            # M = [["1","9"]]
+            # print(M)
+
+            # vf2 = VF2Algorithm(M)
+            # vf2.subGraphSearch(M)
+
+            # vf2 = VF2Algorithm(M, 'small_query_graph_VF2.txt', 'small_data_graph_VF2.txt', 'RI')
+            # vf2.subGraphSearch(M)
+
+            M = []
+            results = []
+            # print("Query graph choice: for Small data graph or RI data graph? (sm/ri)")
+            # graph_choice = str(input())
+            start_time = timer()
+            if len(M) == 0:
+                # Pentru radacini nu am mai facut pruning!
+                # Pentru fiecare radacina din lista de radacini,
+                # din rezultatul final voi elimina radacinile care nu au fost folosite
+                # pentru executia respectiva a algoritmului.
+
+                M_list_main = []
+
+                print("\nRoots search beginning: ")
+                # vf2 = VF2Algorithm(M, 'small_query_graph_VF2.txt', 'small_data_graph_VF2.txt', 'RI')
+                # exit(0)
+
+                # vf2 = VF2Algorithm(M, graph_choice)
+                vf2 = VF2Algorithm_FARA_PRUNING(M)
+
+                roots = vf2.subGraphSearch(M)[1]
+                vf2.results_dict.clear()
+
+                print()
+                print("Roots found: ")
+                print(roots)
+                print()
+                # print("Selected root: ")
+                for root in roots:
+                    # print(root)
+
+                    # Alegem noi primul nod al grafului query:
+                    # Pentru small graph
+                    # M2 = [[1, root]]
+
+                    # Pentru RI graph
+                    # M2 = [[1773, root]] # Algoritmul va schimba al doilea element doar.
+                    # print("M2 = " + str(M2))
+
+                    # if graph_choice == "sm":
+                    #     M2 = [[1, root]]
+
+                    # if graph_choice == "ri":
+                    # M2 = [[1773, root]]
+                    M2 = [[2462, root]]
+
+                    # M2 = [[1488, root]]
+                    # M2 = [[1898, root]]
+                    # M2 = [[0, root]]
+                    # M2 = [[7190, root]]
+                    # M2 = [[269, root]]
+
+                    # M2 = [[6523, root]]
+                    # M2 = [[1111, root]]
+
+                    # print()
+                    # print("Query root node: " + str(root))
+
+                    # vf2 = VF2Algorithm(M, 'small_query_graph_VF2.txt', 'small_data_graph_VF2.txt', 'RI')
+                    # vf2_2 = VF2Algorithm(M2, graph_choice)
+                    vf2_2 = VF2Algorithm_FARA_PRUNING(M2)
+
+                    execution_flag = vf2_2.subGraphSearch(M2)
+                    M_list_main.append(execution_flag)
+                    # vf2 = None
+
+                    # Pentru small graph
+                    # results.append([["Query root: " + "1"], ["Data root: " + str(root)], [list(vf2_2.results_dict.items())[1:]]])
+                    # Pentru RI graph
+                    # results.append([["Query root: " + "1773"], ["Data root: " + str(root)], [list(vf2_2.results_dict.items())[1:]]])
+                    if execution_flag == None:
+                        # if graph_choice == "sm":
+                        #     print(Fore.LIGHTGREEN_EX + str([["Query root: " + "1"], ["Data root: " + str(root)],
+                        #                                     [list(vf2_2.results_dict.items())[1:]]]))
+                        #     print(Style.RESET_ALL)
+
+                        # if graph_choice == "ri":
+                        # if len(list(vf2_2.results_dict.items())) > 0:
+
+                        leafs = copy.deepcopy(list(vf2_2.results_dict.items()))
+                        leafs.insert(0, root)
+                        res = copy.deepcopy(leafs)
+                        print("Results from VF2 Algorithm NO PRUNING: ")
+                        if len(res) == len(vf2_2.queryGraph.nodes()):
+                            print(Fore.LIGHTGREEN_EX + "Data root: " + str(root))
+                            print(res)
+                            f_13.write(str(res))
+                            f_13.write("\n")
+                            # print(len(res))
+                            # print(list(vf2_2.results_dict.items())[0])
+                            print(Style.RESET_ALL)
+                            vf2_2.results_dict.clear()
+
+            total_time_sec = timer() - start_time
+            print("Execution time for VF2 Algorithm NO PRUNING(seconds): ")
+            print(total_time_sec)
+            f_13_2 = open("file_VF2 Algorithm NO PRUNING execution times.txt", "a")
+            f_13_2.write(str(total_time_sec) + " ")
+            f_13_2.write("\n")
+            f_13_2.close()
+
+            # print(Fore.LIGHTBLUE_EX + "\nShow results found until now? (y/n): ")
+            # i = input()
+            # if i == "y":
+            #     break
+            # print(Style.RESET_ALL)
 
             # print(Fore.GREEN + "\nFinal results: ")
             # for result in results:
