@@ -15,156 +15,94 @@ class Query_Graph_Generator(object):
     def gen_RI_query_graph(self):
         query_graph = nx.Graph()
 
-        # OK - Cei trei algoritmi dau la fel - data graf RI cu 1000 muchii si 701 noduri.
         # query_graph_edges = [[1773, 1488]]
         # node_attr = ["25", "28"]
 
-        # OK - Cei trei algoritmi dau la fel - data graf RI cu 1000 muchii si 701 noduri.
         # query_graph_edges = [[1773, 1488], [1773, 1898]]
         # node_attr = ["25", "28", "29"]
 
-        # OK - Cei trei algoritmi dau la fel - data graf RI cu 1000 muchii si 701 noduri.
+        # query_graph_edges = [[2462,4829], [2462,5730]]
+        # node_attr = ["18", "5", "7"]
+
         # query_graph_edges = [[1773, 1488], [1773, 1898], [1773, 2285]]
         # node_attr = ["25", "28", "29", "27"]
 
-        # OK - Cei trei algoritmi dau la fel: nici un rezultat - data graf RI cu 1000 muchii si 701 noduri.
         # query_graph_edges = [[1488, 7465]]
         # node_attr = ["28", "18"]
 
-        # OK - Cei trei algoritmi dau la fel - data graf RI cu 1000 muchii si 701 noduri.
-        # OK - STWIG SI VF2 dau la fel - data graf RI cu 10000 muchii
         # query_graph_edges = [[1898,1347], [1898,5596]]
         # node_attr = ["29", "31", "9"]
 
-        # OK - Cei trei algoritmi dau la fel - data graf RI cu 1000 muchii si 701 noduri.
         # query_graph_edges = [[0,1773],[0,1817]]
         # node_attr = ["29", "25", "19"]
 
-        # OK - Cei trei algoritmi dau la fel - data graf RI cu 1000 muchii si 701 noduri.
         # query_graph_edges = [[0, 1773], [0, 1817],[0,4426]]
-        # node_attr = ["29", "25", "19", "13"] # - Label-urile sunt diferite!
+        # node_attr = ["29", "25", "19", "13"]
 
-        # OK - STWIG SI VF2 dau la fel - data graf RI cu 10000 muchii
-        # query_graph_edges = [[0, 1773], [0, 1817], [0, 2428],[0,4426]]
-        # node_attr = ["29", "25", "19", "6", "13"] # - Label-urile sunt diferite!
-
-        # OK - Cei trei algoritmi dau la fel - data graf RI cu 1000 muchii si 701 noduri.
-        # query_graph_edges = [[0,1773],[0,1817],[0,3719]]
-        # node_attr = ["29", "25", "19", "29"] # - Avem doua noduri care au acelasi label, nodurile 0 si 3719 au label-ul 29.
-
-        # OK - STWIG SI VF2 dau la fel - data graf RI cu 10000 muchii
-        # query_graph_edges = [[0,1773],[0,1817],[0,2428],[0,3719]]
-        # node_attr = ["29", "25", "19", "6", "29"] # - Avem doua noduri care au acelasi label, nodurile 0 si 3719 au label-ul 29. - o radacina si o frunza.
-
-        # OK - STWIG SI VF2 dau la fel - data graf RI cu 1000 muchii, VF2 lucreaza mult mai repede
-        # query_graph_edges = [[269, 8134], [269, 9362], [269, 9573]]
-        # node_attr = ["15", "3", "31", "12"]
-
-        # OK - Cei trei algoritmi dau la fel - data graf RI cu 1000 muchii si 701 noduri.
         # query_graph_edges = [[7190,137], [7190,419], [7190,450]]
         # node_attr = ["3", "2", "11", "3"]
 
-        # !!!
-        # Algoritmii STwig si VF2 arata cateva rezultate care nu trebuie sa fie: unele stwiguri data
-        # au aceeasi frunza de doua ori, datorita celor doua frunze query care au acelasi label.
-        # Algoritmul Backtracking nu arata acele stwiguri data defecte. DAR, nu arata unele stwiguri care sunt bune de afisat,
-        # si pe care le afiseaza ceilalti doi algoritmi.
-        # RASPUNS:
-        # Algoritmul STwig nu mai arata STwig-uri data cu aceeasi frunza de mai multe ori.
-        # Acesta afiseaza acum de exemplu pt label-urile  ["20", "15", "32", "32"], rezultatul (si nu numai acesta) astfel:
-        # [6523, [2844, 6107, 12230]] si [6523, [2844, 12230, 6107]]
-        # UPDATE: Acum elimina si una din cele doua variante de mai sus.
-
-        # VF2 afiseaza toate cele trei variante - cele doua descrise mai sus si cea cu dublura.
-
-        # Backtracking afiseaza doar una dintre ele, acest algoritm avand log-uri pt fiecare pozitie, astfel asigurandu-ne ca nu apar dubluri,
-        # si doar una din cele cu interschimbarea nodurilor descrisa mai sus.
-
-        # FOLOSIT GRAFUL RI CU 1000 de muchii si 701 noduri.
-
-        # query_graph_edges = [[6523, 2844], [6523, 6107], [6523, 12230]]
-        # node_attr = ["20", "15", "32", "32"]
-
-
-        # De testat: Indiferent de id-uri, diferite label-uri date de intrare pentru algoritmi, si cautare doar dupa label-uri.
-        # query_graph_edges = [[1, 2], [1, 3], [1, 4]]
-        # query_graph_edges = [[10, 7], [10, 5], [10, 3]]
-        # query_graph_edges = [[6524, 2844], [6524, 6107], [6524, 12230]] # Pt VF2. Radacina are id-ul 6524 in loc de 6523(6523 este in graful data. 6524 nu exista in graful data).
-
-
-        # node_attr = ["20", "15", "32", "32"]
-        # node_attr = ["29", "25", "19", "29"]
-        # node_attr = ["19", "15", "32", "32"]
-        # node_attr = ["20", "15", "20", "32"]
-        # node_attr = ["19", "15", "20", "32"]
-
-        # Pentru graf mic cu 10 noduri.
-        # query_graph_edges = [[1, 2], [1, 3], [1, 4]]
-        # node_attr = ["101", "102", "103", "104"]
-
-        # query_graph_edges = [[11111, 22222222222], [11111,333]]
-        # node_attr = ["101", "102", "103"]
-
-        # query_graph_edges = [[2, 3], [2, 4]]
-        # node_attr = ["102", "103", "104"]
-
-        # query_graph_edges = [[1, 2]]
-        # node_attr = ["101", "102"]
-
-        # Functional cu STwig Algorithm si VF2 Algorithm cu graful de 10 noduri.
-        # query_graph_edges = [[1111, 545454], [1111, 990909090], [1111, 87454747]]
-        # node_attr = ["101", "102", "104", "104"]
-
-        query_graph_edges = [[1111, 2222], [1111, 3333], [1111, 4444]]
-        node_attr = ["101", "102", "104", "104"]
-
-        # Functional cu STwig Algorithm si VF2 Algorithm cu graful de 10 noduri.
-        # query_graph_edges = [[1111, 545454], [1111, 990909090], [1111, 87454747]]
-        # node_attr = ["104", "101", "101", "101"]
-
-        # query_graph_edges = [[1111, 545454], [1111, 990909090], [1111, 87454747]]
-        # node_attr = ["101", "102", "104", "103"]
-
-        # query_graph_edges = [[1111, 2222], [1111, 3333], [1111, 4444]]
-        # node_attr = ["101", "102", "103", "104"]
-
-        # Folosit de STwig Alg pentru filtrarea secventiala si cu graful RI de 10000 de muchii.
-        # Folosit de acelasi algoritm si cu acelasi graf data pentru cautarea in paralel folosind trei procese
-        # si depunerea rezultatelor intr-un dict comun.
-        # query_graph_edges = [[1773, 1488], [1773, 1898], [1773, 2285], [1488, 7465], [1898,1347], [1898,5596]]
-        # node_attr = ["25", "28", "29", "27", "18", "31", "9"]
-
-        # Pentru VF2 pentru compararea cu una si cinci instante neo4j. Doar primul STwig de mai sus.
         # query_graph_edges = [[1773, 1488], [1773, 1898], [1773, 2285]]
         # node_attr = ["25", "28", "29", "27"]
 
-        # OK - STWIG SI VF2 dau la fel - data graf RI cu 10000 muchii
-        # query_graph_edges = [[1773, 1488], [1773, 1898], [1773, 2285]]
-        # node_attr = ["25", "28", "29", "27"]
-
-        # OK - STWIG SI VF2 dau la fel - data graf RI cu 10000 muchii
         # query_graph_edges = [[1488, 7465]]
         # node_attr = ["28", "18"]
 
+        # A doua serie de grafuri query pentru testare - fiecare este cate un STwig.
 
-########################################################################################################################
-        # query_graph_edges = [[0,1773],[0,1817],[0,2428],[0,3719],[0,4426],[0,8214],[0,9148]]
-        # node_attr = ["29", "25", "19", "6", "29", "13", "15", "20"]
+        # Grafuri query cu 3 noduri:
 
-        # Pentru graf mic cu 12 noduri.
-        # query_graph_edges = [[1, 2], [1, 3], [3, 5]]  # Trei pozitii, iar fiecare pozitie are o pereche de noduri.
-        # Arbore cu doua nivele
-        # node_attr = ["101", "102", "103", "105"]
+        # query_graph_edges = [[7711, 2243], [7711, 2259]]
+        # node_attr = ["16", "2", "17"]
 
-        # query_graph_edges = [[111, 444], [111, 1010], [111, 888], [1010, 1212]] # Patru pozitii, iar fiecare pozitie are o pereche de noduri.
-        # Arbore cu doua nivele
+        # query_graph_edges = [[2670, 10109], [2670, 10387]]
+        # node_attr = ["29", "30", "20"]
 
-        # query_graph_edges = [[11111, 222222], [11111, 44444], [11111, 33333], [33333, 55555]] # Bucla infinita la BTR?!
+        # query_graph_edges = [[4164, 3526], [4164, 5687]]
+        # node_attr = ["10", "26", "2"]
 
-        # Folosit:
-        # query_graph_edges = [[11111, 222222], [11111, 44444], [11111, 33333], [44444, 55555]]
-        # node_attr = ["101", "102", "104", "103", "105"]
-########################################################################################################################
+        # query_graph_edges = [[5636, 2904], [5636, 3414]]
+        # node_attr = ["16", "6", "30"]
+
+        # query_graph_edges = [[10553, 7888], [10553, 8186]]
+        # node_attr = ["3", "27", "27"]
+
+
+        # Grafuri query cu 6 noduri:
+
+        # query_graph_edges = [[11041, 2467], [11041, 2607], [11041, 2650], [11041, 2904], [11041, 3414]]
+        # node_attr = ["18", "23", "11", "9", "6", "30"]
+
+        # query_graph_edges = [[7563, 5755], [7563, 6256], [7563, 6784], [7563, 7289], [7563, 7308]]
+        # node_attr = ["18", "23", "3", "15", "26", "2"]
+
+        # query_graph_edges = [[6880, 5687], [6880, 6392], [6880, 9094], [6880, 12206], [6880, 11000]]
+        # node_attr = [["9", "2", "23", "10", "22", "24"]]
+
+        # query_graph_edges = [[7190, 2900], [7190, 3255], [7190, 3258], [7190, 3411], [7190, 3586]]
+        # node_attr = ["3", "5", "24", "11", "5", "14"]
+
+        # query_graph_edges = [[12472, 10543], [12472, 10688], [12472, 10752], [12472, 10808], [12472, 10978]]
+        # node_attr = ["8", "8", "5", "25", "15", "14"]
+
+
+        # Grafuri query cu 9 noduri:
+
+        # query_graph_edges = [[531,5399], [531,5671], [531,6393], [531,6702], [531,7289], [531,7421], [531,7438], [531,8066]]
+        # node_attr = ["20", "32", "20", "22", "31", "26", "9", "16", "18"]
+
+        # query_graph_edges = [[831,4915], [831,4924], [831,4976], [831,5144], [831,5157], [831,5164], [831,5272], [831,5399]]
+        # node_attr = ["17", "24", "22", "14", "12", "32", "25", "2", "32"]
+
+        # query_graph_edges = [[5414,1300], [5414,1341], [5414,1349], [5414,1365], [5414,1466], [5414,1519], [5414,1546], [5414,1547]]
+        # node_attr = ["14", "3", "30", "20", "25", "8", "7", "24", "7"]
+
+        # query_graph_edges = [[7020,2430], [7020,2473], [7020,2508], [7020,2540], [7020,2560], [7020,2573], [7020,2724], [7020,2771]]
+        # node_attr = ["21", "9", "18", "24", "16", "26", "21", "6", "21"]
+
+        query_graph_edges = [[11000,8269], [11000,8429], [11000,8507], [11000,9430], [11000,10327], [11000,10426], [11000,11319], [11000,11783]]
+        node_attr = ["24", "19", "32", "25", "32", "24", "26", "11", "12"]
+
 
         query_graph.add_edges_from(query_graph_edges)
 
