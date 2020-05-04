@@ -814,9 +814,9 @@ def subgraph_search(partial_solution, query_graph_dict, data_graph):
                     c_sol = copy.deepcopy(partial_solution)
                     # print(is_joinable(3, [1,2], data_graph, query_graph_dict))
                     complete_solutions.append(c_sol)
-                    for c_sol_elem in c_sol:
-                        f1.write(str(c_sol_elem) + " ")
-                    f1.write("\n")
+                    # for c_sol_elem in c_sol:
+                    #     f1.write(str(c_sol_elem) + " ")
+                    # f1.write("\n")
                     # print("One complete solution found!")
                     # print()
                     # print(Fore.GREEN + Style.BRIGHT + "List of complete solutions: ")
@@ -891,6 +891,11 @@ def subgraph_search(partial_solution, query_graph_dict, data_graph):
             if partial_solution == []:
                 # i = False
 
+                # f2 = open("file_Backtracking Algorithm execution times.txt", "a")
+                # f2.write(str(total_time) + " ")
+                # f2.write("\n")
+                # f2.close()
+
                 print("\n" + Fore.GREEN + Style.BRIGHT + "Backtracking results: ")
                 for cs in complete_solutions:
                     print(cs)
@@ -900,10 +905,7 @@ def subgraph_search(partial_solution, query_graph_dict, data_graph):
                 print("Execution time for Backtracking Algorithm (seconds): ")
                 total_time = timer() - start_time
                 print(total_time)
-                f2 = open("file_Backtracking Algorithm execution times.txt", "a")
-                f2.write(str(total_time) + " ")
-                f2.write("\n")
-                f2.close()
+
                 exit(0)
 
             # go back a position with restore position()
@@ -1216,7 +1218,7 @@ node_list_aux = copy.deepcopy(list(dataGraph.nodes()))
 ####################################################################################
 
 # Fisier text:
-f1 = open("file_Backtracking Algorithm output.txt", "w+")
+# f1 = open("file_Backtracking Algorithm output.txt", "w+")
 
 # Executia algoritmului Backtracking:
 try:
