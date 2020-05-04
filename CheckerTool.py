@@ -68,10 +68,10 @@ for vf2_line1 in f2_int_lines:
         # counter += 1
         result = all(elem in vf2_line1 for elem in stwig_line1)
         if result:
-            print("STwig line: " + str(stwig_line1) + " | VF2 line: " + str(vf2_line1) + " | " + str(result))
+            print("GNS1 line: " + str(stwig_line1) + " | VF2 line: " + str(vf2_line1) + " | " + str(result))
             counter = counter + 1
 print()
-print("counter_stwig: " + str(counter_stwig))
+print("counter_gns1: " + str(counter_stwig))
 print("counter_vf2: " + str(counter_vf2))
 print("total count: " + str(counter))
 
