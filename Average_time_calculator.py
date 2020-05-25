@@ -1,15 +1,17 @@
-# f1 = open("file_STwig Algorithm execution times.txt", "r+")
+f1 = open("file_STwig Algorithm execution times.txt", "r+")
+
 # f1 = open("file_VF2 Algorithm execution times.txt", "r+")
-f1 = open("file_GNS1_Backtracking_STwig_Matching_Algorithm_execution_times.txt", "r+")
+# f1 = open("file_GNS1_Backtracking_STwig_Matching_Algorithm_execution_times.txt", "r+")
 
 list_of_execution_times = []
 times_sum = 0
 result = 0
 f1_string_lines = []
 
-# with open("file_STwig Algorithm execution times.txt", "r") as rd:
+with open("file_STwig Algorithm execution times.txt", "r") as rd:
+
 # with open("file_VF2 Algorithm execution times.txt", "r") as rd:
-with open("file_GNS1_Backtracking_STwig_Matching_Algorithm_execution_times.txt", "r") as rd:
+# with open("file_GNS1_Backtracking_STwig_Matching_Algorithm_execution_times.txt", "r") as rd:
 
     # Read lines in loop
     for line in rd:
