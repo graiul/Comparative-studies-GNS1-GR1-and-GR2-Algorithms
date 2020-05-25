@@ -1,10 +1,9 @@
 from asyncio import wait
 
 f1 = open("file_GNS1_Backtracking_STwig_Matching_Algorithm_output.txt", "r+")
-# f1 = open("file_STwig Algorithm output.txt", "r+")
 
-f2 = open("file_VF2 Algorithm output.txt", "r+")
-# f2 = open("file_GNS1_Backtracking_STwig_Matching_Algorithm_output.txt", "r+")
+f2 = open("file_STwig Algorithm output.txt", "r+")
+# f2 = open("file_VF2 Algorithm output.txt", "r+")
 
 
 # https://www.techbeamers.com/python-read-file-line-by-line/
@@ -18,21 +17,23 @@ with open("file_GNS1_Backtracking_STwig_Matching_Algorithm_output.txt", "r") as 
     for line in rd:
         # All lines (besides the last) will include  newline, so strip it
         f1_string_lines.append(line.strip())
-with open("file_VF2 Algorithm output.txt", "r") as rd2:
+
+with open("file_STwig Algorithm output.txt", "r") as rd2:
+# with open("file_VF2 Algorithm output.txt", "r") as rd2:
     # Read lines in loop
     for line in rd2:
         # All lines (besides the last) will include  newline, so strip it
         f2_string_lines.append(line.strip())
 
 f1_int_lines = []
-int_stwig_alg_line = []
+int_gns1_line = []
 for stwig_line in f1_string_lines:
     # https://www.geeksforgeeks.org/python-string-split/
     string_backtracking_line = stwig_line.split(" ")
     for string_backtracking_line_element in string_backtracking_line:
-        int_stwig_alg_line.append(int(string_backtracking_line_element))
-    f1_int_lines.append(int_stwig_alg_line)
-    int_stwig_alg_line = []
+        int_gns1_line.append(int(string_backtracking_line_element))
+    f1_int_lines.append(int_gns1_line)
+    int_gns1_line = []
 
 # for item in f1_int_lines:
 #     print(item)
@@ -52,26 +53,27 @@ for stwig_line in f2_string_lines:
 #     print(item2)
 # print()
 
+counter_gns1 = 0
 counter_stwig = 0
-counter_vf2 = 0
 counter = 0
-for stwig_line in f1_int_lines:
+for gns1_line in f1_int_lines:
+    counter_gns1 += 1
+for stwig_line in f2_int_lines:
     counter_stwig += 1
-for vf2_line in f2_int_lines:
-    counter_vf2 += 1
 
 # https://thispointer.com/python-check-if-a-list-contains-all-the-elements-of-another-list/
-for vf2_line1 in f2_int_lines:
+for stwig_line1 in f2_int_lines:
     # print("STwig line: " + str(stwig_line))
-    for stwig_line1 in f1_int_lines:
+    for gns1_line1 in f1_int_lines:
         # print("Backtracking line: " + str(backtracking_line))
         # counter += 1
-        result = all(elem in vf2_line1 for elem in stwig_line1)
+        result = all(elem in stwig_line1 for elem in gns1_line1)
         if result:
-            print("GNS1 line: " + str(stwig_line1) + " | VF2 line: " + str(vf2_line1) + " | " + str(result))
+            print("GNS1 line: " + str(gns1_line1) + " | STwig Alg line: " + str(stwig_line1) + " | " + str(result))
             counter = counter + 1
 print()
-print("counter_gns1: " + str(counter_stwig))
-print("counter_vf2: " + str(counter_vf2))
-print("total count: " + str(counter))
+print("counter_gns1: " + str(counter_gns1))
+print("counter_vf2: " + str(counter_stwig))
+print("total count, must be equal to previous counters, who must also be equal to eachother: ")
+print(counter)
 
