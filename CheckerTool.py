@@ -73,7 +73,7 @@ for stwig_line1 in f2_int_lines:
             counter = counter + 1
 print()
 print("counter_gns1: " + str(counter_gns1))
-print("counter_vf2: " + str(counter_stwig))
+print("counter_stwig: " + str(counter_stwig))
 print("total count, must be equal to previous counters, who must also be equal to eachother: ")
 print(counter)
 
