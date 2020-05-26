@@ -37,7 +37,9 @@ with open("file_VF2 Algorithm output.txt", "r") as rd2:
         f2_string_lines.append(line.strip())
 # PENTRU VF2 ALGORITHM #############################################################
 
-# ACESTE DOUA SECTIUNI VOR RAMANE INTOTDEAUNA DECOMENTATE ##########################
+# CONVERSIA DE LA STRING DIN FISIERE LA INT ########################################
+
+# PENTRU GNS1 ALGORITHM. RAMANE TOT TIMPUL DECOMENTAT ##############################
 f1_int_lines = []
 int_gns1_line = []
 for stwig_line in f1_string_lines:
@@ -47,19 +49,35 @@ for stwig_line in f1_string_lines:
         int_gns1_line.append(int(string_backtracking_line_element))
     f1_int_lines.append(int_gns1_line)
     int_gns1_line = []
+# PENTRU GNS1 ALGORITHM. RAMANE TOT TIMPUL DECOMENTAT ###############################
+
+# PENTRU STWIG ALGORITHM ############################################################
+# f2_int_lines = []
+# int_stwig_line = []
+# for stwig_line in f2_string_lines:
+#     string_stwig_line = stwig_line.split(" ")
+#     for string_stwig_line_element in string_stwig_line:
+#         int_stwig_line.append(int(string_stwig_line_element))
+#     f2_int_lines.append(int_stwig_line)
+#     int_stwig_line = []
+# PENTRU STWIG ALGORITHM ############################################################
+
+# PENTRU VF2 ALGORITHM ##############################################################
+f2_int_lines = []
+int_vf2_line = []
+for vf2_line in f2_string_lines:
+    string_vf2_line = vf2_line.split(" ")
+    for string_vf2_line_element in string_vf2_line:
+        int_vf2_line.append(int(string_vf2_line_element))
+    f2_int_lines.append(int_vf2_line)
+    int_vf2_line = []
+# PENTRU VF2 ALGORITHM ##############################################################
+
+# CONVERSIA DE LA STRING DIN FISIERE LA INT #########################################
+
 
 # for item in f1_int_lines:
 #     print(item)
-
-
-f2_int_lines = []
-int_stwig_line = []
-for stwig_line in f2_string_lines:
-    string_stwig_line = stwig_line.split(" ")
-    for string_stwig_line_element in string_stwig_line:
-        int_stwig_line.append(int(string_stwig_line_element))
-    f2_int_lines.append(int_stwig_line)
-    int_stwig_line = []
 
 # print()
 # for item2 in f2_int_lines:
