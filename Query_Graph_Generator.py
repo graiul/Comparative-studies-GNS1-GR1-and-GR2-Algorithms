@@ -48,8 +48,9 @@ class Query_Graph_Generator(object):
         # query_graph_edges = [[1488, 7465]]
         # node_attr = ["28", "18"]
 
-        # A doua serie de grafuri query pentru testare - fiecare este cate un STwig.
 
+        # A doua serie de grafuri query pentru testare - fiecare este cate un STwig.
+        # STwig Alg si VF2 Alg, pentru Articolul 2
         # Grafuri query cu 3 noduri:
 
         # ok
@@ -108,16 +109,19 @@ class Query_Graph_Generator(object):
 
         # Dupa 12 ore nu a terminat executia - STwig alg. Acesta este graful 11 din articolul 2.
         # Am incercat o noua executie: 28 apr 2020 ora 930 - 30 apr 2020 ora 1533 si a dat MemoryError la sfarsit. Mesajul complet de eroare cat si acest STwig input este aflat intr-un fisier text in directorul articolului 2.
+        # Am rulat apoi cu VF2 cu succes si in timp fezabil de ~190 secunde.
         # query_graph_edges = [[3719, 850], [3719, 1287], [3719, 2035], [3719, 2611], [3719, 2764], [3719, 3366], [3719, 3482], [3719, 4005]]
         # node_attr = ["29", "32", "21", "19", "28", "17", "8", "6", "27"]
 
 
         # ------------------------------------------------------------------------------------------------------------------------------------
-        # Am testat cu 9 si cu 8 noduri, fara sa returneze rezultate in timp fezabil.
+        # STwig Alg: Am testat cu 9 si cu 8 noduri, fara sa returneze rezultate in timp fezabil.
         # query_graph_edges = [[8214, 2598], [8214, 2614], [8214, 2670], [8214, 3238], [8214, 3253], [8214, 3366], [8214, 3620]] #, [8214, 3963]]
         # node_attr = ["15", "19", "32", "29", "11", "13", "8", "27"] #, "18"]
 
         # ------------------------------------------------------------------------------------------------------------------------------------
+
+        # Urmatoarele nu sunt valabile pentru STwig Alg si VF2 Alg.
         # query_graph_edges = [[531,5399], [531,5671], [531,6393], [531,6702], [531,7289], [531,7421], [531,7438], [531,8066]]
         # node_attr = ["20", "32", "20", "22", "31", "26", "9", "16", "18"]
 
@@ -174,48 +178,78 @@ class Query_Graph_Generator(object):
         # Grafuri query cu forma STwig cu patru noduri si trei muchii pentru
         # testarea algoritmilor  STwig, VF2 si GNS1 pentru Articolul 3.
 
+        # 1
         # GNS1 ruleaza fara bucla infinita
-        query_graph_edges = [[11041, 2467], [11041, 2607], [11041, 2650]]
-        node_attr = ["18", "23", "11", "9"]
+        # Ruleaza ok GNS1 si VF2.
+        # Ruleaza ok si cu STwig Algorithm.
+        # query_graph_edges = [[11041, 2467], [11041, 2607], [11041, 2650]]
+        # node_attr = ["18", "23", "11", "9"]
 
+        # 2
         # GNS1 ruleaza fara bucla infinita
+        # Ruleaza ok GNS1 si VF2.
+        # Ruleaza ok si cu STwig Algorithm.
         # query_graph_edges = [[8028, 3850], [8028, 58], [8028, 7465]]
         # node_attr = ["6", "4", "20", "18"]
 
+        # 3
         # GNS1 ruleaza fara bucla infinita
+        # Ruleaza ok GNS1 si VF2.
+        # Ruleaza ok si cu STwig Algorithm.
         # query_graph_edges = [[2850, 979], [2850, 3526], [2850, 5591]]
         # node_attr = ["27", "14", "26", "3"]
 
+        # 4
         # GNS1 ruleaza fara bucla infinita
+        # Ruleaza ok GNS1 si VF2.
+        # Ruleaza ok si cu STwig Algorithm.
         # query_graph_edges = [[1773, 1488], [1773, 1898], [1773, 2285]]
         # node_attr = ["25", "28", "29", "27"]
 
+        # 5
         # GNS1 ruleaza fara bucla infinita
+        # Ruleaza ok GNS1 si VF2.
+        # Ruleaza ok si cu STwig Algorithm.
         # query_graph_edges = [[0, 1773], [0, 1817],[0,4426]]
         # node_attr = ["29", "25", "19", "13"]
 
 
         # Grafuri query cu forma STwig cu trei noduri si doua muchii pentru testarea algoritmilor VF2 si GNS1 pentru Articolul 3.
 
+        # 6
+        # Ruleaza ok GNS1 si VF2.
         # GNS1 ruleaza fara bucla infinita
+        # Ruleaza ok si cu STwig Algorithm.
         # query_graph_edges = [[2462,4829], [2462,5730]]
         # node_attr = ["18", "5", "7"]
 
+        # 7
+        # Ruleaza ok GNS1 si VF2.
         # GNS1 ruleaza fara bucla infinita
+        # Ruleaza ok si cu STwig Algorithm.
         # query_graph_edges = [[11000, 10426], [11000, 11319]]
         # node_attr = ["24", "26", "11"]
 
+        # 8
+        # Ruleaza ok GNS1 si VF2.
         # GNS1 ruleaza fara bucla infinita
+        # Ruleaza ok si cu STwig Algorithm.
         # query_graph_edges = [[5157, 580], [5157, 734]]
         # node_attr = ["32", "18", "17"]
 
+        # 9
+        # Ruleaza ok GNS1 si VF2.
         # GNS1 ruleaza fara bucla infinita
+        # Ruleaza ok si cu STwig Algorithm.
         # query_graph_edges = [[6954, 7970], [6954, 8161]]
         # node_attr = ["14", "22", "25"]
 
+        # 10
+        # Ruleaza ok GNS1 si VF2.
         # GNS1 ruleaza fara bucla infinita
-        # query_graph_edges = [[3842, 7591], [3842, 7596]]
-        # node_attr = ["31", "6", "20"]
+        # Ruleaza ok si cu STwig Algorithm.
+        query_graph_edges = [[3842, 7591], [3842, 7596]]
+        node_attr = ["31", "6", "20"]
 
 
 
