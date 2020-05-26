@@ -88,8 +88,8 @@ class VF2Algorithm(GenericQueryProc):
         graph_choice = "ri"
         self.queryGraph = query_graph_gen.gen_RI_query_graph()
         nx.set_node_attributes(self.queryGraph, False, 'matched')
-        print("Query graph nodes: " + str(self.queryGraph.nodes(data=True)))
-        print("Query graph edges: " + str(self.queryGraph.edges()))
+        # print("Query graph nodes: " + str(self.queryGraph.nodes(data=True)))
+        # print("Query graph edges: " + str(self.queryGraph.edges()))
 
         # GRAFUL DATA DIN NEO4J
         # neograph_data = Graph("bolt://127.0.0.1:7690", auth=("neo4j", "changeme"))  # Data Graph RI din READ_REPLICA
@@ -129,9 +129,9 @@ class VF2Algorithm(GenericQueryProc):
 
         if len(M) > 0:
             # Matching-ul trebuie sa fie fara id-uri, doar label-uri.
-            print("M: ")
-            for m_item in M:
-                print(m_item)
+            # print("M: ")
+            # for m_item in M:
+            #     print(m_item)
             self.queryGraph.nodes[M[0][0]]['matched'] = True
             self.dataGraph.nodes[M[0][1]]['matched'] = True
 
@@ -192,6 +192,9 @@ class VF2Algorithm(GenericQueryProc):
 
             candidates_refined = self.refineCandidates(M, u, candidates_u)
             # print("\nCandidatii rafinati ai nodului " + str(u) + ": " + str(candidates_refined))
+            # print("candidates_refined:")
+            # print(candidates_refined)
+            # print(len(list(candidates_refined)))
 
             if candidates_refined == None:
                 # print("No refined candidates for node: " + str(u))
@@ -485,7 +488,7 @@ class VF2Algorithm(GenericQueryProc):
                 # print("         Facut intersectiile de la Conditia (2)")
                 # print("         " + str(len(first_intersection)))
                 # print("         " + str(len(second_intersection)))
-                print("For breakpoint.")
+                # print("For breakpoint.")
                 # print("Cardinalul primei intersectii > decat celei de a doua?")
                 if len(first_intersection) > len(second_intersection):
                     # print("         Conditia(2) intra in vigoare, astfel avem:")
