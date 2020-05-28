@@ -64,3 +64,19 @@ class VF2Algorithm_GraphQL():
         if len(M) > 0:
             self.queryGraph.nodes[M[0][0]]['matched'] = True
             self.dataGraph.nodes[M[0][1]]['matched'] = True
+
+    # Regula GraphQL nr 1: neighborhood signature based pruning, p133-han.pdf, pagina 6.
+    def sig_GraphQL_query_graph(self, vertex):
+        vertex_neighbors = list(self.queryGraph.neighbors(vertex))
+        # print(vertex_neighbors)
+        signature = []
+        for vertex_neighbor in vertex_neighbors:
+            label = self.queryGraph.nodes[vertex_neighbor]['label']
+            # print(label)
+            signature.append(label)
+        return signature
+M = []
+vf2grql = VF2Algorithm_GraphQL(M)
+
+print(vf2grql.sig_GraphQL_query_graph(3842))
+
