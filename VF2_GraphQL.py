@@ -73,10 +73,47 @@ class VF2Algorithm_GraphQL():
         for vertex_neighbor in vertex_neighbors:
             label = self.queryGraph.nodes[vertex_neighbor]['label']
             # print(label)
+            # print(type(label))
             signature.append(label)
         return signature
+
+    def sig_GraphQL_data_graph(self, node_id):
+        signature2 = []
+        neograph_data = Graph("bolt://127.0.0.1:7687",
+                              auth=("neo4j", "password"))  # Data Graph RI - O singura instanta de Neo4J
+        cqlQuery2 = "MATCH(n{node_id: '" + str(node_id) + "'})--(m) return m"
+        result2 = list(neograph_data.run(cqlQuery2).to_ndarray())
+
+        for neighbor in result2:
+            # print(neighbor)
+
+            aux = str(neighbor).split("id: '")[1]
+            neighbor_id = int(str(aux).split("',")[0])
+
+            aux2 = str(neighbor).split("node_label: ")[1]
+            # print(aux2)
+            neighbor_label = str(aux2).split("})]")[0]
+            # print(type(neighbor_label))
+
+            # print(neighbor_id)
+            # print(neighbor_label)
+            signature2.append(neighbor_label)
+        return signature2
+
+    # networkx.github.io/documentation/networkx-1.10/reference/generated/networkx.algorithms.traversal.breadth_first_search.bfs_tree.html
+    def breadth_first_search_tree_for_query_graph_node(self, node_id, depth_r):
+        return list(nx.bfs_tree(self.queryGraph, node_id, depth_r))
+
+    # networkx.github.io/documentation/networkx-1.10/reference/generated/networkx.algorithms.traversal.breadth_first_search.bfs_tree.html
+    def breadth_first_search_tree_for_data_graph_node(self, node_id, depth_r):
+        return list(nx.bfs_tree(self.dataGraph, node_id, depth_limit=depth_r))
+
+
+
 M = []
 vf2grql = VF2Algorithm_GraphQL(M)
 
-print(vf2grql.sig_GraphQL_query_graph(3842))
-
+# print(vf2grql.sig_GraphQL_query_graph(3842))
+# print(vf2grql.sig_GraphQL_data_graph(11000))
+print(vf2grql.breadth_first_search_tree_for_query_graph_node(3842, 0))
+print(vf2grql.breadth_first_search_tree_for_data_graph_node(11000, 0))
