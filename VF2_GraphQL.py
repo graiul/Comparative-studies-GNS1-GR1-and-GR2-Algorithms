@@ -16,6 +16,7 @@ from colorama import init
 from colorama import Fore, Back, Style
 init()
 
+
 class VF2Algorithm_GraphQL():
 
     queryGraphFile = None
@@ -115,5 +116,31 @@ vf2grql = VF2Algorithm_GraphQL(M)
 
 # print(vf2grql.sig_GraphQL_query_graph(3842))
 # print(vf2grql.sig_GraphQL_data_graph(11000))
-print(vf2grql.breadth_first_search_tree_for_query_graph_node(3842, 0))
-print(vf2grql.breadth_first_search_tree_for_data_graph_node(11000, 0))
+# print(vf2grql.breadth_first_search_tree_for_query_graph_node(3842, 0))
+# print(vf2grql.breadth_first_search_tree_for_data_graph_node(11000, 0))
+
+
+# p133-han.pdf, pag 6, 1) neighborhood signature based pruning
+
+# stackoverflow.com/questions/16579085/how-can-i-verify-if-one-list-is-a-subset-of-another
+# - raspunsul al doilea, dat de Yulan Liu la Nov 24 2014 ora 23:29 si editat de max la Feb 5 2019 ora 00:21.
+# docs.python.org/2/library/stdtypes.html#set.issubset
+# set1 = ["A", "A", "C"]
+# # set2 = ["A", "A", "C", "B"]
+# set2 = ["A", "B", "D"]
+# if set(set1) <= (set(set2)):
+#     print(True)
+# else:
+#     print(False)
+
+
+# p133-han.pdf, pag 6, 2) the pseudo subgraph isomorphism test based pruning.
+
+# bfs_tree_query_graph = vf2grql.breadth_first_search_tree_for_query_graph_node(3842, 0)
+# bfs_tree_data_graph = vf2grql.breadth_first_search_tree_for_data_graph_node(11000, 0)
+# if set(bfs_tree_query_graph) <= set(bfs_tree_data_graph):
+#     print(True)
+# else:
+#     print(False)
+
+
