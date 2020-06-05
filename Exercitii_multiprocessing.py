@@ -1,3 +1,6 @@
+from timeit import default_timer as timer
+
+# EXERCITIU 1
 # docs.python.org/2/library/multiprocessing.html
 import multiprocessing as mp
 # def f(x):
@@ -6,6 +9,7 @@ import multiprocessing as mp
 #     pool = mp.Pool(2)
 #     print(pool.map(f, [1,2,3]))
 
+# EXERCITIU 2
 # stonesoupprogramming.com/2017/09/11/python-multiprocessing-producer-consumer-pattern/
 # import os
 #
@@ -44,7 +48,7 @@ import multiprocessing as mp
 #         print(consumer_item)
 #         consumer_item.start()
 
-
+# EXERCITIU 3
 # towardsdatascience.com/speed-up-your-algorithms-part-3-parallelization-4d95c0888748
 # stackoverflow.com/questions/5442910/python-multiprocessing-pool-map-for-multiple-arguments
 # stackoverflow.com/questions/15639779/why-does-multiprocessing-use-only-a-single-core-after-i-import-numpy
@@ -58,15 +62,17 @@ import multiprocessing as mp
 import numpy as np
 # Numai pentru unix: os.system("taskset -p 0xff %d" % os.getpid())
 def sum(chunk):
+# def sum(chunk, queue):
     # Nu e nevoie. Chiar daca arata acelasi id pt fiecare proces, acest lucu e dat faptului ca suma fiecarui rand e calc rapid.
-    # Daca ar fi fiecare linie al mat cu 10000 elem, atunci ar fi mai multe procese.
+    # Daca ar fi fiecare linie al mat cu 1000000 elem, atunci ar fi mai multe procese.
     # Totusi, la rularea cu Concurrency Diagram, apar inca trei procese pe langa cel principal.
     # stackoverflow.com/questions/10190981/get-a-unique-id-for-worker-in-python-multiprocessing-pool
-    # print(mp.current_process())
+    print(mp.current_process())
     sum = 0
-    print(chunk)
+    # print(chunk)
     for elem in chunk:
         sum = sum + elem
+    # queue.put(sum)
     print(sum)
 
 def sum_3_lines(line1, line2, line3):
@@ -85,19 +91,59 @@ def sum_3_lines(line1, line2, line3):
     print(sum3)
 
 
-if __name__ == '__main__':
-    pool = mp.Pool(processes=3)
-    # stackoverflow.com/questions/4535374/initialize-a-numpy-array
-    mat = np.array([[1, 2, 3], [3, 4, 5], [5, 6, 0]])
-    res = mp.Queue()
+# if __name__ == '__main__':
+#     pool = mp.Pool(processes=9)
+    # #stackoverflow.com/questions/4535374/initialize-a-numpy-array
+    # #mat = np.array([[1, 2, 3], [3, 4, 5], [5, 6, 0]])
+    # #l1 = np.ones(1000000)
+    # #l2 = np.ones(1000000)
+    # #l3 = np.ones(1000000)
+    # #mat = np.array([l1, l2, l3])
+    # mat = np.ones((100, 100))
+    # #print(mat)
+
+    # #res = mp.Queue()
 
     # Cu pool.map, un singur argument pt functia sum
+    # start_time = timer()
     # for line in mat:
     #     list_line = line.tolist()
     #     pool.map(sum, [list_line])
+    # total_time = timer() - start_time
+    # print(total_time)
 
     # stackoverflow.com/questions/5442910/python-multiprocessing-pool-map-for-multiple-arguments
     # Cu pool.starmap, mai multe argumente pt functia sum
     # Inca mai am de lucru aici. Rezolvat pb asem in optiunea 94 din main menu pt alg stwig.
-    pool.starmap(sum_3_lines, mat)
+    # pool.starmap(sum_3_lines, mat)
 
+# EXERCITIU 4
+# geeksforgeeks.org/synchronization-pooling-processes-python/
+def withdraw(balance, lock):
+    for v in range(10000):
+        lock.acquire()
+        balance.value = balance.value - 1
+        lock.release()
+def deposit(balance, lock):
+    for v in range(10000):
+        lock.acquire()
+        balance.value = balance.value + 1
+        lock.release()
+def perform_transaction():
+    balance = mp.Value('i', 100)
+    lock = mp.Lock()
+    p1 = mp.Process(target=withdraw, args=(balance, lock, ))
+    p2 = mp.Process(target=deposit, args=(balance, lock, ))
+    p1.start()
+    p2.start()
+    p1.join()
+    p2.join()
+    print("Final balance = {}".format(balance.value))
+
+if __name__ == '__main__':
+    for v in range(10):
+        perform_transaction()
+
+# Articole inrudite cu exercitiul 4:
+# geeksforgeeks.org/multiprocessing-python-set-1/
+# geeksforgeeks.org/python-how-to-lock-critical-sections/, cu pachetul "threading", atentie la GIL.
