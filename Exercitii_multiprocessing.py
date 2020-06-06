@@ -160,3 +160,6 @@ if __name__ == '__main__':
 # docs.python.org/3.7/library/multiprocessing.html#multiprocessing-managers
 
 # MULTIPROCESSING GUIDELINES: docs.python.org/3.7/library/multiprocessing.html#multiprocessing-programming
+
+# numpy: geeksforgeeks.org/python-numpy/
+# Pandas DataFrame: geeksforgeeks.org/python-pandas-dataframe/
