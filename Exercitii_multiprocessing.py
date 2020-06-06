@@ -148,3 +148,15 @@ if __name__ == '__main__':
 # geeksforgeeks.org/multiprocessing-python-set-1/
 # geeksforgeeks.org/python-how-to-lock-critical-sections/, cu pachetul "threading", atentie la GIL.
 # geeksforgeeks.org/python-difference-between-lock-and-rlock-objects, cu pachetul "threading", atentie la GIL.
+
+# Alte adrese de citit:
+# geeksforgeeks.org/difference-between-asymmetric-and-symmetric-multiprocessing/
+# geeksforgeeks.org/multiple-processor-scheduling-in-operating-system/
+
+# Documentatie oficiala Python 3.7 multiprocessing: docs.python.org/3.7/library/multiprocessing.html
+# docs.python.org/3.7/library/multiprocessing.html#synchronization-primitives, contine detalii despre multiprocessing.Barrier,
+# mentionand "clona al threading.Barrier". Acolo se pot gasi detalii.
+# docs.python.org/3.7/library/multiprocessing.html#pipes-and-queues
+# docs.python.org/3.7/library/multiprocessing.html#multiprocessing-managers
+
+# MULTIPROCESSING GUIDELINES: docs.python.org/3.7/library/multiprocessing.html#multiprocessing-programming
