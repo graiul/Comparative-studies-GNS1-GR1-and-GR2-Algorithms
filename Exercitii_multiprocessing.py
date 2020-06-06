@@ -147,3 +147,4 @@ if __name__ == '__main__':
 # Articole inrudite cu exercitiul 4:
 # geeksforgeeks.org/multiprocessing-python-set-1/
 # geeksforgeeks.org/python-how-to-lock-critical-sections/, cu pachetul "threading", atentie la GIL.
+# geeksforgeeks.org/python-difference-between-lock-and-rlock-objects, cu pachetul "threading", atentie la GIL.
