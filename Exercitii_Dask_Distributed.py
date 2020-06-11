@@ -55,7 +55,13 @@ if __name__ == '__main__': # https://github.com/dask/distributed/issues/2422
     lc = LocalCluster()
     lc.scale(2)
     client = Client(lc)
+    # https://docs.dask.org/en/latest/futures.html#distributed.Client.scheduler_info
+    # Am ales sa afisez pe cate o linie fiecare informatie din dictionarl returnat de Client.scheduler_info().
+    # La item-ul 'workers se afla un subdictionar cu informatii despre procesele din LocalCluster/Pool, la campul 'id'.
+    for item in client.scheduler_info().items():
+        print(item)
     q = Queue()
+
     # names = [['Master Shake', 'Meatwad', 'Frylock', 'Carl'],
     #              ['Early', 'Rusty', 'Sheriff', 'Granny', 'Lil'],
     #              ['Rick', 'Morty', 'Jerry', 'Summer', 'Beth']]
