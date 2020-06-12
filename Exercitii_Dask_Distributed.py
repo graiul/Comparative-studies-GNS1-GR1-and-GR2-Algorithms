@@ -92,7 +92,9 @@
 #     # print(e)
 #     print(e.result())
 
-# # EXERCITIUL 3 - un producator si mai multi consumatori, iar fiecare consumator este producator la randul lui.
+# # EXERCITIUL 3 - un producator si mai multi consumatori,
+# iar fiecare consumator este producator la randul lui si lucreaza cu material doar de la consumatorul precedent lyui.
+
 # # https://stonesoupprogramming.com/2017/09/11/python-multiprocessing-producer-consumer-pattern/
 # # https://docs.dask.org/en/latest/futures.html?highlight=queue#queues
 from dask.distributed import Client, LocalCluster, Queue
@@ -141,8 +143,13 @@ def consumer(queue_of_products, queue_of_futures):
         # new_name_from_producer = queue_of_products.get()
         # print(new_name_from_producer)
 
-        queue_of_finished_products.put(new_consumer_product)
+        # queue_of_finished_products.put(new_consumer_product)
 
+#         Pentru ca un consumator sa preia nume noi de la consumatorul precedent treb folosita o bucla infinita care sa
+# caute intr-o stiva si sa prelucreze in continuare. Acea stiva va trebui sa fie:
+# - stiva consumatorului precedent in care se pun nume produse de cons respectiv
+# - SAU o stiva comuna in care se pun nume finalizate, ia prin finalizate ma refer ca au fost prelucrate l rand de consumatorii precedenti
+# - cazul primului consumator care preia nume proaspat produse de producator.
 
 if __name__ == '__main__': # https://github.com/dask/distributed/issues/2422
                            # https://github.com/dask/distributed/pull/2462
