@@ -3,22 +3,97 @@
 
 # # https://stonesoupprogramming.com/2017/09/11/python-multiprocessing-producer-consumer-pattern/
 # # https://docs.dask.org/en/latest/futures.html?highlight=queue#queues
-import copy
 import random
 import time
+
+############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
+import copy
+
+
+import networkx as nx
+from collections import OrderedDict
+
+# https://stackoverflow.com/questions/6537487/changing-shell-text-color-windows
+# https://pypi.org/project/colorama/
+from colorama import init
+from colorama import Fore, Back, Style
+
+from Query_Graph_Generator import Query_Graph_Generator
+
+init()
+
+# https://stackoverflow.com/questions/4564559/get-exception-description-and-stack-trace-which-caused-an-exception-all-as-a-st
+import traceback
+
+from py2neo import Graph, Subgraph
+
+from timeit import default_timer as timer
+############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
+
 
 from dask.distributed import Client, LocalCluster, Queue
 import multiprocessing
 import os
 # Producer function that places data on the Queue
-def producer(queue_of_the_producer, names):
-    # Place our names on the Queue
-    for name in names:
-        # time.sleep(random.randint(0, 10))
-        queue_of_the_producer.put(name)
-    # print("\nQueue of producer results: ")
-    # aux = copy.deepcopy(queue_of_the_producer)
-    # print(aux.get(batch=True))
+# Va produce noduri data cu label-ul radacinii din graful query STwig.
+def producer(queue_of_the_producer, query_stwig_1_dict):
+    query_stwig = list(query_stwig_1_dict.items())
+    # print(query_stwig)
+    query_stwig_root_node = query_stwig[0]
+    # print(query_stwig_root_node)
+    query_stwig_root_node_id = query_stwig_root_node[0]
+    query_stwig_root_node_label = query_stwig_root_node[1]
+    # print(query_stwig_root_node_id)
+    # print(query_stwig_root_node_label)
+
+
+    ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
+    # GRAFUL DATA DIN NEO4J
+    # neograph_data = Graph("bolt://127.0.0.1:7690", auth=("neo4j", "changeme")) # Data Graph RI - Cluster Neo4J
+    neograph_data = Graph("bolt://127.0.0.1:7687",
+                          auth=("neo4j", "password"))  # Data Graph RI - O singura instanta de Neo4J
+
+    cqlQuery = "MATCH p=(n)-[r:PPI]->(m) return n.node_id, m.node_id"
+    result = neograph_data.run(cqlQuery).to_ndarray()
+    edge_list = result.tolist()
+    # # print("edge_list: ")
+    # # print(edge_list)
+    edge_list_integer_ids = []
+    for string_edge in edge_list:
+        edge_list_integer_ids.append([int(i) for i in string_edge])
+    # # print("edge_list_integer_ids: ")
+    # # print(edge_list_integer_ids)
+
+    dataGraph = nx.Graph()
+    dataGraph.add_edges_from(sorted(edge_list_integer_ids))
+    cqlQuery2 = "MATCH (n) return n.node_id, n.node_label"
+    result2 = neograph_data.run(cqlQuery2).to_ndarray()
+    # # print("result2: ")
+    # # print(result2)
+    node_ids_as_integers_with_string_labels = []
+    for node in result2:
+        # # print(node[0])
+        node_ids_as_integers_with_string_labels.append([int(node[0]), node[1]])
+    # # print("node_ids_as_integers_with_string_labels: ")
+    # # print(node_ids_as_integers_with_string_labels)
+
+    node_attr_dict = OrderedDict(sorted(node_ids_as_integers_with_string_labels))
+    nx.set_node_attributes(dataGraph, node_attr_dict, 'label')
+############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
+
+############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
+    for node in list(dataGraph.nodes()):
+        if query_stwig_root_node_label == dataGraph.nodes[node]['label']:
+            queue_of_the_producer.put(node)
+############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
+
+    # nodes = list(dataGraph.nodes(data=True))
+    # for n in nodes:
+    #     queue_of_the_producer.put(n)
+
+    print("\nQueue of producer results: ")
+    aux = copy.deepcopy(queue_of_the_producer)
+    print(aux.get(batch=True))
 
 
 # The consumer function takes data off of the Queue
@@ -105,39 +180,59 @@ if __name__ == '__main__': # https://github.com/dask/distributed/issues/2422
     queue_of_finished_products_4 = Queue()
     queue_of_finished_products_5 = Queue()
 
-# names = [['Master Shake', 'Meatwad', 'Frylock', 'Carl'],
-    #              ['Early', 'Rusty', 'Sheriff', 'Granny', 'Lil'],
-    #              ['Rick', 'Morty', 'Jerry', 'Summer', 'Beth']]
+############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
+    # Aici cream un obiect graf query:
+    query_graph_gen = Query_Graph_Generator()
+    query_graph = query_graph_gen.gen_RI_query_graph()
+    query_stwig_1 = list(query_graph.nodes())
+    # print("Query STwig: " + str(query_stwig_1))
+    # Label-ul radacinii
+    # root_label = dataGraph.node[query_stwig_1[0]]['label']
+    root_label = query_graph.nodes[query_stwig_1[0]]['label']
+    # Label-urile vecinilor din lista
+    neighbor_labels = []
+    for n in query_stwig_1[1:]:
+       # neighbor_labels.append(dataGraph.node[n]['label'])
+       neighbor_labels.append(query_graph.nodes[n]['label'])
 
-    names = ['Master Shake', 'Meatwad', 'Frylock', 'Carl', 'Early', 'Rusty', 'Sheriff', 'Granny', 'Lil', 'Rick', 'Morty', 'Jerry', 'Summer', 'Beth', 'STOP']
+    query_stwig_1_as_labels = []
+    query_stwig_1_as_labels.append(root_label)
+    for nl in neighbor_labels:
+       query_stwig_1_as_labels.append(nl)
+    # print("query_stwig_1_as_labels: " + str(query_stwig_1_as_labels))
+    # print()
+    query_stwig_1_as_labels_source = copy.deepcopy(query_stwig_1_as_labels)
+
+    query_stwig_1_dict = OrderedDict(zip(query_stwig_1, query_stwig_1_as_labels_source))
+############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
 
     # Prin metoda submit() se da de lucru Pool-ului de procese create de LocalCluster, iar numarul de procese este cel dat prin metoda scale() dupa instantierea LocalCluster-ului.
-    a = client.submit(producer, queue_of_the_producer, names) # Producer-ul creaza coada cu nume.
+    a = client.submit(producer, queue_of_the_producer, query_stwig_1_dict) # Producer-ul creaza coada cu nume.
     # print(a)
-    # print(a.result())
+    print(a.result())
     # print(queue_of_the_producer.get(batch=True))
 
-    b = client.submit(consumer, queue_of_the_producer, queue_of_finished_products_1, queue_of_futures)
+    # b = client.submit(consumer, queue_of_the_producer, queue_of_finished_products_1, queue_of_futures)
     # print(b)
     # print(b.result())
     # queue_of_futures.put(b)
     # print("queue_of_finished_products_1: " + str(queue_of_finished_products_1.get(batch=True)))
 
-    c = client.submit(consumer, queue_of_finished_products_1, queue_of_finished_products_2, queue_of_futures)
+    # c = client.submit(consumer, queue_of_finished_products_1, queue_of_finished_products_2, queue_of_futures)
     # # # print(c)
     # print(c.result())
     # # queue_of_futures.put(c)
     # print("queue_of_finished_products_2: " + str(queue_of_finished_products_2.get(batch=True)))
 
-    d = client.submit(consumer, queue_of_finished_products_2, queue_of_finished_products_3, queue_of_futures)
+    # d = client.submit(consumer, queue_of_finished_products_2, queue_of_finished_products_3, queue_of_futures)
     # # # print(d)
     # print(d.result())
     # queue_of_futures.put(d)
 
-    e = client.submit(consumer, queue_of_finished_products_3, queue_of_finished_products_4, queue_of_futures)
+    # e = client.submit(consumer, queue_of_finished_products_3, queue_of_finished_products_4, queue_of_futures)
     # print(e)
     # print(e.result())
     # queue_of_futures.put(e)
 
-    f = client.submit(consumer, queue_of_finished_products_4, queue_of_finished_products_5, queue_of_futures)
-    print(f.result())
+    # f = client.submit(consumer, queue_of_finished_products_4, queue_of_finished_products_5, queue_of_futures)
+    # print(f.result())
