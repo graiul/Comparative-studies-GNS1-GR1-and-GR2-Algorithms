@@ -185,13 +185,13 @@ def consumer(queue_of_the_producer, queue_of_finished_products, queue_of_futures
     #
     #     # queue_of_finished_products.put(new_consumer_product)
 
-#         Pentru ca un consumator sa preia nume noi de la consumatorul precedent treb folosita o bucla infinita care sa
+# Pentru ca un consumator sa preia nume noi de la consumatorul precedent treb folosita o bucla infinita care sa
 # caute intr-o coada si sa prelucreze in continuare. Acea coada va trebui sa fie:
 # - IMPLEMENTAT: coada consumatorului precedent in care se pun nume produse de cons respectiv
 # - NU A FOST NEVOIE: SAU o coada comuna in care se pun nume finalizate, ia prin finalizate ma refer ca au fost prelucrate l rand de consumatorii precedenti
 # - IMPLEMENTAT: cazul primului consumator care preia nume proaspat produse de producator.
-# - URMEAZA crearea unei bucle infinite care preia material pana la intalnirea unui semnal de oprire.
-# Pentru acest lucru e nevoie de mult mai mult material in coada initiala de nume.
+# - IMPLEMENTAT crearea unei bucle infinite care preia material pana la intalnirea unui semnal de oprire.
+# - NU A FOST NEVOIE: Pentru acest lucru e nevoie de mult mai mult material in coada initiala de nume.
 if __name__ == '__main__': # https://github.com/dask/distributed/issues/2422
                            # https://github.com/dask/distributed/pull/2462
     # Client() foloseste un LocalCluster format din procese.
