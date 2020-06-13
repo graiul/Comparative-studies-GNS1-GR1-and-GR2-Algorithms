@@ -98,6 +98,8 @@
 # # https://stonesoupprogramming.com/2017/09/11/python-multiprocessing-producer-consumer-pattern/
 # # https://docs.dask.org/en/latest/futures.html?highlight=queue#queues
 import copy
+import random
+import time
 
 from dask.distributed import Client, LocalCluster, Queue
 import multiprocessing
@@ -115,44 +117,52 @@ def producer(queue_of_the_producer, names):
 
 # The consumer function takes data off of the Queue
 def consumer(queue_of_the_producer, queue_of_finished_products, queue_of_futures):
+    print("\nStarting consumer " + str(os.getpid()))
+    name = queue_of_the_producer.get()
 
     # Run indefinitely
-    # while True: # DACA LA WHILE AICI CEILALTI CONSUMATORI NU VOR MAI AVEA MATERIAL, ATUNCI NU VOR FI PUSE IN FOLOSIRE SI CELELALTE PROCESE.
+    while name!='STOP': # DACA LA WHILE AICI CEILALTI CONSUMATORI NU VOR MAI AVEA MATERIAL, ATUNCI NU VOR FI PUSE IN FOLOSIRE SI CELELALTE PROCESE.
                 # Se poate folosi acest procedeu daca lista data de producator este mult mai mare, pentru ca lucreaza foarte repede consumatorii,
                 # iar consumatorul care ia din coada nu lasa timp pentru ceilalti.
-    # time.sleep(random.randint(0, 10))
 
-    # consumer_log_queue = Queue()
+    # while queue_of_the_producer.qsize() > 0: # docs.dask.org/en/latest/futures.html?highlight=queue#distributed.Queue.qsize
 
-    # If the queue is empty, queue.get() will block until the queue has data
-    # if queue_of_futures.qsize() == 0:
-    print("\nStarting consumer " + str(os.getpid()))
-    # print("Queue with products for consumer production: " + str(queue_of_the_producer.get(batch=True)))
+        # time.sleep(random.randint(0, 10))
 
-    name = queue_of_the_producer.get()
-    name2 = queue_of_the_producer.get()
-    name3 = queue_of_the_producer.get()
+        # If the queue is empty, queue.get() will block until the queue has data
+        # print("Queue with products for consumer production: " + str(queue_of_the_producer.get(batch=True)))
 
-    print("Consumer " + str(os.getpid()) + " got: " + str(name) + " from the queue of producer products.")
-    print("Consumer " + str(os.getpid()) + " got: " + str(name2) + " from the queue of producer products.")
-    print("Consumer " + str(os.getpid()) + " got: " + str(name3) + " from the queue of producer products.")
+        # name2 = queue_of_the_producer.get()
+        # name3 = queue_of_the_producer.get()
 
-    # https://stackoverflow.com/questions/10190981/get-a-unique-id-for-worker-in-python-multiprocessing-pool
-    # print("Consumer " + str(multiprocessing.current_process()) + " got: " + str(name))
+        print("Consumer " + str(os.getpid()) + " got: " + str(name) + " from the queue of producer products.")
+        # print("Consumer " + str(os.getpid()) + " got: " + str(name2) + " from the queue of producer products.")
+        # print("Consumer " + str(os.getpid()) + " got: " + str(name3) + " from the queue of producer products.")
 
-    new_consumer_product = str(name) + "|" + str(os.getpid())
-    new_consumer_product2 = str(name2) + "|" + str(os.getpid())
-    new_consumer_product3 = str(name3) + "|" + str(os.getpid())
+        # if name=='STOP':
+        #     break
 
+        # https://stackoverflow.com/questions/10190981/get-a-unique-id-for-worker-in-python-multiprocessing-pool
+        # print("Consumer " + str(multiprocessing.current_process()) + " got: " + str(name))
 
-    print("Consumer " + str(os.getpid()) + " produced: " + new_consumer_product)
-    print("Consumer " + str(os.getpid()) + " produced: " + new_consumer_product2)
-    print("Consumer " + str(os.getpid()) + " produced: " + new_consumer_product3)
+        new_consumer_product = str(name) + "|" + str(os.getpid())
+        # new_consumer_product2 = str(name2) + "|" + str(os.getpid())
+        # new_consumer_product3 = str(name3) + "|" + str(os.getpid())
 
 
-    queue_of_finished_products.put(new_consumer_product)
-    queue_of_finished_products.put(new_consumer_product2)
-    queue_of_finished_products.put(new_consumer_product3)
+        print("Consumer " + str(os.getpid()) + " produced: " + new_consumer_product)
+        # print("Consumer " + str(os.getpid()) + " produced: " + new_consumer_product2)
+        # print("Consumer " + str(os.getpid()) + " produced: " + new_consumer_product3)
+
+
+        queue_of_finished_products.put(new_consumer_product)
+        # queue_of_finished_products.put(new_consumer_product2)
+        # queue_of_finished_products.put(new_consumer_product3)
+
+        name = queue_of_the_producer.get()
+
+
+    # return
 
 
     # print("Queue of consumer results: " + str(queue_of_finished_products.get(batch=True)))
@@ -191,7 +201,7 @@ if __name__ == '__main__': # https://github.com/dask/distributed/issues/2422
 
     # Am creat un LocalCluster cu 5 workers, adica 5 procese, acesta avand rolul de Pool din  pachetul py multiprocessing.
     lc = LocalCluster()
-    lc.scale(2)
+    lc.scale(10)
     client = Client(lc)
     # https://docs.dask.org/en/latest/futures.html#distributed.Client.scheduler_info
     # Am ales sa afisez pe cate o linie fiecare informatie din dictionarl returnat de Client.scheduler_info().
@@ -211,12 +221,13 @@ if __name__ == '__main__': # https://github.com/dask/distributed/issues/2422
     queue_of_finished_products_2 = Queue()
     queue_of_finished_products_3 = Queue()
     queue_of_finished_products_4 = Queue()
+    queue_of_finished_products_5 = Queue()
 
 # names = [['Master Shake', 'Meatwad', 'Frylock', 'Carl'],
     #              ['Early', 'Rusty', 'Sheriff', 'Granny', 'Lil'],
     #              ['Rick', 'Morty', 'Jerry', 'Summer', 'Beth']]
 
-    names = ['Master Shake', 'Meatwad', 'Frylock', 'Carl', 'Early', 'Rusty', 'Sheriff', 'Granny', 'Lil', 'Rick', 'Morty', 'Jerry', 'Summer', 'Beth']
+    names = ['Master Shake', 'Meatwad', 'Frylock', 'Carl', 'Early', 'Rusty', 'Sheriff', 'Granny', 'Lil', 'Rick', 'Morty', 'Jerry', 'Summer', 'Beth', 'STOP']
 
     # Prin metoda submit() se da de lucru Pool-ului de procese create de LocalCluster, iar numarul de procese este cel dat prin metoda scale() dupa instantierea LocalCluster-ului.
     a = client.submit(producer, queue_of_the_producer, names) # Producer-ul creaza coada cu nume.
@@ -226,23 +237,26 @@ if __name__ == '__main__': # https://github.com/dask/distributed/issues/2422
 
     b = client.submit(consumer, queue_of_the_producer, queue_of_finished_products_1, queue_of_futures)
     # print(b)
-    print(b.result())
+    # print(b.result())
     # queue_of_futures.put(b)
     # print("queue_of_finished_products_1: " + str(queue_of_finished_products_1.get(batch=True)))
 
     c = client.submit(consumer, queue_of_finished_products_1, queue_of_finished_products_2, queue_of_futures)
     # # # print(c)
-    print(c.result())
+    # print(c.result())
     # # queue_of_futures.put(c)
     # print("queue_of_finished_products_2: " + str(queue_of_finished_products_2.get(batch=True)))
 
     d = client.submit(consumer, queue_of_finished_products_2, queue_of_finished_products_3, queue_of_futures)
     # # # print(d)
-    print(d.result())
+    # print(d.result())
     # queue_of_futures.put(d)
 
     e = client.submit(consumer, queue_of_finished_products_3, queue_of_finished_products_4, queue_of_futures)
-    # # # print(e)
-    print(e.result())
+    # print(e)
+    # print(e.result())
     # queue_of_futures.put(e)
+
+    f = client.submit(consumer, queue_of_finished_products_4, queue_of_finished_products_5, queue_of_futures)
+    print(f.result())
 
