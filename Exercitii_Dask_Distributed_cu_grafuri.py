@@ -41,9 +41,9 @@ def producer(queue_of_the_producer, query_stwig_1_dict, data_graph_edges, node_a
     # print(query_stwig_root_node)
     query_stwig_root_node_id = query_stwig_root_node[0]
     query_stwig_root_node_label = query_stwig_root_node[1]
-    # print(query_stwig_root_node_id)
-    # print(query_stwig_root_node_label)
-
+    print(query_stwig_root_node_id)
+    print(query_stwig_root_node_label)
+    print()
     dataGraph = nx.Graph()
     dataGraph.add_edges_from(data_graph_edges)
     nx.set_node_attributes(dataGraph, node_attributes_dictionary, 'label')
