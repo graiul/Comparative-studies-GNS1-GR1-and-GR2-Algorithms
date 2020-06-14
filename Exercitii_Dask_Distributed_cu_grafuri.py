@@ -50,7 +50,7 @@ def producer(queue_of_the_producer, query_stwig_1_dict, data_graph_edges, node_a
 
 ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
     for node in list(dataGraph.nodes()):
-        if query_stwig_root_node_label == query_stwig_root_node_label:
+        if query_stwig_root_node_label == dataGraph.nodes[node]['label']:
             print(node)
             queue_of_the_producer.put(node)
 ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
