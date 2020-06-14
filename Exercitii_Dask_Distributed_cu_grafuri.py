@@ -3,8 +3,7 @@
 
 # # https://stonesoupprogramming.com/2017/09/11/python-multiprocessing-producer-consumer-pattern/
 # # https://docs.dask.org/en/latest/futures.html?highlight=queue#queues
-import random
-import time
+
 
 ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
 import copy
@@ -31,12 +30,11 @@ from timeit import default_timer as timer
 ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
 
 
-from dask.distributed import Client, LocalCluster, Queue
-import multiprocessing
+from dask.distributed import Client, LocalCluster, Queue, Variable
 import os
 # Producer function that places data on the Queue
 # Va produce noduri data cu label-ul radacinii din graful query STwig.
-def producer(queue_of_the_producer, query_stwig_1_dict):
+def producer(queue_of_the_producer, query_stwig_1_dict, data_graph_edges, node_attributes_dictionary):
     query_stwig = list(query_stwig_1_dict.items())
     # print(query_stwig)
     query_stwig_root_node = query_stwig[0]
@@ -46,101 +44,77 @@ def producer(queue_of_the_producer, query_stwig_1_dict):
     # print(query_stwig_root_node_id)
     # print(query_stwig_root_node_label)
 
-
-    ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
-    # GRAFUL DATA DIN NEO4J
-    # neograph_data = Graph("bolt://127.0.0.1:7690", auth=("neo4j", "changeme")) # Data Graph RI - Cluster Neo4J
-    neograph_data = Graph("bolt://127.0.0.1:7687",
-                          auth=("neo4j", "password"))  # Data Graph RI - O singura instanta de Neo4J
-
-    cqlQuery = "MATCH p=(n)-[r:PPI]->(m) return n.node_id, m.node_id"
-    result = neograph_data.run(cqlQuery).to_ndarray()
-    edge_list = result.tolist()
-    # # print("edge_list: ")
-    # # print(edge_list)
-    edge_list_integer_ids = []
-    for string_edge in edge_list:
-        edge_list_integer_ids.append([int(i) for i in string_edge])
-    # # print("edge_list_integer_ids: ")
-    # # print(edge_list_integer_ids)
-
     dataGraph = nx.Graph()
-    dataGraph.add_edges_from(sorted(edge_list_integer_ids))
-    cqlQuery2 = "MATCH (n) return n.node_id, n.node_label"
-    result2 = neograph_data.run(cqlQuery2).to_ndarray()
-    # # print("result2: ")
-    # # print(result2)
-    node_ids_as_integers_with_string_labels = []
-    for node in result2:
-        # # print(node[0])
-        node_ids_as_integers_with_string_labels.append([int(node[0]), node[1]])
-    # # print("node_ids_as_integers_with_string_labels: ")
-    # # print(node_ids_as_integers_with_string_labels)
-
-    node_attr_dict = OrderedDict(sorted(node_ids_as_integers_with_string_labels))
-    nx.set_node_attributes(dataGraph, node_attr_dict, 'label')
-############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
+    dataGraph.add_edges_from(data_graph_edges)
+    nx.set_node_attributes(dataGraph, node_attributes_dictionary, 'label')
 
 ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
     for node in list(dataGraph.nodes()):
-        if query_stwig_root_node_label == dataGraph.nodes[node]['label']:
+        if query_stwig_root_node_label == query_stwig_root_node_label:
+            print(node)
             queue_of_the_producer.put(node)
 ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
 
-    # nodes = list(dataGraph.nodes(data=True))
-    # for n in nodes:
-    #     queue_of_the_producer.put(n)
+    queue_of_the_producer.put('STOP')
 
-    print("\nQueue of producer results: ")
-    aux = copy.deepcopy(queue_of_the_producer)
-    print(aux.get(batch=True))
 
+    # print("\nQueue of producer results: ")
+    # aux = copy.deepcopy(queue_of_the_producer)
+    # print(aux.get(batch=True))
 
 # The consumer function takes data off of the Queue
-def consumer(queue_of_the_producer, queue_of_finished_products, queue_of_futures):
+def consumer(queue_of_the_producer, queue_of_finished_products, dataGraph_node_list_with_labels, dataGraph_distrib_var):
     print("\nStarting consumer " + str(os.getpid()))
-    name = queue_of_the_producer.get()
+    query_stwig = list(query_stwig_1_dict.items())
+    # print(query_stwig)
+    query_stwig_root_node = query_stwig[0]
+    # print(query_stwig_root_node)
+    query_stwig_root_node_id = query_stwig_root_node[0]
+    query_stwig_root_node_label = query_stwig_root_node[1]
+    # print(query_stwig_root_node_id)
+    # print(query_stwig_root_node_label)
+
+    dataGraph = nx.Graph()
+    dataGraph.add_edges_from(data_graph_edges)
+    nx.set_node_attributes(dataGraph, node_attributes_dictionary, 'label')
+
+    ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
+    for node in list(dataGraph.nodes()):
+        if query_stwig_root_node_label == dataGraph.nodes[node]['label']:
+            print("Same labels")
+            queue_of_the_producer.put(node)
+    ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
+
+
+    node = queue_of_the_producer.get()
+
 
     # Run indefinitely
-    while name!='STOP': # DACA LA WHILE AICI CEILALTI CONSUMATORI NU VOR MAI AVEA MATERIAL, ATUNCI NU VOR FI PUSE IN FOLOSIRE SI CELELALTE PROCESE.
-                # Se poate folosi acest procedeu daca lista data de producator este mult mai mare, pentru ca lucreaza foarte repede consumatorii,
-                # iar consumatorul care ia din coada nu lasa timp pentru ceilalti.
+    while node != 'STOP': # DACA LA WHILE AICI CEILALTI CONSUMATORI NU VOR MAI AVEA MATERIAL, ATUNCI NU VOR FI PUSE IN FOLOSIRE SI CELELALTE PROCESE.
+                          # Se poate folosi acest procedeu daca lista data de producator este mult mai mare, pentru ca lucreaza foarte repede consumatorii,
+                          # iar consumatorul care ia din coada nu lasa timp pentru ceilalti.
 
     # while queue_of_the_producer.qsize() > 0: # docs.dask.org/en/latest/futures.html?highlight=queue#distributed.Queue.qsize
 
-        # time.sleep(random.randint(0, 10))
-
         # If the queue is empty, queue.get() will block until the queue has data
-        # print("Queue with products for consumer production: " + str(queue_of_the_producer.get(batch=True)))
+        # print("Queue with products for consumer production: " + str(queue_of_the_producer.get(batch=True))) # docs.dask.org/en/latest/futures.html?highlight=queue#distributed.Queue.get
+                                                                                                              # batch=True ia toate elementele din queue, lasand queue goala.
 
-        # name2 = queue_of_the_producer.get()
-        # name3 = queue_of_the_producer.get()
+        print("Consumer " + str(os.getpid()) + " got: " + str(node) + " from the queue of producer products.")
 
-        print("Consumer " + str(os.getpid()) + " got: " + str(name) + " from the queue of producer products.")
-        # print("Consumer " + str(os.getpid()) + " got: " + str(name2) + " from the queue of producer products.")
-        # print("Consumer " + str(os.getpid()) + " got: " + str(name3) + " from the queue of producer products.")
-
-        # if name=='STOP':
-        #     break
 
         # https://stackoverflow.com/questions/10190981/get-a-unique-id-for-worker-in-python-multiprocessing-pool
         # print("Consumer " + str(multiprocessing.current_process()) + " got: " + str(name))
 
-        new_consumer_product = str(name) + "|" + str(os.getpid())
-        # new_consumer_product2 = str(name2) + "|" + str(os.getpid())
-        # new_consumer_product3 = str(name3) + "|" + str(os.getpid())
+        for data_node in dataGraph_node_list_with_labels.get():
+            if dataGraph.has_edge(node, data_node):
+                new_consumer_product = str(node) + "|" + str(data_node)
+                queue_of_finished_products.put(new_consumer_product)
+                print("Consumer " + str(os.getpid()) + " produced: " + new_consumer_product)
 
+        node = queue_of_the_producer.get()
+    # queue_of_the_producer.put('STOP')
 
-        print("Consumer " + str(os.getpid()) + " produced: " + new_consumer_product)
-        # print("Consumer " + str(os.getpid()) + " produced: " + new_consumer_product2)
-        # print("Consumer " + str(os.getpid()) + " produced: " + new_consumer_product3)
-
-
-        queue_of_finished_products.put(new_consumer_product)
-        # queue_of_finished_products.put(new_consumer_product2)
-        # queue_of_finished_products.put(new_consumer_product3)
-
-        name = queue_of_the_producer.get()
 
 # Pentru ca un consumator sa preia nume noi de la consumatorul precedent treb folosita o bucla infinita care sa
 # caute intr-o coada si sa prelucreze in continuare. Acea coada va trebui sa fie:
@@ -169,6 +143,10 @@ if __name__ == '__main__': # https://github.com/dask/distributed/issues/2422
     q1 = Queue()
     q2 = Queue()
     queue_of_futures = Queue()
+    # docs.dask.org/en/latest/futures.html?highlight=queue#distributed.Queue.qsize
+    dataGraph_node_list_with_labels = Variable()
+    dataGraph_distrib_var = Variable()
+
     # Lucrul cu cozi in loc de stive simplifica lucrul cand vine vorba de preluarea de catre consumatori al materialelor.
     # Acest lucru deoarece ei preiau de la primul element pus in coada, ceea ce inseamna ca noile elemente produse vor fi adaugate la
     # sfarsitul cozii. Astfel nu mai apar probleme ca si la stive , unde ar fi fost preluat tot timpul ultimele elemente adaugate.
@@ -206,13 +184,51 @@ if __name__ == '__main__': # https://github.com/dask/distributed/issues/2422
     query_stwig_1_dict = OrderedDict(zip(query_stwig_1, query_stwig_1_as_labels_source))
 ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
 
-    # Prin metoda submit() se da de lucru Pool-ului de procese create de LocalCluster, iar numarul de procese este cel dat prin metoda scale() dupa instantierea LocalCluster-ului.
-    a = client.submit(producer, queue_of_the_producer, query_stwig_1_dict) # Producer-ul creaza coada cu nume.
+############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
+    # GRAFUL DATA DIN NEO4J
+    # neograph_data = Graph("bolt://127.0.0.1:7690", auth=("neo4j", "changeme")) # Data Graph RI - Cluster Neo4J
+    neograph_data = Graph("bolt://127.0.0.1:7687",
+                         auth=(
+                         "neo4j", "password"))  # Data Graph RI - O singura instanta de Neo4J
+
+    cqlQuery = "MATCH p=(n)-[r:PPI]->(m) return n.node_id, m.node_id"
+    result = neograph_data.run(cqlQuery).to_ndarray()
+    edge_list = result.tolist()
+    # # print("edge_list: ")
+    # # print(edge_list)
+    edge_list_integer_ids = []
+    for string_edge in edge_list:
+       edge_list_integer_ids.append([int(i) for i in string_edge])
+    # # print("edge_list_integer_ids: ")
+    # # print(edge_list_integer_ids)
+
+    dataGraph = nx.Graph()
+    dataGraph.add_edges_from(sorted(edge_list_integer_ids))
+    cqlQuery2 = "MATCH (n) return n.node_id, n.node_label"
+    result2 = neograph_data.run(cqlQuery2).to_ndarray()
+    # # print("result2: ")
+    # # print(result2)
+    node_ids_as_integers_with_string_labels = []
+    for node in result2:
+       # # print(node[0])
+       node_ids_as_integers_with_string_labels.append([int(node[0]), node[1]])
+    # # print("node_ids_as_integers_with_string_labels: ")
+    # # print(node_ids_as_integers_with_string_labels)
+
+    node_attr_dict = OrderedDict(sorted(node_ids_as_integers_with_string_labels))
+    nx.set_node_attributes(dataGraph, node_attr_dict, 'label')
+############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
+
+    data_graph_edges = copy.deepcopy(sorted(edge_list_integer_ids))
+    node_attributes_dictionary = OrderedDict(sorted(node_ids_as_integers_with_string_labels))
+
+# Prin metoda submit() se da de lucru Pool-ului de procese create de LocalCluster, iar numarul de procese este cel dat prin metoda scale() dupa instantierea LocalCluster-ului.
+    a = client.submit(producer, queue_of_the_producer, query_stwig_1_dict, data_graph_edges, node_attributes_dictionary) # Producer-ul creaza coada cu nume.
     # print(a)
     print(a.result())
     # print(queue_of_the_producer.get(batch=True))
 
-    # b = client.submit(consumer, queue_of_the_producer, queue_of_finished_products_1, queue_of_futures)
+    # b = client.submit(consumer, queue_of_the_producer, queue_of_finished_products_1, dataGraph_node_list_with_labels, dataGraph_distrib_var)
     # print(b)
     # print(b.result())
     # queue_of_futures.put(b)
