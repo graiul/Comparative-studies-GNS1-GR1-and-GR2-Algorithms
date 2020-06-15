@@ -51,7 +51,7 @@ def producer(queue_of_the_producer, query_stwig_1_dict, data_graph_edges, node_a
 ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
     for node in list(dataGraph.nodes()):
         if query_stwig_root_node_label == dataGraph.nodes[node]['label']:
-            print(node)
+            # print(node)
             queue_of_the_producer.put(node)
 ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
 
@@ -63,31 +63,22 @@ def producer(queue_of_the_producer, query_stwig_1_dict, data_graph_edges, node_a
     # print(aux.get(batch=True))
 
 # The consumer function takes data off of the Queue
-def consumer(queue_of_the_producer, queue_of_finished_products, dataGraph_node_list_with_labels, dataGraph_distrib_var):
+def consumer(input_queue, output_queue, query_stwig_leaf_node_label, data_graph_edges, node_attributes_dictionary):
     print("\nStarting consumer " + str(os.getpid()))
-    query_stwig = list(query_stwig_1_dict.items())
-    # print(query_stwig)
-    query_stwig_root_node = query_stwig[0]
-    # print(query_stwig_root_node)
-    query_stwig_root_node_id = query_stwig_root_node[0]
-    query_stwig_root_node_label = query_stwig_root_node[1]
-    # print(query_stwig_root_node_id)
-    # print(query_stwig_root_node_label)
 
     dataGraph = nx.Graph()
     dataGraph.add_edges_from(data_graph_edges)
     nx.set_node_attributes(dataGraph, node_attributes_dictionary, 'label')
 
     ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
-    for node in list(dataGraph.nodes()):
-        if query_stwig_root_node_label == dataGraph.nodes[node]['label']:
-            print("Same labels")
-            queue_of_the_producer.put(node)
+    # for node in list(dataGraph.nodes()):
+    #     if query_node_label == dataGraph.nodes[node]['label']:
+    #         # print("Same labels")
+    #         queue_of_the_producer.put(node)
     ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
 
-
-    node = queue_of_the_producer.get()
-
+    node = input_queue.get()
+    # print("Consumer " + str(os.getpid()) + " got: " + str(node) + " from the queue of producer products.")
 
     # Run indefinitely
     while node != 'STOP': # DACA LA WHILE AICI CEILALTI CONSUMATORI NU VOR MAI AVEA MATERIAL, ATUNCI NU VOR FI PUSE IN FOLOSIRE SI CELELALTE PROCESE.
@@ -100,20 +91,22 @@ def consumer(queue_of_the_producer, queue_of_finished_products, dataGraph_node_l
         # print("Queue with products for consumer production: " + str(queue_of_the_producer.get(batch=True))) # docs.dask.org/en/latest/futures.html?highlight=queue#distributed.Queue.get
                                                                                                               # batch=True ia toate elementele din queue, lasand queue goala.
 
-        print("Consumer " + str(os.getpid()) + " got: " + str(node) + " from the queue of producer products.")
-
+        # print("Consumer " + str(os.getpid()) + " got: " + str(node) + " from the queue of producer products.")
 
         # https://stackoverflow.com/questions/10190981/get-a-unique-id-for-worker-in-python-multiprocessing-pool
         # print("Consumer " + str(multiprocessing.current_process()) + " got: " + str(name))
 
-        for data_node in dataGraph_node_list_with_labels.get():
-            if dataGraph.has_edge(node, data_node):
-                new_consumer_product = str(node) + "|" + str(data_node)
-                queue_of_finished_products.put(new_consumer_product)
-                print("Consumer " + str(os.getpid()) + " produced: " + new_consumer_product)
+        for data_node in dataGraph.nodes():
+            if query_stwig_leaf_node_label == dataGraph.nodes[data_node]['label']:
+                if dataGraph.has_edge(node, data_node):
+                    new_consumer_product = str(node) + "|" + str(data_node)
+                    output_queue.put(new_consumer_product)
+                    print("Consumer " + str(os.getpid()) + " produced: " + new_consumer_product)
 
-        node = queue_of_the_producer.get()
-    # queue_of_the_producer.put('STOP')
+        node = input_queue.get()
+
+
+    output_queue.put('STOP')
 
 
 # Pentru ca un consumator sa preia nume noi de la consumatorul precedent treb folosita o bucla infinita care sa
@@ -219,26 +212,30 @@ if __name__ == '__main__': # https://github.com/dask/distributed/issues/2422
     nx.set_node_attributes(dataGraph, node_attr_dict, 'label')
 ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
 
+    query_stwig = list(query_stwig_1_dict.items())
+
     data_graph_edges = copy.deepcopy(sorted(edge_list_integer_ids))
     node_attributes_dictionary = OrderedDict(sorted(node_ids_as_integers_with_string_labels))
+
+    query_stwig_root_node = query_stwig[0]
+    query_stwig_root_node_label = query_stwig[0][1]
 
 # Prin metoda submit() se da de lucru Pool-ului de procese create de LocalCluster, iar numarul de procese este cel dat prin metoda scale() dupa instantierea LocalCluster-ului.
     a = client.submit(producer, queue_of_the_producer, query_stwig_1_dict, data_graph_edges, node_attributes_dictionary) # Producer-ul creaza coada cu nume.
     # print(a)
-    print(a.result())
+    # print(a.result())
     # print(queue_of_the_producer.get(batch=True))
 
-    # b = client.submit(consumer, queue_of_the_producer, queue_of_finished_products_1, dataGraph_node_list_with_labels, dataGraph_distrib_var)
-    # print(b)
-    # print(b.result())
-    # queue_of_futures.put(b)
-    # print("queue_of_finished_products_1: " + str(queue_of_finished_products_1.get(batch=True)))
+    query_stwig_leaf_node1 = query_stwig[1]
+    query_stwig_leaf_node_label1 = query_stwig[1][1]
+    b = client.submit(consumer, queue_of_the_producer, queue_of_finished_products_1, query_stwig_leaf_node_label1, data_graph_edges, node_attributes_dictionary)
+    print(b.result())
 
-    # c = client.submit(consumer, queue_of_finished_products_1, queue_of_finished_products_2, queue_of_futures)
-    # # # print(c)
+    # query_stwig_leaf_node2 = query_stwig[2]
+    # query_stwig_leaf_node_label2 = query_stwig[2][1]
+    # c = client.submit(consumer, queue_of_the_producer, queue_of_finished_products_1, queue_of_finished_products_2, query_stwig_leaf_node_label2, data_graph_edges, node_attributes_dictionary)
     # print(c.result())
-    # # queue_of_futures.put(c)
-    # print("queue_of_finished_products_2: " + str(queue_of_finished_products_2.get(batch=True)))
+
 
     # d = client.submit(consumer, queue_of_finished_products_2, queue_of_finished_products_3, queue_of_futures)
     # # # print(d)
