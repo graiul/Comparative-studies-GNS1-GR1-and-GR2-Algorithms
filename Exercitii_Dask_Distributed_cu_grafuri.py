@@ -72,15 +72,6 @@ def consumer(input_queue, output_queue, query_stwig_leaf_node_label, data_graph_
     dataGraph.add_edges_from(data_graph_edges)
     nx.set_node_attributes(dataGraph, node_attributes_dictionary, 'label')
 
-    ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
-    # for node in list(dataGraph.nodes()):
-    #     if query_node_label == dataGraph.nodes[node]['label']:
-    #         # print("Same labels")
-    #         queue_of_the_producer.put(node)
-    ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
-
-    # print(input_queue.get(batch=True))
-
     partial_solution = list(input_queue.get())
     print(partial_solution)
     root_node = partial_solution[0]
@@ -100,33 +91,16 @@ def consumer(input_queue, output_queue, query_stwig_leaf_node_label, data_graph_
         # for p in partial_solutions:
         #     partial_solution = [p[0]]
         # partial_solution = [root_node]
-
-        # https://stackoverflow.com/questions/10190981/get-a-unique-id-for-worker-in-python-multiprocessing-pool
-        # print("Consumer " + str(multiprocessing.current_process()) + " got: " + str(name))
-
         for data_node in dataGraph.nodes():
             if query_stwig_leaf_node_label == dataGraph.nodes[data_node]['label']:
                 if dataGraph.has_edge(root_node, data_node):
                     print("Has edge")
-    #                 # new_consumer_product = str(root_node) + "|" + str(data_node)
-    #                 # output_queue.put(new_consumer_product)
-    #                 # print("Consumer " + str(os.getpid()) + " produced: " + new_consumer_product)
-    #                 partial_solution.append(data_node)
-    #                 print("Partial solution: " + str(partial_solution))
-    #                 # partial_solutions.put(partial_solution)
-    #                 # partial_solution = [p[0]]
-    #                 output_queue.put(partial_solution)
-    #                 partial_solution = input_queue.get()
-    #
-    #                 # print("starting producer: {}".format(os.getpid()))
-                else:
+                    partial_solution.append(data_node)
+                    print("Partial solution: " + str(partial_solution))
+                    # partial_solutions.put(partial_solution)
+                    output_queue.put(partial_solution)
                     partial_solution = input_queue.get()
-                    root_node = partial_solution[0]
-                    break
-
-    #     root_node = partial_solution[0]
-    #
-    #
+        root_node = partial_solution[0]
     # output_queue.put('STOP')
 
 
