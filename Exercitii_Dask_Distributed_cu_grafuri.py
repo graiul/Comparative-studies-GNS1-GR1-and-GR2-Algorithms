@@ -62,7 +62,8 @@ def producer(queue_of_the_producer, query_stwig_1_dict, data_graph_edges, node_a
 
     # print("\nQueue of producer results: ")
     # aux = copy.deepcopy(queue_of_the_producer)
-    # print(aux.get(batch=True))
+    # print(aux.get(batch=True)) # docs.dask.org/en/latest/futures.html?highlight=queue#distributed.Queue.get
+                                 # batch=True ia toate elementele din queue, lasand queue goala.
 
 # The consumer function takes data off of the Queue
 def consumer(input_queue, output_queue, query_stwig_leaf_node_label, data_graph_edges, node_attributes_dictionary):
@@ -74,7 +75,6 @@ def consumer(input_queue, output_queue, query_stwig_leaf_node_label, data_graph_
 
     partial_solution = list(input_queue.get())
     root_node = partial_solution[0]
-
     # # Run indefinitely
     while root_node != 'STOP': # DACA LA WHILE AICI CEILALTI CONSUMATORI NU VOR MAI AVEA MATERIAL, ATUNCI NU VOR FI PUSE IN FOLOSIRE SI CELELALTE PROCESE.
                           # Se poate folosi acest procedeu daca lista data de producator este mult mai mare, pentru ca lucreaza foarte repede consumatorii,
@@ -83,20 +83,26 @@ def consumer(input_queue, output_queue, query_stwig_leaf_node_label, data_graph_
     # while queue_of_the_producer.qsize() > 0: # docs.dask.org/en/latest/futures.html?highlight=queue#distributed.Queue.qsize
 
         # If the queue is empty, queue.get() will block until the queue has data
-        # print("Queue with products for consumer production: " + str(queue_of_the_producer.get(batch=True))) # docs.dask.org/en/latest/futures.html?highlight=queue#distributed.Queue.get
-                                                                                                              # batch=True ia toate elementele din queue, lasand queue goala.
+        # print("Consumer " + str(os.getpid()) + ": Root node: " + str(root_node))
+        # print("Consumer " + str(os.getpid()) + ": partial_solution[-1]: " + str(partial_solution[-1]))
 
         # print("Consumer " + str(os.getpid()) + " got: " + str(partial_solution) + " from the queue of producer products.")
         for data_node in dataGraph.nodes():
             if query_stwig_leaf_node_label == dataGraph.nodes[data_node]['label']:
                 if dataGraph.has_edge(root_node, data_node):
+
+                    # print("Consumer " + str(os.getpid()) + ": Root node: " + str(root_node))
+
                     partial_solution.append(data_node)
-                    print("Partial solution: " + str(partial_solution))
+                    print("Consumer " + str(os.getpid()) + ": Partial solution: " + str(partial_solution))
                     # partial_solutions.put(partial_solution)
                     output_queue.put(partial_solution)
                     partial_solution = list(input_queue.get())
         partial_solution = list(input_queue.get())
         root_node = partial_solution[0]
+        # print(partial_solution[-1])
+        if len(partial_solution) > 1 and partial_solution[-1] != 'STOP':
+            continue
     output_queue.put(['STOP'])
 
 
@@ -220,12 +226,12 @@ if __name__ == '__main__': # https://github.com/dask/distributed/issues/2422
     query_stwig_leaf_node1 = query_stwig[1]
     query_stwig_leaf_node_label1 = query_stwig[1][1]
     b = client.submit(consumer, queue_of_the_producer, queue_of_finished_products_1, query_stwig_leaf_node_label1, data_graph_edges, node_attributes_dictionary)
-    print(b.result())
+    # print(b.result())
 
-    # query_stwig_leaf_node2 = query_stwig[2]
-    # query_stwig_leaf_node_label2 = query_stwig[2][1]
-    # c = client.submit(consumer, queue_of_the_producer, queue_of_finished_products_1, queue_of_finished_products_2, query_stwig_leaf_node_label2, data_graph_edges, node_attributes_dictionary)
-    # print(c.result())
+    query_stwig_leaf_node2 = query_stwig[2]
+    query_stwig_leaf_node_label2 = query_stwig[2][1]
+    c = client.submit(consumer, queue_of_finished_products_1, queue_of_finished_products_2, query_stwig_leaf_node_label2, data_graph_edges, node_attributes_dictionary)
+    print(c.result())
 
 
     # d = client.submit(consumer, queue_of_finished_products_2, queue_of_finished_products_3, queue_of_futures)
