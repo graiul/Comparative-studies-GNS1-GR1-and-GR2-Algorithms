@@ -56,7 +56,7 @@ def producer(queue_of_the_producer, query_stwig_1_dict, data_graph_edges, node_a
             queue_of_the_producer.put([node])
 ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
 
-    queue_of_the_producer.put('STOP')
+    queue_of_the_producer.put(['STOP'])
     # print(list(queue_of_the_producer.get()))
 
 
@@ -73,10 +73,7 @@ def consumer(input_queue, output_queue, query_stwig_leaf_node_label, data_graph_
     nx.set_node_attributes(dataGraph, node_attributes_dictionary, 'label')
 
     partial_solution = list(input_queue.get())
-    print(partial_solution)
     root_node = partial_solution[0]
-    print(root_node)
-    print("Consumer " + str(os.getpid()) + " got: " + str(partial_solution) + " from the queue of producer products.")
 
     # # Run indefinitely
     while root_node != 'STOP': # DACA LA WHILE AICI CEILALTI CONSUMATORI NU VOR MAI AVEA MATERIAL, ATUNCI NU VOR FI PUSE IN FOLOSIRE SI CELELALTE PROCESE.
@@ -88,20 +85,19 @@ def consumer(input_queue, output_queue, query_stwig_leaf_node_label, data_graph_
         # If the queue is empty, queue.get() will block until the queue has data
         # print("Queue with products for consumer production: " + str(queue_of_the_producer.get(batch=True))) # docs.dask.org/en/latest/futures.html?highlight=queue#distributed.Queue.get
                                                                                                               # batch=True ia toate elementele din queue, lasand queue goala.
-        # for p in partial_solutions:
-        #     partial_solution = [p[0]]
-        # partial_solution = [root_node]
+
+        # print("Consumer " + str(os.getpid()) + " got: " + str(partial_solution) + " from the queue of producer products.")
         for data_node in dataGraph.nodes():
             if query_stwig_leaf_node_label == dataGraph.nodes[data_node]['label']:
                 if dataGraph.has_edge(root_node, data_node):
-                    print("Has edge")
                     partial_solution.append(data_node)
                     print("Partial solution: " + str(partial_solution))
                     # partial_solutions.put(partial_solution)
                     output_queue.put(partial_solution)
-                    partial_solution = input_queue.get()
+                    partial_solution = list(input_queue.get())
+        partial_solution = list(input_queue.get())
         root_node = partial_solution[0]
-    # output_queue.put('STOP')
+    output_queue.put(['STOP'])
 
 
 # Pentru ca un consumator sa preia nume noi de la consumatorul precedent treb folosita o bucla infinita care sa
