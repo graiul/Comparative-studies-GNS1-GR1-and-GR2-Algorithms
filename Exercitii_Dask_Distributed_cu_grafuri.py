@@ -227,6 +227,7 @@ if __name__ == '__main__': # https://github.com/dask/distributed/issues/2422
     query_stwig_root_node = query_stwig[0]
     query_stwig_root_node_label = query_stwig[0][1]
 
+    start_time = timer()
 # Prin metoda submit() se da de lucru Pool-ului de procese create de LocalCluster, iar numarul de procese este cel dat prin metoda scale() dupa instantierea LocalCluster-ului.
     a = client.submit(producer, queue_of_the_producer, query_stwig_1_dict, data_graph_edges, node_attributes_dictionary) # Producer-ul creaza coada cu nume.
     # print(a.result())
@@ -254,3 +255,6 @@ if __name__ == '__main__': # https://github.com/dask/distributed/issues/2422
 
     # f = client.submit(consumer, queue_of_finished_products_4, queue_of_finished_products_5, queue_of_futures)
     # print(f.result())
+
+    total_time = timer() - start_time
+    print("Total execution time: " + str(total_time))
