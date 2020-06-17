@@ -80,8 +80,6 @@ def consumer(input_queue, output_queue, query_stwig_leaf_node_label, data_graph_
                           # Se poate folosi acest procedeu daca lista data de producator este mult mai mare, pentru ca lucreaza foarte repede consumatorii,
                           # iar consumatorul care ia din coada nu lasa timp pentru ceilalti.
 
-    # while queue_of_the_producer.qsize() > 0: # docs.dask.org/en/latest/futures.html?highlight=queue#distributed.Queue.qsize
-
         # If the queue is empty, queue.get() will block until the queue has data
         # print("Consumer " + str(os.getpid()) + ": Root node: " + str(root_node))
         # print("Consumer " + str(os.getpid()) + ": partial_solution[-1]: " + str(partial_solution[-1]))
@@ -104,6 +102,7 @@ def consumer(input_queue, output_queue, query_stwig_leaf_node_label, data_graph_
                         print(root_node)
                         break
 
+        # docs.dask.org/en/latest/futures.html?highlight=queue#distributed.Queue.qsize
         if input_queue.qsize() > 0:
             partial_solution = list(input_queue.get())
             root_node = partial_solution[0]
