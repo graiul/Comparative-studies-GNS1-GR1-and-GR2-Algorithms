@@ -98,11 +98,21 @@ def consumer(input_queue, output_queue, query_stwig_leaf_node_label, data_graph_
                     # partial_solutions.put(partial_solution)
                     output_queue.put(partial_solution)
                     partial_solution = list(input_queue.get())
-        partial_solution = list(input_queue.get())
-        root_node = partial_solution[0]
+                    if partial_solution[0] == 'STOP':
+                        # print('STOP')
+                        root_node = 'STOP'
+                        print(root_node)
+                        break
+
+        if input_queue.qsize() > 0:
+            partial_solution = list(input_queue.get())
+            root_node = partial_solution[0]
         # print(partial_solution[-1])
-        if len(partial_solution) > 1 and partial_solution[-1] != 'STOP':
-            continue
+        # if len(partial_solution) > 1 and partial_solution[-1] != 'STOP':
+        # if len(partial_solution) == 1 and partial_solution[-1] == 'STOP':
+        if partial_solution[0] == 'STOP':
+            # output_queue.put(['STOP'])
+            root_node = 'STOP'
     output_queue.put(['STOP'])
 
 
