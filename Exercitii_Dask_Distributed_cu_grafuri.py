@@ -220,7 +220,7 @@ if __name__ == '__main__': # https://github.com/dask/distributed/issues/2422
 ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
 
     query_stwig = list(query_stwig_1_dict.items())
-
+    print(query_stwig)
     data_graph_edges = copy.deepcopy(sorted(edge_list_integer_ids))
     node_attributes_dictionary = OrderedDict(sorted(node_ids_as_integers_with_string_labels))
 
@@ -242,11 +242,10 @@ if __name__ == '__main__': # https://github.com/dask/distributed/issues/2422
     c = client.submit(consumer, queue_of_finished_products_1, queue_of_finished_products_2, query_stwig_leaf_node_label2, data_graph_edges, node_attributes_dictionary)
     print(c.result())
 
-
-    # d = client.submit(consumer, queue_of_finished_products_2, queue_of_finished_products_3, queue_of_futures)
-    # # # print(d)
+    # query_stwig_leaf_node3 = query_stwig[3]
+    # query_stwig_leaf_node_label3 = query_stwig[3][1]
+    # d = client.submit(consumer, queue_of_finished_products_2, queue_of_finished_products_3, query_stwig_leaf_node_label3, data_graph_edges, node_attributes_dictionary)
     # print(d.result())
-    # queue_of_futures.put(d)
 
     # e = client.submit(consumer, queue_of_finished_products_3, queue_of_finished_products_4, queue_of_futures)
     # print(e)
