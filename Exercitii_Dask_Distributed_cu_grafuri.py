@@ -92,12 +92,11 @@ def consumer(input_queue, output_queue, query_stwig_leaf_node_label, query_stwig
                     # print("Consumer " + str(os.getpid()) + ": Root node: " + str(root_node))
 
                     partial_solution.append(data_node)
-                    print("Consumer " + str(os.getpid()) + ": Partial solution: " + str(partial_solution))
-                    # partial_solutions.put(partial_solution)
+                    if len(partial_solution) == query_stwig_length:
+                        print("Consumer " + str(os.getpid()) + ": Partial solution: " + str(partial_solution))
                     output_queue.put(partial_solution)
                     if len(partial_solution) == query_stwig_length:
                         queue_for_printing.put(partial_solution)
-
                     partial_solution = list(input_queue.get())
                     if partial_solution[0] == 'STOP':
                         # print('STOP')
