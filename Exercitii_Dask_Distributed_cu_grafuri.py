@@ -66,7 +66,7 @@ def producer(queue_of_the_producer, query_stwig_1_dict, data_graph_edges, node_a
                                  # batch=True ia toate elementele din queue, lasand queue goala.
 
 # The consumer function takes data off of the Queue
-def consumer(input_queue, output_queue, query_stwig_leaf_node_label, data_graph_edges, node_attributes_dictionary):
+def consumer(input_queue, output_queue, query_stwig_leaf_node_label, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing):
     print("\nStarting consumer " + str(os.getpid()))
 
     dataGraph = nx.Graph()
@@ -77,8 +77,8 @@ def consumer(input_queue, output_queue, query_stwig_leaf_node_label, data_graph_
     root_node = partial_solution[0]
     # # Run indefinitely
     while root_node != 'STOP': # DACA LA WHILE AICI CEILALTI CONSUMATORI NU VOR MAI AVEA MATERIAL, ATUNCI NU VOR FI PUSE IN FOLOSIRE SI CELELALTE PROCESE.
-                          # Se poate folosi acest procedeu daca lista data de producator este mult mai mare, pentru ca lucreaza foarte repede consumatorii,
-                          # iar consumatorul care ia din coada nu lasa timp pentru ceilalti.
+        # Se poate folosi acest procedeu daca lista data de producator este mult mai mare, pentru ca lucreaza foarte repede consumatorii,
+        # iar consumatorul care ia din coada nu lasa timp pentru ceilalti.
 
         # If the queue is empty, queue.get() will block until the queue has data
         # print("Consumer " + str(os.getpid()) + ": Root node: " + str(root_node))
@@ -95,6 +95,9 @@ def consumer(input_queue, output_queue, query_stwig_leaf_node_label, data_graph_
                     print("Consumer " + str(os.getpid()) + ": Partial solution: " + str(partial_solution))
                     # partial_solutions.put(partial_solution)
                     output_queue.put(partial_solution)
+                    if len(partial_solution) == query_stwig_length:
+                        queue_for_printing.put(partial_solution)
+
                     partial_solution = list(input_queue.get())
                     if partial_solution[0] == 'STOP':
                         # print('STOP')
@@ -113,6 +116,13 @@ def consumer(input_queue, output_queue, query_stwig_leaf_node_label, data_graph_
             # output_queue.put(['STOP'])
             root_node = 'STOP'
     output_queue.put(['STOP'])
+
+    # if len(query_stwig) == query_stwig_length:
+        # f = open("file_Parallel_Backtracking_Algorithm_with_STwig_query_graphs_OUTPUT.txt", "w+")
+        # while queue_for_printing.qsize() > 0:
+        #     p = queue_for_printing.get()
+        #     f.write(str(p) + "\n")
+        # f.close()
 
 
 # Pentru ca un consumator sa preia nume noi de la consumatorul precedent treb folosita o bucla infinita care sa
@@ -157,6 +167,7 @@ if __name__ == '__main__': # https://github.com/dask/distributed/issues/2422
     queue_of_finished_products_4 = Queue()
     queue_of_finished_products_5 = Queue()
     partial_solutions = Queue()
+    queue_for_printing = Queue()
 
 ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
     # Aici cream un obiect graf query:
@@ -226,21 +237,23 @@ if __name__ == '__main__': # https://github.com/dask/distributed/issues/2422
 
     query_stwig_root_node = query_stwig[0]
     query_stwig_root_node_label = query_stwig[0][1]
+    query_stwig_length = len(query_stwig) # Pentru grafuri STwig, e nr nodurilor. Pentru grafuri care nu au forma STwig, va fi nr muchiilor, adica al perechilor de noduri,
+                                          # datorita faptului ca am pus o muchie pe cate o pozitie al solutiei partiale in cazul respectiv.
 
     start_time = timer()
-# Prin metoda submit() se da de lucru Pool-ului de procese create de LocalCluster, iar numarul de procese este cel dat prin metoda scale() dupa instantierea LocalCluster-ului.
+    # Prin metoda submit() se da de lucru Pool-ului de procese create de LocalCluster, iar numarul de procese este cel dat prin metoda scale() dupa instantierea LocalCluster-ului.
     a = client.submit(producer, queue_of_the_producer, query_stwig_1_dict, data_graph_edges, node_attributes_dictionary) # Producer-ul creaza coada cu nume.
     # print(a.result())
     # print(queue_of_the_producer.get(batch=True))
 
     query_stwig_leaf_node1 = query_stwig[1]
     query_stwig_leaf_node_label1 = query_stwig[1][1]
-    b = client.submit(consumer, queue_of_the_producer, queue_of_finished_products_1, query_stwig_leaf_node_label1, data_graph_edges, node_attributes_dictionary)
+    b = client.submit(consumer, queue_of_the_producer, queue_of_finished_products_1, query_stwig_leaf_node_label1, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
     # print(b.result())
 
     query_stwig_leaf_node2 = query_stwig[2]
     query_stwig_leaf_node_label2 = query_stwig[2][1]
-    c = client.submit(consumer, queue_of_finished_products_1, queue_of_finished_products_2, query_stwig_leaf_node_label2, data_graph_edges, node_attributes_dictionary)
+    c = client.submit(consumer, queue_of_finished_products_1, queue_of_finished_products_2, query_stwig_leaf_node_label2, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
     print(c.result())
 
     # query_stwig_leaf_node3 = query_stwig[3]
@@ -258,3 +271,10 @@ if __name__ == '__main__': # https://github.com/dask/distributed/issues/2422
 
     total_time = timer() - start_time
     print("Total execution time: " + str(total_time))
+    f = open("file_Parallel_Backtracking_Algorithm_with_STwig_query_graphs_OUTPUT.txt", "w+")
+    while queue_for_printing.qsize() > 0:
+        p = queue_for_printing.get()
+        for p_elem in p:
+            f.write(str(p_elem) + " ")
+        f.write("\n")
+    f.close()
