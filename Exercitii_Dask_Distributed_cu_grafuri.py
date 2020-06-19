@@ -75,6 +75,9 @@ def consumer(input_queue, output_queue, query_stwig_leaf_node_label, query_stwig
 
     partial_solution = list(input_queue.get())
     root_node = partial_solution[0]
+
+    aux_partial_solutions_list = []
+
     # # Run indefinitely
     while root_node != 'STOP': # DACA LA WHILE AICI CEILALTI CONSUMATORI NU VOR MAI AVEA MATERIAL, ATUNCI NU VOR FI PUSE IN FOLOSIRE SI CELELALTE PROCESE.
         # Se poate folosi acest procedeu daca lista data de producator este mult mai mare, pentru ca lucreaza foarte repede consumatorii,
@@ -97,7 +100,14 @@ def consumer(input_queue, output_queue, query_stwig_leaf_node_label, query_stwig
                         print("Consumer " + str(os.getpid()) + ": Partial solution: " + str(partial_solution))
                         if partial_solution == [3842, 9997, 9670]:
                             print("!!!")
-                        queue_for_printing.put(partial_solution)
+                        # if partial_solution not in aux_partial_solutions_list:
+                        #     aux_partial_solutions_list.append(partial_solution)
+                        #     queue_for_printing.put(partial_solution)
+                        # else:
+                        #     if partial_solution in aux_partial_solutions_list:
+                        #         print("!!!")
+                        #         root_node = 'STOP'
+                        #         break
 
                     output_queue.put(partial_solution)
                     partial_solution.remove(partial_solution[-1])
