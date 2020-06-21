@@ -97,6 +97,8 @@ def consumer(input_queue, output_queue, query_stwig_leaf_node_label, query_stwig
                     partial_solution.append(data_node)
 
                     if len(partial_solution) == query_stwig_length:
+                        # La acest nivel, consumatorul va mai crea o solutie partiala validata care a mai fost creata deja.
+                        # Cand acest lucru se intampla, mai jos algoritmul isi va opri executia.
                         # print("Consumer " + str(os.getpid()) + ": Partial solution: " + str(partial_solution))
 
                         if partial_solution not in aux_partial_solutions_list:
