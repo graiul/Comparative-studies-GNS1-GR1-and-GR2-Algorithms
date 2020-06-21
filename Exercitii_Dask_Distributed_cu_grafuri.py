@@ -104,6 +104,14 @@ def consumer(input_queue, output_queue, query_stwig_leaf_node_label, query_stwig
                             print("!!!")
                             root_node = 'STOP'
 
+                        # VARIANTA 1:
+                        # Verificator de iteratii sau contor al gasirilor. Daca o solutie partiala se gaseste o data in lista
+                        # si e construita inca o data alg se incheie.
+
+                        # VARIANTA 2:
+                        # In loc sa verific daca o solutie se afla deja, mai bine numar de cate ori apare solutia resp inainte de a o adauga in lista.
+                        # Nu se poate sa adaug in lista si sa verific existenta sol resp in lista in aceeasi iteratie. Nu are sens.
+                        # Fie verific existenta, dar in iteratii diferite, fie numar existenta, da in aceeasi iteratie.
 
                         # if partial_solution not in aux_partial_solutions_list:
                         #     aux_partial_solutions_list.append(partial_solution)
