@@ -98,6 +98,8 @@ def consumer(input_queue, output_queue, query_stwig_leaf_node_label, query_stwig
 
                     if len(partial_solution) == query_stwig_length:
                         print("Consumer " + str(os.getpid()) + ": Partial solution: " + str(partial_solution))
+                        queue_for_printing.put(partial_solution)
+
                         if partial_solution == [3842, 9997, 9670]:
                             print("!!!")
                             root_node = 'STOP'
