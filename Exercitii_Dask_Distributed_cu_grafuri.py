@@ -117,14 +117,14 @@ def consumer(input_queue, output_queue, query_stwig_leaf_node_label, query_stwig
                     output_queue.put(partial_solution)
                     partial_solution.remove(partial_solution[-1])
 
-        if len(partial_solution) == query_stwig_length:
-            queue_for_printing.put(partial_solution)
-            partial_solution = list(input_queue.get())
-        if partial_solution[0] == 'STOP':
-            # print('STOP')
-            root_node = 'STOP'
-            print(root_node)
-            # break
+        # if len(partial_solution) == query_stwig_length:
+        #     queue_for_printing.put(partial_solution)
+        #     partial_solution = list(input_queue.get())
+        # if partial_solution[0] == 'STOP':
+        #     # print('STOP')
+        #     root_node = 'STOP'
+        #     print(root_node)
+        #     # break
 
         # docs.dask.org/en/latest/futures.html?highlight=queue#distributed.Queue.qsize
         if input_queue.qsize() > 0:
