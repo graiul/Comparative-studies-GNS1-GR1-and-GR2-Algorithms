@@ -99,22 +99,26 @@ def consumer(input_queue, output_queue, query_stwig_leaf_node_label, query_stwig
                     if len(partial_solution) == query_stwig_length:
 
                         if partial_solution not in aux_partial_solutions_list:
+                            queue_for_printing.put(partial_solution)
+                            print("Consumer " + str(os.getpid()) + ": Partial solution: " + str(partial_solution))
+
                             aux_ps = copy.deepcopy(partial_solution)
                             aux_partial_solutions_list.append(aux_ps)
-                            print(aux_partial_solutions_list)
-
-                        # print("Consumer " + str(os.getpid()) + ": Partial solution: " + str(partial_solution))
-                        queue_for_printing.put(partial_solution)
-
-                        if partial_solution == [3842, 9997, 9670]:
-                            print("!!!")
+                            # print(aux_partial_solutions_list)
+                        elif partial_solution in aux_partial_solutions_list:
+                            # print("!!!")
                             root_node = 'STOP'
 
-                        # VARIANTA 1:
+
+                        # if partial_solution == [3842, 9997, 9670]:
+                        #     print("!!!")
+                        #     root_node = 'STOP'
+
+                        # NU A FOST NEVOIE: VARIANTA 1:
                         # Verificator de iteratii sau contor al gasirilor. Daca o solutie partiala se gaseste o data in lista
                         # si e construita inca o data alg se incheie.
 
-                        # VARIANTA 2:
+                        # NU A FOST NEVOIE: VARIANTA 2:
                         # In loc sa verific daca o solutie se afla deja, mai bine numar de cate ori apare solutia resp inainte de a o adauga in lista.
                         # Nu se poate sa adaug in lista si sa verific existenta sol resp in lista in aceeasi iteratie. Nu are sens.
                         # Fie verific existenta, dar in iteratii diferite, fie numar existenta, da in aceeasi iteratie.
