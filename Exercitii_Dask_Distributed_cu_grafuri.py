@@ -152,13 +152,6 @@ def consumer(input_queue, output_queue, query_stwig_leaf_node_label, query_stwig
             root_node = 'STOP'
     output_queue.put(['STOP'])
 
-    # if len(query_stwig) == query_stwig_length:
-        # f = open("file_Parallel_Backtracking_Algorithm_with_STwig_query_graphs_OUTPUT.txt", "w+")
-        # while queue_for_printing.qsize() > 0:
-        #     p = queue_for_printing.get()
-        #     f.write(str(p) + "\n")
-        # f.close()
-
 
 # Pentru ca un consumator sa preia nume noi de la consumatorul precedent treb folosita o bucla infinita care sa
 # caute intr-o coada si sa prelucreze in continuare. Acea coada va trebui sa fie:
