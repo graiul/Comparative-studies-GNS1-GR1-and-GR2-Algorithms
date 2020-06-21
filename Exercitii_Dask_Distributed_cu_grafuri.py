@@ -97,7 +97,13 @@ def consumer(input_queue, output_queue, query_stwig_leaf_node_label, query_stwig
                     partial_solution.append(data_node)
 
                     if len(partial_solution) == query_stwig_length:
-                        print("Consumer " + str(os.getpid()) + ": Partial solution: " + str(partial_solution))
+
+                        if partial_solution not in aux_partial_solutions_list:
+                            aux_ps = copy.deepcopy(partial_solution)
+                            aux_partial_solutions_list.append(aux_ps)
+                            print(aux_partial_solutions_list)
+
+                        # print("Consumer " + str(os.getpid()) + ": Partial solution: " + str(partial_solution))
                         queue_for_printing.put(partial_solution)
 
                         if partial_solution == [3842, 9997, 9670]:
