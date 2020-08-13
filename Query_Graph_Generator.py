@@ -138,6 +138,32 @@ class Query_Graph_Generator(object):
         # node_attr = ["24", "19", "32", "25", "32", "24", "26", "11", "12"]
 
 
+        # A treia serie de teste
+        # STwig Alg si VF2 Alg, pentru Articolul 2
+
+        # ok
+        # query_graph_edges = [[7711, 2243], [7711, 2259]]
+        # node_attr = ["16", "2", "17"]
+
+        # ok
+        # query_graph_edges = [[11041, 2467], [11041, 2607], [11041, 2650]]
+        # node_attr = ["18", "23", "11", "9"]
+
+        # ok
+        # query_graph_edges =[[58, 1870], [58, 1878], [58, 1982], [58, 3396]]
+        # node_attr = ["20", "13", "32", "4", "14"]
+
+        # Dupa 1h jum STwig Alg, inca mai rula
+        # query_graph_edges = [[10881, 8738], [10881, 8962], [10881, 9854], [10881, 10074]]
+        # node_attr = ["18", "32", "1", "29", "20"]
+
+        # Dupa 3h si jumatate cu STwig Alg, inca nu s-a terminat rularea
+        # query_graph_edges = [[11041, 2467], [11041, 2607], [11041, 2650], [11041, 2904], [11041, 3414]]
+        # node_attr = ["18", "23", "11", "9", "6", "30"]
+
+
+
+        # ##############################################################################################################
         # Grafuri pentru testarea algoritmilor VF2 si GNS2v1 pentru Articolul 3.
 
         # query_graph_edges = [[1, 2], [3, 4], [5, 6], [7, 8]] # GNS ca si da rezultat o gasire, dar nu stiu daca  mai sunt si alte gasiri existente in graful RI cu 10000 muchii si 4652 de noduri.
@@ -248,11 +274,31 @@ class Query_Graph_Generator(object):
         # Ruleaza ok GNS1 si VF2.
         # GNS1 ruleaza fara bucla infinita
         # Ruleaza ok si cu STwig Algorithm.
-        query_graph_edges = [[3842, 7591], [3842, 7596]]
-        node_attr = ["31", "6", "20"]
+        # query_graph_edges = [[3842, 7591], [3842, 7596]]
+        # node_attr = ["31", "6", "20"]
 
 
+        # Grafuri query pentru testarea GR1_Algorithm
 
+        # ok
+        # query_graph_edges = [[4164, 3526], [4164, 5687]]
+        # node_attr = ["10", "26", "2"]
+
+        # ok
+        query_graph_edges = [[7711, 2243], [7711, 2259]]
+        node_attr = ["16", "2", "17"]
+
+
+        # query_graph_edges = [[2670, 10109], [2670, 10387]]
+        # node_attr = ["29", "30", "20"]
+
+
+        # query_graph_edges = [[5636, 2904], [5636, 3414]]
+        # node_attr = ["16", "6", "30"]
+
+
+        # query_graph_edges = [[11965, 1278], [11965, 1291]]
+        # node_attr = ["16", "13", "9"]
 
 
         query_graph.add_edges_from(query_graph_edges)
