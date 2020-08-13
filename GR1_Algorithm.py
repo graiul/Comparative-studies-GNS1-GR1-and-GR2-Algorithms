@@ -51,7 +51,7 @@ def producer(queue_of_the_producer, query_stwig_1_dict, data_graph_edges, node_a
 ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
     for node in list(dataGraph.nodes()):
         if query_stwig_root_node_label == dataGraph.nodes[node]['label']:
-            # print(type([node]))
+            # print(node)
 
             queue_of_the_producer.put([node])
 ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
@@ -73,7 +73,8 @@ def consumer(input_queue, output_queue, query_stwig_leaf_node_label, query_stwig
     dataGraph.add_edges_from(data_graph_edges)
     nx.set_node_attributes(dataGraph, node_attributes_dictionary, 'label')
 
-    partial_solution = list(input_queue.get())
+    partial_solution = copy.deepcopy(list(input_queue.get()))
+    # print(partial_solution)
     root_node = partial_solution[0]
 
     aux_partial_solutions_list = []
@@ -108,9 +109,9 @@ def consumer(input_queue, output_queue, query_stwig_leaf_node_label, query_stwig
                             aux_ps = copy.deepcopy(partial_solution)
                             aux_partial_solutions_list.append(aux_ps)
                             # print(aux_partial_solutions_list)
-                        elif partial_solution in aux_partial_solutions_list:
+                        # elif partial_solution in aux_partial_solutions_list:
                             # print("!!!")
-                            root_node = 'STOP'
+                            # root_node = 'STOP'
 
 
                         # if partial_solution == [3842, 9997, 9670]:
@@ -631,7 +632,7 @@ if __name__ == '__main__': # https://github.com/dask/distributed/issues/2422
     query_stwig_leaf_node_label1 = query_stwig[1][1]
     b = client.submit(consumer, queue_of_the_producer, queue_of_finished_products_1, query_stwig_leaf_node_label1, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
     # print(b.result())
-
+    #
     query_stwig_leaf_node2 = query_stwig[2]
     query_stwig_leaf_node_label2 = query_stwig[2][1]
     c = client.submit(consumer, queue_of_finished_products_1, queue_of_finished_products_2, query_stwig_leaf_node_label2, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
