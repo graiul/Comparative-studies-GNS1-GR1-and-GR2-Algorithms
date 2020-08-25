@@ -623,6 +623,10 @@ if __name__ == '__main__': # https://github.com/dask/distributed/issues/2422
                                           # datorita faptului ca am pus o muchie pe cate o pozitie al solutiei partiale in cazul respectiv.
 
     start_time = timer()
+
+    # distributed.dask.org/en/latest/locality.html
+    futures = client.scatter(data_graph_edges, workers=None, broadcast=True)
+
     # Prin metoda submit() se da de lucru Pool-ului de procese create de LocalCluster, iar numarul de procese este cel dat prin metoda scale() dupa instantierea LocalCluster-ului.
     a = client.submit(producer, queue_of_the_producer, query_stwig_1_dict, data_graph_edges, node_attributes_dictionary) # Producer-ul creaza coada cu nume.
     # print(a.result())
