@@ -280,25 +280,68 @@ class Query_Graph_Generator(object):
 
         # Grafuri query pentru testarea GR1_Algorithm
 
-        # ok
+        # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si doi consumatori
+        # Cinci rulari
+        # query_graph_edges = [[7711, 2243], [7711, 2259]]
+        # node_attr = ["16", "2", "17"]
+
+        # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si doi consumatori
+        # Cinci rulari
         # query_graph_edges = [[4164, 3526], [4164, 5687]]
         # node_attr = ["10", "26", "2"]
 
-        # ok
-        query_graph_edges = [[7711, 2243], [7711, 2259]]
-        node_attr = ["16", "2", "17"]
-
-
+        # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si doi consumatori
+        # Cinci rulari
         # query_graph_edges = [[2670, 10109], [2670, 10387]]
         # node_attr = ["29", "30", "20"]
 
-
+        # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si doi consumatori
+        # Cinci rulari
         # query_graph_edges = [[5636, 2904], [5636, 3414]]
         # node_attr = ["16", "6", "30"]
 
-
+        # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si doi consumatori
+        # Cinci rulari
         # query_graph_edges = [[11965, 1278], [11965, 1291]]
         # node_attr = ["16", "13", "9"]
+
+        # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si trei consumatori
+        # Cinci rulari
+        # query_graph_edges = [[11041, 2467], [11041, 2607], [11041, 2650]]
+        # node_attr = ["18", "23", "11", "9"]
+
+        # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si trei consumatori
+        # Cinci rulari
+        # query_graph_edges = [[8028, 3850], [8028, 58], [8028, 7465]]
+        # node_attr = ["6", "4", "20", "18"]
+
+        # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si trei consumatori
+        # Cinci rulari
+        # query_graph_edges = [[2850, 979], [2850, 3526], [2850, 5591]]
+        # node_attr = ["27", "14", "26", "3"]
+
+        # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si trei consumatori
+        # Cinci rulari
+        # query_graph_edges = [[1773, 1488], [1773, 1898], [1773, 2285]]
+        # node_attr = ["25", "28", "29", "27"]
+
+        # se tot blocheaza de la a doua rulare. Prima a avut urm timp: 178.9057435
+        # query_graph_edges = [[0, 1773], [0, 1817],[0,4426]]
+        # node_attr = ["29", "25", "19", "13"]
+
+        # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si trei consumatori
+        # Cinci rulari
+        # query_graph_edges = [[7190,137], [7190,419], [7190,450]]
+        # node_attr = ["3", "2", "11", "3"]
+
+        # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si patru consumatori
+        # fara print-uri ale rezultatelor in timpul rularii.
+        # Trei rulari.
+        # query_graph_edges =[[58, 1870], [58, 1878], [58, 1982], [58, 3396]]
+        # node_attr = ["20", "13", "32", "4", "14"]
+
+        query_graph_edges = [[10881, 8738], [10881, 8962], [10881, 9854], [10881, 10074]]
+        node_attr = ["18", "32", "1", "29", "20"]
 
 
         query_graph.add_edges_from(query_graph_edges)
