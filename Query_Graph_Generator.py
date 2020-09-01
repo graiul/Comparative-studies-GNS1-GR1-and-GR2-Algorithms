@@ -413,8 +413,15 @@ class Query_Graph_Generator(object):
         # query_graph_edges = [[10881, 8738], [10881, 8962], [10881, 9854], [10881, 10074], [10881, 10527], [10881, 10699]]
         # node_attr = ["18", "32", "1", "29", "20", "8", "17"]
 
-        # 26
+        # nr 21
+        # 25 min si nu s-a terminat prima rulare
+        # Refolosit un graf query cu 6 noduri si am adaugat inca un nod
+        # query_graph_edges = [[979, 4337], [979, 4341], [979, 4419], [979, 4736], [979, 4888], [979, 5042]]
+        # node_attr = ["14", "13", "3", "28", "8", "18", "15"]
+
+        # nr 26
         # 90 min si nu s-a terminat prima rulare
+        # Refolosit un graf query cu 6 noduri si am adaugat inca doua noduri
         query_graph_edges = [[979, 4337], [979, 4341], [979, 4419], [979, 4736], [979, 4888], [979, 5042], [979, 5086]]
         node_attr = ["14", "13", "3", "28", "8", "18", "15", "30"]
         # 979,4337
@@ -424,6 +431,7 @@ class Query_Graph_Generator(object):
         # 979,4888
         # 979,5042
         # 979,5086
+
         query_graph.add_edges_from(query_graph_edges)
 
         node_attr_dict = dict(zip(query_graph.nodes(), node_attr)) # Am scos sortarea crescatoare al id-urilor nodurilor. Astfel se face corect asocierea intre noduri si label-uri.
