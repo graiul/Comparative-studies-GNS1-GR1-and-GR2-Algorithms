@@ -8,7 +8,7 @@
 ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
 import copy
 
-
+# import dask
 import networkx as nx
 from collections import OrderedDict
 
@@ -35,6 +35,8 @@ import os
 # Producer function that places data on the Queue
 # Va produce noduri data cu label-ul radacinii din graful query STwig.
 def producer(queue_of_the_producer, query_stwig_1_dict, data_graph_edges, node_attributes_dictionary):
+    print("\nStarting producer " + str(os.getpid()))
+
     query_stwig = list(query_stwig_1_dict.items())
     # print(query_stwig)
     query_stwig_root_node = query_stwig[0]
@@ -66,6 +68,7 @@ def producer(queue_of_the_producer, query_stwig_1_dict, data_graph_edges, node_a
                                  # batch=True ia toate elementele din queue, lasand queue goala.
 
 # The consumer function takes data off of the Queue
+# @dask.delayed
 def consumer(input_queue, output_queue, query_stwig_leaf_node_label, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing):
     print("\nStarting consumer " + str(os.getpid()))
 
@@ -104,7 +107,7 @@ def consumer(input_queue, output_queue, query_stwig_leaf_node_label, query_stwig
 
                         if partial_solution not in aux_partial_solutions_list:
                             queue_for_printing.put(partial_solution)
-                            # print("Consumer " + str(os.getpid()) + ": Partial solution: " + str(partial_solution))
+                            print("Consumer " + str(os.getpid()) + ": Partial solution: " + str(partial_solution))
 
                             aux_ps = copy.deepcopy(partial_solution)
                             aux_partial_solutions_list.append(aux_ps)
@@ -548,6 +551,8 @@ if __name__ == '__main__': # https://github.com/dask/distributed/issues/2422
     queue_of_finished_products_3 = Queue()
     queue_of_finished_products_4 = Queue()
     queue_of_finished_products_5 = Queue()
+    queue_of_finished_products_6 = Queue()
+    queue_of_finished_products_7 = Queue()
     partial_solutions = Queue()
     queue_for_printing = Queue()
 
@@ -625,37 +630,61 @@ if __name__ == '__main__': # https://github.com/dask/distributed/issues/2422
     start_time = timer()
 
     # distributed.dask.org/en/latest/locality.html
-    futures = client.scatter(data_graph_edges, workers=None, broadcast=True)
+    futures = client.scatter(data_graph_edges, workers=None, broadcast=False)
 
     # Prin metoda submit() se da de lucru Pool-ului de procese create de LocalCluster, iar numarul de procese este cel dat prin metoda scale() dupa instantierea LocalCluster-ului.
+    # big_producer = client.scatter(data_graph_edges)
+    # a = client.submit(producer, big_producer, queue_of_the_producer, query_stwig_1_dict, data_graph_edges, node_attributes_dictionary)  # Producer-ul creaza coada cu nume.
     a = client.submit(producer, queue_of_the_producer, query_stwig_1_dict, data_graph_edges, node_attributes_dictionary) # Producer-ul creaza coada cu nume.
     # print(a.result())
     # print(queue_of_the_producer.get(batch=True))
 
     query_stwig_leaf_node1 = query_stwig[1]
     query_stwig_leaf_node_label1 = query_stwig[1][1]
+    # big_consumer_1 = client.scatter(data_graph_edges)
+    # b = client.submit(consumer, big_consumer_1, queue_of_the_producer, queue_of_finished_products_1, query_stwig_leaf_node_label1, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
     b = client.submit(consumer, queue_of_the_producer, queue_of_finished_products_1, query_stwig_leaf_node_label1, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
     # print(b.result())
-    #
+
     query_stwig_leaf_node2 = query_stwig[2]
     query_stwig_leaf_node_label2 = query_stwig[2][1]
+    # big_consumer_2 = client.scatter(data_graph_edges)
+    # c = client.submit(consumer, big_consumer_2, queue_of_finished_products_1, queue_of_finished_products_2, query_stwig_leaf_node_label2, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
     c = client.submit(consumer, queue_of_finished_products_1, queue_of_finished_products_2, query_stwig_leaf_node_label2, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
     # print(c.result())
 
     query_stwig_leaf_node3 = query_stwig[3]
     query_stwig_leaf_node_label3 = query_stwig[3][1]
+    # big_consumer_3 = client.scatter(data_graph_edges)
+    # d = client.submit(consumer, big_consumer_3, queue_of_finished_products_2, queue_of_finished_products_3, query_stwig_leaf_node_label3, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
     d = client.submit(consumer, queue_of_finished_products_2, queue_of_finished_products_3, query_stwig_leaf_node_label3, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
     # print(d.result())
 
     query_stwig_leaf_node4 = query_stwig[4]
     query_stwig_leaf_node_label4 = query_stwig[4][1]
+    # big_consumer_4 = client.scatter(data_graph_edges)
+    # e = client.submit(consumer, big_consumer_4, queue_of_finished_products_3, queue_of_finished_products_4, query_stwig_leaf_node_label4, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
     e = client.submit(consumer, queue_of_finished_products_3, queue_of_finished_products_4, query_stwig_leaf_node_label4, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
     # print(e)
     # print(e.result())
     # queue_of_futures.put(e)
-    e.result()
-    # f = client.submit(consumer, queue_of_finished_products_4, queue_of_finished_products_5, queue_of_futures)
-    # print(f.result())
+    # e.result()
+
+
+    query_stwig_leaf_node5 = query_stwig[5]
+    query_stwig_leaf_node_label5 = query_stwig[5][1]
+    f = client.submit(consumer, queue_of_finished_products_4, queue_of_finished_products_5, query_stwig_leaf_node_label5, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
+    # f.result()
+
+    query_stwig_leaf_node6 = query_stwig[6]
+    query_stwig_leaf_node_label6 = query_stwig[6][1]
+    g = client.submit(consumer, queue_of_finished_products_5, queue_of_finished_products_6, query_stwig_leaf_node_label6, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
+    # g.result()
+
+    query_stwig_leaf_node7 = query_stwig[7]
+    query_stwig_leaf_node_label7 = query_stwig[7][1]
+    h = client.submit(consumer, queue_of_finished_products_6, queue_of_finished_products_7, query_stwig_leaf_node_label7, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
+    h.result()
 
     total_time = timer() - start_time
     print("Total execution time: " + str(total_time))
