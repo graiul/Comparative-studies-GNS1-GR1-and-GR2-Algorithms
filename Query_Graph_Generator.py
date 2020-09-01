@@ -280,46 +280,55 @@ class Query_Graph_Generator(object):
 
         # Grafuri query pentru testarea GR1_Algorithm
 
+        # nr 1
         # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si doi consumatori
         # Cinci rulari
         # query_graph_edges = [[7711, 2243], [7711, 2259]]
         # node_attr = ["16", "2", "17"]
 
+        # nr 2
         # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si doi consumatori
         # Cinci rulari
         # query_graph_edges = [[4164, 3526], [4164, 5687]]
         # node_attr = ["10", "26", "2"]
 
+        # nr 3
         # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si doi consumatori
         # Cinci rulari
         # query_graph_edges = [[2670, 10109], [2670, 10387]]
         # node_attr = ["29", "30", "20"]
 
+        # nr 4
         # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si doi consumatori
         # Cinci rulari
         # query_graph_edges = [[5636, 2904], [5636, 3414]]
         # node_attr = ["16", "6", "30"]
 
+        # nr 5
         # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si doi consumatori
         # Cinci rulari
         # query_graph_edges = [[11965, 1278], [11965, 1291]]
         # node_attr = ["16", "13", "9"]
 
+        # nr 6
         # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si trei consumatori
         # Cinci rulari
         # query_graph_edges = [[11041, 2467], [11041, 2607], [11041, 2650]]
         # node_attr = ["18", "23", "11", "9"]
 
+        # nr 7
         # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si trei consumatori
         # Cinci rulari
         # query_graph_edges = [[8028, 3850], [8028, 58], [8028, 7465]]
         # node_attr = ["6", "4", "20", "18"]
 
+        # nr 8
         # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si trei consumatori
         # Cinci rulari
         # query_graph_edges = [[2850, 979], [2850, 3526], [2850, 5591]]
         # node_attr = ["27", "14", "26", "3"]
 
+        # nr 9
         # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si trei consumatori
         # Cinci rulari
         # query_graph_edges = [[1773, 1488], [1773, 1898], [1773, 2285]]
@@ -329,47 +338,55 @@ class Query_Graph_Generator(object):
         # query_graph_edges = [[0, 1773], [0, 1817],[0,4426]]
         # node_attr = ["29", "25", "19", "13"]
 
+        # nr 10
         # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si trei consumatori
         # Cinci rulari
-        # query_graph_edges = [[7190,137], [7190,419], [7190,450]]
-        # node_attr = ["3", "2", "11", "3"]
+        query_graph_edges = [[7190,137], [7190,419], [7190,450]]
+        node_attr = ["3", "2", "11", "3"]
 
+        # nr 11
         # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si patru consumatori
         # fara print-uri ale rezultatelor in timpul rularii.
         # Cinci rulari. Dask scatter broadcast=False, un sg graf data, distribuire round-robin facuta de dask; distributed.dask.org/en/latest/locality.html
         # query_graph_edges =[[58, 1870], [58, 1878], [58, 1982], [58, 3396]]
         # node_attr = ["20", "13", "32", "4", "14"]
 
+        # nr 12
         # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si patru consumatori
         # fara print-uri ale rezultatelor in timpul rularii.
         # Cinci rulari. Dask scatter broadcast=False, un sg graf data, distribuire round-robin facuta de dask; distributed.dask.org/en/latest/locality.html
         # query_graph_edges = [[10881, 8738], [10881, 8962], [10881, 9854], [10881, 10074]]
         # node_attr = ["18", "32", "1", "29", "20"]
 
+        # nr 13
         # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si patru consumatori
         # fara print-uri ale rezultatelor in timpul rularii.
         # Cinci rulari. Dask scatter broadcast=False, un sg graf data, distribuire round-robin facuta de dask; distributed.dask.org/en/latest/locality.html
         # query_graph_edges = [[8379,8306], [8379,8374], [8379,8676], [8379,9219]]
         # node_attr = ["12", "24", "19", "6", "9"]
 
+        # nr 14
         # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si patru consumatori
         # fara print-uri ale rezultatelor in timpul rularii.
         # Cinci rulari. Dask scatter broadcast=False, un sg graf data, distribuire round-robin facuta de dask; distributed.dask.org/en/latest/locality.html
         # query_graph_edges = [[9467,7395], [9467,7407], [9467,7465], [9467,7522]]
         # node_attr = ["28", "30", "1", "18", "11"]
 
+        # nr 15
         # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si patru consumatori
         # fara print-uri ale rezultatelor in timpul rularii.
         # Cinci rulari. Dask scatter broadcast=False, un sg graf data, distribuire round-robin facuta de dask; distributed.dask.org/en/latest/locality.html
         # query_graph_edges = [[10095,4634], [10095,4723], [10095,4778], [10095,4858]]
         # node_attr = ["25", "28", "15", "10", "6"]
 
+        # nr 16
         # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si cinci consumatori
         # fara print-uri ale rezultatelor in timpul rularii.
         # Cinci rulari. Dask scatter broadcast=False, un sg graf data, distribuire round-robin facuta de dask; distributed.dask.org/en/latest/locality.html
         # query_graph_edges = [[11041, 2467], [11041, 2607], [11041, 2650], [11041, 2904], [11041, 3414]]
         # node_attr = ["18", "23", "11", "9", "6", "30"]
 
+        # nr 17
         # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si cinci consumatori
         # fara print-uri ale rezultatelor in timpul rularii.
         # Cinci rulari. Dask scatter broadcast=False, un sg graf data, distribuire round-robin facuta de dask; distributed.dask.org/en/latest/locality.html
@@ -401,6 +418,21 @@ class Query_Graph_Generator(object):
         # query_graph_edges = [[979, 4337], [979, 4341], [979, 4419], [979, 4736], [979, 4888]]
         # node_attr = ["14", "13", "3", "28", "8", "18"]
 
+        # Preluat de la graful query nr 20 si despartit in 2 bucati:
+        # Bucata 1:
+        # query_graph_edges = [[979, 4337], [979, 4341]]
+        # node_attr = ["14", "13", "3"]
+
+        # Bucata 2:
+        # query_graph_edges = [[979, 4419], [979, 4736], [979, 4888]]
+        # node_attr = ["14", "28", "8", "18"]
+
+
+
+        # ##################################################################################################
+        # De aici incolo este necesara despartirea in bucati.
+        # ##################################################################################################
+
         # dureaza prea mult
         # query_graph_edges = [[7867,6217], [7867,6369], [7867,6419], [7867,6828], [7867,9155], [7867,9764]]
         # node_attr = ["10", "19", "16", "27", "26", "30", "12"]
@@ -419,11 +451,21 @@ class Query_Graph_Generator(object):
         # query_graph_edges = [[979, 4337], [979, 4341], [979, 4419], [979, 4736], [979, 4888], [979, 5042]]
         # node_attr = ["14", "13", "3", "28", "8", "18", "15"]
 
+        # Graf nr 21
+        # Il impart in doua bucati:
+        # Bucata 1:
+        # query_graph_edges = [[979, 4337], [979, 4341], [979, 4419]]
+        # node_attr = ["14", "13", "3", "28"]
+
+        # Bucata 2:
+        # query_graph_edges = [[979, 4736], [979, 4888], [979, 5042]]
+        # node_attr = ["14", "8", "18", "15"]
+
         # nr 26
         # 90 min si nu s-a terminat prima rulare
         # Refolosit un graf query cu 6 noduri si am adaugat inca doua noduri
-        query_graph_edges = [[979, 4337], [979, 4341], [979, 4419], [979, 4736], [979, 4888], [979, 5042], [979, 5086]]
-        node_attr = ["14", "13", "3", "28", "8", "18", "15", "30"]
+        # query_graph_edges = [[979, 4337], [979, 4341], [979, 4419], [979, 4736], [979, 4888], [979, 5042], [979, 5086]]
+        # node_attr = ["14", "13", "3", "28", "8", "18", "15", "30"]
         # 979,4337
         # 979,4341
         # 979,4419
