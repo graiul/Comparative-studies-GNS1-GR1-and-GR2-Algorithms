@@ -336,14 +336,94 @@ class Query_Graph_Generator(object):
 
         # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si patru consumatori
         # fara print-uri ale rezultatelor in timpul rularii.
-        # Trei rulari.
+        # Cinci rulari. Dask scatter broadcast=False, un sg graf data, distribuire round-robin facuta de dask; distributed.dask.org/en/latest/locality.html
         # query_graph_edges =[[58, 1870], [58, 1878], [58, 1982], [58, 3396]]
         # node_attr = ["20", "13", "32", "4", "14"]
 
-        query_graph_edges = [[10881, 8738], [10881, 8962], [10881, 9854], [10881, 10074]]
-        node_attr = ["18", "32", "1", "29", "20"]
+        # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si patru consumatori
+        # fara print-uri ale rezultatelor in timpul rularii.
+        # Cinci rulari. Dask scatter broadcast=False, un sg graf data, distribuire round-robin facuta de dask; distributed.dask.org/en/latest/locality.html
+        # query_graph_edges = [[10881, 8738], [10881, 8962], [10881, 9854], [10881, 10074]]
+        # node_attr = ["18", "32", "1", "29", "20"]
 
+        # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si patru consumatori
+        # fara print-uri ale rezultatelor in timpul rularii.
+        # Cinci rulari. Dask scatter broadcast=False, un sg graf data, distribuire round-robin facuta de dask; distributed.dask.org/en/latest/locality.html
+        # query_graph_edges = [[8379,8306], [8379,8374], [8379,8676], [8379,9219]]
+        # node_attr = ["12", "24", "19", "6", "9"]
 
+        # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si patru consumatori
+        # fara print-uri ale rezultatelor in timpul rularii.
+        # Cinci rulari. Dask scatter broadcast=False, un sg graf data, distribuire round-robin facuta de dask; distributed.dask.org/en/latest/locality.html
+        # query_graph_edges = [[9467,7395], [9467,7407], [9467,7465], [9467,7522]]
+        # node_attr = ["28", "30", "1", "18", "11"]
+
+        # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si patru consumatori
+        # fara print-uri ale rezultatelor in timpul rularii.
+        # Cinci rulari. Dask scatter broadcast=False, un sg graf data, distribuire round-robin facuta de dask; distributed.dask.org/en/latest/locality.html
+        # query_graph_edges = [[10095,4634], [10095,4723], [10095,4778], [10095,4858]]
+        # node_attr = ["25", "28", "15", "10", "6"]
+
+        # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si cinci consumatori
+        # fara print-uri ale rezultatelor in timpul rularii.
+        # Cinci rulari. Dask scatter broadcast=False, un sg graf data, distribuire round-robin facuta de dask; distributed.dask.org/en/latest/locality.html
+        # query_graph_edges = [[11041, 2467], [11041, 2607], [11041, 2650], [11041, 2904], [11041, 3414]]
+        # node_attr = ["18", "23", "11", "9", "6", "30"]
+
+        # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si cinci consumatori
+        # fara print-uri ale rezultatelor in timpul rularii.
+        # Cinci rulari. Dask scatter broadcast=False, un sg graf data, distribuire round-robin facuta de dask; distributed.dask.org/en/latest/locality.html
+        # query_graph_edges = [[7563, 5755], [7563, 6256], [7563, 6784], [7563, 7289], [7563, 7308]]
+        # node_attr = ["18", "23", "3", "15", "26", "2"]
+
+        # dureaza prea mult
+        # query_graph_edges = [[6880, 5687], [6880, 6392], [6880, 9094], [6880, 12206], [6880, 11000]]
+        # node_attr = ["9", "2", "23", "10", "22", "24"]
+
+        # nr 18
+        # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si cinci consumatori
+        # fara print-uri ale rezultatelor in timpul rularii.
+        # Cinci rulari. Dask scatter broadcast=False, un sg graf data, distribuire round-robin facuta de dask; distributed.dask.org/en/latest/locality.html
+        # query_graph_edges = [[7190, 3586], [7190, 3857], [7190, 3937], [7190, 4344], [7190, 4396]]
+        # node_attr = ["3", "14", "8", "16", "11", "13"]
+
+        # nr 19
+        # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si cinci consumatori
+        # fara print-uri ale rezultatelor in timpul rularii.
+        # Cinci rulari. Dask scatter broadcast=False, un sg graf data, distribuire round-robin facuta de dask; distributed.dask.org/en/latest/locality.html
+        # query_graph_edges =[[58, 1870], [58, 1878], [58, 1982], [58, 3396], [58, 4819]]
+        # node_attr = ["20", "13", "32", "4", "14", "11"]
+
+        # nr 20
+        # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si cinci consumatori
+        # fara print-uri ale rezultatelor in timpul rularii.
+        # Cinci rulari. Dask scatter broadcast=False, un sg graf data, distribuire round-robin facuta de dask; distributed.dask.org/en/latest/locality.html
+        # query_graph_edges = [[979, 4337], [979, 4341], [979, 4419], [979, 4736], [979, 4888]]
+        # node_attr = ["14", "13", "3", "28", "8", "18"]
+
+        # dureaza prea mult
+        # query_graph_edges = [[7867,6217], [7867,6369], [7867,6419], [7867,6828], [7867,9155], [7867,9764]]
+        # node_attr = ["10", "19", "16", "27", "26", "30", "12"]
+
+        # dureaza prea mult
+        # query_graph_edges = [[10196,2551], [10196,2800], [10196,3083], [10196,3223], [10196,3318], [10196,3482]]
+        # node_attr = ["27", "22", "20", "3", "8", "26", "6"]
+
+        # dureaza prea mult
+        # query_graph_edges = [[10881, 8738], [10881, 8962], [10881, 9854], [10881, 10074], [10881, 10527], [10881, 10699]]
+        # node_attr = ["18", "32", "1", "29", "20", "8", "17"]
+
+        # 26
+        # 90 min si nu s-a terminat prima rulare
+        query_graph_edges = [[979, 4337], [979, 4341], [979, 4419], [979, 4736], [979, 4888], [979, 5042], [979, 5086]]
+        node_attr = ["14", "13", "3", "28", "8", "18", "15", "30"]
+        # 979,4337
+        # 979,4341
+        # 979,4419
+        # 979,4736
+        # 979,4888
+        # 979,5042
+        # 979,5086
         query_graph.add_edges_from(query_graph_edges)
 
         node_attr_dict = dict(zip(query_graph.nodes(), node_attr)) # Am scos sortarea crescatoare al id-urilor nodurilor. Astfel se face corect asocierea intre noduri si label-uri.
