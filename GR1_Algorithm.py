@@ -34,11 +34,13 @@ from dask.distributed import Client, LocalCluster, Queue, Variable
 import os
 # Producer function that places data on the Queue
 # Va produce noduri data cu label-ul radacinii din graful query STwig.
-def producer(queue_of_the_producer, query_stwig_1_dict, data_graph_edges, node_attributes_dictionary):
+def producer(queue_of_the_producer, query_parts, query_stwig_1_dict, data_graph_edges, node_attributes_dictionary):
     print("\nStarting producer " + str(os.getpid()))
 
     query_stwig = list(query_stwig_1_dict.items())
-    # print(query_stwig)
+    print(query_stwig)
+    for part in query_parts:
+        print(part)
     query_stwig_root_node = query_stwig[0]
     # print(query_stwig_root_node)
     query_stwig_root_node_id = query_stwig_root_node[0]
@@ -510,6 +512,12 @@ def refineCandidates(self, M, query_node, query_node_candidates):
     # self.M.append([query_node, query_node_candidates[0]])
 
 
+# stackoverflow.com/questions/752308/split-list-into-smaller-lists-split-in-half
+def split_list(alist, wanted_parts=1):
+    length = len(alist)
+    return [alist[i*length // wanted_parts: (i+1)*length // wanted_parts]
+            for i in range(wanted_parts)]
+
 # Pentru ca un consumator sa preia nume noi de la consumatorul precedent treb folosita o bucla infinita care sa
 # caute intr-o coada si sa prelucreze in continuare. Acea coada va trebui sa fie:
 # - IMPLEMENTAT: coada consumatorului precedent in care se pun nume produse de cons respectiv
@@ -627,6 +635,21 @@ if __name__ == '__main__': # https://github.com/dask/distributed/issues/2422
     query_stwig_length = len(query_stwig) # Pentru grafuri STwig, e nr nodurilor. Pentru grafuri care nu au forma STwig, va fi nr muchiilor, adica al perechilor de noduri,
                                           # datorita faptului ca am pus o muchie pe cate o pozitie al solutiei partiale in cazul respectiv.
 
+    parts = split_list(query_stwig, wanted_parts=2)
+    print("Query graph parts: ")
+    for part in parts:
+        print(part)
+    # print(query_stwig_1_as_labels)
+    l_parts = split_list(query_stwig_1_as_labels, wanted_parts=2)
+    print("\nQuery graph edges with labels, having ID's inserted at the beginning of each edge:")
+    print(l_parts)
+    aux = (None, l_parts[0][0])
+    del l_parts[0][0]
+    del l_parts[1][0]
+    l_parts[0].insert(0, aux)
+    l_parts[1].insert(0, parts[1][0])
+    print(l_parts)
+
     start_time = timer()
 
     # distributed.dask.org/en/latest/locality.html
@@ -635,9 +658,10 @@ if __name__ == '__main__': # https://github.com/dask/distributed/issues/2422
     # Prin metoda submit() se da de lucru Pool-ului de procese create de LocalCluster, iar numarul de procese este cel dat prin metoda scale() dupa instantierea LocalCluster-ului.
     # big_producer = client.scatter(data_graph_edges)
     # a = client.submit(producer, big_producer, queue_of_the_producer, query_stwig_1_dict, data_graph_edges, node_attributes_dictionary)  # Producer-ul creaza coada cu nume.
-    a = client.submit(producer, queue_of_the_producer, query_stwig_1_dict, data_graph_edges, node_attributes_dictionary) # Producer-ul creaza coada cu nume.
+    a = client.submit(producer, queue_of_the_producer, l_parts, query_stwig_1_dict, data_graph_edges, node_attributes_dictionary) # Producer-ul creaza coada cu nume.
     # print(a.result())
     # print(queue_of_the_producer.get(batch=True))
+    # exit(0)
 
     query_stwig_leaf_node1 = query_stwig[1]
     query_stwig_leaf_node_label1 = query_stwig[1][1]
