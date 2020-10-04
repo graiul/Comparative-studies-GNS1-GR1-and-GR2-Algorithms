@@ -87,6 +87,9 @@ print(parts)
 # print(query_stwig_1_as_labels)
 l_parts = split_list(query_stwig_1_as_labels, wanted_parts=2)
 print(l_parts)
+aux = (None, l_parts[0][0])
+del l_parts[0][0]
 del l_parts[1][0]
+l_parts[0].insert(0, aux)
 l_parts[1].insert(0, parts[1][0])
 print(l_parts)
