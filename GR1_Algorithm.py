@@ -34,13 +34,21 @@ from dask.distributed import Client, LocalCluster, Queue, Variable
 import os
 # Producer function that places data on the Queue
 # Va produce noduri data cu label-ul radacinii din graful query STwig.
-def producer(queue_of_the_producer, query_parts, query_stwig_1_dict, data_graph_edges, node_attributes_dictionary):
+def producer(queue_of_the_producer, query_stwig_1_dict, data_graph_edges, node_attributes_dictionary):
+# Signatura urmatoare contine ca si input o lista de parti ale grafului query
+# def producer(queue_of_the_producer, query_parts, query_stwig_1_dict, data_graph_edges, node_attributes_dictionary):
     print("\nStarting producer " + str(os.getpid()))
 
     query_stwig = list(query_stwig_1_dict.items())
+    print("Query STwig received by the producer: ")
     print(query_stwig)
-    for part in query_parts:
-        print(part)
+    # print("The STwig query graf split into parts: ")
+    # query_stwig_parts = split_list(query_stwig, wanted_parts=2)
+    # for part in query_stwig_parts:
+    #     print(part)
+    # print("Query STwig PARTS received by the producer: ")
+    # for part in query_parts:
+    #     print(part)
     query_stwig_root_node = query_stwig[0]
     # print(query_stwig_root_node)
     query_stwig_root_node_id = query_stwig_root_node[0]
@@ -657,8 +665,9 @@ if __name__ == '__main__': # https://github.com/dask/distributed/issues/2422
 
     # Prin metoda submit() se da de lucru Pool-ului de procese create de LocalCluster, iar numarul de procese este cel dat prin metoda scale() dupa instantierea LocalCluster-ului.
     # big_producer = client.scatter(data_graph_edges)
-    # a = client.submit(producer, big_producer, queue_of_the_producer, query_stwig_1_dict, data_graph_edges, node_attributes_dictionary)  # Producer-ul creaza coada cu nume.
-    a = client.submit(producer, queue_of_the_producer, l_parts, query_stwig_1_dict, data_graph_edges, node_attributes_dictionary) # Producer-ul creaza coada cu nume.
+    a = client.submit(producer, queue_of_the_producer, query_stwig_1_dict, data_graph_edges, node_attributes_dictionary)  # Producer-ul creaza coada cu nume.
+    # Urmatorul rand contine crearea unui producer folosind signatura ce contine o lista de parti ale grafului query
+    # a = client.submit(producer, queue_of_the_producer, l_parts, query_stwig_1_dict, data_graph_edges, node_attributes_dictionary) # Producer-ul creaza coada cu nume.
     # print(a.result())
     # print(queue_of_the_producer.get(batch=True))
     # exit(0)
