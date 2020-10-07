@@ -588,7 +588,7 @@ def main():
                 # M2 = [[11041, root]]
                 # M2 = [[7563, root]]
                 # M2 = [[6880, root]]
-                # M2 = [[58, root]]
+                M2 = [[58, root]]
                 # M2 = [[979, root]]
 
                 # M2 = [[10881, root]] # Acest graf blocheaza laptop-ul - STwig alg
@@ -630,7 +630,7 @@ def main():
                 # M2 = [[6954, root]]
 
                 # ok
-                M2 = [[3842, root]]
+                # M2 = [[3842, root]]
 
 
                     # print()
