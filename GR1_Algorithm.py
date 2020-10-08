@@ -42,12 +42,12 @@ class GR1_Algorithm(object):
 
     # Producer function that places data on the Queue
     # Va produce noduri data cu label-ul radacinii din graful query STwig.
-    def producer(self, queue_of_the_producer, query_stwig_1_dict, data_graph_edges, node_attributes_dictionary):
+    def producer(self, queue_of_the_producer, query_stwig, data_graph_edges, node_attributes_dictionary):
     # Signatura urmatoare contine ca si input o lista de parti ale grafului query
     # def producer(queue_of_the_producer, query_parts, query_stwig_1_dict, data_graph_edges, node_attributes_dictionary):
         print("\nStarting producer " + str(os.getpid()))
 
-        query_stwig = list(query_stwig_1_dict.items())
+        # query_stwig = list(query_stwig_1_dict.items())
         print("Query STwig received by the producer: ")
         print(query_stwig)
         # print("The STwig query graf split into parts: ")
@@ -528,13 +528,6 @@ class GR1_Algorithm(object):
     #     # self.M.append([query_node, query_node_candidates[0]])
 
 
-    # stackoverflow.com/questions/752308/split-list-into-smaller-lists-split-in-half
-
-    def split_list(alist, wanted_parts=1):
-        length = len(alist)
-        return [alist[i*length // wanted_parts: (i+1)*length // wanted_parts]
-                for i in range(wanted_parts)]
-
     # Pentru ca un consumator sa preia nume noi de la consumatorul precedent treb folosita o bucla infinita care sa
     # caute intr-o coada si sa prelucreze in continuare. Acea coada va trebui sa fie:
     # - IMPLEMENTAT: coada consumatorului precedent in care se pun nume produse de cons respectiv
@@ -542,13 +535,13 @@ class GR1_Algorithm(object):
     # - IMPLEMENTAT: cazul primului consumator care preia nume proaspat produse de producator.
     # - IMPLEMENTAT crearea unei bucle infinite care preia material pana la intalnirea unui semnal de oprire.
     # - NU A FOST NEVOIE: Pentru acest lucru e nevoie de mult mai mult material in coada initiala de nume.
-    if __name__ == '__main__': # https://github.com/dask/distributed/issues/2422
+    # if __name__ == '__main__': # https://github.com/dask/distributed/issues/2422
                                # https://github.com/dask/distributed/pull/2462
         # Client() foloseste un LocalCluster format din procese.
         # client = Client() # ASA E PARALEL, PT CA LUCREAZA CU PROCESE, NU CU THREADURI.
                                # Daca ar fi fost nbconverted, nu ar fi fost nevoie de "if name==main".
                                # Acest lucru nu e mentionat in documentatia dask pentru LocalCluster, care e generat de Client().
-
+    def execute_gr1_algorithm(self):
         # Am creat un LocalCluster cu 5 workers, adica 5 procese, acesta avand rolul de Pool din  pachetul py multiprocessing.
         lc = LocalCluster()
         lc.scale(10)
@@ -581,125 +574,137 @@ class GR1_Algorithm(object):
         partial_solutions = Queue()
         queue_for_printing = Queue()
 
-    ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
-        # Aici cream un obiect graf query:
-        query_graph_gen = Query_Graph_Generator()
-        query_graph = query_graph_gen.gen_RI_query_graph()
-        query_stwig_1 = list(query_graph.nodes())
-        # print("Query STwig: " + str(query_stwig_1))
-        # Label-ul radacinii
-        # root_label = dataGraph.node[query_stwig_1[0]]['label']
-        root_label = query_graph.nodes[query_stwig_1[0]]['label']
-        # Label-urile vecinilor din lista
-        neighbor_labels = []
-        for n in query_stwig_1[1:]:
-           # neighbor_labels.append(dataGraph.node[n]['label'])
-           neighbor_labels.append(query_graph.nodes[n]['label'])
+    # ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
+    #     # Aici cream un obiect graf query:
+    #     query_graph_gen = Query_Graph_Generator()
+    #     query_graph = query_graph_gen.gen_RI_query_graph()
+    #     query_stwig_1 = list(query_graph.nodes())
+    #     # print("Query STwig: " + str(query_stwig_1))
+    #     # Label-ul radacinii
+    #     # root_label = dataGraph.node[query_stwig_1[0]]['label']
+    #     root_label = query_graph.nodes[query_stwig_1[0]]['label']
+    #     # Label-urile vecinilor din lista
+    #     neighbor_labels = []
+    #     for n in query_stwig_1[1:]:
+    #        # neighbor_labels.append(dataGraph.node[n]['label'])
+    #        neighbor_labels.append(query_graph.nodes[n]['label'])
+    #
+    #     query_stwig_1_as_labels = []
+    #     query_stwig_1_as_labels.append(root_label)
+    #     for nl in neighbor_labels:
+    #        query_stwig_1_as_labels.append(nl)
+    #     # print("query_stwig_1_as_labels: " + str(query_stwig_1_as_labels))
+    #     # print()
+    #     query_stwig_1_as_labels_source = copy.deepcopy(query_stwig_1_as_labels)
+    #
+    #     query_stwig_1_dict = OrderedDict(zip(query_stwig_1, query_stwig_1_as_labels_source))
+    # ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
+    #
+    # ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
+    #     # GRAFUL DATA DIN NEO4J
+    #     # neograph_data = Graph("bolt://127.0.0.1:7690", auth=("neo4j", "changeme")) # Data Graph RI - Cluster Neo4J
+    #     neograph_data = Graph("bolt://127.0.0.1:7687",
+    #                          auth=(
+    #                          "neo4j", "password"))  # Data Graph RI - O singura instanta de Neo4J
+    #
+    #     cqlQuery = "MATCH p=(n)-[r:PPI]->(m) return n.node_id, m.node_id"
+    #     result = neograph_data.run(cqlQuery).to_ndarray()
+    #     edge_list = result.tolist()
+    #     # # print("edge_list: ")
+    #     # # print(edge_list)
+    #     edge_list_integer_ids = []
+    #     for string_edge in edge_list:
+    #        edge_list_integer_ids.append([int(i) for i in string_edge])
+    #     # # print("edge_list_integer_ids: ")
+    #     # # print(edge_list_integer_ids)
+    #
+    #     dataGraph = nx.Graph()
+    #     dataGraph.add_edges_from(sorted(edge_list_integer_ids))
+    #     cqlQuery2 = "MATCH (n) return n.node_id, n.node_label"
+    #     result2 = neograph_data.run(cqlQuery2).to_ndarray()
+    #     # # print("result2: ")
+    #     # # print(result2)
+    #     node_ids_as_integers_with_string_labels = []
+    #     for node in result2:
+    #        # # print(node[0])
+    #        node_ids_as_integers_with_string_labels.append([int(node[0]), node[1]])
+    #     # # print("node_ids_as_integers_with_string_labels: ")
+    #     # # print(node_ids_as_integers_with_string_labels)
+    #
+    #     node_attr_dict = OrderedDict(sorted(node_ids_as_integers_with_string_labels))
+    #     nx.set_node_attributes(dataGraph, node_attr_dict, 'label')
+    # ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
 
-        query_stwig_1_as_labels = []
-        query_stwig_1_as_labels.append(root_label)
-        for nl in neighbor_labels:
-           query_stwig_1_as_labels.append(nl)
-        # print("query_stwig_1_as_labels: " + str(query_stwig_1_as_labels))
-        # print()
-        query_stwig_1_as_labels_source = copy.deepcopy(query_stwig_1_as_labels)
+        # query_stwig = list(query_stwig_1_dict.items())
+        # print(query_stwig)
+        # data_graph_edges = copy.deepcopy(sorted(edge_list_integer_ids))
+        # node_attributes_dictionary = OrderedDict(sorted(node_ids_as_integers_with_string_labels))
 
-        query_stwig_1_dict = OrderedDict(zip(query_stwig_1, query_stwig_1_as_labels_source))
-    ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
-
-    ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
-        # GRAFUL DATA DIN NEO4J
-        # neograph_data = Graph("bolt://127.0.0.1:7690", auth=("neo4j", "changeme")) # Data Graph RI - Cluster Neo4J
-        neograph_data = Graph("bolt://127.0.0.1:7687",
-                             auth=(
-                             "neo4j", "password"))  # Data Graph RI - O singura instanta de Neo4J
-
-        cqlQuery = "MATCH p=(n)-[r:PPI]->(m) return n.node_id, m.node_id"
-        result = neograph_data.run(cqlQuery).to_ndarray()
-        edge_list = result.tolist()
-        # # print("edge_list: ")
-        # # print(edge_list)
-        edge_list_integer_ids = []
-        for string_edge in edge_list:
-           edge_list_integer_ids.append([int(i) for i in string_edge])
-        # # print("edge_list_integer_ids: ")
-        # # print(edge_list_integer_ids)
-
-        dataGraph = nx.Graph()
-        dataGraph.add_edges_from(sorted(edge_list_integer_ids))
-        cqlQuery2 = "MATCH (n) return n.node_id, n.node_label"
-        result2 = neograph_data.run(cqlQuery2).to_ndarray()
-        # # print("result2: ")
-        # # print(result2)
-        node_ids_as_integers_with_string_labels = []
-        for node in result2:
-           # # print(node[0])
-           node_ids_as_integers_with_string_labels.append([int(node[0]), node[1]])
-        # # print("node_ids_as_integers_with_string_labels: ")
-        # # print(node_ids_as_integers_with_string_labels)
-
-        node_attr_dict = OrderedDict(sorted(node_ids_as_integers_with_string_labels))
-        nx.set_node_attributes(dataGraph, node_attr_dict, 'label')
-    ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
-
-        query_stwig = list(query_stwig_1_dict.items())
-        print(query_stwig)
-        data_graph_edges = copy.deepcopy(sorted(edge_list_integer_ids))
-        node_attributes_dictionary = OrderedDict(sorted(node_ids_as_integers_with_string_labels))
-
-        query_stwig_root_node = query_stwig[0]
-        query_stwig_root_node_label = query_stwig[0][1]
-        query_stwig_length = len(query_stwig) # Pentru grafuri STwig, e nr nodurilor. Pentru grafuri care nu au forma STwig, va fi nr muchiilor, adica al perechilor de noduri,
+        query_stwig_root_node = self.query_graph[0]
+        query_stwig_root_node_label = self.query_graph[0][1]
+        query_stwig_length = len(self.query_graph) # Pentru grafuri STwig, e nr nodurilor. Pentru grafuri care nu au forma STwig, va fi nr muchiilor, adica al perechilor de noduri,
                                               # datorita faptului ca am pus o muchie pe cate o pozitie al solutiei partiale in cazul respectiv.
 
-        parts = split_list(query_stwig, wanted_parts=2)
-        print("Query graph parts: ")
-        for part in parts:
-            print(part)
-        # print(query_stwig_1_as_labels)
-        l_parts = split_list(query_stwig_1_as_labels, wanted_parts=2)
-        print("\nQuery graph edges with labels, having ID's inserted at the beginning of each edge:")
-        print(l_parts)
-        aux = (None, l_parts[0][0])
-        del l_parts[0][0]
-        del l_parts[1][0]
-        l_parts[0].insert(0, aux)
-        l_parts[1].insert(0, parts[1][0])
-        print(l_parts)
+        # parts = split_list(query_stwig, wanted_parts=2)
+        # print("Query graph parts: ")
+        # for part in parts:
+        #     print(part)
+        # # print(query_stwig_1_as_labels)
+        # l_parts = split_list(query_stwig_1_as_labels, wanted_parts=2)
+        # print("\nQuery graph edges with labels, having ID's inserted at the beginning of each edge:")
+        # print(l_parts)
+        # aux = (None, l_parts[0][0])
+        # del l_parts[0][0]
+        # del l_parts[1][0]
+        # l_parts[0].insert(0, aux)
+        # l_parts[1].insert(0, parts[1][0])
+        # print(l_parts)
 
         start_time = timer()
 
         # distributed.dask.org/en/latest/locality.html
-        futures = client.scatter(data_graph_edges, workers=None, broadcast=False)
+        # futures = client.scatter(data_graph_edges, workers=None, broadcast=False)
+        futures = client.scatter(self.data_graph[0], workers=None, broadcast=False)
+
 
         # Prin metoda submit() se da de lucru Pool-ului de procese create de LocalCluster, iar numarul de procese este cel dat prin metoda scale() dupa instantierea LocalCluster-ului.
         # big_producer = client.scatter(data_graph_edges)
-        a = client.submit(producer, queue_of_the_producer, query_stwig_1_dict, data_graph_edges, node_attributes_dictionary)  # Producer-ul creaza coada cu nume.
+
+        # a = client.submit(self.producer, queue_of_the_producer, query_stwig_1_dict, data_graph_edges, node_attributes_dictionary)  # Producer-ul creaza coada cu nume.
+        a = client.submit(self.producer, queue_of_the_producer, self.query_graph, self.data_graph[0], self.data_graph[1])  # Producer-ul creaza coada cu nume.
+
         # Urmatorul rand contine crearea unui producer folosind signatura ce contine o lista de parti ale grafului query
         # a = client.submit(producer, queue_of_the_producer, l_parts, query_stwig_1_dict, data_graph_edges, node_attributes_dictionary) # Producer-ul creaza coada cu nume.
+
         # print(a.result())
         # print(queue_of_the_producer.get(batch=True))
         # exit(0)
 
-        query_stwig_leaf_node1 = query_stwig[1]
-        query_stwig_leaf_node_label1 = query_stwig[1][1]
+        query_stwig_leaf_node1 = self.query_graph[1]
+        query_stwig_leaf_node_label1 = self.query_graph[1][1]
         # big_consumer_1 = client.scatter(data_graph_edges)
         # b = client.submit(consumer, big_consumer_1, queue_of_the_producer, queue_of_finished_products_1, query_stwig_leaf_node_label1, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
-        b = client.submit(consumer, queue_of_the_producer, queue_of_finished_products_1, query_stwig_leaf_node_label1, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
+
+        # b = client.submit(consumer, queue_of_the_producer, queue_of_finished_products_1, query_stwig_leaf_node_label1, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
+        b = client.submit(self.consumer, queue_of_the_producer, queue_of_finished_products_1, query_stwig_leaf_node_label1, query_stwig_length, self.data_graph[0], self.data_graph[1], queue_for_printing)
+
         # print(b.result())
 
-        query_stwig_leaf_node2 = query_stwig[2]
-        query_stwig_leaf_node_label2 = query_stwig[2][1]
+        query_stwig_leaf_node2 = self.query_graph[2]
+        query_stwig_leaf_node_label2 = self.query_graph[2][1]
         # big_consumer_2 = client.scatter(data_graph_edges)
         # c = client.submit(consumer, big_consumer_2, queue_of_finished_products_1, queue_of_finished_products_2, query_stwig_leaf_node_label2, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
-        c = client.submit(consumer, queue_of_finished_products_1, queue_of_finished_products_2, query_stwig_leaf_node_label2, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
+
+        # c = client.submit(consumer, queue_of_finished_products_1, queue_of_finished_products_2, query_stwig_leaf_node_label2, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
+        c = client.submit(self.consumer, queue_of_finished_products_1, queue_of_finished_products_2, query_stwig_leaf_node_label2, query_stwig_length, self.data_graph[0], self.data_graph[1], queue_for_printing)
+
         # c.result()
 
-        query_stwig_leaf_node3 = query_stwig[3]
-        query_stwig_leaf_node_label3 = query_stwig[3][1]
+        query_stwig_leaf_node3 = self.query_graph[3]
+        query_stwig_leaf_node_label3 = self.query_graph[3][1]
         # big_consumer_3 = client.scatter(data_graph_edges)
         # d = client.submit(consumer, big_consumer_3, queue_of_finished_products_2, queue_of_finished_products_3, query_stwig_leaf_node_label3, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
-        d = client.submit(consumer, queue_of_finished_products_2, queue_of_finished_products_3, query_stwig_leaf_node_label3, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
+        d = client.submit(self.consumer, queue_of_finished_products_2, queue_of_finished_products_3, query_stwig_leaf_node_label3, query_stwig_length, self.data_graph[0], self.data_graph[1], queue_for_printing)
         d.result()
 
         # query_stwig_leaf_node4 = query_stwig[4]
