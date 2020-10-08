@@ -36,9 +36,11 @@ import os
 class GR1_Algorithm(object):
 
     def __init__(self, query_graph, data_graph, first_query_node_id_into_search=False):
+    # def __init__(self, query_graph, data_graph, first_query_node_id_into_search=False, logs_directory):
         self.query_graph = query_graph
         self.data_graph = data_graph
         self.first_query_node_id_into_search = first_query_node_id_into_search
+        # self.logs_directory = logs_directory
 
     # Producer function that places data on the Queue
     # Va produce noduri data cu label-ul radacinii din graful query STwig.
@@ -681,6 +683,7 @@ class GR1_Algorithm(object):
         # exit(0)
 
         number_of_consumers = len(self.query_graph) - 1
+        # simplifiedpython.net/python-switch-case-statement/
         if number_of_consumers == 1:
             query_stwig_leaf_node1 = self.query_graph[1]
             query_stwig_leaf_node_label1 = self.query_graph[1][1]
