@@ -7,11 +7,16 @@ from py2neo import Graph
 import networkx as nx
 
 from Query_Graph_Generator import Query_Graph_Generator
+
 from DB_Access_Test import DB_Access_Test
 from Dataset_Operator import Dataset_Operator
+
 from STwig_Algorithm import STwig_Algorithm
 # from Backtracking_STwig_Matching import Backtracking_STwig_Matching
 from VF2Algorithm import VF2Algorithm
+from GR1_Algorithm import GR1_Algorithm
+
+
 from neo4j_test_2 import neo4j_test_2
 import os
 from multiprocessing import Pool, Process, Manager, Lock
@@ -847,15 +852,52 @@ def main():
 
     elif option == 13:
         print("\n##### GR1 Algorithm execution #####")
-        obtain_query_graph()
+        query_graph = obtain_query_graph(2)[0] # Variabila "query_graph" poate sa contina un query graf intreg, sau mai multe bucati.
+        for pq in query_graph:
+            print(pq)
+        print()
+        data_graph = obtain_data_graph()
+        for pd in data_graph:
+            print(pd)
+        # a1 = GR1_Algorithm(query_graph[0], data_graph, False)
+        # a1.execute_gr1_algorithm()
+
+        a2 =GR1_Algorithm(query_graph[1], data_graph, False)
+        a2.execute_gr1_algorithm()
+
 
 # stackoverflow.com/questions/752308/split-list-into-smaller-lists-split-in-half
 def split_list(alist, wanted_parts=1):
-    length = len(alist)
-    return [alist[i*length // wanted_parts: (i+1)*length // wanted_parts]
-            for i in range(wanted_parts)]
+    # print("Splitter work:")
+    print(alist)
+    root = copy.deepcopy(alist[0])
+    no_root_alist = copy.deepcopy(alist[1:])
+    # print(no_root_alist)
+    length = len(no_root_alist)
 
-def obtain_query_graph(): # Foloseste si data graful din Neo4J pentru label-urile nodurilor
+    rez_list = []
+    # for i in range(wanted_parts):
+    #     aux = []
+    #     if i == 0:
+    #         rez_list.append(alist[i * length // wanted_parts: (i + 1) * length // wanted_parts])
+    #     else:
+    #         aux = copy.deepcopy(alist[i*length // wanted_parts: (i+1)*length // wanted_parts])
+    #         aux.insert(0, root)
+    #         rez_list.append(aux)
+    # return rez_list
+
+    rez_list.append([no_root_alist[i * length // wanted_parts: (i + 1) * length // wanted_parts]
+            for i in range(wanted_parts)])
+
+    for r in rez_list[0]:
+        r.insert(0, root)
+
+    return rez_list
+
+    # return [alist[i*length // wanted_parts: (i+1)*length // wanted_parts]
+    #         for i in range(wanted_parts)]
+
+def obtain_query_graph(wanted_parts=1): # Foloseste si data graful din Neo4J pentru label-urile nodurilor
     ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
     # Aici cream un obiect graf query:
     query_graph_gen = Query_Graph_Generator()
@@ -882,6 +924,30 @@ def obtain_query_graph(): # Foloseste si data graful din Neo4J pentru label-uril
     query_stwig_1_dict = OrderedDict(zip(query_stwig_1, query_stwig_1_as_labels_source))
     ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
 
+
+    query_stwig = list(query_stwig_1_dict.items())
+    if wanted_parts == 1:
+        return query_stwig
+    elif wanted_parts > 1:
+        return split_list(query_stwig, wanted_parts=wanted_parts)
+
+
+
+    # print("Query graph parts: ")
+    # for part in parts:
+    #     print(part)
+    # # print(query_stwig_1_as_labels)
+    # l_parts = split_list(query_stwig_1_as_labels, wanted_parts=2)
+    # print("\nQuery graph edges with labels, having ID's inserted at the beginning of each edge:")
+    # print(l_parts)
+    # aux = (None, l_parts[0][0])
+    # del l_parts[0][0]
+    # del l_parts[1][0]
+    # l_parts[0].insert(0, aux)
+    # l_parts[1].insert(0, parts[1][0])
+    # print(l_parts)
+
+def obtain_data_graph():
     ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
     # GRAFUL DATA DIN NEO4J
     # neograph_data = Graph("bolt://127.0.0.1:7690", auth=("neo4j", "changeme")) # Data Graph RI - Cluster Neo4J
@@ -915,33 +981,10 @@ def obtain_query_graph(): # Foloseste si data graful din Neo4J pentru label-uril
 
     node_attr_dict = OrderedDict(sorted(node_ids_as_integers_with_string_labels))
     nx.set_node_attributes(dataGraph, node_attr_dict, 'label')
-    ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
 
-    query_stwig = list(query_stwig_1_dict.items())
-    print(query_stwig)
     data_graph_edges = copy.deepcopy(sorted(edge_list_integer_ids))
     node_attributes_dictionary = OrderedDict(sorted(node_ids_as_integers_with_string_labels))
-
-    query_stwig_root_node = query_stwig[0]
-    query_stwig_root_node_label = query_stwig[0][1]
-    query_stwig_length = len(
-        query_stwig)  # Pentru grafuri STwig, e nr nodurilor. Pentru grafuri care nu au forma STwig, va fi nr muchiilor, adica al perechilor de noduri,
-    # datorita faptului ca am pus o muchie pe cate o pozitie al solutiei partiale in cazul respectiv.
-
-    parts = split_list(query_stwig, wanted_parts=2)
-    print("Query graph parts: ")
-    for part in parts:
-        print(part)
-    # print(query_stwig_1_as_labels)
-    l_parts = split_list(query_stwig_1_as_labels, wanted_parts=2)
-    print("\nQuery graph edges with labels, having ID's inserted at the beginning of each edge:")
-    print(l_parts)
-    aux = (None, l_parts[0][0])
-    del l_parts[0][0]
-    del l_parts[1][0]
-    l_parts[0].insert(0, aux)
-    l_parts[1].insert(0, parts[1][0])
-    print(l_parts)
+    return [data_graph_edges, node_attributes_dictionary]
 
 if __name__ == '__main__':
     main()
