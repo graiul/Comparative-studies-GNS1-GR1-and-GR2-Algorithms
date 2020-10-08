@@ -35,12 +35,11 @@ import os
 
 class GR1_Algorithm(object):
 
-    def __init__(self, query_graph, data_graph, first_query_node_id_into_search=False):
-    # def __init__(self, query_graph, data_graph, first_query_node_id_into_search=False, logs_directory):
+    def __init__(self, query_graph, data_graph, first_query_node_id_into_search=False, logs_directory=''):
         self.query_graph = query_graph
         self.data_graph = data_graph
         self.first_query_node_id_into_search = first_query_node_id_into_search
-        # self.logs_directory = logs_directory
+        self.logs_directory = logs_directory
 
     # Producer function that places data on the Queue
     # Va produce noduri data cu label-ul radacinii din graful query STwig.
@@ -883,15 +882,36 @@ class GR1_Algorithm(object):
 
         total_time = timer() - start_time
         print("Total execution time: " + str(total_time))
-        f_time = open("file_GR1_Algorithm_with_STwig_query_graphs_execution_times.txt", "a")
+
+        # stackoverflow.com/questions/11700593/creating-files-and-directories-via-python
+        import os
+        if not os.path.exists(self.logs_directory):
+            os.makedirs(self.logs_directory)
+
+        # stackoverflow.com/questions/8024248/telling-python-to-save-a-txt-file-to-a-certain-directory-on-windows-and-mac
+        save_path = self.logs_directory
+        name_of_file = "file_GR1_Algorithm_execution_time"
+        completeName = os.path.join(save_path, name_of_file+".txt")
+
+        # f_time = open(self.logs_directory + "\\file_GR1_Algorithm_with_STwig_query_graphs_execution_times.txt", "a")
+        f_time = open(completeName, "a")
         f_time.write(str(total_time) + " ")
         f_time.write("\n")
         f_time.close()
 
-        f = open("file_GR1_Algorithm_with_STwig_query_graphs_OUTPUT.txt", "w+")
+        # f = open(self.logs_directory + "\\file_GR1_Algorithm_with_STwig_query_graphs_OUTPUT.txt", "w+")
+        name_of_file_2 = "file_GR1_Algorithm_output"
+        complete_name_2 = os.path.join(save_path, name_of_file_2+".txt")
+        f_output = open(complete_name_2, "w+")
         while queue_for_printing.qsize() > 0:
             p = queue_for_printing.get()
             for p_elem in p:
-                f.write(str(p_elem) + " ")
-            f.write("\n")
-        f.close()
+                f_output.write(str(p_elem) + " ")
+            f_output.write("\n")
+        f_output.close()
+
+        name_of_file_3 = "query_graph"
+        complete_name_3 = os.path.join(save_path, name_of_file_3+".txt")
+        f_query_graph_used = open(complete_name_3, "a")
+        f_query_graph_used.write(str(self.query_graph))
+        f_query_graph_used.close()
