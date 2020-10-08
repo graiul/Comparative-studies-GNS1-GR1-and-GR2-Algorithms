@@ -34,6 +34,8 @@ from dask.distributed import Client, LocalCluster, Queue, Variable
 import os
 
 class GR1_Algorithm(object):
+    # Atributele clasei
+    execution_time = None
 
     def __init__(self, query_graph, data_graph, first_query_node_id_into_search=False, logs_directory=''):
         self.query_graph = query_graph
@@ -894,10 +896,11 @@ class GR1_Algorithm(object):
         completeName = os.path.join(save_path, name_of_file+".txt")
 
         # f_time = open(self.logs_directory + "\\file_GR1_Algorithm_with_STwig_query_graphs_execution_times.txt", "a")
-        f_time = open(completeName, "a")
+        f_time = open(completeName, "w+")
         f_time.write(str(total_time) + " ")
         f_time.write("\n")
         f_time.close()
+        self.execution_time = total_time
 
         # f = open(self.logs_directory + "\\file_GR1_Algorithm_with_STwig_query_graphs_OUTPUT.txt", "w+")
         name_of_file_2 = "file_GR1_Algorithm_output"
@@ -912,6 +915,9 @@ class GR1_Algorithm(object):
 
         name_of_file_3 = "query_graph"
         complete_name_3 = os.path.join(save_path, name_of_file_3+".txt")
-        f_query_graph_used = open(complete_name_3, "a")
+        f_query_graph_used = open(complete_name_3, "w+")
         f_query_graph_used.write(str(self.query_graph))
         f_query_graph_used.close()
+
+    def get_execution_time_gr1_algorithm(self):
+        return self.execution_time
