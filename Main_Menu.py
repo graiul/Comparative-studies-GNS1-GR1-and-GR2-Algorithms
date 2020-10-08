@@ -1,5 +1,6 @@
 import copy
 import itertools
+import math
 import traceback
 from collections import OrderedDict
 
@@ -857,13 +858,24 @@ def main():
             print(pq)
         print()
         data_graph = obtain_data_graph()
-        for pd in data_graph:
-            print(pd)
-        # a1 = GR1_Algorithm(query_graph[0], data_graph, False)
+        # for pd in data_graph:
+        #     print(pd)
+
+        execution_times = []
+
+        # a1 = GR1_Algorithm(query_graph[0], data_graph, False, 'C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 1/')
         # a1.execute_gr1_algorithm()
 
-        a2 =GR1_Algorithm(query_graph[1], data_graph, False)
+        a2 =GR1_Algorithm(query_graph[1], data_graph, False, 'C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 2/')
         a2.execute_gr1_algorithm()
+        execution_times.append(a2.get_execution_time_gr1_algorithm())
+
+        a3 =GR1_Algorithm(query_graph[1], data_graph, False, 'C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 2/')
+        a3.execute_gr1_algorithm()
+        execution_times.append(a3.get_execution_time_gr1_algorithm())
+
+        create_execution_times_and_avg_txt_file_with_dir('C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 2/', execution_times)
+
 
 
 # stackoverflow.com/questions/752308/split-list-into-smaller-lists-split-in-half
@@ -896,6 +908,20 @@ def split_list(alist, wanted_parts=1):
 
     # return [alist[i*length // wanted_parts: (i+1)*length // wanted_parts]
     #         for i in range(wanted_parts)]
+
+def create_execution_times_and_avg_txt_file_with_dir(save_path, execution_times):
+    avg = 0
+    sum = 0
+    for ex in execution_times:
+        sum = sum + ex
+    avg = sum / len(execution_times)
+    name_of_file = "file_GR1_Algorithm_execution_times_and_average"
+    complete_name = os.path.join(save_path, name_of_file + ".txt")
+    f_exec_times_and_avg = open(complete_name, "w+")
+    f_exec_times_and_avg.write(str(execution_times))
+    f_exec_times_and_avg.write("\nAverage time: " +str(avg))
+
+    f_exec_times_and_avg.close()
 
 def obtain_query_graph(wanted_parts=1): # Foloseste si data graful din Neo4J pentru label-urile nodurilor
     ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
