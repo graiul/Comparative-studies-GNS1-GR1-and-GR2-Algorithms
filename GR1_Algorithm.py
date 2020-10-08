@@ -698,14 +698,14 @@ class GR1_Algorithm(object):
         # c = client.submit(consumer, queue_of_finished_products_1, queue_of_finished_products_2, query_stwig_leaf_node_label2, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
         c = client.submit(self.consumer, queue_of_finished_products_1, queue_of_finished_products_2, query_stwig_leaf_node_label2, query_stwig_length, self.data_graph[0], self.data_graph[1], queue_for_printing)
 
-        # c.result()
-
-        query_stwig_leaf_node3 = self.query_graph[3]
-        query_stwig_leaf_node_label3 = self.query_graph[3][1]
-        # big_consumer_3 = client.scatter(data_graph_edges)
-        # d = client.submit(consumer, big_consumer_3, queue_of_finished_products_2, queue_of_finished_products_3, query_stwig_leaf_node_label3, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
-        d = client.submit(self.consumer, queue_of_finished_products_2, queue_of_finished_products_3, query_stwig_leaf_node_label3, query_stwig_length, self.data_graph[0], self.data_graph[1], queue_for_printing)
-        d.result()
+        c.result()
+        #
+        # query_stwig_leaf_node3 = self.query_graph[3]
+        # query_stwig_leaf_node_label3 = self.query_graph[3][1]
+        # # big_consumer_3 = client.scatter(data_graph_edges)
+        # # d = client.submit(consumer, big_consumer_3, queue_of_finished_products_2, queue_of_finished_products_3, query_stwig_leaf_node_label3, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
+        # d = client.submit(self.consumer, queue_of_finished_products_2, queue_of_finished_products_3, query_stwig_leaf_node_label3, query_stwig_length, self.data_graph[0], self.data_graph[1], queue_for_printing)
+        # d.result()
 
         # query_stwig_leaf_node4 = query_stwig[4]
         # query_stwig_leaf_node_label4 = query_stwig[4][1]
