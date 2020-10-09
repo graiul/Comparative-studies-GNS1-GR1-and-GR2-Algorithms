@@ -71,13 +71,22 @@ class GR1_Algorithm(object):
         dataGraph.add_edges_from(data_graph_edges)
         nx.set_node_attributes(dataGraph, node_attributes_dictionary, 'label')
 
-    ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
-        for node in list(dataGraph.nodes()):
-            if query_stwig_root_node_label == dataGraph.nodes[node]['label']:
-                # print(node)
+        if self.first_query_node_id_into_search == False:
+        ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
+            for node in list(dataGraph.nodes()):
+                if query_stwig_root_node_label == dataGraph.nodes[node]['label']:
+                    # print(node)
 
-                queue_of_the_producer.put([node])
-    ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
+                    queue_of_the_producer.put([node])
+        ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
+        else:
+            if self.first_query_node_id_into_search == True:
+                for node in list(dataGraph.nodes()):
+                    if query_stwig_root_node_label == dataGraph.nodes[node]['label'] and query_stwig_root_node_id == node:
+                        print(node)
+
+                        queue_of_the_producer.put([node])
+
 
         queue_of_the_producer.put(['STOP'])
         # print(list(queue_of_the_producer.get()))
