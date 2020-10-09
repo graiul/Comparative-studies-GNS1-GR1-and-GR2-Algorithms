@@ -15,7 +15,7 @@ SAU hardcodarea consumatorilor la un numar de 6, deoarece GR1 lucreaza in timp f
 
 - fiecare instanta de GR1_Algorithm va genera propriile loguri
 OK - cu graful query,
-   - numele grafului data,
+   - numele grafului data si detalii despre el, chiar graful intreg?
 OK - rezultate,
 OK - timpul de executie al rularii respective
 OK - timpi de exec,
