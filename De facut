@@ -1,0 +1,41 @@
+### GR1_Algorithm ###
+OK - De transformat tot scriptul GR1 Algorithm intr-o clasa cu metode
+OK - Va accepta un graf query,
+OK - sau o parte de graf query,
+OK - graful data,
+OK - si un flag care sa indice daca se ia in considerare de catre producator id-ul primului nod al
+al unei parti query, daca se da ca si input o parte de graf query.
+
+OK - GR1 Algorithm sa aleaga singur nr de consumatori, ca sa nu mai pun ca si comment fiecare rand.
+SAU hardcodarea consumatorilor la un numar de 6, deoarece GR1 lucreaza in timp fezabil cu query grafuri STwig cu maxim 6 noduri.
+=> am facut o scara if-elif-else pentru cazul fiecarui numar de consumatori pana la un numar de maxim 5 consumatori.
+
+- fiecare instanta de GR1_Algorithm va genera propriile loguri
+OK - cu graful query,
+   - numele grafului data,
+OK - rezultate,
+OK - timpul de executie al rularii respective
+OK - timpi de exec,
+OK - media timpilor,
+OK - la un director la alegere.
+
+- IMPORTANT: LA ALG (SWig, VF2, GNS1, GR1, nu mai tin minte pt GNS2, dar am lucrat la treaba cu rezultatele duplicate) - am decis
+ca grafurile query Stwig sa aiba label-urile nodurilor diferite complet intre ele, adica si intre frunze,
+dar si intre radacina si frunze.
+
+Aceste lucruri sunt necesare pt a rula o baterie de teste direct din Main_Menu optiunea 13, fara nici o alta interventie.
+
+OK - GR1 Algorithm creaza directoarele cerute in optiunea 13 din Main_Menu la executarea obiectului GR1 Algorithm
+De asemenea creaza si fisierele text urmatoare:
+OK - fisier txt cu timpul de executie al unei rulari - NU se pot acumula in fisierul txt
+OK - fisier txt cu datele de iesire ale rularii respective - fisierul va fi golit si reumplut la rulari ulterioare
+OK - fisier txt cu lista de noduri (fiecare elem este (id, label)). NU SE VA ACUMULA IN FISIER. Aceasta este pentru grafuri query STwig.
+OK - metoda de returnare al timpului de executie al unei rulari. Util pentru Main_Menu, optiunea 13 pentru lista cu timpi.
+OK - Optiunea 13 calculeaza media aritmetica al timpilor din lista dupa mai multe rulari succesive.
+OK - Pentru fiecare rulare creez un obiect GR1_Algorithm si rulez metoda de executie.
+? Datorita porturilor Neo4j, a doua rulare succesiva va avea timpul influentat?
+
+Trebuie sa verific daca timpul de executie al rularii pentru bucatile query STwig de dupa prima este influentat de
+faptul ca Neo4J anunta ca trebuie port nou pt a doua rulare. Totusi dupa cateva momente ruleaza pentru acelasi port ca si pentru prima bucata.
+
+! Ce se intampla cu celelalte radacini returnate de producator in cazul folosirii descompunerii in mai multe bucati al grafului query STwig?
