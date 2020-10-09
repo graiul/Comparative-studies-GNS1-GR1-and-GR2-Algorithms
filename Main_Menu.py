@@ -853,9 +853,8 @@ def main():
 
     elif option == 13:
         print("\n##### GR1 Algorithm execution #####")
-        query_graph = obtain_query_graph(2)[0] # Variabila "query_graph" poate sa contina un query graf intreg, sau mai multe bucati.
-        for pq in query_graph:
-            print(pq)
+        # for pq in query_graph:
+        #     print(pq)
         print()
         data_graph = obtain_data_graph()
         # for pd in data_graph:
@@ -863,18 +862,30 @@ def main():
 
         execution_times = []
 
+        query_graph = obtain_query_graph() # Variabila "query_graph" poate sa contina un query graf intreg, sau mai multe bucati.
+        print(query_graph)
+        a0 = GR1_Algorithm(query_graph, data_graph, False, 'C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 0/')
+        a0.execute_gr1_algorithm()
+        execution_times.append(a0.get_execution_time_gr1_algorithm())
+        create_execution_times_and_avg_txt_file_with_dir('C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 0/', execution_times)
+
+        # query_graph = obtain_query_graph(2)[0] # Variabila "query_graph" poate sa contina un query graf intreg, sau mai multe bucati.
         # a1 = GR1_Algorithm(query_graph[0], data_graph, False, 'C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 1/')
         # a1.execute_gr1_algorithm()
+        # execution_times.append(a1.get_execution_time_gr1_algorithm())
+        # create_execution_times_and_avg_txt_file_with_dir('C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 1/', execution_times)
 
-        a2 =GR1_Algorithm(query_graph[1], data_graph, False, 'C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 2/')
-        a2.execute_gr1_algorithm()
-        execution_times.append(a2.get_execution_time_gr1_algorithm())
+        # query_graph = obtain_query_graph(2)[0] # Variabila "query_graph" poate sa contina un query graf intreg, sau mai multe bucati.
+        # a2 =GR1_Algorithm(query_graph[1], data_graph, True, 'C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 2/')
+        # a2.execute_gr1_algorithm()
+        # execution_times.append(a2.get_execution_time_gr1_algorithm())
+        # create_execution_times_and_avg_txt_file_with_dir('C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 2/', execution_times)
 
-        a3 =GR1_Algorithm(query_graph[1], data_graph, False, 'C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 2/')
-        a3.execute_gr1_algorithm()
-        execution_times.append(a3.get_execution_time_gr1_algorithm())
-
-        create_execution_times_and_avg_txt_file_with_dir('C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 2/', execution_times)
+        # query_graph = obtain_query_graph(2)[0] # Variabila "query_graph" poate sa contina un query graf intreg, sau mai multe bucati.
+        # a3 =GR1_Algorithm(query_graph[1], data_graph, False, 'C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 2/')
+        # a3.execute_gr1_algorithm()
+        # execution_times.append(a3.get_execution_time_gr1_algorithm())
+        # create_execution_times_and_avg_txt_file_with_dir('C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 2/', execution_times)
 
 
 
