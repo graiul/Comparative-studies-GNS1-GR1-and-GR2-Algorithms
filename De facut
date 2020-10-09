@@ -39,3 +39,17 @@ Trebuie sa verific daca timpul de executie al rularii pentru bucatile query STwi
 faptul ca Neo4J anunta ca trebuie port nou pt a doua rulare. Totusi dupa cateva momente ruleaza pentru acelasi port ca si pentru prima bucata.
 
 ! Ce se intampla cu celelalte radacini returnate de producator in cazul folosirii descompunerii in mai multe bucati al grafului query STwig?
+
+% OBS: LA DATA DE 1 SEPT CAND AM FACUT TESTELE IN SAPTAMANA RESPECTIVA AVEAM IN NEO4J GRAFUL RI INTREG CU 12,575 nodes
+SI 86,890 relationships DEOARECE CU CEVA VREME INAINTE AM FACUT ULTIMA BATERIE DE TESTE PENTRU ARTICOLUL VF2+STWIG DE LA SOFTCOM 2020
+IN FUNCTIE DE CERINTELE DE LA REVIEWERI,
+EI SPUNAND CA VOR MAI MULTE TESTE. ASTFEL AM LASAT IN NEO4J GRAFUL DATA FOLOSIT PENTRU ULTIMUL TABEL DIN ARTICOLUL DE LA SOFTCOM2020.
+
+
+Mai departe - lucruri discutabile:
+OK - De testat cu si mai multi consumatori si dask queues.
+%De testat cu alte grafuri data.
+%De testat cu  reguli de pruning gns1.
+%De facut GR2 care lucreaza cu grafuri query indiferent de adiacenta nodurilor query.
+De facut GR2 cu parti de Quantum Computing.
+
