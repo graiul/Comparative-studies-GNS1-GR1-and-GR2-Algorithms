@@ -864,6 +864,9 @@ def main():
 
         query_graph = obtain_query_graph() # Variabila "query_graph" poate sa contina un query graf intreg, sau mai multe bucati.
         print(query_graph)
+        # stackoverflow.com/questions/11700593/creating-files-and-directories-via-python
+        # stackoverflow.com/questions/8024248/telling-python-to-save-a-txt-file-to-a-certain-directory-on-windows-and-mac
+
         a0 = GR1_Algorithm(query_graph, data_graph, False, 'C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 0/')
         a0.execute_gr1_algorithm()
         execution_times.append(a0.get_execution_time_gr1_algorithm())
