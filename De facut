@@ -1,6 +1,8 @@
 ### GR1_Algorithm ###
 AM FOLOSIT GRAFUL RI PPI 12,575 nodes 86,890 relationships. Confirmare in foto agenda de pe perete 23 sept 2020, IMG_8041.
 
+! TREBUIE GASIT UN ALGORITM PENTRU TESTE CARE SA FIE PARALEL, SA LUCREZE CU LABEL-URI,
+CU GRAFURILE QUERY SI DATA PE CARE LE FOLOSESC AICI.
 
 OK - De transformat tot scriptul GR1 Algorithm intr-o clasa cu metode
 OK - Va accepta un graf query,
