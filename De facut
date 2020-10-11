@@ -44,7 +44,10 @@ Trebuie sa verific daca timpul de executie al rularii pentru bucatile query STwi
 faptul ca Neo4J anunta ca trebuie port nou pt a doua rulare. Totusi dupa cateva momente ruleaza pentru acelasi port ca si pentru prima bucata.
 
 ! Ce se intampla cu celelalte radacini returnate de producator in cazul folosirii descompunerii in mai multe bucati al grafului query STwig?
+Atat pentru prima bucata, cat si pentru a doua apar rezultate care nu pot fi cuplate intre ele.
 
+Pentru teste, de comparat cu STwig Algorithm:
+Din articol ZhaoSun: Exploration. Each machine performs Algorithm 1 for STwig matching in parallel.
 
 Mai departe - lucruri discutabile:
 OK - De testat cu si mai multi consumatori si dask queues.
