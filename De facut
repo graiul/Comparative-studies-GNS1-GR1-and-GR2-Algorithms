@@ -46,6 +46,8 @@ faptul ca Neo4J anunta ca trebuie port nou pt a doua rulare. Totusi dupa cateva 
 ! Ce se intampla cu celelalte radacini returnate de producator in cazul folosirii descompunerii in mai multe bucati al grafului query STwig?
 Atat pentru prima bucata, cat si pentru a doua apar rezultate care nu pot fi cuplate intre ele.
 
+De reverificat inceperea contorizarii timpului de executie.
+
 Pentru teste, de comparat cu STwig Algorithm:
 Din articol ZhaoSun: Exploration. Each machine performs Algorithm 1 for STwig matching in parallel.
 
