@@ -862,15 +862,22 @@ def main():
 
         execution_times = []
 
-        query_graph = obtain_query_graph() # Variabila "query_graph" poate sa contina un query graf intreg, sau mai multe bucati.
-        print(query_graph)
+        # Variabila "query_graph" poate sa contina un query graf intreg, sau mai multe bucati.
+
         # stackoverflow.com/questions/11700593/creating-files-and-directories-via-python
         # stackoverflow.com/questions/8024248/telling-python-to-save-a-txt-file-to-a-certain-directory-on-windows-and-mac
 
-        a0 = GR1_Algorithm(query_graph, data_graph, False, 'C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 0/')
-        a0.execute_gr1_algorithm()
-        execution_times.append(a0.get_execution_time_gr1_algorithm())
-        create_execution_times_and_avg_txt_file_with_dir('C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 0/', execution_times)
+        # Rulare cu graf query intreg, fara descompunere
+        # query_graph = obtain_query_graph()
+        # print(query_graph)
+        # a0 = GR1_Algorithm(query_graph, data_graph, False, 'C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 0/')
+        # a0.execute_gr1_algorithm()
+        # execution_times.append(a0.get_execution_time_gr1_algorithm())
+        # create_execution_times_and_avg_txt_file_with_dir('C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 0/', execution_times)
+
+        # Rulare cu prima bucata a unui query STwig cu 4 noduri:
+        # query_graph_edges = [[7190,137], [7190,419], [7190,450]]
+        # node_attr = ["3", "2", "11", "3"]
 
         # query_graph = obtain_query_graph(2)[0] # Variabila "query_graph" poate sa contina un query graf intreg, sau mai multe bucati.
         # a1 = GR1_Algorithm(query_graph[0], data_graph, False, 'C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 1/')
@@ -878,17 +885,19 @@ def main():
         # execution_times.append(a1.get_execution_time_gr1_algorithm())
         # create_execution_times_and_avg_txt_file_with_dir('C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 1/', execution_times)
 
+
+        # Doua rulari succesive cu a doua jumatate query STwig
         # query_graph = obtain_query_graph(2)[0] # Variabila "query_graph" poate sa contina un query graf intreg, sau mai multe bucati.
         # a2 =GR1_Algorithm(query_graph[1], data_graph, True, 'C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 2/')
         # a2.execute_gr1_algorithm()
         # execution_times.append(a2.get_execution_time_gr1_algorithm())
         # create_execution_times_and_avg_txt_file_with_dir('C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 2/', execution_times)
 
-        # query_graph = obtain_query_graph(2)[0] # Variabila "query_graph" poate sa contina un query graf intreg, sau mai multe bucati.
-        # a3 =GR1_Algorithm(query_graph[1], data_graph, False, 'C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 2/')
-        # a3.execute_gr1_algorithm()
-        # execution_times.append(a3.get_execution_time_gr1_algorithm())
-        # create_execution_times_and_avg_txt_file_with_dir('C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 2/', execution_times)
+        query_graph = obtain_query_graph(2)[0] # Variabila "query_graph" poate sa contina un query graf intreg, sau mai multe bucati.
+        a3 =GR1_Algorithm(query_graph[1], data_graph, False, 'C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 2/')
+        a3.execute_gr1_algorithm()
+        execution_times.append(a3.get_execution_time_gr1_algorithm())
+        create_execution_times_and_avg_txt_file_with_dir('C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 2/', execution_times)
 
 
 
