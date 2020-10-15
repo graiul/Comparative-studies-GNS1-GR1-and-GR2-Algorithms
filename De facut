@@ -1,8 +1,30 @@
 ### GR1_Algorithm ###
 AM FOLOSIT GRAFUL RI PPI 12,575 nodes 86,890 relationships. Confirmare in foto agenda de pe perete 23 sept 2020, IMG_8041.
 
+DE INCLUS SI TESTELE CU QUERY STWIG DE 6 NODURI
+OK - DE FACUT CA GR1 ALGORITHM SA SELECTEZE SINGUR PANA LA 5 CONSUMATORI
+DE INCLUS si celelalte unelte in Toolbox.
+Verificatorul de rezultate trebuie sa aiba rubrica si pentru GR1_Algorithm.
+
+? Datorita porturilor Neo4j, a doua rulare succesiva va avea timpul influentat?
+
+Trebuie sa verific daca timpul de executie al rularii pentru bucatile query STwig de dupa prima este influentat de
+faptul ca Neo4J anunta ca trebuie port nou pt a doua rulare. Totusi dupa cateva momente ruleaza pentru acelasi port ca si pentru prima bucata.
+
+! Ce se intampla cu celelalte radacini returnate de producator in cazul folosirii descompunerii in mai multe bucati al grafului query STwig?
+Atat pentru prima bucata, cat si pentru a doua apar rezultate care nu pot fi cuplate intre ele.
+
+? De reverificat inceperea contorizarii timpului de executie.
+? De reverificat inceperea contorizarii timpului de executie.
+
 ! TREBUIE GASIT UN ALGORITM PENTRU TESTE CARE SA FIE PARALEL, SA LUCREZE CU LABEL-URI,
-CU GRAFURILE QUERY SI DATA PE CARE LE FOLOSESC AICI.
+CU GRAFURILE QUERY SI DATA PE CARE LE FOLOSESC AICI. => STWIG ALGORITHM
+Pentru teste, de comparat cu STwig Algorithm:
+Din articol ZhaoSun: Exploration. Each machine performs Algorithm 1 for STwig matching in parallel.
+
+Aceste lucruri sunt necesare pt a rula o baterie de teste direct din Main_Menu optiunea 13, fara nici o alta interventie.
+
+
 
 OK - De transformat tot scriptul GR1 Algorithm intr-o clasa cu metode
 OK - Va accepta un graf query,
@@ -28,7 +50,6 @@ OK - la un director la alegere.
 ca grafurile query Stwig sa aiba label-urile nodurilor diferite complet intre ele, adica si intre frunze,
 dar si intre radacina si frunze.
 
-Aceste lucruri sunt necesare pt a rula o baterie de teste direct din Main_Menu optiunea 13, fara nici o alta interventie.
 
 OK - GR1 Algorithm creaza directoarele cerute in optiunea 13 din Main_Menu la executarea obiectului GR1 Algorithm
 De asemenea creaza si fisierele text urmatoare:
@@ -38,18 +59,8 @@ OK - fisier txt cu lista de noduri (fiecare elem este (id, label)). NU SE VA ACU
 OK - metoda de returnare al timpului de executie al unei rulari. Util pentru Main_Menu, optiunea 13 pentru lista cu timpi.
 OK - Optiunea 13 calculeaza media aritmetica al timpilor din lista dupa mai multe rulari succesive.
 OK - Pentru fiecare rulare creez un obiect GR1_Algorithm si rulez metoda de executie.
-? Datorita porturilor Neo4j, a doua rulare succesiva va avea timpul influentat?
 
-Trebuie sa verific daca timpul de executie al rularii pentru bucatile query STwig de dupa prima este influentat de
-faptul ca Neo4J anunta ca trebuie port nou pt a doua rulare. Totusi dupa cateva momente ruleaza pentru acelasi port ca si pentru prima bucata.
 
-! Ce se intampla cu celelalte radacini returnate de producator in cazul folosirii descompunerii in mai multe bucati al grafului query STwig?
-Atat pentru prima bucata, cat si pentru a doua apar rezultate care nu pot fi cuplate intre ele.
-
-De reverificat inceperea contorizarii timpului de executie.
-
-Pentru teste, de comparat cu STwig Algorithm:
-Din articol ZhaoSun: Exploration. Each machine performs Algorithm 1 for STwig matching in parallel.
 
 Mai departe - lucruri discutabile:
 OK - De testat cu si mai multi consumatori si dask queues.
