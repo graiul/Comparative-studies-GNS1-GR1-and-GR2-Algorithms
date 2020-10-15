@@ -17,6 +17,7 @@ from STwig_Algorithm import STwig_Algorithm
 from VF2Algorithm import VF2Algorithm
 from GR1_Algorithm import GR1_Algorithm
 
+from Toolbox_Gheorghica_Radu_Iulian import Toolbox_Gheorghica_Radu_Iulian as tgri
 
 from neo4j_test_2 import neo4j_test_2
 import os
@@ -853,10 +854,12 @@ def main():
 
     elif option == 13:
         print("\n##### GR1 Algorithm execution #####")
+        tools = tgri()
+
         # for pq in query_graph:
         #     print(pq)
         print()
-        data_graph = obtain_data_graph()
+        data_graph = tools.obtain_data_graph()
         # for pd in data_graph:
         #     print(pd)
 
@@ -893,147 +896,18 @@ def main():
         # execution_times.append(a2.get_execution_time_gr1_algorithm())
         # create_execution_times_and_avg_txt_file_with_dir('C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 2/', execution_times)
 
-        query_graph = obtain_query_graph(2)[0] # Variabila "query_graph" poate sa contina un query graf intreg, sau mai multe bucati.
-        a3 =GR1_Algorithm(query_graph[1], data_graph, False, 'C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 2/')
-        a3.execute_gr1_algorithm()
-        execution_times.append(a3.get_execution_time_gr1_algorithm())
-        create_execution_times_and_avg_txt_file_with_dir('C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 2/', execution_times)
 
+        # query_graph = obtain_query_graph(2)[0] # Variabila "query_graph" poate sa contina un query graf intreg, sau mai multe bucati.
+        # a3 =GR1_Algorithm(query_graph[1], data_graph, False, 'C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 2/')
+        # a3.execute_gr1_algorithm()
+        # execution_times.append(a3.get_execution_time_gr1_algorithm())
+        # create_execution_times_and_avg_txt_file_with_dir('C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 2/', execution_times)
 
-
-# stackoverflow.com/questions/752308/split-list-into-smaller-lists-split-in-half
-def split_list(alist, wanted_parts=1):
-    # print("Splitter work:")
-    print(alist)
-    root = copy.deepcopy(alist[0])
-    no_root_alist = copy.deepcopy(alist[1:])
-    # print(no_root_alist)
-    length = len(no_root_alist)
-
-    rez_list = []
-    # for i in range(wanted_parts):
-    #     aux = []
-    #     if i == 0:
-    #         rez_list.append(alist[i * length // wanted_parts: (i + 1) * length // wanted_parts])
-    #     else:
-    #         aux = copy.deepcopy(alist[i*length // wanted_parts: (i+1)*length // wanted_parts])
-    #         aux.insert(0, root)
-    #         rez_list.append(aux)
-    # return rez_list
-
-    rez_list.append([no_root_alist[i * length // wanted_parts: (i + 1) * length // wanted_parts]
-            for i in range(wanted_parts)])
-
-    for r in rez_list[0]:
-        r.insert(0, root)
-
-    return rez_list
-
-    # return [alist[i*length // wanted_parts: (i+1)*length // wanted_parts]
-    #         for i in range(wanted_parts)]
-
-def create_execution_times_and_avg_txt_file_with_dir(save_path, execution_times):
-    avg = 0
-    sum = 0
-    for ex in execution_times:
-        sum = sum + ex
-    avg = sum / len(execution_times)
-    name_of_file = "file_GR1_Algorithm_execution_times_and_average"
-    complete_name = os.path.join(save_path, name_of_file + ".txt")
-    f_exec_times_and_avg = open(complete_name, "w+")
-    f_exec_times_and_avg.write(str(execution_times))
-    f_exec_times_and_avg.write("\nAverage time: " +str(avg))
-
-    f_exec_times_and_avg.close()
-
-def obtain_query_graph(wanted_parts=1): # Foloseste si data graful din Neo4J pentru label-urile nodurilor
-    ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
-    # Aici cream un obiect graf query:
-    query_graph_gen = Query_Graph_Generator()
-    query_graph = query_graph_gen.gen_RI_query_graph()
-    query_stwig_1 = list(query_graph.nodes())
-    # print("Query STwig: " + str(query_stwig_1))
-    # Label-ul radacinii
-    # root_label = dataGraph.node[query_stwig_1[0]]['label']
-    root_label = query_graph.nodes[query_stwig_1[0]]['label']
-    # Label-urile vecinilor din lista
-    neighbor_labels = []
-    for n in query_stwig_1[1:]:
-        # neighbor_labels.append(dataGraph.node[n]['label'])
-        neighbor_labels.append(query_graph.nodes[n]['label'])
-
-    query_stwig_1_as_labels = []
-    query_stwig_1_as_labels.append(root_label)
-    for nl in neighbor_labels:
-        query_stwig_1_as_labels.append(nl)
-    # print("query_stwig_1_as_labels: " + str(query_stwig_1_as_labels))
-    # print()
-    query_stwig_1_as_labels_source = copy.deepcopy(query_stwig_1_as_labels)
-
-    query_stwig_1_dict = OrderedDict(zip(query_stwig_1, query_stwig_1_as_labels_source))
-    ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
-
-
-    query_stwig = list(query_stwig_1_dict.items())
-    if wanted_parts == 1:
-        return query_stwig
-    elif wanted_parts > 1:
-        return split_list(query_stwig, wanted_parts=wanted_parts)
-
-
-
-    # print("Query graph parts: ")
-    # for part in parts:
-    #     print(part)
-    # # print(query_stwig_1_as_labels)
-    # l_parts = split_list(query_stwig_1_as_labels, wanted_parts=2)
-    # print("\nQuery graph edges with labels, having ID's inserted at the beginning of each edge:")
-    # print(l_parts)
-    # aux = (None, l_parts[0][0])
-    # del l_parts[0][0]
-    # del l_parts[1][0]
-    # l_parts[0].insert(0, aux)
-    # l_parts[1].insert(0, parts[1][0])
-    # print(l_parts)
-
-def obtain_data_graph():
-    ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
-    # GRAFUL DATA DIN NEO4J
-    # neograph_data = Graph("bolt://127.0.0.1:7690", auth=("neo4j", "changeme")) # Data Graph RI - Cluster Neo4J
-    neograph_data = Graph("bolt://127.0.0.1:7687",
-                          auth=(
-                              "neo4j", "password"))  # Data Graph RI - O singura instanta de Neo4J
-
-    cqlQuery = "MATCH p=(n)-[r:PPI]->(m) return n.node_id, m.node_id"
-    result = neograph_data.run(cqlQuery).to_ndarray()
-    edge_list = result.tolist()
-    # # print("edge_list: ")
-    # # print(edge_list)
-    edge_list_integer_ids = []
-    for string_edge in edge_list:
-        edge_list_integer_ids.append([int(i) for i in string_edge])
-    # # print("edge_list_integer_ids: ")
-    # # print(edge_list_integer_ids)
-
-    dataGraph = nx.Graph()
-    dataGraph.add_edges_from(sorted(edge_list_integer_ids))
-    cqlQuery2 = "MATCH (n) return n.node_id, n.node_label"
-    result2 = neograph_data.run(cqlQuery2).to_ndarray()
-    # # print("result2: ")
-    # # print(result2)
-    node_ids_as_integers_with_string_labels = []
-    for node in result2:
-        # # print(node[0])
-        node_ids_as_integers_with_string_labels.append([int(node[0]), node[1]])
-    # # print("node_ids_as_integers_with_string_labels: ")
-    # # print(node_ids_as_integers_with_string_labels)
-
-    node_attr_dict = OrderedDict(sorted(node_ids_as_integers_with_string_labels))
-    nx.set_node_attributes(dataGraph, node_attr_dict, 'label')
-
-    data_graph_edges = copy.deepcopy(sorted(edge_list_integer_ids))
-    node_attributes_dictionary = OrderedDict(sorted(node_ids_as_integers_with_string_labels))
-    return [data_graph_edges, node_attributes_dictionary]
+        list_of_paths = ["C:/Users/StationG/Desktop/8 oct 2020 Baterie Teste GR1_Algorithm/Test 1/file_GR1_Algorithm_output.txt",
+                         "C:/Users/StationG/Desktop/9 oct 2020 Baterie Teste GR1_Algorithm/Test 2/file_GR1_Algorithm_output.txt"]
+        r1 = tools.reunion_of_query_STwig_parts_results(list_of_paths)
+        tools.create_txt_file_reunited_results_at_dir_path(r1, "C:/Users/StationG/Desktop/14 oct 2020 GR1 Algorithm reunited results/", "file_GR1_Algorithm_reunited_results")
+        # print(r1)
 
 if __name__ == '__main__':
     main()
