@@ -901,11 +901,11 @@ class GR1_Algorithm(object):
 
         # stackoverflow.com/questions/8024248/telling-python-to-save-a-txt-file-to-a-certain-directory-on-windows-and-mac
         save_path = self.logs_directory
-        name_of_file = "file_GR1_Algorithm_execution_time"
+        name_of_file = "file_GR1_Algorithm_execution_times"
         completeName = os.path.join(save_path, name_of_file+".txt")
 
         # f_time = open(self.logs_directory + "\\file_GR1_Algorithm_with_STwig_query_graphs_execution_times.txt", "a")
-        f_time = open(completeName, "w+")
+        f_time = open(completeName, "a")
         f_time.write(str(total_time) + " ")
         f_time.write("\n")
         f_time.close()
