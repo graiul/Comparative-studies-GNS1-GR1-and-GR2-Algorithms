@@ -871,7 +871,7 @@ def main():
         # stackoverflow.com/questions/8024248/telling-python-to-save-a-txt-file-to-a-certain-directory-on-windows-and-mac
 
         # Rulare cu graf query intreg, fara descompunere
-        # query_graph = obtain_query_graph()
+        # query_graph = tools.obtain_query_graph()
         # print(query_graph)
         # a0 = GR1_Algorithm(query_graph, data_graph, False, 'C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 0/')
         # a0.execute_gr1_algorithm()
@@ -879,9 +879,9 @@ def main():
         # create_execution_times_and_avg_txt_file_with_dir('C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 0/', execution_times)
 
         # Rulare cu prima bucata a unui query STwig cu 4 noduri:
+        # query_graph = tools.obtain_query_graph(wanted_parts=2)
         # query_graph_edges = [[7190,137], [7190,419], [7190,450]]
         # node_attr = ["3", "2", "11", "3"]
-
         # query_graph = obtain_query_graph(2)[0] # Variabila "query_graph" poate sa contina un query graf intreg, sau mai multe bucati.
         # a1 = GR1_Algorithm(query_graph[0], data_graph, False, 'C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 1/')
         # a1.execute_gr1_algorithm()
@@ -890,24 +890,42 @@ def main():
 
 
         # Doua rulari succesive cu a doua jumatate query STwig
-        # query_graph = obtain_query_graph(2)[0] # Variabila "query_graph" poate sa contina un query graf intreg, sau mai multe bucati.
+        # query_graph = tools.obtain_query_graph(2)[0] # Variabila "query_graph" poate sa contina un query graf intreg, sau mai multe bucati.
         # a2 =GR1_Algorithm(query_graph[1], data_graph, True, 'C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 2/')
         # a2.execute_gr1_algorithm()
         # execution_times.append(a2.get_execution_time_gr1_algorithm())
         # create_execution_times_and_avg_txt_file_with_dir('C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 2/', execution_times)
 
-
-        # query_graph = obtain_query_graph(2)[0] # Variabila "query_graph" poate sa contina un query graf intreg, sau mai multe bucati.
+        # query_graph = tools.obtain_query_graph(2)[0] # Variabila "query_graph" poate sa contina un query graf intreg, sau mai multe bucati.
         # a3 =GR1_Algorithm(query_graph[1], data_graph, False, 'C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 2/')
         # a3.execute_gr1_algorithm()
         # execution_times.append(a3.get_execution_time_gr1_algorithm())
         # create_execution_times_and_avg_txt_file_with_dir('C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 2/', execution_times)
 
-        list_of_paths = ["C:/Users/StationG/Desktop/8 oct 2020 Baterie Teste GR1_Algorithm/Test 1/file_GR1_Algorithm_output.txt",
-                         "C:/Users/StationG/Desktop/9 oct 2020 Baterie Teste GR1_Algorithm/Test 2/file_GR1_Algorithm_output.txt"]
-        r1 = tools.reunion_of_query_STwig_parts_results(list_of_paths)
-        tools.create_txt_file_reunited_results_at_dir_path(r1, "C:/Users/StationG/Desktop/14 oct 2020 GR1 Algorithm reunited results/", "file_GR1_Algorithm_reunited_results")
-        # print(r1)
+        # NU fac rulari succesive, apare timp in plus de la a doua bucata
+        # Nu fac reunirea rezultatelor pt ca dureaza prea mult pentru acest query graph STwig.
+        # Am testat si metoda de creere al mediei respective.
+        query_graph = tools.obtain_query_graph(wanted_parts=2)[0] # Listele sunt stocate pe prima pozitie al unei liste mai mari, de aceea folosesc [0].
+
+        # a4 = GR1_Algorithm(query_graph[0], data_graph, False, 'C:/Users/StationG/Desktop/16 oct 2020 Baterie Teste GR1_Algorithm/Test 22/Prima parte graf query STwig/')
+        # a4.execute_gr1_algorithm()
+
+        # a5 = GR1_Algorithm(query_graph[1], data_graph, False, 'C:/Users/StationG/Desktop/16 oct 2020 Baterie Teste GR1_Algorithm/Test 22/A doua parte graf query STwig/')
+        # a5.execute_gr1_algorithm()
+
+        # Obtinerea mediei aritmetice al timpilor de executie.
+        # Pentru prima bucata.
+        # tools.create_execution_times_and_avg_txt_file_at_dir_path("GR1_Algorithm", 'C:/Users/StationG/Desktop/16 oct 2020 Baterie Teste GR1_Algorithm/Test 22/Prima parte graf query STwig/file_GR1_Algorithm_execution_times.txt', 'C:/Users/StationG/Desktop/16 oct 2020 Baterie Teste GR1_Algorithm/Test 22/Prima parte graf query STwig/')
+        # Pentru a doua bucata.
+        tools.create_execution_times_and_avg_txt_file_at_dir_path("GR1_Algorithm", 'C:/Users/StationG/Desktop/16 oct 2020 Baterie Teste GR1_Algorithm/Test 22/A doua parte graf query STwig/file_GR1_Algorithm_execution_times.txt', 'C:/Users/StationG/Desktop/16 oct 2020 Baterie Teste GR1_Algorithm/Test 22/A doua parte graf query STwig/')
+
+
+        # Reunirea rezultatelor
+        # list_of_paths = ["C:/Users/StationG/Desktop/16 oct 2020 Baterie Teste GR1_Algorithm/Test 21/Prima parte graf query STwig/file_GR1_Algorithm_output.txt",
+        #                  "C:/Users/StationG/Desktop/16 oct 2020 Baterie Teste GR1_Algorithm/Test 21/A doua parte graf query STwig/file_GR1_Algorithm_output.txt"]
+        # r1 = tools.reunion_of_query_STwig_parts_results(list_of_paths)
+        # tools.create_txt_file_reunited_results_at_dir_path(r1, "C:/Users/StationG/Desktop/16 oct 2020 Baterie Teste GR1_Algorithm/Rezultate reunite/", "file_GR1_Algorithm_reunited_results")
+        # # print(r1)
 
 if __name__ == '__main__':
     main()
