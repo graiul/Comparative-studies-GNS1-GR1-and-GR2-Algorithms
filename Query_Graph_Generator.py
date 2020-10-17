@@ -445,14 +445,18 @@ class Query_Graph_Generator(object):
 
         # nr 21
         # Dureaza prea mult intreg. Va fi despartit in bucati.
-        query_graph_edges = [[7867,6217], [7867,6369], [7867,6419], [7867,6828], [7867,9155], [7867,9764]]
-        node_attr = ["10", "19", "16", "27", "26", "30", "12"]
+        # ok
+        # query_graph_edges = [[7867,6217], [7867,6369], [7867,6419], [7867,6828], [7867,9155], [7867,9764]]
+        # node_attr = ["10", "19", "16", "27", "26", "30", "12"]
 
-        # dureaza prea mult
+        # nr 22
+        # Dureaza prea mult intreg. Va fi despartit in bucati.
+        # ok
         # query_graph_edges = [[10196,2551], [10196,2800], [10196,3083], [10196,3223], [10196,3318], [10196,3482]]
         # node_attr = ["27", "22", "20", "3", "8", "26", "6"]
 
-        # dureaza prea mult
+        # ############################ Nu le folosesc #########################################
+        # NU l-am mai folosit. Pentru testarea GR1 Algorithm cu bucati, vreau doar cate doua grafuri din fiecare nr de noduri de la sapte pana la zece.
         # query_graph_edges = [[10881, 8738], [10881, 8962], [10881, 9854], [10881, 10074], [10881, 10527], [10881, 10699]]
         # node_attr = ["18", "32", "1", "29", "20", "8", "17"]
 
@@ -471,19 +475,11 @@ class Query_Graph_Generator(object):
         # Bucata 2:
         # query_graph_edges = [[979, 4736], [979, 4888], [979, 5042]]
         # node_attr = ["14", "8", "18", "15"]
+        # ############################ Nu le folosesc #########################################
 
-        # nr 26
-        # 90 min si nu s-a terminat prima rulare
-        # Refolosit un graf query cu 6 noduri si am adaugat inca doua noduri
-        # query_graph_edges = [[979, 4337], [979, 4341], [979, 4419], [979, 4736], [979, 4888], [979, 5042], [979, 5086]]
-        # node_attr = ["14", "13", "3", "28", "8", "18", "15", "30"]
-        # 979,4337
-        # 979,4341
-        # 979,4419
-        # 979,4736
-        # 979,4888
-        # 979,5042
-        # 979,5086
+        # nr 23
+        query_graph_edges = []
+        node_attr = []
 
         query_graph.add_edges_from(query_graph_edges)
 
