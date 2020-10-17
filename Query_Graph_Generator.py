@@ -341,8 +341,8 @@ class Query_Graph_Generator(object):
         # nr 10
         # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si trei consumatori
         # Cinci rulari
-        query_graph_edges = [[7190,137], [7190,419], [7190,450]]
-        node_attr = ["3", "2", "11", "3"]
+        # query_graph_edges = [[7190,137], [7190,419], [7190,450]]
+        # node_attr = ["3", "2", "11", "3"]
 
         # nr 11
         # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si patru consumatori
@@ -418,6 +418,7 @@ class Query_Graph_Generator(object):
         # query_graph_edges = [[979, 4337], [979, 4341], [979, 4419], [979, 4736], [979, 4888]]
         # node_attr = ["14", "13", "3", "28", "8", "18"]
 
+        # ############################ Nu le folosesc #########################################
         # Preluat de la graful query nr 20 si despartit in 2 bucati:
         # Bucata 1:
         # query_graph_edges = [[979, 4337], [979, 4341]]
@@ -427,15 +428,25 @@ class Query_Graph_Generator(object):
         # query_graph_edges = [[979, 4419], [979, 4736], [979, 4888]]
         # node_attr = ["14", "28", "8", "18"]
 
+        # NU. nr 21
+        # query_graph_edges = [[979, 4337], [979, 4341], [979, 4419], [979, 4736], [979, 4888], [979, 5042]]
+        # node_attr = ["14", "13", "3", "28", "8", "18", "15"]
+
+        # NU. nr 26 vechi. Nr 22 noua numerotare.
+        # Refolosit un graf query cu 6 noduri si am adaugat inca doua noduri
+        # query_graph_edges = [[979, 4337], [979, 4341], [979, 4419], [979, 4736], [979, 4888], [979, 5042], [979, 5086]]
+        # node_attr = ["14", "13", "3", "28", "8", "18", "15", "30"]
+        # ############################ Nu le folosesc #########################################
 
 
         # ##################################################################################################
         # De aici incolo este necesara despartirea in bucati.
         # ##################################################################################################
 
-        # dureaza prea mult
-        # query_graph_edges = [[7867,6217], [7867,6369], [7867,6419], [7867,6828], [7867,9155], [7867,9764]]
-        # node_attr = ["10", "19", "16", "27", "26", "30", "12"]
+        # nr 21
+        # Dureaza prea mult intreg. Va fi despartit in bucati.
+        query_graph_edges = [[7867,6217], [7867,6369], [7867,6419], [7867,6828], [7867,9155], [7867,9764]]
+        node_attr = ["10", "19", "16", "27", "26", "30", "12"]
 
         # dureaza prea mult
         # query_graph_edges = [[10196,2551], [10196,2800], [10196,3083], [10196,3223], [10196,3318], [10196,3482]]
