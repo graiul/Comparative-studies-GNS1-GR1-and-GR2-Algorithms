@@ -93,19 +93,54 @@ class Toolbox_Gheorghica_Radu_Iulian(object):
                 f_reunited_results.write(str(r_element) + " ")
             f_reunited_results.write("\n")
 
-    def create_execution_times_and_avg_txt_file_with_dir(self, save_path, execution_times):
-        avg = 0
-        sum = 0
-        for ex in execution_times:
-            sum = sum + ex
-        avg = sum / len(execution_times)
-        name_of_file = "file_GR1_Algorithm_execution_times_and_average"
+    def create_execution_times_and_avg_txt_file_at_dir_path(self, algorithm_name, execution_times_path_and_filename, save_path):
+        # avg = 0
+        # sum = 0
+        # for ex in execution_times:
+        #     sum = sum + ex
+        # avg = sum / len(execution_times)
+        # name_of_file = "file_GR1_Algorithm_execution_times_and_average"
+        # complete_name = os.path.join(save_path, name_of_file + ".txt")
+        # f_exec_times_and_avg = open(complete_name, "w+")
+        # f_exec_times_and_avg.write(str(execution_times))
+        # f_exec_times_and_avg.write("\nAverage time: " +str(avg))
+        # f_exec_times_and_avg.close()
+
+        list_of_execution_times = []
+        times_sum = 0
+        result = 0
+        f1_string_lines = []
+
+        with open(execution_times_path_and_filename, "r") as rd:
+            # Read lines in loop
+            for line in rd:
+                # All lines (besides the last) will include  newline, so strip it
+                f1_string_lines.append(line.strip())
+
+        f1_int_lines = []
+        float_val_lines = []
+        for string_line in f1_string_lines:
+            # https://www.geeksforgeeks.org/python-string-split/
+            split_string_line = string_line.split(" ")
+            for string_backtracking_line_element in split_string_line:
+                float_val_lines.append(float(string_backtracking_line_element))
+
+        print(float_val_lines)
+        times_sum = float(0)
+        result = float(0)
+        length = len(float_val_lines)
+        for t in float_val_lines:
+            times_sum = times_sum + t
+        result = times_sum / length
+        name_of_file = "file_" + algorithm_name + "_execution_times_and_average"
         complete_name = os.path.join(save_path, name_of_file + ".txt")
         f_exec_times_and_avg = open(complete_name, "w+")
-        f_exec_times_and_avg.write(str(execution_times))
-        f_exec_times_and_avg.write("\nAverage time: " +str(avg))
-
+        for time in float_val_lines:
+            f_exec_times_and_avg.write(str(time) + "\n")
+        # f_exec_times_and_avg.write(str(result))
+        f_exec_times_and_avg.write("\nAverage time: " +str(result))
         f_exec_times_and_avg.close()
+
 
     def obtain_query_graph(self, wanted_parts=1): # Foloseste si data graful din Neo4J pentru label-urile nodurilor
         ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
