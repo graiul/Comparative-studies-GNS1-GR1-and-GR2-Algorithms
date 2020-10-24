@@ -4,16 +4,23 @@ AM FOLOSIT GRAFUL RI PPI 12,575 nodes 86,890 relationships. Confirmare in foto a
 OK - DE INCLUS SI TESTELE CU QUERY STWIG DE 6 NODURI
 OK - DE FACUT CA GR1 ALGORITHM SA SELECTEZE SINGUR PANA LA 5 CONSUMATORI
 
-DE INCLUS si celelalte unelte in Toolbox.
-Verificatorul de rezultate trebuie sa aiba rubrica si pentru GR1_Algorithm.
-Teste GR1 cu bucati query STWIG
-Teste STwig cu query STWIG intregi si bucati
+- DE INCLUS si celelalte unelte in Toolbox.
+- Verificatorul de rezultate trebuie sa aiba rubrica si pentru GR1_Algorithm SAU DE SCHIMBAT VERIFICATOR
+IN FORMA GENERALIZATA.
+ - Teste GR1 cu bucati query STWIG
+ - Teste STwig cu query STWIG intregi si bucati
 
 Scriere text articol pe schelet.
 - De scris in articol si despre verificatorul de rezultate.
 - De scris ca contorizarea timpului include distribuirea grafului data peste procese.
 - Mentionez in articol ca sunt bucati care nu pot fi reunite.
 
+Mai departe - lucruri discutabile:
+OK - De testat cu si mai multi consumatori si dask queues.
+%De testat cu alte grafuri data.
+%De testat cu  reguli de pruning gns1.
+%VECHI. De facut GR2 care lucreaza cu grafuri query indiferent de adiacenta nodurilor query.
+De facut GR2 cu parti de Quantum Computing => paralelism + parti de quantum.
 
 
 CANTARESTE TIMP IN PLUS. VOI RULA SEPARAT. Datorita porturilor Neo4j, a doua rulare succesiva va avea timpul influentat?
@@ -72,10 +79,4 @@ OK - Pentru fiecare rulare creez un obiect GR1_Algorithm si rulez metoda de exec
 
 
 
-Mai departe - lucruri discutabile:
-OK - De testat cu si mai multi consumatori si dask queues.
-%De testat cu alte grafuri data.
-%De testat cu  reguli de pruning gns1.
-%De facut GR2 care lucreaza cu grafuri query indiferent de adiacenta nodurilor query.
-De facut GR2 cu parti de Quantum Computing.
 
