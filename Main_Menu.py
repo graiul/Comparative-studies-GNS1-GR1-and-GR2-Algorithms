@@ -904,21 +904,45 @@ def main():
 
         # NU fac rulari succesive, apare timp in plus de la a doua bucata
         # Nu fac reunirea rezultatelor pt ca dureaza prea mult pentru acest query graph STwig.
-        # Am testat si metoda de creere al mediei respective.
-        query_graph = tools.obtain_query_graph(wanted_parts=2)[0] # Listele sunt stocate pe prima pozitie al unei liste mai mari, de aceea folosesc [0].
+        # Am testat si metoda de creare al mediei respective.
+        query_graph = tools.obtain_query_graph(wanted_parts=5)[0] # Listele sunt stocate pe prima pozitie al unei liste mai mari, de aceea folosesc [0].
 
-        # a4 = GR1_Algorithm(query_graph[0], data_graph, False, 'C:/Users/StationG/Desktop/16 oct 2020 Baterie Teste GR1_Algorithm/Test 22/Prima parte graf query STwig/')
+        # a4 = GR1_Algorithm(query_graph[0], data_graph, False, 'C:/Users/StationG/Desktop/24 oct 2020 Baterie Teste GR1_Algorithm/Test 30/I parte graf query STwig/')
         # a4.execute_gr1_algorithm()
 
-        # a5 = GR1_Algorithm(query_graph[1], data_graph, False, 'C:/Users/StationG/Desktop/16 oct 2020 Baterie Teste GR1_Algorithm/Test 22/A doua parte graf query STwig/')
+        # a5 = GR1_Algorithm(query_graph[1], data_graph, False, 'C:/Users/StationG/Desktop/24 oct 2020 Baterie Teste GR1_Algorithm/Test 30/II-a parte graf query STwig/')
         # a5.execute_gr1_algorithm()
 
-        # Obtinerea mediei aritmetice al timpilor de executie.
-        # Pentru prima bucata.
-        # tools.create_execution_times_and_avg_txt_file_at_dir_path("GR1_Algorithm", 'C:/Users/StationG/Desktop/16 oct 2020 Baterie Teste GR1_Algorithm/Test 22/Prima parte graf query STwig/file_GR1_Algorithm_execution_times.txt', 'C:/Users/StationG/Desktop/16 oct 2020 Baterie Teste GR1_Algorithm/Test 22/Prima parte graf query STwig/')
-        # Pentru a doua bucata.
-        tools.create_execution_times_and_avg_txt_file_at_dir_path("GR1_Algorithm", 'C:/Users/StationG/Desktop/16 oct 2020 Baterie Teste GR1_Algorithm/Test 22/A doua parte graf query STwig/file_GR1_Algorithm_execution_times.txt', 'C:/Users/StationG/Desktop/16 oct 2020 Baterie Teste GR1_Algorithm/Test 22/A doua parte graf query STwig/')
+        # a6 = GR1_Algorithm(query_graph[2], data_graph, False, 'C:/Users/StationG/Desktop/24 oct 2020 Baterie Teste GR1_Algorithm/Test 30/III-a parte graf query STwig/')
+        # a6.execute_gr1_algorithm()
 
+        # a7 = GR1_Algorithm(query_graph[3], data_graph, False, 'C:/Users/StationG/Desktop/24 oct 2020 Baterie Teste GR1_Algorithm/Test 30/IV-a parte graf query STwig/')
+        # a7.execute_gr1_algorithm()
+
+        # a8 = GR1_Algorithm(query_graph[4], data_graph, False, 'C:/Users/StationG/Desktop/24 oct 2020 Baterie Teste GR1_Algorithm/Test 30/V-a parte graf query STwig/')
+        # a8.execute_gr1_algorithm()
+
+        # Obtinerea mediei aritmetice al timpilor de executie.
+        # Pentru prima parte.
+        tools.create_execution_times_and_avg_txt_file_at_dir_path("GR1_Algorithm",
+                                                                  'C:/Users/StationG/Desktop/24 oct 2020 Baterie Teste GR1_Algorithm/Test 30/I parte graf query STwig/file_GR1_Algorithm_execution_times.txt',
+                                                                  'C:/Users/StationG/Desktop/24 oct 2020 Baterie Teste GR1_Algorithm/Test 30/I parte graf query STwig/')
+        # Pentru a doua parte.
+        tools.create_execution_times_and_avg_txt_file_at_dir_path("GR1_Algorithm",
+                                                                  'C:/Users/StationG/Desktop/24 oct 2020 Baterie Teste GR1_Algorithm/Test 30/II-a parte graf query STwig/file_GR1_Algorithm_execution_times.txt',
+                                                                  'C:/Users/StationG/Desktop/24 oct 2020 Baterie Teste GR1_Algorithm/Test 30/II-a parte graf query STwig/')
+        # Pentru a treia parte.
+        tools.create_execution_times_and_avg_txt_file_at_dir_path("GR1_Algorithm",
+                                                                  'C:/Users/StationG/Desktop/24 oct 2020 Baterie Teste GR1_Algorithm/Test 30/III-a parte graf query STwig/file_GR1_Algorithm_execution_times.txt',
+                                                                  'C:/Users/StationG/Desktop/24 oct 2020 Baterie Teste GR1_Algorithm/Test 30/III-a parte graf query STwig/')
+        # Pentru a patra parte.
+        tools.create_execution_times_and_avg_txt_file_at_dir_path("GR1_Algorithm",
+                                                                  'C:/Users/StationG/Desktop/24 oct 2020 Baterie Teste GR1_Algorithm/Test 30/IV-a parte graf query STwig/file_GR1_Algorithm_execution_times.txt',
+                                                                  'C:/Users/StationG/Desktop/24 oct 2020 Baterie Teste GR1_Algorithm/Test 30/IV-a parte graf query STwig/')
+        # Pentru a cincea parte.
+        tools.create_execution_times_and_avg_txt_file_at_dir_path("GR1_Algorithm",
+                                                                  'C:/Users/StationG/Desktop/24 oct 2020 Baterie Teste GR1_Algorithm/Test 30/V-a parte graf query STwig/file_GR1_Algorithm_execution_times.txt',
+                                                                  'C:/Users/StationG/Desktop/24 oct 2020 Baterie Teste GR1_Algorithm/Test 30/V-a parte graf query STwig/')
 
         # Reunirea rezultatelor
         # list_of_paths = ["C:/Users/StationG/Desktop/16 oct 2020 Baterie Teste GR1_Algorithm/Test 21/Prima parte graf query STwig/file_GR1_Algorithm_output.txt",
