@@ -14,6 +14,15 @@ Scriere text articol pe schelet.
 - De scris in articol si despre verificatorul de rezultate.
 - De scris ca contorizarea timpului include distribuirea grafului data peste procese.
 - Mentionez in articol ca sunt bucati care nu pot fi reunite.
+- De scris faptul ca timpii includ distribuirea grafului data pe procese + timpul de
+pornire al proceselor.
+? Include si oprirea automata al proceselor?
+- De scris cu cat mai multe parti query, cu atat mai multe rezultate
+care nu pot fi reunite, dar incluud pe cele valabile. Cu cat mai multe parti,
+cu atat executia e mai rapida, iar reunirea va dura mai mult.
+- De mentionat ca poate lucra cu parti formate din pana la 6 noduri
+- De mentionat ca fiecare parte de la a doua incolo are
+pe prima pozitie adaugata radacina.
 
 Mai departe - lucruri discutabile:
 OK - De testat cu si mai multi consumatori si dask queues.
