@@ -27,6 +27,7 @@ import traceback
 from py2neo import Graph, Subgraph
 
 from timeit import default_timer as timer
+# import time
 ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
 
 
@@ -79,6 +80,9 @@ class GR1_Algorithm(object):
 
                     queue_of_the_producer.put([node])
         ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
+
+        # Aici am incercat o filtrare pentru a evita aparitia rezultatelor pentru parti query STwig care
+        # nu pot fi cuplate. Am decis sa nu mai folosesc aceasta filtrare.
         else:
             if self.first_query_node_id_into_search == True:
                 for node in list(dataGraph.nodes()):
@@ -673,6 +677,10 @@ class GR1_Algorithm(object):
         # print(l_parts)
 
         start_time = timer()
+        # start_time = time.clock()
+        # print()
+        # print("A INCEPUT CRONOMETRAREA")
+        # print()
 
         # distributed.dask.org/en/latest/locality.html
         # futures = client.scatter(data_graph_edges, workers=None, broadcast=False)
@@ -892,7 +900,8 @@ class GR1_Algorithm(object):
         # # h.result()
 
         total_time = timer() - start_time
-        print("Total execution time: " + str(total_time))
+        # total_time = time.clock() - start_time
+        print("Total execution time: " + str(total_time) + " seconds.")
 
         # stackoverflow.com/questions/11700593/creating-files-and-directories-via-python
         import os
