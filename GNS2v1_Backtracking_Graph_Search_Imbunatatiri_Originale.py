@@ -6,7 +6,7 @@
 # from colorama import Fore, Back, Style
 # init()
 
-import pandas as pd
+# import pandas as pd
 
 from Query_Graph_Generator import Query_Graph_Generator
 from EdgeFinderTool import EdgeFinderTool
