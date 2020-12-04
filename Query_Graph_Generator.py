@@ -553,11 +553,13 @@ class Query_Graph_Generator(object):
         #              "31", "10"]
 
         # Testari algoritm GNS2v1 Algorithm
-        # nr 1 luat de la GR1 Algorithm
-        # - graf data RI 12,575 nodes si 86,890 relationships, un producator si doi consumatori
+
+        # graf query STwig
+        # nr 6 luat de la GR1 Algorithm
+        # - graf data RI 12,575 nodes si 86,890 relationships, un producator si trei consumatori
         # x rulari
-        query_graph_edges = [[7711, 2243], [7711, 2259]]
-        node_attr = ["16", "2", "17"]
+        query_graph_edges = [[11041, 2467], [11041, 2607], [11041, 2650]]
+        node_attr = ["18", "23", "11", "9"]
 
         query_graph.add_edges_from(query_graph_edges)
 
