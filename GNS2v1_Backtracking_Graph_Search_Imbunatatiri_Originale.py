@@ -17,8 +17,9 @@ import copy
 # https://stackoverflow.com/questions/4564559/get-exception-description-and-stack-trace-which-caused-an-exception-all-as-a-st
 import traceback
 
-from py2neo import Graph, Subgraph
+from py2neo import Graph  #, Subgraph
 from timeit import default_timer as timer
+
 
 def update_state(edge, partial_solution):
     # print("update_state exec: ")
@@ -38,6 +39,7 @@ def restore_state(partial_solution):
     else:
         return partial_solution
 
+
 def next_query_vertex(current_node, query_stwig_dict):
     if current_node == []:
         return list(query_stwig_dict.keys())[0]
@@ -49,8 +51,8 @@ def next_query_vertex(current_node, query_stwig_dict):
         # print("No more elements after this one in dict.")
         pass
 
-def next_data_edge(partial_solution, data_graph):
 
+def next_data_edge(partial_solution, data_graph):
     for edge in sorted(list(data_graph.edges())):
         if is_joinable(edge, partial_solution, data_graph, query_edges_dict):
             return edge
@@ -281,7 +283,7 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
                                     found2 = finder2.edge_found()
                                     if found2 is False:
                                     # if aux[-1] not in positions[pos]:
-                                        positions[pos].append(aux[-1]) # aux[-1] e data_edge_to_be_joined
+                                        positions[pos].append(aux[-1])  # aux[-1] e data_edge_to_be_joined
                                         # print("Appended data edge: ")
                                         # print(aux[-1])
                                         # print("Reversed data edge to avoid final results duplicates: ")
@@ -688,6 +690,7 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
 
     return None
 
+
 def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph):
     # print()
     # print("Started subgraph search: ")
@@ -731,7 +734,6 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
             # print()
             # print(query_graph.edges)
             # print(partial_solution)
-
 
             gr_isomorphic = False
             partial_solution_data_subgraph = nx.Graph()
@@ -782,7 +784,6 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
                 # print("Adjacency matrix sizes do not match.")
                 # print("Not isomorphic")
                 pass
-
 
             partial_solution = copy.deepcopy(restore_state(partial_solution))
             # mat_equal = False # Pentru lucrul cu matrice de adiacenta. Problema este descrisa mai sus.
@@ -847,10 +848,11 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
                 # f2.write("\n")
                 # f2.close()
 
-                print("\n" + Fore.GREEN + Style.BRIGHT + "Backtracking results: ")
+                # print("\n" + Fore.GREEN + Style.BRIGHT + "Backtracking results: ")
+                print("Backtracking results: ")
                 for cs in complete_solutions:
                     print(cs)
-                print(Style.RESET_ALL)
+                # print(Style.RESET_ALL)
                 # print("Finished. Press 'Enter' to close the window.")
                 # input()
                 print("Execution time for Backtracking Algorithm (seconds): ")
@@ -862,27 +864,26 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
             # go back a position with restore position()
             # print("Going back a position.")
             # input("Continue execution?")
-            partial_solution = copy.deepcopy(restore_state(partial_solution)) #partial_solution[:1])
+            partial_solution = copy.deepcopy(restore_state(partial_solution))  #partial_solution[:1])
             # print("Restored partial solution: " + str(partial_solution))
             if len(partial_solution) == 0:  # poz 0 = []
                 current_node = []
-                positions[1] = [] # poz 1 = []
+                positions[1] = []  # poz 1 = []
                 # positions[2] = []
             # else:
             #     current_node = copy.deepcopy(partial_solution[-1])
 
-            if len(partial_solution) == 1: # poz 0 = [x]
+            if len(partial_solution) == 1:  # poz 0 = [x]
                 current_node = copy.deepcopy(partial_solution[0])
                 # positions[1] = []
-                positions[2] = [] # poz 1 = []
+                positions[2] = []  # poz 1 = []
 
-            if len(partial_solution) == 2: # poz 0 = [x], poz 1 = [y]
+            if len(partial_solution) == 2:  # poz 0 = [x], poz 1 = [y]
                 current_node = copy.deepcopy(partial_solution[-1])
                 positions[3] = []
 
             # print("Current node: " + str(current_node))
             subgraph_search(partial_solution, query_graph_dict, current_node, data_graph)
-
 
         partial_solution = copy.deepcopy(update_state(candidate, partial_solution))
         # print("PARTIAL SOLUTION: " + str(partial_solution))
@@ -892,6 +893,7 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
 
     if i == False:
         print("Finished.")
+
 
 # https://stackoverflow.com/questions/35964155/checking-if-list-is-a-sublist
 def sublist2(lst1, lst2):
@@ -904,36 +906,37 @@ def sublist2(lst1, lst2):
             return False
     return True
 
+
 def remove_used_node_from_node_list(node):
     node_list_aux.remove(node)
     print(node_list_aux)
 
-def renew_node_list(old_node_list):
-    old_node_list = copy.deepcopy(list(small_graph.nodes()))
-    print(old_node_list)
-    return old_node_list
+# def renew_node_list(old_node_list):
+#     old_node_list = copy.deepcopy(list(small_graph.nodes()))
+#     print(old_node_list)
+#     return old_node_list
 
 # Va prelua din graful data nodurile pentru fiecare pozitie al solutiei partiale.
 # Astfel cautarea nu se va mai face direct in graful data, ci in multimea de refined candidates.
 def obtainCandidates(query_node_label):
-        candidates = []
-        # if query_node is None:
-        #     exit(0)
-        for data_node in dataGraph.nodes():
-            if query_node_label == dataGraph.nodes[data_node]['label']:
-                candidates.append(data_node)
-        return candidates
+    candidates = []
+    # if query_node is None:
+    #     exit(0)
+    for data_node in dataGraph.nodes():
+        if query_node_label == dataGraph.nodes[data_node]['label']:
+            candidates.append(data_node)
+    return candidates
 
-        # candidates = []
-        # # for x in VF2QueryGraphDict.keys():
-        # # print("Candidates for node: " + u.getVertexLabel())
-        # for y in dataGraphDict.keys():
-        #     if u.getVertexLabel() in dataGraphDict.get(y).getVertexLabel():
-        #         # print("Is candidate")
-        #         # print(dataGraphDict.get(y))
-        #         candidates.append(dataGraphDict.get(y).getVertexID())
-        #
-        # return candidates
+    # candidates = []
+    # # for x in VF2QueryGraphDict.keys():
+    # # print("Candidates for node: " + u.getVertexLabel())
+    # for y in dataGraphDict.keys():
+    #     if u.getVertexLabel() in dataGraphDict.get(y).getVertexLabel():
+    #         # print("Is candidate")
+    #         # print(dataGraphDict.get(y))
+    #         candidates.append(dataGraphDict.get(y).getVertexID())
+    #
+    # return candidates
 
 def obtainCandidateEdges(edge_node_0_label, edge_node_1_label):
         candidate_edges = []
@@ -1151,7 +1154,7 @@ print("Data graph edges: ")
 print(list(dataGraph.edges()))
 p_solution = []
 complete_solutions = []
-positions = OrderedDict().fromkeys([0,1,2,3])
+positions = OrderedDict().fromkeys([0, 1, 2, 3])
 positions[0] = []
 positions[1] = []
 positions[2] = []
