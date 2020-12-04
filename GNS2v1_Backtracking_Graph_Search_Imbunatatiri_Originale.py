@@ -1,28 +1,24 @@
-import copy
-
 # from Graph_Format import Graph_Format
-import networkx as nx
-from collections import OrderedDict
 
 # https://stackoverflow.com/questions/6537487/changing-shell-text-color-windows
 # https://pypi.org/project/colorama/
-from colorama import init
-from colorama import Fore, Back, Style
+# from colorama import init
+# from colorama import Fore, Back, Style
+# init()
+
+import pandas as pd
 
 from Query_Graph_Generator import Query_Graph_Generator
-
-init()
+from EdgeFinderTool import EdgeFinderTool
+import networkx as nx
+from collections import OrderedDict
+import copy
 
 # https://stackoverflow.com/questions/4564559/get-exception-description-and-stack-trace-which-caused-an-exception-all-as-a-st
 import traceback
 
 from py2neo import Graph, Subgraph
-
 from timeit import default_timer as timer
-
-import pandas as pd
-
-from EdgeFinderTool import EdgeFinderTool
 
 def update_state(edge, partial_solution):
     # print("update_state exec: ")
