@@ -20,6 +20,15 @@ import traceback
 from py2neo import Graph  #, Subgraph
 from timeit import default_timer as timer
 
+# CAUTAREA IN GRAFUL DATA MERGE BINE DAR ERA LIMITATA DE PYTHON
+# DATORITA NR MARE DE APELURI RECURSIVE NECESARE, FIIND INTERPRETAT
+# GRESIT DE PYTHON CA FIIND BUCLA INFINITA.
+# NU E BUCLA INFINITA CI DOAR O CAUTARE RECURSIVA FOARTE ADANCA, IN FUNCTIE DE CAZ.
+# DE ACEEA UNELE GRAFURI QUERY DAU REZULTATUL BINE SI ALGORITMUL SE OPRESTE SINGUR,
+# IAR IN ALTE CAZURI APAREA EROAREA RESPECTIVA.
+# stackoverflow.com/questions/3323001/what-is-the-maximum-recursion-depth-in-python-and-how-to-increase-it
+import sys
+sys.setrecursionlimit(100000)
 
 def update_state(edge, partial_solution):
     # print("update_state exec: ")
@@ -693,8 +702,9 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
 
 def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph):
     # print()
-    # print("Started subgraph search: ")
+    print("Started subgraph search: ")
     # print(Back.WHITE + Fore.LIGHTBLUE_EX + Style.BRIGHT + "Partial solution given: " + str(partial_solution) + Style.RESET_ALL)
+    print("Partial solution given: " + str(partial_solution))
     i = False
     # print(query_graph_dict)
     if len(partial_solution) == len(list(query_graph_dict.items())):
@@ -1146,12 +1156,12 @@ query_edges_dict = OrderedDict(zip(query_graph_edges, query_edge_labels))
 query_stwig1_dict_matched_attribute = OrderedDict(zip(query_nodes, query_node_matched_attribute_source))
 print("Query graph edges dictionary: " + str(list(query_edges_dict.items())))
 print()
-adj_mat_query = nx.to_pandas_adjacency(query_graph, dtype=int)
+# adj_mat_query = nx.to_pandas_adjacency(query_graph, dtype=int)
 print("query_stwig1_dict_matched_attribute: ")
 print(list(query_stwig1_dict_matched_attribute.items()))
 print()
-print("Data graph edges: ")
-print(list(dataGraph.edges()))
+# print("Data graph edges: ")
+# print(list(dataGraph.edges()))
 p_solution = []
 complete_solutions = []
 positions = OrderedDict().fromkeys([0, 1, 2, 3])
