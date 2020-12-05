@@ -27,8 +27,14 @@ from timeit import default_timer as timer
 # DE ACEEA UNELE GRAFURI QUERY DAU REZULTATUL BINE SI ALGORITMUL SE OPRESTE SINGUR,
 # IAR IN ALTE CAZURI APAREA EROAREA RESPECTIVA.
 # stackoverflow.com/questions/3323001/what-is-the-maximum-recursion-depth-in-python-and-how-to-increase-it
-import sys
-sys.setrecursionlimit(100000)
+# import sys
+# sys.setrecursionlimit(10000000)
+
+# Si mai este problema cu "Process finished with exit code -1073741571 (0xC00000FD)"
+# stackoverflow.com/questions/5061582/setting-stacksize-in-a-python-script
+import resource, sys
+resource.setrlimit(resource.RLIMIT_STACK, (2**29, -1))
+sys.setrecursionlimit(10**6)
 
 def update_state(edge, partial_solution):
     # print("update_state exec: ")
@@ -780,11 +786,13 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
                     # for c_sol_elem in c_sol:
                     #     f1.write(str(c_sol_elem) + " ")
                     # f1.write("\n")
-                    # print("One complete solution found!")
+                    print("\nOne complete solution found!")
                     # print()
                     # print(Fore.GREEN + Style.BRIGHT + "List of complete solutions: ")
-                    # for cs in complete_solutions:
-                    #     print(cs)
+                    print("List of complete solutions: ")
+                    for cs in complete_solutions:
+                        print(cs)
+                    print()
                     # print(Style.RESET_ALL)
                 else:
                     # print("Duplicate found")
