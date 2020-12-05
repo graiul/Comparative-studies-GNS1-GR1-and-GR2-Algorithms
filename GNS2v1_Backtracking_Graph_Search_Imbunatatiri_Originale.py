@@ -33,6 +33,8 @@ from timeit import default_timer as timer
 # Si mai este problema cu "Process finished with exit code -1073741571 (0xC00000FD)"
 # stackoverflow.com/questions/5061582/setting-stacksize-in-a-python-script
 import resource  # trebuie instalat package separat prin instalatorul de pachete al interpretorului.
+                 # sau scot recursivitatea
+                 # sau folosesc graful data cu 10000 de muchii. ASTA VOI FACE.
 import sys
 resource.setrlimit(resource.RLIMIT_STACK, (2**29, -1))
 sys.setrecursionlimit(10**6)
