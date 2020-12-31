@@ -32,12 +32,12 @@ from timeit import default_timer as timer
 
 # Si mai este problema cu "Process finished with exit code -1073741571 (0xC00000FD)"
 # stackoverflow.com/questions/5061582/setting-stacksize-in-a-python-script
-import resource  # trebuie instalat package separat prin instalatorul de pachete al interpretorului.
+# import resource  # trebuie instalat package separat prin instalatorul de pachete al interpretorului.
                  # sau scot recursivitatea
                  # sau folosesc graful data cu 10000 de muchii. ASTA VOI FACE.
-import sys
-resource.setrlimit(resource.RLIMIT_STACK, (2**29, -1))
-sys.setrecursionlimit(10**6)
+# import sys
+# resource.setrlimit(resource.RLIMIT_STACK, (2**29, -1))
+# sys.setrecursionlimit(10**6)
 
 def update_state(edge, partial_solution):
     # print("update_state exec: ")
@@ -716,6 +716,78 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
 # solutii complete de gasit
 #  - iar pentru cautarea in sine sa fie o functie separata care sa fie
 # apelata pentru fiecare pozitie al grafului query.
+
+# Pentru inceput: gasirea unei singure solutii complete, dar fara recursivitate.
+def subgraph_search_non_recursive(partial_solution, query_graph_dict, current_node, data_graph):
+    # print()
+    # print("Started subgraph search: ")
+    # print(Back.WHITE + Fore.LIGHTBLUE_EX + Style.BRIGHT + "Partial solution given: " + str(partial_solution) + Style.RESET_ALL)
+    # print("Partial solution given: " + str(partial_solution))
+    # i = False
+    # print(query_graph_dict)
+
+    candidate = next_data_edge(partial_solution, data_graph)
+    print("Candidate data edge: ")
+    print(candidate)
+
+        # # if candidate is not None:
+        # #     print("Candidate edge (data node id's): " + str(candidate))
+        # #     print("Candidate edge (data nodes label): " + str([data_graph.node[candidate[0]]['label'], data_graph.node[candidate[1]]['label']]))
+        # #     print("Positions log after choosing candidate: " + str(list(positions.items())))
+        #
+        # if candidate is None:  # go back a position with restore position()
+        #
+        #     # print("Candidate: " + Fore.LIGHTRED_EX + str(candidate) + Style.RESET_ALL)
+        #     # print()
+        #
+        #     if partial_solution == []:
+        #         # i = False
+        #
+        #         # f2 = open("file_Backtracking Algorithm execution times.txt", "a")
+        #         # f2.write(str(total_time) + " ")
+        #         # f2.write("\n")
+        #         # f2.close()
+        #
+        #         # print("\n" + Fore.GREEN + Style.BRIGHT + "Backtracking results: ")
+        #         print("Backtracking results: ")
+        #         for cs in complete_solutions:
+        #             print(cs)
+        #         # print(Style.RESET_ALL)
+        #         # print("Finished. Press 'Enter' to close the window.")
+        #         # input()
+        #         print("Execution time for Backtracking Algorithm (seconds): ")
+        #         total_time = timer() - start_time
+        #         print(total_time)
+
+                # exit(0)
+
+        #     # go back a position with restore position()
+        #     # print("Going back a position.")
+        #     # input("Continue execution?")
+        #     partial_solution = copy.deepcopy(restore_state(partial_solution))  # partial_solution[:1])
+        #     # print("Restored partial solution: " + str(partial_solution))
+        #     if len(partial_solution) == 0:  # poz 0 = []
+        #         current_node = []
+        #         positions[1] = []  # poz 1 = []
+        #         # positions[2] = []
+        #     # else:
+        #     #     current_node = copy.deepcopy(partial_solution[-1])
+        #
+        #     if len(partial_solution) == 1:  # poz 0 = [x]
+        #         current_node = copy.deepcopy(partial_solution[0])
+        #         # positions[1] = []
+        #         positions[2] = []  # poz 1 = []
+        #
+        #     if len(partial_solution) == 2:  # poz 0 = [x], poz 1 = [y]
+        #         current_node = copy.deepcopy(partial_solution[-1])
+        #         positions[3] = []
+        #
+        #     # print("Current node: " + str(current_node))
+        #     # subgraph_search(partial_solution, query_graph_dict, current_node, data_graph)
+        #
+        # partial_solution = copy.deepcopy(update_state(candidate, partial_solution))
+        # # print("PARTIAL SOLUTION: " + str(partial_solution))
+
 def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph):
     # print()
     print("Started subgraph search: ")
@@ -842,7 +914,7 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
             # partial_solution = []
             # candidate = []
             # restore_state(partial_solution)
-            subgraph_search(partial_solution, query_graph_dict, current_node, data_graph)
+            # subgraph_search(partial_solution, query_graph_dict, current_node, data_graph)
 
         # if partial_solution in complete_solutions:
         #     print("Already found.")
@@ -911,12 +983,12 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
                 positions[3] = []
 
             # print("Current node: " + str(current_node))
-            subgraph_search(partial_solution, query_graph_dict, current_node, data_graph)
+            # subgraph_search(partial_solution, query_graph_dict, current_node, data_graph)
 
         partial_solution = copy.deepcopy(update_state(candidate, partial_solution))
         # print("PARTIAL SOLUTION: " + str(partial_solution))
 
-        subgraph_search(partial_solution, query_graph_dict, candidate, data_graph)
+        # subgraph_search(partial_solution, query_graph_dict, candidate, data_graph)
         # restore_state(partial_solution)
 
     if i == False:
@@ -1198,7 +1270,12 @@ node_list_aux = copy.deepcopy(list(dataGraph.nodes()))
 try:
     # subgraph_search(p_solution, query_edges_dict, [], small_graph)
     start_time = timer()
-    subgraph_search(p_solution, query_edges_dict, [], dataGraph)
+    # subgraph_search(p_solution, query_edges_dict, [], dataGraph)
+    for i in range(0, 999):
+        print("Iteration number: ")
+        print(i)
+        subgraph_search_non_recursive(p_solution, query_edges_dict, [], dataGraph)
+        i = i + 1
     # total_time = timer() - start_time
     # print("Timp total de executare algoritm Backtracking: " + str(total_time) + " secunde.")
 except IndexError:
