@@ -719,21 +719,22 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
 
 # Pentru inceput: gasirea unei singure solutii complete, dar fara recursivitate.
 def subgraph_search_non_recursive(partial_solution, query_graph_dict, current_node, data_graph):
-    # print()
-    # print("Started subgraph search: ")
+    print()
+    print("Started subgraph search: ")
     # print(Back.WHITE + Fore.LIGHTBLUE_EX + Style.BRIGHT + "Partial solution given: " + str(partial_solution) + Style.RESET_ALL)
-    # print("Partial solution given: " + str(partial_solution))
+    print("Partial solution given: " + str(partial_solution))
     # i = False
-    # print(query_graph_dict)
+    print("Query graph dictionary given as input to subgraph search: ")
+    print(query_graph_dict)
 
     candidate = next_data_edge(partial_solution, data_graph)
-    print("Candidate data edge: ")
-    print(candidate)
 
-        # # if candidate is not None:
-        # #     print("Candidate edge (data node id's): " + str(candidate))
-        # #     print("Candidate edge (data nodes label): " + str([data_graph.node[candidate[0]]['label'], data_graph.node[candidate[1]]['label']]))
-        # #     print("Positions log after choosing candidate: " + str(list(positions.items())))
+    if candidate is not None:
+        print("Candidate edge (data node id's): " + str(candidate))
+        # stackoverflow.com/questions/13698352/storing-and-accessing-node-attributes-python-networkx
+        # "NOTE: In networkx 2.4 (aici 2.5), G.node[] has been replaced with G.nodes[]
+        print("Candidate edge (data nodes label): " + str([data_graph.nodes[candidate[0]]['label'], data_graph.nodes[candidate[1]]['label']]))
+        print("Positions log after choosing candidate: " + str(list(positions.items())))
         #
         # if candidate is None:  # go back a position with restore position()
         #
@@ -914,7 +915,7 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
             # partial_solution = []
             # candidate = []
             # restore_state(partial_solution)
-            # subgraph_search(partial_solution, query_graph_dict, current_node, data_graph)
+            subgraph_search(partial_solution, query_graph_dict, current_node, data_graph)
 
         # if partial_solution in complete_solutions:
         #     print("Already found.")
@@ -983,12 +984,12 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
                 positions[3] = []
 
             # print("Current node: " + str(current_node))
-            # subgraph_search(partial_solution, query_graph_dict, current_node, data_graph)
+            subgraph_search(partial_solution, query_graph_dict, current_node, data_graph)
 
         partial_solution = copy.deepcopy(update_state(candidate, partial_solution))
         # print("PARTIAL SOLUTION: " + str(partial_solution))
 
-        # subgraph_search(partial_solution, query_graph_dict, candidate, data_graph)
+        subgraph_search(partial_solution, query_graph_dict, candidate, data_graph)
         # restore_state(partial_solution)
 
     if i == False:
@@ -1270,12 +1271,16 @@ node_list_aux = copy.deepcopy(list(dataGraph.nodes()))
 try:
     # subgraph_search(p_solution, query_edges_dict, [], small_graph)
     start_time = timer()
-    # subgraph_search(p_solution, query_edges_dict, [], dataGraph)
-    for i in range(0, 999):
-        print("Iteration number: ")
-        print(i)
-        subgraph_search_non_recursive(p_solution, query_edges_dict, [], dataGraph)
-        i = i + 1
+    subgraph_search(p_solution, query_edges_dict, [], dataGraph)
+
+    # Pentru non recursiv:
+    # for i in range(0, 999):
+    #     print("Iteration number: ")
+    #     print(i)
+    #     subgraph_search_non_recursive(p_solution, query_edges_dict, [], dataGraph)
+    #     i = i + 1
+    # subgraph_search_non_recursive(p_solution, query_edges_dict, [], dataGraph)
+
     # total_time = timer() - start_time
     # print("Timp total de executare algoritm Backtracking: " + str(total_time) + " secunde.")
 except IndexError:
