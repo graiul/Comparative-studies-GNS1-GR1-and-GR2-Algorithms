@@ -197,6 +197,7 @@ class Query_Graph_Generator(object):
         # ok
         # query_graph_edges = [[1773, 1488], [1773, 1898], [1773, 2285]]
         # node_attr = ["25", "28", "29", "27"]
+        # ##############################################################################################################
 
 
 
@@ -558,8 +559,21 @@ class Query_Graph_Generator(object):
         # nr 6 luat de la GR1 Algorithm
         # - graf data RI 12,575 nodes si 86,890 relationships, un producator si trei consumatori
         # x rulari
-        query_graph_edges = [[11041, 2467], [11041, 2607], [11041, 2650]]
-        node_attr = ["18", "23", "11", "9"]
+        # query_graph_edges = [[11041, 2467], [11041, 2607], [11041, 2650]]
+        # node_attr = ["18", "23", "11", "9"]
+
+        # ##################################
+        # Rulare si cu graf query non-STwig
+        query_graph_edges = [[1, 2], [3, 4], [5, 6], [7, 8]] # GNS ca si da rezultat o gasire, dar nu stiu daca  mai sunt si alte gasiri existente in graful RI cu 10000 muchii si 4652 de noduri.
+        # STwig Alg si VF2 Alg nu pot lucra cu grafuri query non-STwig.
+        # Comparatia atunci ar putea fi facuta cu un alt algoritm luat de pe net si rulat - pt grafuri query non-STwig
+        # -------------------
+        # query_graph_edges = [[1, 4], [3, 4], [5, 6], [7, 8]] # - defect
+        # query_graph.add_node(2)
+        # -------------------
+
+        node_attr = ["24", "19", "32", "25", "32", "24", "26", "11"]
+        # ##################################
 
         query_graph.add_edges_from(query_graph_edges)
 
