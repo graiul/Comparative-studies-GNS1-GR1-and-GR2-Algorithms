@@ -1198,14 +1198,6 @@ try:
     start_time = timer()
     subgraph_search(p_solution, query_edges_dict, [], dataGraph)
 
-    # Pentru non recursiv:
-    # for i in range(0, 999):
-    #     print("Iteration number: ")
-    #     print(i)
-    #     subgraph_search_non_recursive(p_solution, query_edges_dict, [], dataGraph)
-    #     i = i + 1
-    # subgraph_search_non_recursive(p_solution, query_edges_dict, [], dataGraph)
-
     # total_time = timer() - start_time
     # print("Timp total de executare algoritm Backtracking: " + str(total_time) + " secunde.")
 except IndexError:
