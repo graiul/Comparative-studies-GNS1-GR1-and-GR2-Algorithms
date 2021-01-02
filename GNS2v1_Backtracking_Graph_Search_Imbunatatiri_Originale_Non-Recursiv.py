@@ -91,6 +91,7 @@ def next_data_edge(partial_solution, data_graph):
             return edge
     return None
 
+
 def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edges_dict_input):
 
     found_valid_data_edge = False
@@ -800,178 +801,181 @@ def subgraph_search_non_recursive_ver_2(partial_solution, query_graph_dict, curr
     # print()
     print("Started subgraph search: ")
     # print(Back.WHITE + Fore.LIGHTBLUE_EX + Style.BRIGHT + "Partial solution given: " + str(partial_solution) + Style.RESET_ALL)
-    print("Partial solution given: " + str(partial_solution))
-    i = False
+    # print("Partial solution given: " + str(partial_solution))
     # print(query_graph_dict)
-    if len(partial_solution) == len(list(query_graph_dict.items())):
-        if partial_solution not in complete_solutions:
-            # https://networkx.github.io/documentation/networkx-1.9/reference/generated/networkx.linalg.graphmatrix.adjacency_matrix.html
-            # https://networkx.github.io/documentation/networkx-2.2/reference/generated/networkx.convert_matrix.to_pandas_adjacency.html
-            # https://stackoverflow.com/questions/19917545/comparing-two-pandas-dataframes-for-differences
-            # https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.eq.html#pandas.DataFrame.eq
-            # https://stackoverflow.com/questions/38212697/confirming-equality-of-two-pandas-dataframes
-            # Obtinerea valorilor dintr-un DataFrame pandas: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_numpy.html#pandas.DataFrame.to_numpy
-            # https://stackoverflow.com/questions/10580676/comparing-two-numpy-arrays-for-equality-element-wise
+    # i = False
+    i = True
+    while i:
+        print("Partial solution given: " + str(partial_solution))
+        if len(partial_solution) == len(list(query_graph_dict.items())):
+            if partial_solution not in complete_solutions:
+                # https://networkx.github.io/documentation/networkx-1.9/reference/generated/networkx.linalg.graphmatrix.adjacency_matrix.html
+                # https://networkx.github.io/documentation/networkx-2.2/reference/generated/networkx.convert_matrix.to_pandas_adjacency.html
+                # https://stackoverflow.com/questions/19917545/comparing-two-pandas-dataframes-for-differences
+                # https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.eq.html#pandas.DataFrame.eq
+                # https://stackoverflow.com/questions/38212697/confirming-equality-of-two-pandas-dataframes
+                # Obtinerea valorilor dintr-un DataFrame pandas: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_numpy.html#pandas.DataFrame.to_numpy
+                # https://stackoverflow.com/questions/10580676/comparing-two-numpy-arrays-for-equality-element-wise
 
-            # print()
-            # print(query_graph.edges)
-            # print(partial_solution)
+                # print()
+                # print(query_graph.edges)
+                # print(partial_solution)
 
-            gr_isomorphic = False
-            partial_solution_data_subgraph = nx.Graph()
-            partial_solution_data_subgraph.add_edges_from(partial_solution)
-            if nx.is_isomorphic(query_graph, partial_solution_data_subgraph):
-                duplicate_occurence_list = []
-                duplicate_occurence_indicator = False
+                gr_isomorphic = False
+                partial_solution_data_subgraph = nx.Graph()
+                partial_solution_data_subgraph.add_edges_from(partial_solution)
+                if nx.is_isomorphic(query_graph, partial_solution_data_subgraph):
+                    duplicate_occurence_list = []
+                    duplicate_occurence_indicator = False
 
-                for complete_solution in complete_solutions:
-                    duplicate_occurence_list.clear()
-                    for partial_solution_edge in partial_solution:
-                        finder = EdgeFinderTool(partial_solution_edge, complete_solution)
-                        finder_value = finder.edge_found()
-                        duplicate_occurence_list.append(finder_value)
-                    duplicate_edge_counter = 0
-                    for dup in duplicate_occurence_list:
-                        if dup == True:
-                            duplicate_edge_counter = duplicate_edge_counter + 1
-                    if duplicate_edge_counter == len(duplicate_occurence_list):
-                        duplicate_occurence_indicator = True
+                    for complete_solution in complete_solutions:
+                        duplicate_occurence_list.clear()
+                        for partial_solution_edge in partial_solution:
+                            finder = EdgeFinderTool(partial_solution_edge, complete_solution)
+                            finder_value = finder.edge_found()
+                            duplicate_occurence_list.append(finder_value)
+                        duplicate_edge_counter = 0
+                        for dup in duplicate_occurence_list:
+                            if dup == True:
+                                duplicate_edge_counter = duplicate_edge_counter + 1
+                        if duplicate_edge_counter == len(duplicate_occurence_list):
+                            duplicate_occurence_indicator = True
+                            duplicate_occurence_list.clear()
+
+                            # duplicate_edge_counter = 0
+                            break
+
+                    if duplicate_occurence_indicator == False:
+                        duplicate_occurence_list.clear()
+                        gr_isomorphic = True
+                        i = True
+                        # if partial_solution not in complete_solutions:
+                        c_sol = copy.deepcopy(partial_solution)
+                        # print(is_joinable(3, [1,2], data_graph, query_graph_dict))
+                        complete_solutions.append(c_sol)
+                        # for c_sol_elem in c_sol:
+                        #     f1.write(str(c_sol_elem) + " ")
+                        # f1.write("\n")
+                        print("\nOne complete solution found!")
+                        # print()
+                        # print(Fore.GREEN + Style.BRIGHT + "List of complete solutions: ")
+                        print("List of complete solutions: ")
+                        for cs in complete_solutions:
+                            print(cs)
+                        print()
+                        # print(Style.RESET_ALL)
+                    else:
+                        # print("Duplicate found")
                         duplicate_occurence_list.clear()
 
-                        # duplicate_edge_counter = 0
-                        break
+                else:
+                    # print("Adjacency matrix sizes do not match.")
+                    # print("Not isomorphic")
+                    pass
 
-                if duplicate_occurence_indicator == False:
-                    duplicate_occurence_list.clear()
-                    gr_isomorphic = True
-                    i = True
-                    # if partial_solution not in complete_solutions:
-                    c_sol = copy.deepcopy(partial_solution)
-                    # print(is_joinable(3, [1,2], data_graph, query_graph_dict))
-                    complete_solutions.append(c_sol)
-                    # for c_sol_elem in c_sol:
-                    #     f1.write(str(c_sol_elem) + " ")
-                    # f1.write("\n")
-                    print("\nOne complete solution found!")
-                    # print()
-                    # print(Fore.GREEN + Style.BRIGHT + "List of complete solutions: ")
-                    print("List of complete solutions: ")
+                partial_solution = copy.deepcopy(restore_state(partial_solution))
+                # mat_equal = False # Pentru lucrul cu matrice de adiacenta. Problema este descrisa mai sus.
+                gr_isomorphic = False
+                # print("\nRestored state: " + str(partial_solution))
+
+                # print()
+                # partial_solution = []
+
+                # print("Sliced partial solution: " + str(partial_solution))
+                # print("Old current node: " + str(current_node))
+
+                current_node = copy.deepcopy(partial_solution[-1])
+                # current_node = []
+
+                # print("New current node: " + str(current_node))
+                # print("Next query vertex for new current node: " + str(next_query_vertex(current_node, query_graph_dict)))
+                # print("OK")
+                # print()
+
+                # next_d = next_data_vertex(partial_solution, data_graph, query_graph_dict)
+
+                # print("Next data vertex: " + str(next_d))
+                # print(is_joinable(next_d, partial_solution, data_graph, query_graph_dict))
+
+
+                # return partial_solution
+                # partial_solution = []
+                # candidate = []
+                # restore_state(partial_solution)
+
+                # PRIMUL APEL
+                # subgraph_search(partial_solution, query_graph_dict, current_node, data_graph)
+
+        #    Aici trebuie rulate cautari nerecursive pentru fiecare pozitie al solutiei partiale.
+        else:
+            i = True
+            candidate = next_data_edge(partial_solution, data_graph)
+            # if candidate is not None:
+            #     print("Candidate edge (data node id's): " + str(candidate))
+            #     print("Candidate edge (data nodes label): " + str([data_graph.node[candidate[0]]['label'], data_graph.node[candidate[1]]['label']]))
+            #     print("Positions log after choosing candidate: " + str(list(positions.items())))
+
+            if candidate is None:  # go back a position with restore position()
+
+                # print("Candidate: " + Fore.LIGHTRED_EX + str(candidate) + Style.RESET_ALL)
+                # print()
+
+                if partial_solution == []:
+                    # i = False
+
+                    # f2 = open("file_Backtracking Algorithm execution times.txt", "a")
+                    # f2.write(str(total_time) + " ")
+                    # f2.write("\n")
+                    # f2.close()
+
+                    # print("\n" + Fore.GREEN + Style.BRIGHT + "Backtracking results: ")
+                    print("Backtracking results: ")
                     for cs in complete_solutions:
                         print(cs)
-                    print()
                     # print(Style.RESET_ALL)
-                else:
-                    # print("Duplicate found")
-                    duplicate_occurence_list.clear()
+                    # print("Finished. Press 'Enter' to close the window.")
+                    # input()
+                    print("Execution time for Backtracking Algorithm (seconds): ")
+                    total_time = timer() - start_time
+                    print(total_time)
 
-            else:
-                # print("Adjacency matrix sizes do not match.")
-                # print("Not isomorphic")
-                pass
+                    exit(0)
 
-            partial_solution = copy.deepcopy(restore_state(partial_solution))
-            # mat_equal = False # Pentru lucrul cu matrice de adiacenta. Problema este descrisa mai sus.
-            gr_isomorphic = False
-            # print("\nRestored state: " + str(partial_solution))
+                # go back a position with restore position()
+                # print("Going back a position.")
+                # input("Continue execution?")
+                partial_solution = copy.deepcopy(restore_state(partial_solution))  #partial_solution[:1])
+                # print("Restored partial solution: " + str(partial_solution))
+                if len(partial_solution) == 0:  # poz 0 = []
+                    current_node = []
+                    positions[1] = []  # poz 1 = []
+                    # positions[2] = []
+                # else:
+                #     current_node = copy.deepcopy(partial_solution[-1])
 
-            # print()
-            # partial_solution = []
+                if len(partial_solution) == 1:  # poz 0 = [x]
+                    current_node = copy.deepcopy(partial_solution[0])
+                    # positions[1] = []
+                    positions[2] = []  # poz 1 = []
 
-            # print("Sliced partial solution: " + str(partial_solution))
-            # print("Old current node: " + str(current_node))
+                if len(partial_solution) == 2:  # poz 0 = [x], poz 1 = [y]
+                    current_node = copy.deepcopy(partial_solution[-1])
+                    positions[3] = []
 
-            current_node = copy.deepcopy(partial_solution[-1])
-            # current_node = []
+                # print("Current node: " + str(current_node))
 
-            # print("New current node: " + str(current_node))
-            # print("Next query vertex for new current node: " + str(next_query_vertex(current_node, query_graph_dict)))
-            # print("OK")
-            # print()
+                # AL DOILEA APEL
+                # subgraph_search(partial_solution, query_graph_dict, current_node, data_graph)
 
-            # next_d = next_data_vertex(partial_solution, data_graph, query_graph_dict)
+            partial_solution = copy.deepcopy(update_state(candidate, partial_solution))
+            # print("PARTIAL SOLUTION: " + str(partial_solution))
 
-            # print("Next data vertex: " + str(next_d))
-            # print(is_joinable(next_d, partial_solution, data_graph, query_graph_dict))
-
-
-            # return partial_solution
-            # partial_solution = []
-            # candidate = []
+            # AL TREILEA APEL
+            # subgraph_search(partial_solution, query_graph_dict, candidate, data_graph)
             # restore_state(partial_solution)
 
-            # PRIMUL APEL
-            # subgraph_search(partial_solution, query_graph_dict, current_node, data_graph)
-
-    #    Aici trebuie rulate cautari nerecursive pentru fiecare pozitie al solutiei partiale.
-    else:
-        i = True
-        candidate = next_data_edge(partial_solution, data_graph)
-        # if candidate is not None:
-        #     print("Candidate edge (data node id's): " + str(candidate))
-        #     print("Candidate edge (data nodes label): " + str([data_graph.node[candidate[0]]['label'], data_graph.node[candidate[1]]['label']]))
-        #     print("Positions log after choosing candidate: " + str(list(positions.items())))
-
-        if candidate is None:  # go back a position with restore position()
-
-            # print("Candidate: " + Fore.LIGHTRED_EX + str(candidate) + Style.RESET_ALL)
-            # print()
-
-            if partial_solution == []:
-                # i = False
-
-                # f2 = open("file_Backtracking Algorithm execution times.txt", "a")
-                # f2.write(str(total_time) + " ")
-                # f2.write("\n")
-                # f2.close()
-
-                # print("\n" + Fore.GREEN + Style.BRIGHT + "Backtracking results: ")
-                print("Backtracking results: ")
-                for cs in complete_solutions:
-                    print(cs)
-                # print(Style.RESET_ALL)
-                # print("Finished. Press 'Enter' to close the window.")
-                # input()
-                print("Execution time for Backtracking Algorithm (seconds): ")
-                total_time = timer() - start_time
-                print(total_time)
-
-                exit(0)
-
-            # go back a position with restore position()
-            # print("Going back a position.")
-            # input("Continue execution?")
-            partial_solution = copy.deepcopy(restore_state(partial_solution))  #partial_solution[:1])
-            # print("Restored partial solution: " + str(partial_solution))
-            if len(partial_solution) == 0:  # poz 0 = []
-                current_node = []
-                positions[1] = []  # poz 1 = []
-                # positions[2] = []
-            # else:
-            #     current_node = copy.deepcopy(partial_solution[-1])
-
-            if len(partial_solution) == 1:  # poz 0 = [x]
-                current_node = copy.deepcopy(partial_solution[0])
-                # positions[1] = []
-                positions[2] = []  # poz 1 = []
-
-            if len(partial_solution) == 2:  # poz 0 = [x], poz 1 = [y]
-                current_node = copy.deepcopy(partial_solution[-1])
-                positions[3] = []
-
-            # print("Current node: " + str(current_node))
-
-            # AL DOILEA APEL
-            # subgraph_search(partial_solution, query_graph_dict, current_node, data_graph)
-
-        partial_solution = copy.deepcopy(update_state(candidate, partial_solution))
-        # print("PARTIAL SOLUTION: " + str(partial_solution))
-
-        # AL TREILEA APEL
-        # subgraph_search(partial_solution, query_graph_dict, candidate, data_graph)
-        # restore_state(partial_solution)
-
-    if i == False:
-        print("Finished.")
+        # if i == False:
+        #     print("Finished.")
 
 
 def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph):
