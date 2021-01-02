@@ -8,6 +8,10 @@
 # apelata pentru fiecare pozitie al grafului query.
 # - De publicat varianta recursiva si nerecursiva
 # - De facut conditionare print-uri cu rezultate intermediare.
+# - Am inlocuit apelurile recursive din functia "subgraph_search" in functia
+# "subgraph_search_non_recursive_ver_2". Este necesara o structura repetitiva
+# non-recursiva care sa cuprinda cazurile "if" in care ar fi fost apelurile
+# recursive. Cred ca pot face asta direct in "subgraph_search".
 
 # from Graph_Format import Graph_Format
 
@@ -719,79 +723,78 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
 
     return None
 
-
-
 # Pentru inceput: gasirea unei singure solutii complete, dar fara recursivitate.
-def subgraph_search_non_recursive(partial_solution, query_graph_dict, current_node, data_graph):
-    print()
-    print("Started subgraph search: ")
-    # print(Back.WHITE + Fore.LIGHTBLUE_EX + Style.BRIGHT + "Partial solution given: " + str(partial_solution) + Style.RESET_ALL)
-    print("Partial solution given: " + str(partial_solution))
-    # i = False
-    print("Query graph dictionary given as input to subgraph search: ")
-    print(query_graph_dict)
 
-    candidate = next_data_edge(partial_solution, data_graph)
-
-    if candidate is not None:
-        print("Candidate edge (data node id's): " + str(candidate))
-        # stackoverflow.com/questions/13698352/storing-and-accessing-node-attributes-python-networkx
-        # "NOTE: In networkx 2.4 (aici 2.5), G.node[] has been replaced with G.nodes[]
-        print("Candidate edge (data nodes label): " + str([data_graph.nodes[candidate[0]]['label'], data_graph.nodes[candidate[1]]['label']]))
-        print("Positions log after choosing candidate: " + str(list(positions.items())))
-        #
-        # if candidate is None:  # go back a position with restore position()
-        #
-        #     # print("Candidate: " + Fore.LIGHTRED_EX + str(candidate) + Style.RESET_ALL)
-        #     # print()
-        #
-        #     if partial_solution == []:
-        #         # i = False
-        #
-        #         # f2 = open("file_Backtracking Algorithm execution times.txt", "a")
-        #         # f2.write(str(total_time) + " ")
-        #         # f2.write("\n")
-        #         # f2.close()
-        #
-        #         # print("\n" + Fore.GREEN + Style.BRIGHT + "Backtracking results: ")
-        #         print("Backtracking results: ")
-        #         for cs in complete_solutions:
-        #             print(cs)
-        #         # print(Style.RESET_ALL)
-        #         # print("Finished. Press 'Enter' to close the window.")
-        #         # input()
-        #         print("Execution time for Backtracking Algorithm (seconds): ")
-        #         total_time = timer() - start_time
-        #         print(total_time)
-
-                # exit(0)
-
-        #     # go back a position with restore position()
-        #     # print("Going back a position.")
-        #     # input("Continue execution?")
-        #     partial_solution = copy.deepcopy(restore_state(partial_solution))  # partial_solution[:1])
-        #     # print("Restored partial solution: " + str(partial_solution))
-        #     if len(partial_solution) == 0:  # poz 0 = []
-        #         current_node = []
-        #         positions[1] = []  # poz 1 = []
-        #         # positions[2] = []
-        #     # else:
-        #     #     current_node = copy.deepcopy(partial_solution[-1])
-        #
-        #     if len(partial_solution) == 1:  # poz 0 = [x]
-        #         current_node = copy.deepcopy(partial_solution[0])
-        #         # positions[1] = []
-        #         positions[2] = []  # poz 1 = []
-        #
-        #     if len(partial_solution) == 2:  # poz 0 = [x], poz 1 = [y]
-        #         current_node = copy.deepcopy(partial_solution[-1])
-        #         positions[3] = []
-        #
-        #     # print("Current node: " + str(current_node))
-        #     # subgraph_search(partial_solution, query_graph_dict, current_node, data_graph)
-        #
-        # partial_solution = copy.deepcopy(update_state(candidate, partial_solution))
-        # # print("PARTIAL SOLUTION: " + str(partial_solution))
+# def subgraph_search_non_recursive(partial_solution, query_graph_dict, current_node, data_graph):
+#     print()
+#     print("Started subgraph search: ")
+#     # print(Back.WHITE + Fore.LIGHTBLUE_EX + Style.BRIGHT + "Partial solution given: " + str(partial_solution) + Style.RESET_ALL)
+#     print("Partial solution given: " + str(partial_solution))
+#     # i = False
+#     print("Query graph dictionary given as input to subgraph search: ")
+#     print(query_graph_dict)
+#
+#     candidate = next_data_edge(partial_solution, data_graph)
+#
+#     if candidate is not None:
+#         print("Candidate edge (data node id's): " + str(candidate))
+#         # stackoverflow.com/questions/13698352/storing-and-accessing-node-attributes-python-networkx
+#         # "NOTE: In networkx 2.4 (aici 2.5), G.node[] has been replaced with G.nodes[]
+#         print("Candidate edge (data nodes label): " + str([data_graph.nodes[candidate[0]]['label'], data_graph.nodes[candidate[1]]['label']]))
+#         print("Positions log after choosing candidate: " + str(list(positions.items())))
+#         #
+#         # if candidate is None:  # go back a position with restore position()
+#         #
+#         #     # print("Candidate: " + Fore.LIGHTRED_EX + str(candidate) + Style.RESET_ALL)
+#         #     # print()
+#         #
+#         #     if partial_solution == []:
+#         #         # i = False
+#         #
+#         #         # f2 = open("file_Backtracking Algorithm execution times.txt", "a")
+#         #         # f2.write(str(total_time) + " ")
+#         #         # f2.write("\n")
+#         #         # f2.close()
+#         #
+#         #         # print("\n" + Fore.GREEN + Style.BRIGHT + "Backtracking results: ")
+#         #         print("Backtracking results: ")
+#         #         for cs in complete_solutions:
+#         #             print(cs)
+#         #         # print(Style.RESET_ALL)
+#         #         # print("Finished. Press 'Enter' to close the window.")
+#         #         # input()
+#         #         print("Execution time for Backtracking Algorithm (seconds): ")
+#         #         total_time = timer() - start_time
+#         #         print(total_time)
+#
+#                 # exit(0)
+#
+#         #     # go back a position with restore position()
+#         #     # print("Going back a position.")
+#         #     # input("Continue execution?")
+#         #     partial_solution = copy.deepcopy(restore_state(partial_solution))  # partial_solution[:1])
+#         #     # print("Restored partial solution: " + str(partial_solution))
+#         #     if len(partial_solution) == 0:  # poz 0 = []
+#         #         current_node = []
+#         #         positions[1] = []  # poz 1 = []
+#         #         # positions[2] = []
+#         #     # else:
+#         #     #     current_node = copy.deepcopy(partial_solution[-1])
+#         #
+#         #     if len(partial_solution) == 1:  # poz 0 = [x]
+#         #         current_node = copy.deepcopy(partial_solution[0])
+#         #         # positions[1] = []
+#         #         positions[2] = []  # poz 1 = []
+#         #
+#         #     if len(partial_solution) == 2:  # poz 0 = [x], poz 1 = [y]
+#         #         current_node = copy.deepcopy(partial_solution[-1])
+#         #         positions[3] = []
+#         #
+#         #     # print("Current node: " + str(current_node))
+#         #     # subgraph_search(partial_solution, query_graph_dict, current_node, data_graph)
+#         #
+#         # partial_solution = copy.deepcopy(update_state(candidate, partial_solution))
+#         # # print("PARTIAL SOLUTION: " + str(partial_solution))
 
 def subgraph_search_non_recursive_ver_2(partial_solution, query_graph_dict, current_node, data_graph):
     # print()
@@ -1099,7 +1102,9 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
             # restore_state(partial_solution)
 
             # PRIMUL APEL RECURSIV
-            subgraph_search(partial_solution, query_graph_dict, current_node, data_graph)
+            # subgraph_search(partial_solution, query_graph_dict, current_node, data_graph)
+            subgraph_search_non_recursive_ver_2(partial_solution, query_graph_dict, current_node, data_graph)
+
 
         # VECHI
         # if partial_solution in complete_solutions:
@@ -1171,13 +1176,17 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
 
             # print("Current node: " + str(current_node))
             # AL DOILEA APEL RECURSIV
-            subgraph_search(partial_solution, query_graph_dict, current_node, data_graph)
+            # subgraph_search(partial_solution, query_graph_dict, current_node, data_graph)
+            subgraph_search_non_recursive_ver_2(partial_solution, query_graph_dict, current_node, data_graph)
+
 
         partial_solution = copy.deepcopy(update_state(candidate, partial_solution))
         # print("PARTIAL SOLUTION: " + str(partial_solution))
 
         # AL TREILEA APEL RECURSIV
-        subgraph_search(partial_solution, query_graph_dict, candidate, data_graph)
+        # subgraph_search(partial_solution, query_graph_dict, candidate, data_graph)
+        subgraph_search_non_recursive_ver_2(partial_solution, query_graph_dict, candidate, data_graph)
+
         # restore_state(partial_solution)
 
     if i == False:
