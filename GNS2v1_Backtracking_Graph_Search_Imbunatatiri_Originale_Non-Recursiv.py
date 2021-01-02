@@ -1,3 +1,14 @@
+# 29 DEC 2020:
+# Idee pentru a elimina recursivitatea:
+# - subgraph_search sa fie functia care apeleaza toate celelalte functii
+# subgraph_search sa contina o structura while care sa apeleze functiile
+# necesare crearii de solutii complete in mod repetat pana cand nu mai sunt
+# solutii complete de gasit
+#  - iar pentru cautarea in sine sa fie o functie separata care sa fie
+# apelata pentru fiecare pozitie al grafului query.
+# - De publicat varianta recursiva si nerecursiva
+# - De facut conditionare print-uri cu rezultate intermediare.
+
 # from Graph_Format import Graph_Format
 
 # https://stackoverflow.com/questions/6537487/changing-shell-text-color-windows
@@ -708,14 +719,7 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
 
     return None
 
-# 29 DEC 2020:
-# Idee pentru a elimina recursivitatea:
-# - subgraph_search sa fie functia care apeleaza toate celelalte functii
-# subgraph_search sa contina o structura while care sa apeleze functiile
-# necesare crearii de solutii complete in mod repetat pana cand nu mai sunt
-# solutii complete de gasit
-#  - iar pentru cautarea in sine sa fie o functie separata care sa fie
-# apelata pentru fiecare pozitie al grafului query.
+
 
 # Pentru inceput: gasirea unei singure solutii complete, dar fara recursivitate.
 def subgraph_search_non_recursive(partial_solution, query_graph_dict, current_node, data_graph):
