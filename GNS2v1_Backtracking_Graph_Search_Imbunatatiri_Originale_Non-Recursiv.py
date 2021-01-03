@@ -806,7 +806,11 @@ def subgraph_search_non_recursive_ver_2(partial_solution, query_graph_dict, curr
     # i = False
     i = True
     while i:
-        print("Partial solution given: " + str(partial_solution))
+        print("FROM NON-RECURSIVE VER 2: Partial solution given: " + str(partial_solution))
+
+        # if partial_solution == [(92, 2629), (694, 4600), None]:
+        #     exit(0)
+
         if len(partial_solution) == len(list(query_graph_dict.items())):
             if partial_solution not in complete_solutions:
                 # https://networkx.github.io/documentation/networkx-1.9/reference/generated/networkx.linalg.graphmatrix.adjacency_matrix.html
@@ -874,6 +878,7 @@ def subgraph_search_non_recursive_ver_2(partial_solution, query_graph_dict, curr
                     pass
 
                 partial_solution = copy.deepcopy(restore_state(partial_solution))
+
                 # mat_equal = False # Pentru lucrul cu matrice de adiacenta. Problema este descrisa mai sus.
                 gr_isomorphic = False
                 # print("\nRestored state: " + str(partial_solution))
@@ -885,6 +890,7 @@ def subgraph_search_non_recursive_ver_2(partial_solution, query_graph_dict, curr
                 # print("Old current node: " + str(current_node))
 
                 current_node = copy.deepcopy(partial_solution[-1])
+
                 # current_node = []
 
                 # print("New current node: " + str(current_node))
@@ -944,7 +950,9 @@ def subgraph_search_non_recursive_ver_2(partial_solution, query_graph_dict, curr
                 # go back a position with restore position()
                 # print("Going back a position.")
                 # input("Continue execution?")
-                partial_solution = copy.deepcopy(restore_state(partial_solution))  #partial_solution[:1])
+
+                # partial_solution = copy.deepcopy(restore_state(partial_solution))  #partial_solution[:1])
+
                 # print("Restored partial solution: " + str(partial_solution))
                 if len(partial_solution) == 0:  # poz 0 = []
                     current_node = []
@@ -961,6 +969,12 @@ def subgraph_search_non_recursive_ver_2(partial_solution, query_graph_dict, curr
                 if len(partial_solution) == 2:  # poz 0 = [x], poz 1 = [y]
                     current_node = copy.deepcopy(partial_solution[-1])
                     positions[3] = []
+
+                if len(partial_solution) == 3:  # poz 0 = [x], poz 1 = [y]
+                    print("DE LUCRU AICI")
+                    exit(0)
+                    # current_node = copy.deepcopy(partial_solution[-1])
+                    # positions[3] = []
 
                 # print("Current node: " + str(current_node))
 
@@ -1107,6 +1121,8 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
 
             # PRIMUL APEL RECURSIV
             # subgraph_search(partial_solution, query_graph_dict, current_node, data_graph)
+            # if partial_solution == [(92, 2629), (694, 4600), None]:
+            #     exit(0)
             subgraph_search_non_recursive_ver_2(partial_solution, query_graph_dict, current_node, data_graph)
 
 
@@ -1181,6 +1197,8 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
             # print("Current node: " + str(current_node))
             # AL DOILEA APEL RECURSIV
             # subgraph_search(partial_solution, query_graph_dict, current_node, data_graph)
+            # if partial_solution == [(92, 2629), (694, 4600), None]:
+            #     exit(0)
             subgraph_search_non_recursive_ver_2(partial_solution, query_graph_dict, current_node, data_graph)
 
 
@@ -1189,6 +1207,8 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
 
         # AL TREILEA APEL RECURSIV
         # subgraph_search(partial_solution, query_graph_dict, candidate, data_graph)
+        # if partial_solution == [(92, 2629), (694, 4600), None]:
+        #     exit(0)
         subgraph_search_non_recursive_ver_2(partial_solution, query_graph_dict, candidate, data_graph)
 
         # restore_state(partial_solution)
