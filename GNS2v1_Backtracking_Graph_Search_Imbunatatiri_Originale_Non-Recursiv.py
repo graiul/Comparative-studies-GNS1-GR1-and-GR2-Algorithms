@@ -910,7 +910,7 @@ def subgraph_search_non_recursive_ver_2(partial_solution, query_graph_dict, curr
                 # candidate = []
                 # restore_state(partial_solution)
 
-                # PRIMUL APEL
+                # PRIMUL APEL SCOS DIN UZ
                 # subgraph_search(partial_solution, query_graph_dict, current_node, data_graph)
 
         #    Aici trebuie rulate cautari nerecursive pentru fiecare pozitie al solutiei partiale.
@@ -922,6 +922,7 @@ def subgraph_search_non_recursive_ver_2(partial_solution, query_graph_dict, curr
             #     print("Candidate edge (data nodes label): " + str([data_graph.node[candidate[0]]['label'], data_graph.node[candidate[1]]['label']]))
             #     print("Positions log after choosing candidate: " + str(list(positions.items())))
 
+            # !!! AICI E DE LUCRU?
             if candidate is None:  # go back a position with restore position()
 
                 # print("Candidate: " + Fore.LIGHTRED_EX + str(candidate) + Style.RESET_ALL)
@@ -982,15 +983,16 @@ def subgraph_search_non_recursive_ver_2(partial_solution, query_graph_dict, curr
 
                 # print("Current node: " + str(current_node))
 
-                # AL DOILEA APEL
+                # AL DOILEA APEL SCOS DIN UZ
                 # subgraph_search(partial_solution, query_graph_dict, current_node, data_graph)
 
             print("Candidate data edge before updating state: ")
             print(candidate)
             partial_solution = copy.deepcopy(update_state(candidate, partial_solution))
-            # print("PARTIAL SOLUTION: " + str(partial_solution))
+            print("Partial solution after calling 'update_state': ")
+            print(partial_solution)
 
-            # AL TREILEA APEL
+            # AL TREILEA APEL SCOS DIN UZ
             # subgraph_search(partial_solution, query_graph_dict, candidate, data_graph)
             # restore_state(partial_solution)
 
