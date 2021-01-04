@@ -926,7 +926,7 @@ def subgraph_search_non_recursive_ver_2(partial_solution, query_graph_dict, curr
             if candidate is None:  # go back a position with restore position()
 
                 # print("Candidate: " + Fore.LIGHTRED_EX + str(candidate) + Style.RESET_ALL)
-                # print()
+                print("CANDIDATE NONE")
 
                 if partial_solution == []:
                     # i = False
@@ -986,11 +986,17 @@ def subgraph_search_non_recursive_ver_2(partial_solution, query_graph_dict, curr
                 # AL DOILEA APEL SCOS DIN UZ
                 # subgraph_search(partial_solution, query_graph_dict, current_node, data_graph)
 
-            print("Candidate data edge before updating state: ")
-            print(candidate)
+                print("Candidate data edge before updating state: ")
+                print(candidate)
+                print("New candidate: ")
+                candidate = None
+                candidate = next_data_edge(partial_solution, data_graph)
+                print(candidate)
+                partial_solution = copy.deepcopy(update_state(candidate, partial_solution))
+                print("Partial solution after calling 'update_state': ")
+                print(partial_solution)
+
             partial_solution = copy.deepcopy(update_state(candidate, partial_solution))
-            print("Partial solution after calling 'update_state': ")
-            print(partial_solution)
 
             # AL TREILEA APEL SCOS DIN UZ
             # subgraph_search(partial_solution, query_graph_dict, candidate, data_graph)
