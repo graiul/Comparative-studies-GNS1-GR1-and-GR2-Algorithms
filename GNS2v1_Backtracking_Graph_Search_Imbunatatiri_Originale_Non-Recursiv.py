@@ -59,7 +59,8 @@ def update_state(edge, partial_solution):
     c_edge = copy.deepcopy(edge)
     s = copy.deepcopy(partial_solution)
     s.append(c_edge)
-    # print(s)
+    print("Updated state: ")
+    print(s)
     return s
 
 
@@ -67,7 +68,7 @@ def restore_state(partial_solution):
     if len(partial_solution) > 0:
         del partial_solution[-1]
         p_solution = copy.deepcopy(partial_solution)
-        # print("Restored state: " + str(p_solution))
+        print("Restored state: " + str(p_solution))
         return p_solution
     else:
         return partial_solution
@@ -951,7 +952,7 @@ def subgraph_search_non_recursive_ver_2(partial_solution, query_graph_dict, curr
                 # print("Going back a position.")
                 # input("Continue execution?")
 
-                # partial_solution = copy.deepcopy(restore_state(partial_solution))  #partial_solution[:1])
+                partial_solution = copy.deepcopy(restore_state(partial_solution))  #partial_solution[:1])
 
                 # print("Restored partial solution: " + str(partial_solution))
                 if len(partial_solution) == 0:  # poz 0 = []
@@ -970,17 +971,22 @@ def subgraph_search_non_recursive_ver_2(partial_solution, query_graph_dict, curr
                     current_node = copy.deepcopy(partial_solution[-1])
                     positions[3] = []
 
-                if len(partial_solution) == 3:  # poz 0 = [x], poz 1 = [y]
-                    print("DE LUCRU AICI")
-                    exit(0)
-                    # current_node = copy.deepcopy(partial_solution[-1])
-                    # positions[3] = []
+                # if len(partial_solution) == 3:  # poz 0 = [x], poz 1 = [y]
+                #     print("DE LUCRU AICI")
+                #     partial_solution = copy.deepcopy(restore_state(partial_solution))  #partial_solution[:1])
+                #     print("Returned restored state: ")
+                #     print(partial_solution)
+                #     # exit(0)
+                #     # current_node = copy.deepcopy(partial_solution[-1])
+                #     # positions[3] = []
 
                 # print("Current node: " + str(current_node))
 
                 # AL DOILEA APEL
                 # subgraph_search(partial_solution, query_graph_dict, current_node, data_graph)
 
+            print("Candidate data edge before updating state: ")
+            print(candidate)
             partial_solution = copy.deepcopy(update_state(candidate, partial_solution))
             # print("PARTIAL SOLUTION: " + str(partial_solution))
 
