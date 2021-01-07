@@ -711,9 +711,9 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
 
 def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph):
     # print()
-    print("Started subgraph search: ")
+    # print("Started subgraph search: ")
     # print(Back.WHITE + Fore.LIGHTBLUE_EX + Style.BRIGHT + "Partial solution given: " + str(partial_solution) + Style.RESET_ALL)
-    print("Partial solution given: " + str(partial_solution))
+    # print("Partial solution given: " + str(partial_solution))
     i = False
     # print(query_graph_dict)
     if len(partial_solution) == len(list(query_graph_dict.items())):
@@ -786,16 +786,17 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
                     c_sol = copy.deepcopy(partial_solution)
                     # print(is_joinable(3, [1,2], data_graph, query_graph_dict))
                     complete_solutions.append(c_sol)
+                    print(c_sol)
                     # for c_sol_elem in c_sol:
                     #     f1.write(str(c_sol_elem) + " ")
                     # f1.write("\n")
-                    print("\nOne complete solution found!")
+                    # print("\nOne complete solution found!")
                     # print()
                     # print(Fore.GREEN + Style.BRIGHT + "List of complete solutions: ")
-                    print("List of complete solutions: ")
-                    for cs in complete_solutions:
-                        print(cs)
-                    print()
+                    # print("List of complete solutions: ")
+                    # for cs in complete_solutions:
+                    #     print(cs)
+                    # print()
                     # print(Style.RESET_ALL)
                 else:
                     # print("Duplicate found")
