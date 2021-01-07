@@ -12,6 +12,9 @@
 # "subgraph_search_non_recursive_ver_2". Este necesara o structura repetitiva
 # non-recursiva care sa cuprinda cazurile "if" in care ar fi fost apelurile
 # recursive. Cred ca pot face asta direct in "subgraph_search".
+# 07 IAN 2021
+# De adaugat listarea in fisier al rezultatelor si al timpilor de executie.
+# De folosit 5 grafuri data cu cate doua grafuri query pentru 3 teste de fiecare.
 
 # from Graph_Format import Graph_Format
 
