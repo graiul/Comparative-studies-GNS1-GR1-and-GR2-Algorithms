@@ -59,8 +59,8 @@ def update_state(edge, partial_solution):
     c_edge = copy.deepcopy(edge)
     s = copy.deepcopy(partial_solution)
     s.append(c_edge)
-    print("Updated state: ")
-    print(s)
+    # print("Updated state: ")
+    # print(s)
     return s
 
 
@@ -68,7 +68,7 @@ def restore_state(partial_solution):
     if len(partial_solution) > 0:
         del partial_solution[-1]
         p_solution = copy.deepcopy(partial_solution)
-        print("Restored state: " + str(p_solution))
+        # print("Restored state: " + str(p_solution))
         return p_solution
     else:
         return partial_solution
@@ -800,14 +800,14 @@ def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edge
 
 def subgraph_search_non_recursive_ver_2(partial_solution, query_graph_dict, current_node, data_graph):
     # print()
-    print("Started subgraph search: ")
+    # print("Started subgraph search: ")
     # print(Back.WHITE + Fore.LIGHTBLUE_EX + Style.BRIGHT + "Partial solution given: " + str(partial_solution) + Style.RESET_ALL)
     # print("Partial solution given: " + str(partial_solution))
     # print(query_graph_dict)
     # i = False
     i = True
     while i:
-        print("FROM NON-RECURSIVE VER 2: Partial solution given: " + str(partial_solution))
+        # print("FROM NON-RECURSIVE VER 2: Partial solution given: " + str(partial_solution))
 
         # if partial_solution == [(92, 2629), (694, 4600), None]:
         #     exit(0)
@@ -858,16 +858,17 @@ def subgraph_search_non_recursive_ver_2(partial_solution, query_graph_dict, curr
                         c_sol = copy.deepcopy(partial_solution)
                         # print(is_joinable(3, [1,2], data_graph, query_graph_dict))
                         complete_solutions.append(c_sol)
+                        print(c_sol)
                         # for c_sol_elem in c_sol:
                         #     f1.write(str(c_sol_elem) + " ")
                         # f1.write("\n")
-                        print("\nOne complete solution found!")
+                        # print("\nOne complete solution found!")
                         # print()
                         # print(Fore.GREEN + Style.BRIGHT + "List of complete solutions: ")
-                        print("List of complete solutions: ")
-                        for cs in complete_solutions:
-                            print(cs)
-                        print()
+                        # print("List of complete solutions: ")
+                        # for cs in complete_solutions:
+                        #     print(cs)
+                        # print()
                         # print(Style.RESET_ALL)
                     else:
                         # print("Duplicate found")
@@ -926,7 +927,18 @@ def subgraph_search_non_recursive_ver_2(partial_solution, query_graph_dict, curr
             if candidate is None:  # go back a position with restore position()
 
                 # print("Candidate: " + Fore.LIGHTRED_EX + str(candidate) + Style.RESET_ALL)
-                print("CANDIDATE NONE")
+                # print("CANDIDATE NONE")
+
+                partial_solution = copy.deepcopy(restore_state(partial_solution))
+                # print("Restored state after None candidate: ")
+                # print(partial_solution)
+                # print("New candidate - must not be None:")
+                candidate = next_data_edge(partial_solution, data_graph)
+                # print(candidate)
+                partial_solution = copy.deepcopy(update_state(candidate, partial_solution))
+                # print("New partial solution after discarding None value data candidate: ")
+                # print(partial_solution)
+                # print()
 
                 if partial_solution == []:
                     # i = False
@@ -986,17 +998,17 @@ def subgraph_search_non_recursive_ver_2(partial_solution, query_graph_dict, curr
                 # AL DOILEA APEL SCOS DIN UZ
                 # subgraph_search(partial_solution, query_graph_dict, current_node, data_graph)
 
-                print("Candidate data edge before updating state: ")
-                print(candidate)
-                print("New candidate: ")
-                candidate = None
-                candidate = next_data_edge(partial_solution, data_graph)
-                print(candidate)
+                # print("Candidate data edge before updating state: ")
+                # print(candidate)
+                # print("New candidate: ")
+                # candidate = None
+                # candidate = next_data_edge(partial_solution, data_graph)
+                # print(candidate)
+                # partial_solution = copy.deepcopy(update_state(candidate, partial_solution))
+                # print("Partial solution after calling 'update_state': ")
+                # print(partial_solution)
+            else:
                 partial_solution = copy.deepcopy(update_state(candidate, partial_solution))
-                print("Partial solution after calling 'update_state': ")
-                print(partial_solution)
-
-            partial_solution = copy.deepcopy(update_state(candidate, partial_solution))
 
             # AL TREILEA APEL SCOS DIN UZ
             # subgraph_search(partial_solution, query_graph_dict, candidate, data_graph)
@@ -1010,7 +1022,7 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
     # print()
     print("Started subgraph search: ")
     # print(Back.WHITE + Fore.LIGHTBLUE_EX + Style.BRIGHT + "Partial solution given: " + str(partial_solution) + Style.RESET_ALL)
-    print("Partial solution given: " + str(partial_solution))
+    # print("Partial solution given: " + str(partial_solution))
     i = False
     # print(query_graph_dict)
     if len(partial_solution) == len(list(query_graph_dict.items())):
@@ -1086,13 +1098,13 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
                     # for c_sol_elem in c_sol:
                     #     f1.write(str(c_sol_elem) + " ")
                     # f1.write("\n")
-                    print("\nOne complete solution found!")
+                    # print("\nOne complete solution found!")
                     # print()
                     # print(Fore.GREEN + Style.BRIGHT + "List of complete solutions: ")
-                    print("List of complete solutions: ")
-                    for cs in complete_solutions:
-                        print(cs)
-                    print()
+                    # print("List of complete solutions: ")
+                    # for cs in complete_solutions:
+                    #     print(cs)
+                    # print()
                     # print(Style.RESET_ALL)
                 else:
                     # print("Duplicate found")
