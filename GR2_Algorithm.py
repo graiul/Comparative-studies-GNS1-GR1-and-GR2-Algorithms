@@ -95,6 +95,8 @@ class GR2_Algorithm(object):
         dataGraph.add_edges_from(data_graph_edges)
         nx.set_node_attributes(dataGraph, node_attributes_dictionary, 'label')
 
+        # ACEASTA E RAMURA CARE AM FOLOSIT-O SI IN GR1_Algorithm.
+        # Si anume in clasa Main-Menu optiunea 13.
         if self.first_query_node_id_into_search == False:
         ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
             for node in list(dataGraph.nodes()):
