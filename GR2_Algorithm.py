@@ -1,5 +1,7 @@
 # GR1 Algorithm, iar pe fiecare proces se vor adauga regulile de cautare
 # din GNS2 Algorithm (numit si XDS), cel in varianta nerecursiva.
+# Astfel va fi conceput GR2 Algorithm.
+
 
 # 8 IAN 2021:
 # OK  - De instalat dask.distributed pentru interpretorul Python 3.9. Din cate imi aduc aminte, trebuie sa descarc si sa instalez separat
