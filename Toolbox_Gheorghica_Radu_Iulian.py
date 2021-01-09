@@ -142,7 +142,7 @@ class Toolbox_Gheorghica_Radu_Iulian(object):
         f_exec_times_and_avg.close()
 
 
-    def obtain_query_graph(self, wanted_parts=1): # Foloseste si data graful din Neo4J pentru label-urile nodurilor
+    def obtain_query_graph_stwig(self, wanted_parts=1): # Foloseste si data graful din Neo4J pentru label-urile nodurilor
         ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
         # Aici cream un obiect graf query:
         query_graph_gen = Query_Graph_Generator()
@@ -191,6 +191,58 @@ class Toolbox_Gheorghica_Radu_Iulian(object):
         # l_parts[0].insert(0, aux)
         # l_parts[1].insert(0, parts[1][0])
         # print(l_parts)
+
+    def obtain_query_graph_non_stwig(self):
+        ############################ Din GNS2v1_Backtracking_Graph_Search_Imbunatatiri_Originale_Non-Recursiv ##########################################################
+        # ??? MAI TREBUIE CONVERTIT LA GRAFURI QUERY Non STwig daca e din GNS2v1 ???
+        query_graph_gen = Query_Graph_Generator()
+        query_graph = query_graph_gen.gen_RI_query_graph()
+        query_graph_edges = list(query_graph.edges())
+        print("Query graph edges: " + str(query_graph_edges))
+        # Pentru conditiile VF2:
+        nx.set_node_attributes(query_graph, False, 'matched')
+
+        query_nodes = list(query_graph.nodes())
+        print("Query node id's: " + str(query_nodes))
+        query_matched_attributes = []
+        for n1 in list(query_graph.nodes()):
+            query_matched_attributes.append(query_graph.nodes[n1]['matched'])
+        print("Query node 'matched' attributes: " + str(query_matched_attributes))
+
+        # Label-ul radacinii
+        # root_label = dataGraph.node[query_nodes[0]]['label']
+        root_label = query_graph.nodes[query_nodes[0]]['label']
+        # Label-urile vecinilor din lista
+        neighbor_labels = []
+        for n2 in query_nodes[1:]:
+            # neighbor_labels.append(dataGraph.node[n]['label'])
+            neighbor_labels.append(query_graph.nodes[n2]['label'])
+
+        query_node_labels = []
+        query_node_labels.append(root_label)
+        for nl in neighbor_labels:
+            query_node_labels.append(nl)
+        print("Query nodes labels: " + str(query_node_labels))
+        query_nodes_dict = OrderedDict(zip(query_nodes, query_node_labels))
+        # query_stwig1_dict_matched_attribute = OrderedDict(zip(query_nodes, query_node_matched_attribute_source))
+        print("Query nodes dict: " + str(list(query_nodes_dict.items())))
+        query_edge_labels = []
+        for q_edge in query_graph_edges:
+            query_edge_labels.append([query_nodes_dict[q_edge[0]], query_nodes_dict[q_edge[1]]])
+
+        # print("query_edge_labels: " + str(query_edge_labels))
+        query_node_labels_source = copy.deepcopy(query_node_labels)
+        query_node_matched_attribute_source = copy.deepcopy(query_matched_attributes)
+
+        query_edges_dict = OrderedDict(zip(query_graph_edges, query_edge_labels))
+        query_stwig1_dict_matched_attribute = OrderedDict(zip(query_nodes, query_node_matched_attribute_source))
+        print("Query graph edges dictionary: " + str(list(query_edges_dict.items())))
+        print()
+        # adj_mat_query = nx.to_pandas_adjacency(query_graph, dtype=int)
+        print("query_stwig1_dict_matched_attribute: ")
+        print(list(query_stwig1_dict_matched_attribute.items()))
+        print()
+    ############################ Din GNS2v1_Backtracking_Graph_Search_Imbunatatiri_Originale_Non-Recursiv ##########################################################
 
     def obtain_data_graph(self):
         ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
