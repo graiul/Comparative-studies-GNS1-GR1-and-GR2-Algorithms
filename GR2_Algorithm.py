@@ -573,7 +573,7 @@ class GR2_Algorithm(object):
         # client = Client() # ASA E PARALEL, PT CA LUCREAZA CU PROCESE, NU CU THREADURI.
                                # Daca ar fi fost nbconverted, nu ar fi fost nevoie de "if name==main".
                                # Acest lucru nu e mentionat in documentatia dask pentru LocalCluster, care e generat de Client().
-    def execute_gr1_algorithm(self):
+    def execute_gr2_algorithm(self):
         # Am creat un LocalCluster cu 5 workers, adica 5 procese, acesta avand rolul de Pool din  pachetul py multiprocessing.
         lc = LocalCluster()
         lc.scale(10)
@@ -926,18 +926,18 @@ class GR2_Algorithm(object):
 
         # stackoverflow.com/questions/8024248/telling-python-to-save-a-txt-file-to-a-certain-directory-on-windows-and-mac
         save_path = self.logs_directory
-        name_of_file = "file_GR1_Algorithm_execution_times"
+        name_of_file = "file_GR2_Algorithm_execution_times"
         completeName = os.path.join(save_path, name_of_file+".txt")
 
-        # f_time = open(self.logs_directory + "\\file_GR1_Algorithm_with_STwig_query_graphs_execution_times.txt", "a")
+        # f_time = open(self.logs_directory + "\\file_GR2_Algorithm_with_STwig_query_graphs_execution_times.txt", "a")
         f_time = open(completeName, "a")
         f_time.write(str(total_time) + " ")
         f_time.write("\n")
         f_time.close()
         self.execution_time = total_time
 
-        # f = open(self.logs_directory + "\\file_GR1_Algorithm_with_STwig_query_graphs_OUTPUT.txt", "w+")
-        name_of_file_2 = "file_GR1_Algorithm_output"
+        # f = open(self.logs_directory + "\\file_GR2_Algorithm_with_STwig_query_graphs_OUTPUT.txt", "w+")
+        name_of_file_2 = "file_GR2_Algorithm_output"
         complete_name_2 = os.path.join(save_path, name_of_file_2+".txt")
         f_output = open(complete_name_2, "w+")
         while queue_for_printing.qsize() > 0:
@@ -953,5 +953,5 @@ class GR2_Algorithm(object):
         f_query_graph_used.write(str(self.query_graph))
         f_query_graph_used.close()
 
-    def get_execution_time_gr1_algorithm(self):
+    def get_execution_time_gr2_algorithm(self):
         return self.execution_time
