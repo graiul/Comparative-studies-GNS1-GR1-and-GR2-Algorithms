@@ -1,8 +1,12 @@
 # GR1 Algorithm, iar pe fiecare proces se vor adauga regulile de cautare
 # din GNS2 Algorithm (numit si XDS), cel in varianta nerecursiva.
 # Astfel va fi conceput GR2 Algorithm.
+#
 # Va rula folosind muchii in loc de noduri, pentru a lucra si cu grafuri query non-STwig.
 # Va putea rula qu grafuri query mari care vor fi impartite in bucati.
+#
+# Este nevoie de variabila "query_edges_dict" pentru metodele "next_data_edge"
+# si "is_joinable"
 
 
 
