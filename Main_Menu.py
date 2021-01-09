@@ -7,6 +7,7 @@ from collections import OrderedDict
 from py2neo import Graph
 import networkx as nx
 
+from GR2_Algorithm import GR2_Algorithm
 from Query_Graph_Generator import Query_Graph_Generator
 
 from DB_Access_Test import DB_Access_Test
@@ -950,6 +951,44 @@ def main():
         # r1 = tools.reunion_of_query_STwig_parts_results(list_of_paths)
         # tools.create_txt_file_reunited_results_at_dir_path(r1, "C:/Users/StationG/Desktop/16 oct 2020 Baterie Teste GR1_Algorithm/Rezultate reunite/", "file_GR1_Algorithm_reunited_results")
         # # print(r1)
+
+    elif option == 14:
+############################ Din GR1 Algorithm ##########################################################
+        print("\n##### GR2 Algorithm execution #####")
+
+        tools = tgri()
+        print()
+        data_graph = tools.obtain_data_graph()
+        # for pd in data_graph:
+        #     print(pd)
+
+        execution_times = []
+
+        # Variabila "query_graph" poate sa contina un query graf intreg, sau mai multe bucati.
+
+        # stackoverflow.com/questions/11700593/creating-files-and-directories-via-python
+        # stackoverflow.com/questions/8024248/telling-python-to-save-a-txt-file-to-a-certain-directory-on-windows-and-mac
+
+        # Rulare cu graf query intreg, fara descompunere
+        query_graph = tools.obtain_query_graph()
+        print(query_graph)
+        a0 = GR2_Algorithm(query_graph, data_graph, False, 'C:/Users/StationG/Desktop/Baterie Teste GR2_Algorithm/Test 0/')
+        a0.execute_gr2_algorithm()
+        execution_times.append(a0.get_execution_time_gr2_algorithm())
+        # create_execution_times_and_avg_txt_file_with_dir('C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 0/', execution_times)
+############################ Din GR1 Algorithm ##########################################################
+
+############################ Din GNS2v1_Backtracking_Graph_Search_Imbunatatiri_Originale_Non-Recursiv ##########################################################
+
+        query_graph_edges = list(query_graph.edges())
+        query_node_labels = []
+        for q_edge in query_graph_edges:
+            query_edge_labels.append([query_nodes_dict[q_edge[0]], query_nodes_dict[q_edge[1]]])
+
+        query_edges_dict = OrderedDict(zip(query_graph_edges, query_edge_labels))
+        print("Query graph edges dictionary: " + str(list(query_edges_dict.items())))
+############################ Din GNS2v1_Backtracking_Graph_Search_Imbunatatiri_Originale_Non-Recursiv ##########################################################
+
 
 if __name__ == '__main__':
     main()
