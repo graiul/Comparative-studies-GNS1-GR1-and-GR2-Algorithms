@@ -192,22 +192,29 @@ class Toolbox_Gheorghica_Radu_Iulian(object):
         # l_parts[1].insert(0, parts[1][0])
         # print(l_parts)
 
+    # Returneaza graful query non STwig ca si dictionar cu
+    # muchii si labelurile nodurilor muchiilor, necesare pentru
+    # GR2 Algorithm, si anume pentru metodele next_data_edge si is_joinable
+    # care au fost luate din GNS2v1_Backtracking_Graph_Search_Imbunatatiri_Originale_Non-Recursiv 
+
+    # !!! Trebuie sa il fac sa ruleze si cu wanted_parts ca in metoda de mai sus.
     def obtain_query_graph_non_stwig(self):
         ############################ Din GNS2v1_Backtracking_Graph_Search_Imbunatatiri_Originale_Non-Recursiv ##########################################################
         # ??? MAI TREBUIE CONVERTIT LA GRAFURI QUERY Non STwig daca e din GNS2v1 ???
+        # Trebuie sa returneze dictionarul cu muchii si label-urile nodurilor.
         query_graph_gen = Query_Graph_Generator()
         query_graph = query_graph_gen.gen_RI_query_graph()
         query_graph_edges = list(query_graph.edges())
         print("Query graph edges: " + str(query_graph_edges))
         # Pentru conditiile VF2:
-        nx.set_node_attributes(query_graph, False, 'matched')
+        # nx.set_node_attributes(query_graph, False, 'matched')
 
         query_nodes = list(query_graph.nodes())
         print("Query node id's: " + str(query_nodes))
-        query_matched_attributes = []
-        for n1 in list(query_graph.nodes()):
-            query_matched_attributes.append(query_graph.nodes[n1]['matched'])
-        print("Query node 'matched' attributes: " + str(query_matched_attributes))
+        # query_matched_attributes = []
+        # for n1 in list(query_graph.nodes()):
+        #     query_matched_attributes.append(query_graph.nodes[n1]['matched'])
+        # print("Query node 'matched' attributes: " + str(query_matched_attributes))
 
         # Label-ul radacinii
         # root_label = dataGraph.node[query_nodes[0]]['label']
@@ -231,17 +238,19 @@ class Toolbox_Gheorghica_Radu_Iulian(object):
             query_edge_labels.append([query_nodes_dict[q_edge[0]], query_nodes_dict[q_edge[1]]])
 
         # print("query_edge_labels: " + str(query_edge_labels))
-        query_node_labels_source = copy.deepcopy(query_node_labels)
-        query_node_matched_attribute_source = copy.deepcopy(query_matched_attributes)
+        # query_node_labels_source = copy.deepcopy(query_node_labels)
+        # query_node_matched_attribute_source = copy.deepcopy(query_matched_attributes)
 
         query_edges_dict = OrderedDict(zip(query_graph_edges, query_edge_labels))
-        query_stwig1_dict_matched_attribute = OrderedDict(zip(query_nodes, query_node_matched_attribute_source))
-        print("Query graph edges dictionary: " + str(list(query_edges_dict.items())))
+        # query_stwig1_dict_matched_attribute = OrderedDict(zip(query_nodes, query_node_matched_attribute_source))
+        query_graph_edges_dictionary = list(query_edges_dict.items())
+        print("Query graph edges dictionary: " + str(query_graph_edges_dictionary))
         print()
         # adj_mat_query = nx.to_pandas_adjacency(query_graph, dtype=int)
-        print("query_stwig1_dict_matched_attribute: ")
-        print(list(query_stwig1_dict_matched_attribute.items()))
-        print()
+        # print("query_stwig1_dict_matched_attribute: ")
+        # print(list(query_stwig1_dict_matched_attribute.items()))
+        # print()
+        return query_graph_edges_dictionary
     ############################ Din GNS2v1_Backtracking_Graph_Search_Imbunatatiri_Originale_Non-Recursiv ##########################################################
 
     def obtain_data_graph(self):
