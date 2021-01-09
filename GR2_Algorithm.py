@@ -98,9 +98,63 @@ class GR2_Algorithm(object):
         # ACEASTA E RAMURA CARE AM FOLOSIT-O SI IN GR1_Algorithm.
         # Si anume in clasa Main-Menu optiunea 13.
         if self.first_query_node_id_into_search == False:
-        ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
+############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
             for node in list(dataGraph.nodes()):
                 if query_stwig_root_node_label == dataGraph.nodes[node]['label']:
+################ AICI PUN FILTRELE SI CONDITIILE DIN GNS2 NonRecursiv ( = XDS NonRecursiv).
+                    if data_edge_to_be_joined not in partial_solution:
+                        ########################################################
+                        # Pentru VF2
+                        # print(list(query_  _input.items())[0][1])
+                        # if list(query_   _input.items())[0][1] == False:
+                        ########################################################
+                        # print("     Query edge node labels for the first position: ")
+                        # print("     " + str(list(query_edges_dict.items())[0][1]))
+                        # print("     Candidate data graph edge (data nodes label): " + str(
+                        #     [data_graph.nodes[data_edge_to_be_joined[0]]['label'],
+                        #      data_graph.nodes[data_edge_to_be_joined[1]]['label']]))
+                        # print("     Candidate data graph edge nodes id: " + str(data_edge_to_be_joined))
+                        if list(query_edges_dict.items())[0][1][0] == data_edge_to_be_joined_node_0_label or
+                                list(query_edges_dict.items())[0][1][0] == data_edge_to_be_joined_node_1_label:
+                            # print("YES")
+                            if list(query_edges_dict.items())[0][1][1] == data_edge_to_be_joined_node_1_label or \
+                                    list(query_edges_dict.items())[0][1][1] == data_edge_to_be_joined_node_0_label:
+                                # print("YES")
+                                # print("     " + Fore.GREEN + Style.BRIGHT +  "Positions log before appending first position data edge: " + str(list(positions.items())) + Style.RESET_ALL)
+                                # print()
+
+                                finder = EdgeFinderTool(data_edge_to_be_joined, positions[0])
+                                found = finder.edge_found()
+                                if found is False:
+                                    # if data_edge_to_be_joined not in positions[0]:
+                                    found_valid_data_edge = True
+                                    aux = copy.deepcopy(partial_solution)
+                                    aux.append(data_edge_to_be_joined)
+                                    # print("Appended data edge: ")
+                                    # print(data_edge_to_be_joined)
+                                    # print("Reversed data edge to avoid final results duplicates: ")
+                                    # reversed_data_edge = (data_edge_to_be_joined[1], data_edge_to_be_joined[0])
+                                    # print(reversed_data_edge)
+                                    # print()
+                                    pos = aux.index(aux[-1])
+                                    positions[pos].append(data_edge_to_be_joined)
+                                    # positions[pos].append(reversed_data_edge)
+                                    # print("Log for position 0: ")
+                                    # print(positions[pos])
+
+                                    #####################################################################
+                                    #             matched_true_false_data_nodes_pos_0_dict[data_node_to_be_joined] = True
+                                    #             break
+                                    #####################################################################
+                                    # print("     " + Fore.GREEN + Style.BRIGHT + "Positions log after appending first position data edge: " + str(list(positions.items())) + Style.RESET_ALL)
+                                    # print()
+                            else:
+                                # print("     Data edge is not valid for this.")
+                                pass
+                        else:
+                            # print("     Data edge is not valid for this.")
+                            pass
+################
                     # print(node)
 
                     queue_of_the_producer.put([node])
@@ -108,14 +162,13 @@ class GR2_Algorithm(object):
 
         # Aici am incercat o filtrare pentru a evita aparitia rezultatelor pentru parti query STwig care
         # nu pot fi cuplate. Am decis sa nu mai folosesc aceasta filtrare.
-        else:
-            if self.first_query_node_id_into_search == True:
-                for node in list(dataGraph.nodes()):
-                    if query_stwig_root_node_label == dataGraph.nodes[node]['label'] and query_stwig_root_node_id == node:
-                        print(node)
-
-                        queue_of_the_producer.put([node])
-
+        # else: NU FOLOSESC ACEASTA RAMURA, SI NICI IN GR1_Algorithm in Main_Menu optiunea 13.
+        #     if self.first_query_node_id_into_search == True:
+        #         for node in list(dataGraph.nodes()):
+        #             if query_stwig_root_node_label == dataGraph.nodes[node]['label'] and query_stwig_root_node_id == node:
+        #                 print(node)
+        #
+        #                 queue_of_the_producer.put([node])
 
         queue_of_the_producer.put(['STOP'])
         # print(list(queue_of_the_producer.get()))
