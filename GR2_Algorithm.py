@@ -3,6 +3,11 @@
 # Astfel va fi conceput GR2 Algorithm.
 
 
+
+# TREBUIE DAT CITARE LA GR1 ALGORITHM !!!
+
+
+
 # 8 IAN 2021:
 # OK  - De instalat dask.distributed pentru interpretorul Python 3.9. Din cate imi aduc aminte, trebuie sa descarc si sa instalez separat
 # dask.distributed? Mai demult nu am reusit din managerul de pachete din meniul interpretorului.
