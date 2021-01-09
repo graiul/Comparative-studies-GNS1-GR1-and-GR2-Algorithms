@@ -100,7 +100,9 @@ class GR2_Algorithm(object):
         if self.first_query_node_id_into_search == False:
 ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
             for node in list(dataGraph.nodes()):
-                if query_stwig_root_node_label == dataGraph.nodes[node]['label']:
+
+                # Instructiunea originala din GR1 Algorithm
+                # if query_stwig_root_node_label == dataGraph.nodes[node]['label']:
 ################ AICI PUN FILTRELE SI CONDITIILE DIN GNS2 NonRecursiv ( = XDS NonRecursiv).
                     # if data_edge_to_be_joined not in partial_solution:
                     #     ########################################################
@@ -1008,7 +1010,7 @@ class GR2_Algorithm(object):
         return self.execution_time
 
 ############################ Din GNS2v1_Backtracking_Graph_Search_Imbunatatiri_Originale_Non-Recursiv ##########################################################
-    def is_joinable(data_edge_to_be_joined, partial_solution, data_graph, query_edges_dict_input):
+    def is_joinable(data_edge_to_be_joined, partial_solution, data_graph):
 
         found_valid_data_edge = False
         # Nu mai este necesara sortarea: data_edge_to_be_joined = sorted(data_edge_to_be_joined_unsorted)
