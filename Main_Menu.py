@@ -979,7 +979,7 @@ def main():
 ############################ Din GR1 Algorithm ##########################################################
 
 ############################ Din GNS2v1_Backtracking_Graph_Search_Imbunatatiri_Originale_Non-Recursiv ##########################################################
-# !!! TREBUIE CONVERTIT LA GRAFURI QUERY Non STwig.
+# ??? MAI TREBUIE CONVERTIT LA GRAFURI QUERY Non STwig daca e din GNS2v1 ???
 
 query_graph = query_graph_gen.gen_RI_query_graph()
 query_graph_edges = list(query_graph.edges())
