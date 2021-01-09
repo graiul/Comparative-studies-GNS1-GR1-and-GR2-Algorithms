@@ -30,9 +30,9 @@ from functools import partial
 
 # https://stackoverflow.com/questions/6537487/changing-shell-text-color-windows
 # https://pypi.org/project/colorama/
-from colorama import init
-from colorama import Fore, Back, Style
-init()
+# from colorama import init
+# from colorama import Fore, Back, Style
+# init()
 
 def main():
     menu = [
