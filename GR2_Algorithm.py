@@ -2,11 +2,16 @@
 # din GNS2 Algorithm (numit si XDS), cel in varianta nerecursiva.
 
 # 8 IAN 2021:
-# De instalat dask.distributed pentru interpretorul Python 3.9.
-# Din cate imi aduc aminte, trebuie sa descarc si sa instalez separat
-# dask.distributed?
-# Mai demult nu am reusit din managerul de pachete din meniul interpretorului.
-
+# OK  - De instalat dask.distributed pentru interpretorul Python 3.9. Din cate imi aduc aminte, trebuie sa descarc si sa instalez separat
+# dask.distributed? Mai demult nu am reusit din managerul de pachete din meniul interpretorului.
+# L-am descarcat de la ei:
+# https://github.com/dask/distributed
+# distributed.readthedocs.io/en/latest/install.html
+# in folder-ul distributed-master unde se afla setup.py am
+# deschis o fereastra cmd si am rulat comanda
+# python setup.py install
+# fiind conectat la internet pentru ca sa descarce si
+# celelalte dependencies.
 
 
 # # EXERCITIUL 3 de la Exercitii_Dask_Distributed, aici adaptat la lucrul cu grafuri - un producator si mai multi consumatori,
