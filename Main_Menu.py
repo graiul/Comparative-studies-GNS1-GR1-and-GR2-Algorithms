@@ -10,19 +10,19 @@ import networkx as nx
 from GR2_Algorithm import GR2_Algorithm
 from Query_Graph_Generator import Query_Graph_Generator
 
-from DB_Access_Test import DB_Access_Test
+# from DB_Access_Test import DB_Access_Test
 from Dataset_Operator import Dataset_Operator
 
-from STwig_Algorithm import STwig_Algorithm
+# from STwig_Algorithm import STwig_Algorithm
 # from Backtracking_STwig_Matching import Backtracking_STwig_Matching
-from VF2Algorithm import VF2Algorithm
+# from VF2Algorithm import VF2Algorithm
 from GR1_Algorithm import GR1_Algorithm
 
 from Toolbox_Gheorghica_Radu_Iulian import Toolbox_Gheorghica_Radu_Iulian as tgri
 
-from neo4j_test_2 import neo4j_test_2
+# from neo4j_test_2 import neo4j_test_2
 import os
-from multiprocessing import Pool, Process, Manager, Lock
+# from multiprocessing import Pool, Process, Manager, Lock
 
 from timeit import default_timer as timer
 
@@ -56,6 +56,7 @@ def main():
         # ["11. Configure db"],
         ["12. VF2 Algorithm"],
         ["13. GR1 Algorithm"],
+        ["14. GR2 Algorithm"],
 
         ["0. Exit"]
     ]
@@ -906,7 +907,7 @@ def main():
         # NU fac rulari succesive, apare timp in plus de la a doua bucata
         # Nu fac reunirea rezultatelor pt ca dureaza prea mult pentru acest query graph STwig.
         # Am testat si metoda de creare al mediei respective.
-        query_graph = tools.obtain_query_graph(wanted_parts=5)[0] # Listele sunt stocate pe prima pozitie al unei liste mai mari, de aceea folosesc [0].
+        query_graph = tools.obtain_query_graph_stwig(wanted_parts=5)[0] # Listele sunt stocate pe prima pozitie al unei liste mai mari, de aceea folosesc [0].
 
         # a4 = GR1_Algorithm(query_graph[0], data_graph, False, 'C:/Users/StationG/Desktop/24 oct 2020 Baterie Teste GR1_Algorithm/Test 30/I parte graf query STwig/')
         # a4.execute_gr1_algorithm()
@@ -970,65 +971,14 @@ def main():
         # stackoverflow.com/questions/8024248/telling-python-to-save-a-txt-file-to-a-certain-directory-on-windows-and-mac
 
         # Rulare cu graf query intreg, fara descompunere
-        query_graph = tools.obtain_query_graph()
+        query_graph = tools.obtain_query_graph_non_stwig()
         print(query_graph)
-        a0 = GR2_Algorithm(query_graph, data_graph, False, 'C:/Users/StationG/Desktop/Baterie Teste GR2_Algorithm/Test 0/')
-        a0.execute_gr2_algorithm()
-        execution_times.append(a0.get_execution_time_gr2_algorithm())
+        # a0 = GR2_Algorithm(query_graph, data_graph, False, 'C:/Users/StationG/Desktop/Baterie Teste GR2_Algorithm/Test 0/')
+        # a0.execute_gr2_algorithm()
+        # execution_times.append(a0.get_execution_time_gr2_algorithm())
         # create_execution_times_and_avg_txt_file_with_dir('C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 0/', execution_times)
 ############################ Din GR1 Algorithm ##########################################################
 
-############################ Din GNS2v1_Backtracking_Graph_Search_Imbunatatiri_Originale_Non-Recursiv ##########################################################
-# ??? MAI TREBUIE CONVERTIT LA GRAFURI QUERY Non STwig daca e din GNS2v1 ???
-
-query_graph = query_graph_gen.gen_RI_query_graph()
-query_graph_edges = list(query_graph.edges())
-print("Query graph edges: " + str(query_graph_edges))
-# Pentru conditiile VF2:
-nx.set_node_attributes(query_graph, False, 'matched')
-
-query_nodes = list(query_graph.nodes())
-print("Query node id's: " + str(query_nodes))
-query_matched_attributes = []
-for n1 in list(query_graph.nodes()):
-    query_matched_attributes.append(query_graph.nodes[n1]['matched'])
-print("Query node 'matched' attributes: " + str(query_matched_attributes))
-
-# Label-ul radacinii
-# root_label = dataGraph.node[query_nodes[0]]['label']
-root_label = query_graph.nodes[query_nodes[0]]['label']
-# Label-urile vecinilor din lista
-neighbor_labels = []
-for n2 in query_nodes[1:]:
-    # neighbor_labels.append(dataGraph.node[n]['label'])
-    neighbor_labels.append(query_graph.nodes[n2]['label'])
-
-query_node_labels = []
-query_node_labels.append(root_label)
-for nl in neighbor_labels:
-    query_node_labels.append(nl)
-print("Query nodes labels: " + str(query_node_labels))
-query_nodes_dict = OrderedDict(zip(query_nodes, query_node_labels))
-# query_stwig1_dict_matched_attribute = OrderedDict(zip(query_nodes, query_node_matched_attribute_source))
-print("Query nodes dict: " + str(list(query_nodes_dict.items())))
-query_edge_labels = []
-for q_edge in query_graph_edges:
-    query_edge_labels.append([query_nodes_dict[q_edge[0]], query_nodes_dict[q_edge[1]]])
-
-# print("query_edge_labels: " + str(query_edge_labels))
-query_node_labels_source = copy.deepcopy(query_node_labels)
-query_node_matched_attribute_source = copy.deepcopy(query_matched_attributes)
-
-query_edges_dict = OrderedDict(zip(query_graph_edges, query_edge_labels))
-query_stwig1_dict_matched_attribute = OrderedDict(zip(query_nodes, query_node_matched_attribute_source))
-print("Query graph edges dictionary: " + str(list(query_edges_dict.items())))
-print()
-# adj_mat_query = nx.to_pandas_adjacency(query_graph, dtype=int)
-print("query_stwig1_dict_matched_attribute: ")
-print(list(query_stwig1_dict_matched_attribute.items()))
-print()
-
-############################ Din GNS2v1_Backtracking_Graph_Search_Imbunatatiri_Originale_Non-Recursiv ##########################################################
 
 
 if __name__ == '__main__':
