@@ -198,6 +198,8 @@ class Toolbox_Gheorghica_Radu_Iulian(object):
     # care au fost luate din GNS2v1_Backtracking_Graph_Search_Imbunatatiri_Originale_Non-Recursiv 
 
     # !!! Trebuie sa il fac sa ruleze si cu wanted_parts ca in metoda de mai sus.
+    # Aceasta metoda returneaza doar dictionarul muchiilor grafului query
+    # impreuna cu labelurile nodurilor fiecarei muchii.
     def obtain_query_graph_non_stwig(self):
         ############################ Din GNS2v1_Backtracking_Graph_Search_Imbunatatiri_Originale_Non-Recursiv ##########################################################
         # ??? MAI TREBUIE CONVERTIT LA GRAFURI QUERY Non STwig daca e din GNS2v1 ???
@@ -243,14 +245,19 @@ class Toolbox_Gheorghica_Radu_Iulian(object):
 
         query_edges_dict = OrderedDict(zip(query_graph_edges, query_edge_labels))
         # query_stwig1_dict_matched_attribute = OrderedDict(zip(query_nodes, query_node_matched_attribute_source))
-        query_graph_edges_dictionary = list(query_edges_dict.items())
+
+        # NU E DENUMIT BINE, NU ARE TIPUL DICTIONAR CI TIPUL LISTA
+        # query_graph_edges_dictionary = list(query_edges_dict.items())
         # print("Query graph edges dictionary: " + str(query_graph_edges_dictionary))
         # print()
+
         # adj_mat_query = nx.to_pandas_adjacency(query_graph, dtype=int)
         # print("query_stwig1_dict_matched_attribute: ")
         # print(list(query_stwig1_dict_matched_attribute.items()))
         # print()
-        return query_graph_edges_dictionary
+
+        # print(type(query_edges_dict))
+        return query_edges_dict
     ############################ Din GNS2v1_Backtracking_Graph_Search_Imbunatatiri_Originale_Non-Recursiv ##########################################################
 
     def obtain_data_graph(self):
