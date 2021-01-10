@@ -88,6 +88,7 @@ class GR2_Algorithm(object):
 ################ DIN GNS2 NonRecursiv ( = XDS NonRecursiv). ################
         self.complete_solutions = []
         self.positions = OrderedDict().fromkeys([0, 1, 2, 3])
+        # Log pentru muchiile gasite de producator.
         self.positions[0] = []
         self.positions[1] = []
         self.positions[2] = []
@@ -122,33 +123,39 @@ class GR2_Algorithm(object):
         dataGraph.add_edges_from(data_graph_edges)
         nx.set_node_attributes(dataGraph, node_attributes_dictionary, 'label')
 
+
         # ACEASTA E RAMURA CARE AM FOLOSIT-O SI IN GR1_Algorithm.
         # Si anume in clasa Main-Menu optiunea 13.
         if self.first_query_node_id_into_search == False:
-############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
-
-            # Instructiunea originala din GR1 Algorithm
-            # for node in list(dataGraph.nodes()):
-                # Instructiunea originala din GR1 Algorithm
-                # if query_stwig_root_node_label == dataGraph.nodes[node]['label']:
-################ AICI APELEZ FILTRELE SI CONDITIILE DIN GNS2 NonRecursiv ( = XDS NonRecursiv).
+            print("Data edges found by the producer: ")
             data_edge = copy.deepcopy(self.next_data_edge([], dataGraph, query_graph_dict))
-            print(data_edge)
-            # Log pentru muchiile gasite de producator. Va fi o copie al
-            self.positions[0].append(data_edge)
-            # Instructiunea originala din GR1 Algorithm
-            # queue_of_the_producer.put([node])
-            queue_of_the_producer.put([data_edge])
+            while data_edge is not None:
 ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
 
-        queue_of_the_producer.put(['STOP'])
-        # print(list(queue_of_the_producer.get()))
+                # Instructiunea originala din GR1 Algorithm
+                # for node in list(dataGraph.nodes()):
+                    # Instructiunea originala din GR1 Algorithm
+                    # if query_stwig_root_node_label == dataGraph.nodes[node]['label']:
+    ################ AICI APELEZ FILTRELE SI CONDITIILE DIN GNS2 NonRecursiv ( = XDS NonRecursiv).
+                # data_edge = copy.deepcopy(self.next_data_edge([], dataGraph, query_graph_dict))
+                print(data_edge)
+                # print("Positions[0]: ")
+                # print(self.positions[0])
+                # Instructiunea originala din GR1 Algorithm
+                # queue_of_the_producer.put([node])
+                queue_of_the_producer.put([data_edge])
+                data_edge = copy.deepcopy(self.next_data_edge([], dataGraph, query_graph_dict))
+
+############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
+
+            queue_of_the_producer.put(['STOP'])
+            # print(list(queue_of_the_producer.get()))
 
 
-        # print("\nQueue of producer results: ")
-        # aux = copy.deepcopy(queue_of_the_producer)
-        # print(aux.get(batch=True)) # docs.dask.org/en/latest/futures.html?highlight=queue#distributed.Queue.get
-                                     # batch=True ia toate elementele din queue, lasand queue goala.
+            # print("\nQueue of producer results: ")
+            # aux = copy.deepcopy(queue_of_the_producer)
+            # print(aux.get(batch=True)) # docs.dask.org/en/latest/futures.html?highlight=queue#distributed.Queue.get
+                                         # batch=True ia toate elementele din queue, lasand queue goala.
 
     # The consumer function takes data off of the Queue
     # @dask.delayed
