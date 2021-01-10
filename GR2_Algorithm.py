@@ -2,6 +2,8 @@
 # din GNS2 Algorithm (numit si XDS), cel in varianta nerecursiva.
 # Astfel va fi conceput GR2 Algorithm.
 #
+# Folosesc vechiul interpretor Python 3.7 cu bibliotecile vechi folosite pana la inclusiv Spania.
+# 
 # Va rula folosind muchii in loc de noduri, pentru a lucra si cu grafuri query non-STwig.
 # Va putea rula qu grafuri query mari care vor fi impartite in bucati.
 #
