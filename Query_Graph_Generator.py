@@ -585,9 +585,13 @@ class Query_Graph_Generator(object):
         # # 212,114
 
         # Graf query pentru procesul cu rol de producator din GR2 Algorithm.
-        query_graph_edges = [[2871, 9857]]
-        node_attr = ["1", "18"]
+        # query_graph_edges = [[2871, 9857]]
+        # node_attr = ["1", "18"]
 
+        # Graf query pentru procesul cu rol de producator si un
+        # proces cu rol de consumator din GR2 Algorithm.
+        query_graph_edges = [[2871, 9857], [9857,212],]
+        node_attr = ["1", "18", "19"]
 
         query_graph.add_edges_from(query_graph_edges)
 
