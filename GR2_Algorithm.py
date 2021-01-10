@@ -9,6 +9,9 @@
 # si "is_joinable"
 #
 # Grija la timer!
+#
+# Este nevoie sa lucrez la jurnalele metodei is_joinable
+# pentru fiecare pozitie al solutiei partiale.
 
 
 
