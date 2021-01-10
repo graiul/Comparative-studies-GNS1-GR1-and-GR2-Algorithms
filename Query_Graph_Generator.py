@@ -553,7 +553,7 @@ class Query_Graph_Generator(object):
         #              "11", "12", "5", "7", "18", "19",
         #              "31", "10"]
 
-        # Testari algoritm GNS2v1 Algorithm
+        # Testari algoritm GNS2v1 Algorithm si GR2 Algorithm
 
         # graf query STwig
         # nr 6 luat de la GR1 Algorithm
@@ -574,12 +574,20 @@ class Query_Graph_Generator(object):
 
         # node_attr = ["24", "19", "32", "25", "32", "24", "26", "11"]
         # ##################################
-        query_graph_edges = [[2871,9857], [9857,212], [212,114]]
-        # query_graph_edges = [[11, 22], [33, 44], [55, 66]]
-        node_attr = ["1", "18", "19", "10"]
-        # 2871,9857
-        # 9857,212
-        # 212,114
+
+        # Graf pentru a verifica daca GNS2v1 tine cont de ID-urile nodurilor.
+        # TINE CONT de ID-urile nodurilor.
+        # query_graph_edges = [[2871,9857], [9857,212], [212,114]]
+        # # query_graph_edges = [[11, 22], [33, 44], [55, 66]]
+        # node_attr = ["1", "18", "19", "10"]
+        # # 2871,9857
+        # # 9857,212
+        # # 212,114
+
+        # Graf query pentru procesul cu rol de producator din GR2 Algorithm.
+        query_graph_edges = [[2871, 9857]]
+        node_attr = ["1", "18"]
+
 
         query_graph.add_edges_from(query_graph_edges)
 
