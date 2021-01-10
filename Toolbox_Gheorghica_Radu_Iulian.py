@@ -205,12 +205,12 @@ class Toolbox_Gheorghica_Radu_Iulian(object):
         query_graph_gen = Query_Graph_Generator()
         query_graph = query_graph_gen.gen_RI_query_graph()
         query_graph_edges = list(query_graph.edges())
-        print("Query graph edges: " + str(query_graph_edges))
+        # print("Query graph edges: " + str(query_graph_edges))
         # Pentru conditiile VF2:
         # nx.set_node_attributes(query_graph, False, 'matched')
 
         query_nodes = list(query_graph.nodes())
-        print("Query node id's: " + str(query_nodes))
+        # print("Query node id's: " + str(query_nodes))
         # query_matched_attributes = []
         # for n1 in list(query_graph.nodes()):
         #     query_matched_attributes.append(query_graph.nodes[n1]['matched'])
@@ -229,10 +229,10 @@ class Toolbox_Gheorghica_Radu_Iulian(object):
         query_node_labels.append(root_label)
         for nl in neighbor_labels:
             query_node_labels.append(nl)
-        print("Query nodes labels: " + str(query_node_labels))
+        # print("Query nodes labels: " + str(query_node_labels))
         query_nodes_dict = OrderedDict(zip(query_nodes, query_node_labels))
         # query_stwig1_dict_matched_attribute = OrderedDict(zip(query_nodes, query_node_matched_attribute_source))
-        print("Query nodes dict: " + str(list(query_nodes_dict.items())))
+        # print("Query nodes dict: " + str(list(query_nodes_dict.items())))
         query_edge_labels = []
         for q_edge in query_graph_edges:
             query_edge_labels.append([query_nodes_dict[q_edge[0]], query_nodes_dict[q_edge[1]]])
@@ -244,8 +244,8 @@ class Toolbox_Gheorghica_Radu_Iulian(object):
         query_edges_dict = OrderedDict(zip(query_graph_edges, query_edge_labels))
         # query_stwig1_dict_matched_attribute = OrderedDict(zip(query_nodes, query_node_matched_attribute_source))
         query_graph_edges_dictionary = list(query_edges_dict.items())
-        print("Query graph edges dictionary: " + str(query_graph_edges_dictionary))
-        print()
+        # print("Query graph edges dictionary: " + str(query_graph_edges_dictionary))
+        # print()
         # adj_mat_query = nx.to_pandas_adjacency(query_graph, dtype=int)
         # print("query_stwig1_dict_matched_attribute: ")
         # print(list(query_stwig1_dict_matched_attribute.items()))
