@@ -16,6 +16,10 @@
 # pentru fiecare pozitie al solutiei partiale.
 #
 # Cum transmit lui GR2 Algorithm adiacenta grafului query?
+#
+# Vreau sa generalizez numarul pozitiilor solutiei partiale din metoda "is_joinable",
+# sau cel putin sa coincida cu numarul maxim de procese al GR2 Algorithm
+# (producator + consumatori)
 
 
 
@@ -81,6 +85,14 @@ class GR2_Algorithm(object):
         self.data_graph = data_graph
         self.first_query_node_id_into_search = first_query_node_id_into_search
         self.logs_directory = logs_directory
+################ DIN GNS2 NonRecursiv ( = XDS NonRecursiv). ################
+        self.complete_solutions = []
+        self.positions = OrderedDict().fromkeys([0, 1, 2, 3])
+        self.positions[0] = []
+        self.positions[1] = []
+        self.positions[2] = []
+        self.positions[3] = []
+################ DIN GNS2 NonRecursiv ( = XDS NonRecursiv). ################
 
     # Producer function that places data on the Queue
     # Va produce noduri data cu label-ul radacinii din graful query STwig.
@@ -122,6 +134,8 @@ class GR2_Algorithm(object):
 ################ AICI APELEZ FILTRELE SI CONDITIILE DIN GNS2 NonRecursiv ( = XDS NonRecursiv).
             data_edge = copy.deepcopy(self.next_data_edge([], dataGraph, query_graph_dict))
             print(data_edge)
+            # Log pentru muchiile gasite de producator. Va fi o copie al
+            self.positions[0].append(data_edge)
             # Instructiunea originala din GR1 Algorithm
             # queue_of_the_producer.put([node])
             queue_of_the_producer.put([data_edge])
@@ -1132,7 +1146,7 @@ class GR2_Algorithm(object):
                         # print("     " + Fore.GREEN + Style.BRIGHT +  "Positions log before appending first position data edge: " + str(list(positions.items())) + Style.RESET_ALL)
                         # print()
 
-                        finder = EdgeFinderTool(data_edge_to_be_joined, positions[0])
+                        finder = EdgeFinderTool(data_edge_to_be_joined, self.positions[0])
                         found = finder.edge_found()
                         if found is False:
                             # if data_edge_to_be_joined not in positions[0]:
@@ -1146,7 +1160,7 @@ class GR2_Algorithm(object):
                             # print(reversed_data_edge)
                             # print()
                             pos = aux.index(aux[-1])
-                            positions[pos].append(data_edge_to_be_joined)
+                            self.positions[pos].append(data_edge_to_be_joined)
                             # positions[pos].append(reversed_data_edge)
                             # print("Log for position 0: ")
                             # print(positions[pos])
@@ -1183,7 +1197,7 @@ class GR2_Algorithm(object):
                             list(query_edges_dict.items())[1][1][1] == data_edge_to_be_joined_node_0_label:
                         # print("YES")
                         # print("     " + Fore.GREEN + Style.BRIGHT +  "Positions log before appending second edge: " + str(list(positions.items())) + Style.RESET_ALL)
-                        finder = EdgeFinderTool(data_edge_to_be_joined, positions[1])
+                        finder = EdgeFinderTool(data_edge_to_be_joined, self.positions[1])
                         found = finder.edge_found()
                         if found is False:
                             # if data_edge_to_be_joined not in positions[1]:
@@ -1191,7 +1205,7 @@ class GR2_Algorithm(object):
                             aux.append(data_edge_to_be_joined)
 
                             pos = aux.index(aux[-1])
-                            if aux not in complete_solutions:
+                            if aux not in self.complete_solutions:
                                 # Verificam daca label-ul primei frunze al STwig-ului query are aceeasi valoare ca si label-ul nodului data primit ca si parametru
                                 # si care sa cauta pentru pozitia primei frunze.
 
@@ -1214,11 +1228,11 @@ class GR2_Algorithm(object):
                                         ######################################################################
 
                                         found_valid_data_edge = True
-                                        finder2 = EdgeFinderTool(aux[-1], positions[pos])
+                                        finder2 = EdgeFinderTool(aux[-1], self.positions[pos])
                                         found2 = finder2.edge_found()
                                         if found2 is False:
                                             # if aux[-1] not in positions[pos]:
-                                            positions[pos].append(aux[-1])  # aux[-1] e data_edge_to_be_joined
+                                            self.positions[pos].append(aux[-1])  # aux[-1] e data_edge_to_be_joined
                                             # print("Appended data edge: ")
                                             # print(aux[-1])
                                             # print("Reversed data edge to avoid final results duplicates: ")
@@ -1268,8 +1282,8 @@ class GR2_Algorithm(object):
                         aux.append(data_edge_to_be_joined)
 
                         pos = aux.index(aux[-1])
-                        if aux not in complete_solutions:
-                            finder = EdgeFinderTool(data_edge_to_be_joined, positions[2])
+                        if aux not in self.complete_solutions:
+                            finder = EdgeFinderTool(data_edge_to_be_joined, self.positions[2])
                             found = finder.edge_found()
                             if found is False:
                                 # if data_edge_to_be_joined not in positions[2]:
@@ -1284,11 +1298,11 @@ class GR2_Algorithm(object):
                                         # if matched_true_false_data_nodes_pos_2_dict[data_node_to_be_joined] == False:
                                         ###############################################################################
                                         found_valid_data_edge = True
-                                        finder2 = EdgeFinderTool(aux[-1], positions[pos])
+                                        finder2 = EdgeFinderTool(aux[-1], self.positions[pos])
                                         found2 = finder2.edge_found()
                                         if found2 is False:
                                             # if aux[-1] not in positions[pos]:
-                                            positions[pos].append(aux[-1])
+                                            self.positions[pos].append(aux[-1])
                                             # print("Appended data edge: ")
                                             # print(aux[-1])
                                             # print("Reversed data edge to avoid final results duplicates: ")
@@ -1333,8 +1347,8 @@ class GR2_Algorithm(object):
                         aux = copy.deepcopy(partial_solution)
                         aux.append(data_edge_to_be_joined)
                         pos = aux.index(aux[-1])
-                        if aux not in complete_solutions:
-                            finder = EdgeFinderTool(data_edge_to_be_joined, positions[3])
+                        if aux not in self.complete_solutions:
+                            finder = EdgeFinderTool(data_edge_to_be_joined, self.positions[3])
                             found = finder.edge_found()
                             if found is False:
                                 # if data_edge_to_be_joined not in positions[3]:
@@ -1346,11 +1360,11 @@ class GR2_Algorithm(object):
                                         # print("     Has edge with previous position(s)")
                                         # if matched_true_false_data_nodes_pos_3_dict[data_node_to_be_joined] == False:
                                         found_valid_data_edge = True
-                                        finder2 = EdgeFinderTool(aux[-1], positions[pos])
+                                        finder2 = EdgeFinderTool(aux[-1], self.positions[pos])
                                         found2 = finder2.edge_found()
                                         if found2 is False:
                                             # if aux[-1] not in positions[pos]:
-                                            positions[pos].append(aux[-1])
+                                            self.positions[pos].append(aux[-1])
                                             # print("Appended data edge: ")
                                             # print(aux[-1])
                                             # print("Reversed data edge to avoid final results duplicates: ")
