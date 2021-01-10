@@ -12,7 +12,8 @@
 #
 # Este nevoie sa lucrez la jurnalele metodei is_joinable
 # pentru fiecare pozitie al solutiei partiale.
-
+#
+# Cum transmit lui GR2 Algorithm adiacenta grafului query?
 
 
 
