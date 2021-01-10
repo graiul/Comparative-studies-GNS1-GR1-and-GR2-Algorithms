@@ -177,14 +177,13 @@ class GR2_Algorithm(object):
             # Se poate folosi acest procedeu daca lista data de producator este mult mai mare, pentru ca lucreaza foarte repede consumatorii,
             # iar consumatorul care ia din coada nu lasa timp pentru ceilalti.
 
-            # If the queue is empty, queue.get() will block until the queue has data
-            # print("Consumer " + str(os.getpid()) + ": Root node: " + str(root_node))
-            # print("Consumer " + str(os.getpid()) + ": partial_solution[-1]: " + str(partial_solution[-1]))
-
             # print("Consumer " + str(os.getpid()) + " got: " + str(partial_solution) + " from the queue of producer products.")
-            for data_node in dataGraph.nodes():
-                if query_stwig_leaf_node_label == dataGraph.nodes[data_node]['label']:
-                    if dataGraph.has_edge(root_node, data_node):
+
+            print("Data edges found by the consumer: ")
+            data_edge = copy.deepcopy(self.next_data_edge(partial_solution, dataGraph, query_graph_dict))
+            print(data_edge)
+            exit(0)
+            while data_edge is not None:
 
                         # print("Consumer " + str(os.getpid()) + ": Root node: " + str(root_node))
 
