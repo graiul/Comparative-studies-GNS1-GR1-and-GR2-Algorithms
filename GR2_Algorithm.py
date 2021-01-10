@@ -7,6 +7,9 @@
 #
 # Este nevoie de variabila "query_edges_dict" pentru metodele "next_data_edge"
 # si "is_joinable"
+#
+# Grija la timer!
+
 
 
 
@@ -45,7 +48,7 @@ from collections import OrderedDict
 # https://pypi.org/project/colorama/
 # from colorama import init
 # from colorama import Fore, Back, Style
-
+from EdgeFinderTool import EdgeFinderTool
 from Query_Graph_Generator import Query_Graph_Generator
 
 # init()
@@ -75,14 +78,14 @@ class GR2_Algorithm(object):
 
     # Producer function that places data on the Queue
     # Va produce noduri data cu label-ul radacinii din graful query STwig.
-    def producer(self, queue_of_the_producer, query_stwig, data_graph_edges, node_attributes_dictionary):
+    def producer(self, queue_of_the_producer, query_graph_dict, data_graph_edges, node_attributes_dictionary):
     # Signatura urmatoare contine ca si input o lista de parti ale grafului query
     # def producer(queue_of_the_producer, query_parts, query_stwig_1_dict, data_graph_edges, node_attributes_dictionary):
         print("\nStarting producer " + str(os.getpid()))
 
         # query_stwig = list(query_stwig_1_dict.items())
-        print("Query STwig received by the producer: ")
-        print(query_stwig)
+        print("Query graph non-STwig received by the producer: ")
+        print(query_graph_dict)
         # print("The STwig query graf split into parts: ")
         # query_stwig_parts = split_list(query_stwig, wanted_parts=2)
         # for part in query_stwig_parts:
@@ -90,10 +93,10 @@ class GR2_Algorithm(object):
         # print("Query STwig PARTS received by the producer: ")
         # for part in query_parts:
         #     print(part)
-        query_stwig_root_node = query_stwig[0]
+        # query_stwig_root_node = query_graph_dict[0]
         # print(query_stwig_root_node)
-        query_stwig_root_node_id = query_stwig_root_node[0]
-        query_stwig_root_node_label = query_stwig_root_node[1]
+        # query_stwig_root_node_id = query_stwig_root_node[0]
+        # query_stwig_root_node_label = query_stwig_root_node[1]
         # print(query_stwig_root_node_id)
         # print(query_stwig_root_node_label)
         # print()
@@ -105,66 +108,17 @@ class GR2_Algorithm(object):
         # Si anume in clasa Main-Menu optiunea 13.
         if self.first_query_node_id_into_search == False:
 ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
-            for node in list(dataGraph.nodes()):
 
+            # Instructiunea originala din GR1 Algorithm
+            # for node in list(dataGraph.nodes()):
                 # Instructiunea originala din GR1 Algorithm
                 # if query_stwig_root_node_label == dataGraph.nodes[node]['label']:
-################ AICI PUN FILTRELE SI CONDITIILE DIN GNS2 NonRecursiv ( = XDS NonRecursiv).
-                    # if data_edge_to_be_joined not in partial_solution:
-                    #     ########################################################
-                    #     # Pentru VF2
-                    #     # print(list(query_  _input.items())[0][1])
-                    #     # if list(query_   _input.items())[0][1] == False:
-                    #     ########################################################
-                    #     # print("     Query edge node labels for the first position: ")
-                    #     # print("     " + str(list(query_edges_dict.items())[0][1]))
-                    #     # print("     Candidate data graph edge (data nodes label): " + str(
-                    #     #     [data_graph.nodes[data_edge_to_be_joined[0]]['label'],
-                    #     #      data_graph.nodes[data_edge_to_be_joined[1]]['label']]))
-                    #     # print("     Candidate data graph edge nodes id: " + str(data_edge_to_be_joined))
-                    #     if list(query_edges_dict.items())[0][1][0] == data_edge_to_be_joined_node_0_label or
-                    #             list(query_edges_dict.items())[0][1][0] == data_edge_to_be_joined_node_1_label:
-                    #         # print("YES")
-                    #         if list(query_edges_dict.items())[0][1][1] == data_edge_to_be_joined_node_1_label or \
-                    #                 list(query_edges_dict.items())[0][1][1] == data_edge_to_be_joined_node_0_label:
-                    #             # print("YES")
-                    #             # print("     " + Fore.GREEN + Style.BRIGHT +  "Positions log before appending first position data edge: " + str(list(positions.items())) + Style.RESET_ALL)
-                    #             # print()
-                    #
-                    #             finder = EdgeFinderTool(data_edge_to_be_joined, positions[0])
-                    #             found = finder.edge_found()
-                    #             if found is False:
-                    #                 # if data_edge_to_be_joined not in positions[0]:
-                    #                 found_valid_data_edge = True
-                    #                 aux = copy.deepcopy(partial_solution)
-                    #                 aux.append(data_edge_to_be_joined)
-                    #                 # print("Appended data edge: ")
-                    #                 # print(data_edge_to_be_joined)
-                    #                 # print("Reversed data edge to avoid final results duplicates: ")
-                    #                 # reversed_data_edge = (data_edge_to_be_joined[1], data_edge_to_be_joined[0])
-                    #                 # print(reversed_data_edge)
-                    #                 # print()
-                    #                 pos = aux.index(aux[-1])
-                    #                 positions[pos].append(data_edge_to_be_joined)
-                    #                 # positions[pos].append(reversed_data_edge)
-                    #                 # print("Log for position 0: ")
-                    #                 # print(positions[pos])
-                    #
-                    #                 #####################################################################
-                    #                 #             matched_true_false_data_nodes_pos_0_dict[data_node_to_be_joined] = True
-                    #                 #             break
-                    #                 #####################################################################
-                    #                 # print("     " + Fore.GREEN + Style.BRIGHT + "Positions log after appending first position data edge: " + str(list(positions.items())) + Style.RESET_ALL)
-                    #                 # print()
-                    #         else:
-                    #             # print("     Data edge is not valid for this.")
-                    #             pass
-                    #     else:
-                    #         # print("     Data edge is not valid for this.")
-                    #         pass
-################
-                    # print(node)
-                    queue_of_the_producer.put([node])
+################ AICI APELEZ FILTRELE SI CONDITIILE DIN GNS2 NonRecursiv ( = XDS NonRecursiv).
+            data_edge = copy.deepcopy(self.next_data_edge([], dataGraph, query_graph_dict))
+            print(data_edge)
+            # Instructiunea originala din GR1 Algorithm
+            # queue_of_the_producer.put([node])
+            queue_of_the_producer.put([data_edge])
 ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
 
         queue_of_the_producer.put(['STOP'])
@@ -731,10 +685,14 @@ class GR2_Algorithm(object):
         # data_graph_edges = copy.deepcopy(sorted(edge_list_integer_ids))
         # node_attributes_dictionary = OrderedDict(sorted(node_ids_as_integers_with_string_labels))
 
-        query_stwig_root_node = self.query_graph[0]
-        query_stwig_root_node_label = self.query_graph[0][1]
-        query_stwig_length = len(self.query_graph) # Pentru grafuri STwig, e nr nodurilor. Pentru grafuri care nu au forma STwig, va fi nr muchiilor, adica al perechilor de noduri,
+        # query_stwig_root_node = self.query_graph[0]
+        # query_stwig_root_node_label = self.query_graph[0][1]
+        # query_stwig_length = len(self.query_graph) # Pentru grafuri STwig, e nr nodurilor. Pentru grafuri care nu au forma STwig, va fi nr muchiilor, adica al perechilor de noduri,
                                               # datorita faptului ca am pus o muchie pe cate o pozitie al solutiei partiale in cazul respectiv.
+
+        # !!! TREBUIE SA REDENUMESC IN ACEASA CLASA "query_stwig_length" IN "query_graph_number_of_edges".
+        # query_graph_number_of_edges = len(self.query_graph.items())
+        query_stwig_length = len(self.query_graph.items())
 
         # parts = split_list(query_stwig, wanted_parts=2)
         # print("Query graph parts: ")
@@ -776,6 +734,9 @@ class GR2_Algorithm(object):
         # exit(0)
 
         number_of_consumers = len(self.query_graph) - 1
+        print("Number of consumers: ")
+        print(number_of_consumers)
+        print()
         # simplifiedpython.net/python-switch-case-statement/
         if number_of_consumers == 1:
             query_stwig_leaf_node1 = self.query_graph[1]
