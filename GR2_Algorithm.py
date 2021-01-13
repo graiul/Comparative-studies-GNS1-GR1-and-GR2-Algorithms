@@ -20,7 +20,13 @@
 # Vreau sa generalizez numarul pozitiilor solutiei partiale din metoda "is_joinable",
 # sau cel putin sa coincida cu numarul maxim de procese al GR2 Algorithm
 # (producator + consumatori)
-
+#
+# DE VERIFICAT: validitatea muchiilor gasite de primul consumator privind
+# adiacenta nodurilor fiecarei muchii si daca labelurile nodurilor respective
+# sunt precum este impus de graful query.
+#
+# La primul consumator trebuie adaugat si criteriile de validare al
+# unei solutii complete.
 
 
 # TREBUIE DAT CITARE LA GR1 ALGORITHM !!!
@@ -127,7 +133,7 @@ class GR2_Algorithm(object):
         # ACEASTA E RAMURA CARE AM FOLOSIT-O SI IN GR1_Algorithm.
         # Si anume in clasa Main-Menu optiunea 13.
         if self.first_query_node_id_into_search == False:
-            print("Data edges found by the producer: ")
+            # print("Data edges found by the producer: ")
             data_edge = copy.deepcopy(self.next_data_edge([], dataGraph, query_graph_dict))
             while data_edge is not None:
 ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
@@ -138,7 +144,7 @@ class GR2_Algorithm(object):
                     # if query_stwig_root_node_label == dataGraph.nodes[node]['label']:
     ################ AICI APELEZ FILTRELE SI CONDITIILE DIN GNS2 NonRecursiv ( = XDS NonRecursiv).
                 # data_edge = copy.deepcopy(self.next_data_edge([], dataGraph, query_graph_dict))
-                print(data_edge)
+                # print(data_edge)
                 # print("Positions[0]: ")
                 # print(self.positions[0])
                 # Instructiunea originala din GR1 Algorithm
@@ -159,7 +165,7 @@ class GR2_Algorithm(object):
 
     # The consumer function takes data off of the Queue
     # @dask.delayed
-    def consumer(self, input_queue, output_queue, query_stwig_leaf_node_label, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing):
+    def consumer(self, input_queue, output_queue, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing, query_graph_dict):
         print("\nStarting consumer " + str(os.getpid()))
 
         dataGraph = nx.Graph()
@@ -172,6 +178,8 @@ class GR2_Algorithm(object):
 
         aux_partial_solutions_list = []
 
+        print("Data edges found by the consumer: ")
+
         # # Run indefinitely
         while root_node != 'STOP': # DACA LA WHILE AICI CEILALTI CONSUMATORI NU VOR MAI AVEA MATERIAL, ATUNCI NU VOR FI PUSE IN FOLOSIRE SI CELELALTE PROCESE.
             # Se poate folosi acest procedeu daca lista data de producator este mult mai mare, pentru ca lucreaza foarte repede consumatorii,
@@ -179,57 +187,64 @@ class GR2_Algorithm(object):
 
             # print("Consumer " + str(os.getpid()) + " got: " + str(partial_solution) + " from the queue of producer products.")
 
-            print("Data edges found by the consumer: ")
             data_edge = copy.deepcopy(self.next_data_edge(partial_solution, dataGraph, query_graph_dict))
-            print(data_edge)
-            exit(0)
             while data_edge is not None:
+                print(data_edge)
 
-                        # print("Consumer " + str(os.getpid()) + ": Root node: " + str(root_node))
+                # print("Consumer " + str(os.getpid()) + ": Root node: " + str(root_node))
 
-                        partial_solution.append(data_node)
+                # !!! Aici trebuie puse criteriile de validare (verificarea egalitatii
+                # matricelor de adiacenta al grafului query si al solutiei partiale, samd.)
+                partial_solution.append(data_edge)
+                print("Partial solution: ")
+                print(partial_solution)
 
-                        if len(partial_solution) == query_stwig_length:
-                            # La acest nivel, consumatorul va mai crea o solutie partiala validata care a mai fost creata deja.
-                            # Cand acest lucru se intampla, mai jos algoritmul isi va opri executia.
-                            # print("Consumer " + str(os.getpid()) + ": Partial solution: " + str(partial_solution))
+                # !!! SAU AICI?
+                if len(partial_solution) == query_stwig_length:
+                    # La acest nivel, consumatorul va mai crea o solutie partiala validata care a mai fost creata deja.
+                    # Cand acest lucru se intampla, mai jos algoritmul isi va opri executia.
+                    # print("Consumer " + str(os.getpid()) + ": Partial solution: " + str(partial_solution))
 
-                            if partial_solution not in aux_partial_solutions_list:
-                                queue_for_printing.put(partial_solution)
-                                # print("Consumer " + str(os.getpid()) + ": Partial solution: " + str(partial_solution))
+                    if partial_solution not in aux_partial_solutions_list:
+                        queue_for_printing.put(partial_solution)
+                        # print("Consumer " + str(os.getpid()) + ": Partial solution: " + str(partial_solution))
 
-                                aux_ps = copy.deepcopy(partial_solution)
-                                aux_partial_solutions_list.append(aux_ps)
-                                # print(aux_partial_solutions_list)
-                            # elif partial_solution in aux_partial_solutions_list:
-                                # print("!!!")
-                                # root_node = 'STOP'
+                        aux_ps = copy.deepcopy(partial_solution)
+                        aux_partial_solutions_list.append(aux_ps)
 
 
-                            # if partial_solution == [3842, 9997, 9670]:
-                            #     print("!!!")
-                            #     root_node = 'STOP'
+                        # print(aux_partial_solutions_list)
+                    # elif partial_solution in aux_partial_solutions_list:
+                        # print("!!!")
+                        # root_node = 'STOP'
 
-                            # NU A FOST NEVOIE: VARIANTA 1:
-                            # Verificator de iteratii sau contor al gasirilor. Daca o solutie partiala se gaseste o data in lista
-                            # si e construita inca o data alg se incheie.
 
-                            # NU A FOST NEVOIE: VARIANTA 2:
-                            # In loc sa verific daca o solutie se afla deja, mai bine numar de cate ori apare solutia resp inainte de a o adauga in lista.
-                            # Nu se poate sa adaug in lista si sa verific existenta sol resp in lista in aceeasi iteratie. Nu are sens.
-                            # Fie verific existenta, dar in iteratii diferite, fie numar existenta, da in aceeasi iteratie.
+                    # if partial_solution == [3842, 9997, 9670]:
+                    #     print("!!!")
+                    #     root_node = 'STOP'
 
-                            # if partial_solution not in aux_partial_solutions_list:
-                            #     aux_partial_solutions_list.append(partial_solution)
-                            #     queue_for_printing.put(partial_solution)
-                            # else:
-                            #     if partial_solution in aux_partial_solutions_list:
-                            #         print("!!!")
-                            #         root_node = 'STOP'
-                            #         break
+                    # NU A FOST NEVOIE: VARIANTA 1:
+                    # Verificator de iteratii sau contor al gasirilor. Daca o solutie partiala se gaseste o data in lista
+                    # si e construita inca o data alg se incheie.
 
-                        output_queue.put(partial_solution)
-                        partial_solution.remove(partial_solution[-1])
+                    # NU A FOST NEVOIE: VARIANTA 2:
+                    # In loc sa verific daca o solutie se afla deja, mai bine numar de cate ori apare solutia resp inainte de a o adauga in lista.
+                    # Nu se poate sa adaug in lista si sa verific existenta sol resp in lista in aceeasi iteratie. Nu are sens.
+                    # Fie verific existenta, dar in iteratii diferite, fie numar existenta, da in aceeasi iteratie.
+
+                    # if partial_solution not in aux_partial_solutions_list:
+                    #     aux_partial_solutions_list.append(partial_solution)
+                    #     queue_for_printing.put(partial_solution)
+                    # else:
+                    #     if partial_solution in aux_partial_solutions_list:
+                    #         print("!!!")
+                    #         root_node = 'STOP'
+                    #         break
+
+                output_queue.put(partial_solution)
+                partial_solution.remove(partial_solution[-1])
+
+                data_edge = copy.deepcopy(self.next_data_edge(partial_solution, dataGraph, query_graph_dict))
 
             # if len(partial_solution) == query_stwig_length:
             #     queue_for_printing.put(partial_solution)
@@ -765,15 +780,15 @@ class GR2_Algorithm(object):
         print()
         # simplifiedpython.net/python-switch-case-statement/
         if number_of_consumers == 1:
-            query_stwig_leaf_node1 = self.query_graph[1]
-            query_stwig_leaf_node_label1 = self.query_graph[1][1]
+            # query_stwig_leaf_node1 = self.query_graph[1]
+            # query_stwig_leaf_node_label1 = self.query_graph[1][1]
             # big_consumer_1 = client.scatter(data_graph_edges)
             # b = client.submit(consumer, big_consumer_1, queue_of_the_producer, queue_of_finished_products_1, query_stwig_leaf_node_label1, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
 
             # b = client.submit(consumer, queue_of_the_producer, queue_of_finished_products_1, query_stwig_leaf_node_label1, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
             b = client.submit(self.consumer, queue_of_the_producer, queue_of_finished_products_1,
-                              query_stwig_leaf_node_label1, query_stwig_length, self.data_graph[0], self.data_graph[1],
-                              queue_for_printing)
+                              query_stwig_length, self.data_graph[0], self.data_graph[1],
+                              queue_for_printing, self.query_graph)
 
             print(b.result())
         elif number_of_consumers == 2:
