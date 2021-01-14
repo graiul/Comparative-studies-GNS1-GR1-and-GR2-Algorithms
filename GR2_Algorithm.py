@@ -23,8 +23,21 @@
 # (producator + consumatori)
 #
 # 14 IAN 2021:
-# !!! Apar doua noduri in plus? Pentru graf query cu trei muchii, si in lucrul cu un proces cu
+# Apelez bine metoda cu criteriile de validare al solutiilor partiale?
+# A pus "!!!" in metoda consumatorilor ca sa investighez.
+#
+# Trebuie sa ma uit din nou la criteriile de validare - MERG BINE IN GNS2v1 (recursiv si nonrecursiv?):
+# !!! Pentru graful query
+#     query_graph_edges = [[2871, 9857], [9857, 212]]
+#     node_attr = ["1", "18", "19"]
+#         apare cate un nod in plus in rezultate.
+#
+# !!! Pentru graful query
+#     query_graph_edges = [[3276,4212], [4212,3538], [3538,12006]]
+#     node_attr = ["19", "30", "9", "26"]
+#         apar doua noduri in plus? Pentru graf query cu trei muchii, si in lucrul cu un proces cu
 # rol de producator si doua cu rol de consumator.
+#
 #
 # DE MENTIONAT IN ARTICOL: ca GNS2v1 si GR2 Algorihm poate lucra si cu grafuri query (indiferent de adiacenta) ale carui cel putin doua noduri au acelasi label.
 #
