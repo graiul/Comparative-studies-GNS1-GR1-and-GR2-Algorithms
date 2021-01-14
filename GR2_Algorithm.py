@@ -21,13 +21,17 @@
 # sau cel putin sa coincida cu numarul maxim de procese al GR2 Algorithm
 # (producator + consumatori)
 #
+# 13 IAN 2021:
 # DE VERIFICAT: validitatea muchiilor gasite de primul consumator privind
 # adiacenta nodurilor fiecarei muchii si daca labelurile nodurilor respective
 # sunt precum este impus de graful query.
 #
 # La primul consumator trebuie adaugat si criteriile de validare al
 # unei solutii complete.
-
+# UPDATE: cred ca le-am adaugat pe toate, trebuie sa mai verific.
+# Trebuie sa verific corectitudinea solutiilor complete obtinute de
+# producator si primul consumator.
+# La rularile pe care le-am facut deocamdata da code 0 - asta este bine.
 
 # TREBUIE DAT CITARE LA GR1 ALGORITHM !!!
 
@@ -178,7 +182,8 @@ class GR2_Algorithm(object):
 
         aux_partial_solutions_list = []
 
-        print("Data edges found by the consumer: ")
+        # print("Data edges found by the consumer: ")
+        print("Complete solutions: ")
 
         # # Run indefinitely
         while root_node != 'STOP': # DACA LA WHILE AICI CEILALTI CONSUMATORI NU VOR MAI AVEA MATERIAL, ATUNCI NU VOR FI PUSE IN FOLOSIRE SI CELELALTE PROCESE.
@@ -189,15 +194,19 @@ class GR2_Algorithm(object):
 
             data_edge = copy.deepcopy(self.next_data_edge(partial_solution, dataGraph, query_graph_dict))
             while data_edge is not None:
-                print(data_edge)
+                # print(data_edge)
 
                 # print("Consumer " + str(os.getpid()) + ": Root node: " + str(root_node))
 
                 # !!! Aici trebuie puse criteriile de validare (verificarea egalitatii
                 # matricelor de adiacenta al grafului query si al solutiei partiale, samd.)
                 partial_solution.append(data_edge)
-                print("Partial solution: ")
-                print(partial_solution)
+                query_graph_gen = Query_Graph_Generator()
+                query_graph_nx_obj = query_graph_gen.gen_RI_query_graph()
+
+                if self.validate_partial_solution(partial_solution, query_graph_nx_obj,
+                                                  self.complete_solutions):
+                    print(partial_solution)
 
                 # !!! SAU AICI?
                 if len(partial_solution) == query_stwig_length:
@@ -1412,4 +1421,58 @@ class GR2_Algorithm(object):
 
         return None
 
+    def validate_partial_solution(self, partial_solution, query_graph, complete_solutions):
+        partial_solution_data_subgraph = nx.Graph()
+        partial_solution_data_subgraph.add_edges_from(partial_solution)
+
+        if nx.is_isomorphic(query_graph, partial_solution_data_subgraph):
+            duplicate_occurence_list = []
+            duplicate_occurence_indicator = False
+
+            for complete_solution in complete_solutions:
+                duplicate_occurence_list.clear()
+                for partial_solution_edge in partial_solution:
+                    finder = EdgeFinderTool(partial_solution_edge, complete_solution)
+                    finder_value = finder.edge_found()
+                    duplicate_occurence_list.append(finder_value)
+                duplicate_edge_counter = 0
+                for dup in duplicate_occurence_list:
+                    if dup == True:
+                        duplicate_edge_counter = duplicate_edge_counter + 1
+                if duplicate_edge_counter == len(duplicate_occurence_list):
+                    duplicate_occurence_indicator = True
+                    duplicate_occurence_list.clear()
+
+                    # duplicate_edge_counter = 0
+                    break
+
+            if duplicate_occurence_indicator == False:
+                duplicate_occurence_list.clear()
+                gr_isomorphic = True
+                i = True
+                # if partial_solution not in complete_solutions:
+                c_sol = copy.deepcopy(partial_solution)
+                # print(is_joinable(3, [1,2], data_graph, query_graph_dict))
+                complete_solutions.append(c_sol)
+                # print(c_sol)
+                return True
+                # for c_sol_elem in c_sol:
+                #     f1.write(str(c_sol_elem) + " ")
+                # f1.write("\n")
+                # print("\nOne complete solution found!")
+                # print()
+                # print(Fore.GREEN + Style.BRIGHT + "List of complete solutions: ")
+                # print("List of complete solutions: ")
+                # for cs in complete_solutions:
+                #     print(cs)
+                # print()
+                # print(Style.RESET_ALL)
+            else:
+                # print("Duplicate found")
+                duplicate_occurence_list.clear()
+
+        else:
+            # print("Adjacency matrix sizes do not match.")
+            # print("Not isomorphic")
+            pass
 ############################ Din GNS2v1_Backtracking_Graph_Search_Imbunatatiri_Originale_Non-Recursiv ##########################################################
