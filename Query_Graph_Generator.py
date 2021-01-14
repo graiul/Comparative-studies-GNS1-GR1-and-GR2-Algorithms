@@ -605,8 +605,13 @@ class Query_Graph_Generator(object):
         # Graf query pentru procesul cu rol de producator si un
         # proces cu rol de consumator din GR2 Algorithm.
         # Coincidental este cu forma STwig, dar nu conteaza.
-        query_graph_edges = [[2871, 9857], [9857, 212]]
-        node_attr = ["1", "18", "19"]
+        # query_graph_edges = [[2871, 9857], [9857, 212]]
+        # node_attr = ["1", "18", "19"]
+
+        # GR2 Algorithm
+        query_graph_edges = [[3276,4212], [4212,3538], [3538,12006]]
+        node_attr = ["19", "30", "9", "26"]
+
 
         query_graph.add_edges_from(query_graph_edges)
 
