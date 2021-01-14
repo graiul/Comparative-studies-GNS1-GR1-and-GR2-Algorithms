@@ -36,10 +36,20 @@
 # Trebuie facut diferenta intre variabila query graph de tipul obiect
 # networkx si cea de tipul OrderedDict.
 #
-# SE PARE CA GR2 ALGORITHM si GNS2v1(recursiv si nonrecursiv) TIN CONT DE
+# SE PARE CA GR2 ALGORITHM si GNS2v1(recursiv si nonrecursiv, =XDS) TIN CONT DE
 # ID-URILE NODURILOR QUERY!
 #
 # De pus print-urile spre fisierele text necesare.
+#
+# De verificat corectitudinea rezultatelor pentru graful:
+# query_graph_edges = [[2871, 9857], [212, 114]]
+#         node_attr = ["1", "18", "19", "10"]
+# ID-uri diferite, labeluri diferite ale nodurilor, dar care este adiacenta
+# grafului query si rezultatelor gasite de GR2 Algorithm?
+# Pentru apar si rezultate ale caror ID-uri ale nodurilor sunt diferite intre ele,
+# iar in cazul in care rezultatele acestea sunt corecte, demonstreaza plusul de valoare
+# al GR2 Algorithm si GNS2v1(rec, non rec, =XDS, dar trebuie testat si aici).
+# Pentru GR2 Algorithm a fost obtinut code 0 ceea ce este foarte bine.
 
 # TREBUIE DAT CITARE LA GR1 ALGORITHM !!!
 
