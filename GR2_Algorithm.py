@@ -35,6 +35,9 @@
 #
 # Trebuie facut diferenta intre variabila query graph de tipul obiect
 # networkx si cea de tipul OrderedDict.
+#
+# SE PARE CA GR2 ALGORITHM si GNS2v1(recursiv si nonrecursiv) TIN CONT DE
+# ID-URILE NODURILOR QUERY!
 
 # TREBUIE DAT CITARE LA GR1 ALGORITHM !!!
 
