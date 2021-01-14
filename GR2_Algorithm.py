@@ -22,6 +22,14 @@
 # (producator + consumatori)
 #
 # 14 IAN 2021:
+# Nu lucrez cu urmatoarele cazuri de grafuri query:
+# 1) cele ale caror noduri, oricare cel putin doua noduri au
+# acelasi label
+# 2)cele care desi au labeluri diferite, au si toate id-urile diferite, astfel incat un graf query sa fie neconex,adica sa aiba parti care sa nu fie legate intre ele prin muchii.
+# Adica urmatorul desen graf query:
+# 2871 -------- 9857
+# 212  -------- 114
+
 # De folosit mai multe tipuri de grafuri data - altul pentru human, si inca
 # doua de la animale.
 #
