@@ -23,6 +23,9 @@
 # (producator + consumatori)
 #
 # 14 IAN 2021:
+# !!! Apar doua noduri in plus? Pentru graf query cu trei muchii, si in lucrul cu un proces cu
+# rol de producator si doua cu rol de consumator.
+#
 # DE MENTIONAT IN ARTICOL: ca GNS2v1 si GR2 Algorihm poate lucra si cu grafuri query (indiferent de adiacenta) ale carui cel putin doua noduri au acelasi label.
 #
 # Nu lucrez cu urmatoarele cazuri de grafuri query:
@@ -214,7 +217,7 @@ class GR2_Algorithm(object):
         aux_partial_solutions_list = []
 
         # print("Data edges found by the consumer: ")
-        print("Complete solutions: ")
+        # print("Complete solutions: ")
 
         # # Run indefinitely
         while root_node != 'STOP': # DACA LA WHILE AICI CEILALTI CONSUMATORI NU VOR MAI AVEA MATERIAL, ATUNCI NU VOR FI PUSE IN FOLOSIRE SI CELELALTE PROCESE.
@@ -235,9 +238,13 @@ class GR2_Algorithm(object):
                 query_graph_gen = Query_Graph_Generator()
                 query_graph_nx_obj = query_graph_gen.gen_RI_query_graph()
 
-                if self.validate_partial_solution(partial_solution, query_graph_nx_obj,
-                                                  self.complete_solutions):
-                    print(partial_solution)
+                # if self.validate_partial_solution(partial_solution, query_graph_nx_obj,
+                #                                   self.complete_solutions):
+                    # print(partial_solution)
+                self.validate_partial_solution(partial_solution, query_graph_nx_obj,
+                                               self.complete_solutions)
+                # !!! 14 IAN 2021, 22:30
+                # CE TREBUIE FACUT DUPA CE AM VALIDAT SOLUTIA?
 
                 # !!! SAU AICI?
                 if len(partial_solution) == query_stwig_length:
@@ -832,25 +839,25 @@ class GR2_Algorithm(object):
 
             print(b.result())
         elif number_of_consumers == 2:
-            query_stwig_leaf_node1 = self.query_graph[1]
-            query_stwig_leaf_node_label1 = self.query_graph[1][1]
+            # query_stwig_leaf_node1 = self.query_graph[1]
+            # query_stwig_leaf_node_label1 = self.query_graph[1][1]
             # big_consumer_1 = client.scatter(data_graph_edges)
             # b = client.submit(consumer, big_consumer_1, queue_of_the_producer, queue_of_finished_products_1, query_stwig_leaf_node_label1, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
 
             # b = client.submit(consumer, queue_of_the_producer, queue_of_finished_products_1, query_stwig_leaf_node_label1, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
             b = client.submit(self.consumer, queue_of_the_producer, queue_of_finished_products_1,
-                              query_stwig_leaf_node_label1, query_stwig_length, self.data_graph[0], self.data_graph[1],
-                              queue_for_printing)
+                              query_stwig_length, self.data_graph[0], self.data_graph[1],
+                              queue_for_printing, self.query_graph)
 
-            query_stwig_leaf_node2 = self.query_graph[2]
-            query_stwig_leaf_node_label2 = self.query_graph[2][1]
+            # query_stwig_leaf_node2 = self.query_graph[2]
+            # query_stwig_leaf_node_label2 = self.query_graph[2][1]
             # big_consumer_2 = client.scatter(data_graph_edges)
             # c = client.submit(consumer, big_consumer_2, queue_of_finished_products_1, queue_of_finished_products_2, query_stwig_leaf_node_label2, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
 
             # c = client.submit(consumer, queue_of_finished_products_1, queue_of_finished_products_2, query_stwig_leaf_node_label2, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
             c = client.submit(self.consumer, queue_of_finished_products_1, queue_of_finished_products_2,
-                              query_stwig_leaf_node_label2, query_stwig_length, self.data_graph[0], self.data_graph[1],
-                              queue_for_printing)
+                              query_stwig_length, self.data_graph[0], self.data_graph[1],
+                              queue_for_printing, self.query_graph)
             c.result()
 
         elif number_of_consumers == 3:
