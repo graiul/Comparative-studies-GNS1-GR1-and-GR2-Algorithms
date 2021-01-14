@@ -584,17 +584,29 @@ class Query_Graph_Generator(object):
         # # 9857,212
         # # 212,114
 
+        # GR2 Algorithm
         # Graf query pentru procesul cu rol de producator din GR2 Algorithm.
         # query_graph_edges = [[2871, 9857]]
         # node_attr = ["1", "18"]
 
+        # GR2 Algorithm
+        # query_graph_edges = [[2871, 9857], [212, 114]]
+        # node_attr = ["1", "18", "19", "10"]
+        # Nu lucrez cu urmatoarele cazuri de grafuri query:
+        # 1) cele ale caror noduri, oricare cel putin doua noduri au
+        # acelasi label
+        # 2)cele care desi au labeluri diferite, au si toate id-urile diferite, astfel incat un graf query sa fie neconex,adica sa aiba parti care sa nu fie legate intre ele prin muchii.
+        # Adica urmatorul desen graf query:
+        # 2871 -------- 9857
+        # 212  -------- 114
+        # Acest tip de graf query nu se incadreaza in problema cautarilor de motifuri. Nicaieri nu am citit de motifuri neconexe.
+
+        # GR2 Algorithm
         # Graf query pentru procesul cu rol de producator si un
         # proces cu rol de consumator din GR2 Algorithm.
-        # query_graph_edges = [[2871, 9857], [9857,212]]
-        # node_attr = ["1", "18", "19"]
-
-        query_graph_edges = [[2871, 9857], [212, 114]]
-        node_attr = ["1", "18", "19", "10"]
+        # Coincidental este cu forma STwig, dar nu conteaza.
+        query_graph_edges = [[2871, 9857], [9857, 212]]
+        node_attr = ["1", "18", "19"]
 
         query_graph.add_edges_from(query_graph_edges)
 
