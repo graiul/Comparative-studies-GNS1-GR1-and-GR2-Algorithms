@@ -21,6 +21,10 @@
 # sau cel putin sa coincida cu numarul maxim de procese al GR2 Algorithm
 # (producator + consumatori)
 #
+# 14 IAN 2021:
+# De folosit mai multe tipuri de grafuri data - altul pentru human, si inca
+# doua de la animale.
+#
 # 13 IAN 2021:
 # DE VERIFICAT: validitatea muchiilor gasite de primul consumator privind
 # adiacenta nodurilor fiecarei muchii si daca labelurile nodurilor respective
@@ -52,8 +56,6 @@
 # Pentru GR2 Algorithm a fost obtinut code 0 ceea ce este foarte bine.
 
 # TREBUIE DAT CITARE LA GR1 ALGORITHM !!!
-
-
 
 # 8 IAN 2021:
 # OK  - De instalat dask.distributed pentru interpretorul Python 3.9. Din cate imi aduc aminte, trebuie sa descarc si sa instalez separat
