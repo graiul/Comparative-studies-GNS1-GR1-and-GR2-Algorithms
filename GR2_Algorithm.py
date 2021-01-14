@@ -27,6 +27,8 @@
 # A pus "!!!" in metoda consumatorilor ca sa investighez.
 #
 # Trebuie sa ma uit din nou la criteriile de validare - MERG BINE IN GNS2v1 (recursiv si nonrecursiv?):
+# !!! Cred ca totul e vorba de utilizarea metodei "is_isomorphic()", si anume verificarea egalitatii
+# adiacentei intre graful query si solutiei partiale in prag de a fi declarata solutie completa.
 # !!! Pentru graful query
 #     query_graph_edges = [[2871, 9857], [9857, 212]]
 #     node_attr = ["1", "18", "19"]
