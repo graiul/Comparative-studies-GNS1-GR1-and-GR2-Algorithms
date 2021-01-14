@@ -973,10 +973,11 @@ def main():
         # Rulare cu graf query intreg, fara descompunere
         query_graph = tools.obtain_query_graph_non_stwig()
         print(query_graph)
-        a0 = GR2_Algorithm(query_graph, data_graph, False, 'C:/Users/StationG/Desktop/Baterie Teste GR2_Algorithm/Test 1/')
+        a0 = GR2_Algorithm(query_graph, data_graph, False, 'C:/Users/StationG/Desktop/Baterie Teste GR2_Algorithm/Test 2/')
         a0.execute_gr2_algorithm()
+        # Pentru calculul automat al mediei aritmetice al timpilor de executie:
         # execution_times.append(a0.get_execution_time_gr2_algorithm())
-        # create_execution_times_and_avg_txt_file_with_dir('C:/Users/StationG/Desktop/Baterie Teste GR1_Algorithm/Test 0/', execution_times)
+        # create_execution_times_and_avg_txt_file_with_dir('C:/Users/StationG/Desktop/Baterie Teste GR2_Algorithm/Test 2/', execution_times)
 ############################ Din GR1 Algorithm ##########################################################
 
 
