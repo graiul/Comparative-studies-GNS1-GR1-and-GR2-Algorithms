@@ -38,6 +38,8 @@
 #
 # SE PARE CA GR2 ALGORITHM si GNS2v1(recursiv si nonrecursiv) TIN CONT DE
 # ID-URILE NODURILOR QUERY!
+#
+# De pus print-urile spre fisierele text necesare.
 
 # TREBUIE DAT CITARE LA GR1 ALGORITHM !!!
 
