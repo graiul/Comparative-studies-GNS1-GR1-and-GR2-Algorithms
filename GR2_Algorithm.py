@@ -32,6 +32,9 @@
 # Trebuie sa verific corectitudinea solutiilor complete obtinute de
 # producator si primul consumator.
 # La rularile pe care le-am facut deocamdata da code 0 - asta este bine.
+#
+# Trebuie facut diferenta intre variabila query graph de tipul obiect
+# networkx si cea de tipul OrderedDict.
 
 # TREBUIE DAT CITARE LA GR1 ALGORITHM !!!
 
