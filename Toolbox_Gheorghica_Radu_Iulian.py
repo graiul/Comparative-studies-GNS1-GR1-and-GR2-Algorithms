@@ -260,6 +260,12 @@ class Toolbox_Gheorghica_Radu_Iulian(object):
         return query_edges_dict
     ############################ Din GNS2v1_Backtracking_Graph_Search_Imbunatatiri_Originale_Non-Recursiv ##########################################################
 
+    def get_query_graph_as_nx_object_non_stwig(self):
+        pass
+
+    def get_query_graph_as_dict_with_edges_as_keys_and_node_label_values_non_stwig(self):
+        pass
+
     def obtain_data_graph(self):
         ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
         # GRAFUL DATA DIN NEO4J
