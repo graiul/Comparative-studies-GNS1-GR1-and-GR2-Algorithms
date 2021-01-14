@@ -3,7 +3,8 @@
 # Astfel va fi conceput GR2 Algorithm.
 #
 # Folosesc vechiul interpretor Python 3.7 cu bibliotecile vechi folosite pana la inclusiv Spania.
-# 
+# dask si dask distributed au versiunea 2.18.0
+#
 # Va rula folosind muchii in loc de noduri, pentru a lucra si cu grafuri query non-STwig.
 # Va putea rula qu grafuri query mari care vor fi impartite in bucati.
 #
@@ -22,6 +23,8 @@
 # (producator + consumatori)
 #
 # 14 IAN 2021:
+# DE MENTIONAT IN ARTICOL: ca GNS2v1 si GR2 Algorihm poate lucra si cu grafuri query (indiferent de adiacenta) ale carui cel putin doua noduri au acelasi label.
+#
 # Nu lucrez cu urmatoarele cazuri de grafuri query:
 # 1) cele ale caror noduri, oricare cel putin doua noduri au
 # acelasi label
