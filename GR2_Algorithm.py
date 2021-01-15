@@ -54,6 +54,15 @@
 # De folosit mai multe tipuri de grafuri data - altul pentru human, si inca
 # doua de la animale.
 #
+# 15 IAN 2021:
+# GR2 Algorithm afiseaza in consola rezultatele corecte (testat cu
+# query_graph_edges = [[2871, 9857], [9857, 212]]
+# node_attr = ["1", "18", "19"])
+# si cu
+# query_graph_edges = [[3276,4212], [4212,3538], [3538,12006]]
+# node_attr = ["19", "30", "9", "26"] ), dar in fisierul text care ar contine
+# rezultatele, nu apar corect.
+#
 # 13 IAN 2021:
 # DE VERIFICAT: validitatea muchiilor gasite de primul consumator privind
 # adiacenta nodurilor fiecarei muchii si daca labelurile nodurilor respective
@@ -256,18 +265,24 @@ class GR2_Algorithm(object):
                 # if self.validate_partial_solution(partial_solution, query_graph_nx_obj,
                 #                                   self.complete_solutions):
                     # print(partial_solution)
-                self.validate_partial_solution(partial_solution, query_graph_nx_obj,
-                                               self.complete_solutions)
+                if self.validate_partial_solution(partial_solution, query_graph_nx_obj):
+                    # self.complete_solutions.append(partial_solution)
+                    queue_for_printing.put(partial_solution)
                 # !!! 14 IAN 2021, 22:30
                 # CE TREBUIE FACUT DUPA CE AM VALIDAT SOLUTIA?
 
                 # !!! SAU AICI?
+                # !!! MAI ESTE NECESARA URMATOAREA SECTIUNE DE COD?
                 if len(partial_solution) == query_stwig_length:
                     # La acest nivel, consumatorul va mai crea o solutie partiala validata care a mai fost creata deja.
                     # Cand acest lucru se intampla, mai jos algoritmul isi va opri executia.
                     # print("Consumer " + str(os.getpid()) + ": Partial solution: " + str(partial_solution))
 
                     if partial_solution not in aux_partial_solutions_list:
+                        # !!! Mai este necesara variabila "queue_for_printing"?
+                        # Pentru grafurile query non-STwig variabila "self.complete_solutions"
+                        # ar fi mai la indemana de pus in fisierul text de output, din moment ce
+                        # contine rezultatele valide?
                         queue_for_printing.put(partial_solution)
                         # print("Consumer " + str(os.getpid()) + ": Partial solution: " + str(partial_solution))
 
@@ -1041,6 +1056,8 @@ class GR2_Algorithm(object):
         total_time = timer() - start_time
         # total_time = time.clock() - start_time
         print("Total execution time: " + str(total_time) + " seconds.")
+        print("Solutii complete de pus in fisier scris: ")
+        print(self.complete_solutions)
 
         # stackoverflow.com/questions/11700593/creating-files-and-directories-via-python
         import os
@@ -1063,12 +1080,25 @@ class GR2_Algorithm(object):
         name_of_file_2 = "file_GR2_Algorithm_output"
         complete_name_2 = os.path.join(save_path, name_of_file_2+".txt")
         f_output = open(complete_name_2, "w+")
+        # ## DIN GR1 ALGORITHM ####
         while queue_for_printing.qsize() > 0:
             p = queue_for_printing.get()
             for p_elem in p:
                 f_output.write(str(p_elem) + " ")
             f_output.write("\n")
         f_output.close()
+        # ## DIN GR1 ALGORITHM ####
+
+        # print()
+        # print("Solutii complete de pus in fisier scris: ")
+        # print(self.complete_solutions)
+        # for comp_sol in self.complete_solutions:
+        #     for c_elem in comp_sol:
+        #         f_output.write(str(c_elem) + " ")
+        #     f_output.write("\n")
+        # f_output.close()
+
+
 
         name_of_file_3 = "query_graph"
         complete_name_3 = os.path.join(save_path, name_of_file_3+".txt")
@@ -1474,7 +1504,7 @@ class GR2_Algorithm(object):
 
         return None
 
-    def validate_partial_solution(self, partial_solution, query_graph, complete_solutions):
+    def validate_partial_solution(self, partial_solution, query_graph):
         partial_solution_data_subgraph = nx.Graph()
         partial_solution_data_subgraph.add_edges_from(partial_solution)
 
@@ -1482,7 +1512,7 @@ class GR2_Algorithm(object):
             duplicate_occurence_list = []
             duplicate_occurence_indicator = False
 
-            for complete_solution in complete_solutions:
+            for complete_solution in self.complete_solutions:
                 duplicate_occurence_list.clear()
                 for partial_solution_edge in partial_solution:
                     finder = EdgeFinderTool(partial_solution_edge, complete_solution)
@@ -1506,8 +1536,9 @@ class GR2_Algorithm(object):
                 # if partial_solution not in complete_solutions:
                 c_sol = copy.deepcopy(partial_solution)
                 # print(is_joinable(3, [1,2], data_graph, query_graph_dict))
-                complete_solutions.append(c_sol)
-                # print(c_sol)
+                # self.complete_solutions.append(c_sol)
+                print(c_sol)
+                # print(self.complete_solutions)
                 return True
                 # for c_sol_elem in c_sol:
                 #     f1.write(str(c_sol_elem) + " ")
