@@ -621,17 +621,16 @@ class Query_Graph_Generator(object):
         #                      [8585,7271], [11353,7272], ]
         # node_attr = ["12", "1", "3", "10", "19"]
 
-        # nr 4, GR2 Algorithm
-        query_graph_edges = [[8821,5139], [8821,8401],
-                             [5139,4878], [8401,10071],
-                             [4878,9837]]
-        node_attr = ["13", "21", "29", "30", "3", "5"]
-        #8821,5139; 13, 21
-        #8821,8401; 13, 29
-        #5139,4878; 21, 30
-        #8401,10071; 29, 3
-        #4878,9837; 30, 5
-        # Dar fara sa dea nici macar un rezultat?
+        # nr 4, GR2 Algorithm, pb este ca
+        # nu apare ca si solutie partiala DE LOC graful query
+        # care este el insusi de fapt O APARITIE GARANTATA.
+        query_graph_edges = [[812,4133], [812,7707], [812,8161]]#, [812,9831], [812,12067]]
+        node_attr = ["16", "28", "24", "25"]#, "30", "9"]
+        # 812,4133
+        # 812,7707
+        # 812,8161
+        # 812,9831
+        # 812,12067
 
         query_graph.add_edges_from(query_graph_edges)
 
