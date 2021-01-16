@@ -13,6 +13,8 @@
 #
 # Grija la timer!
 #
+# TREBUIE DAT CITARE LA GR1 ALGORITHM !!!
+#
 # Este nevoie sa lucrez la jurnalele metodei is_joinable
 # pentru fiecare pozitie al solutiei partiale.
 #
@@ -22,51 +24,23 @@
 # sau cel putin sa coincida cu numarul maxim de procese al GR2 Algorithm
 # (producator + consumatori)
 #
-# 16 IAN 2021:
-# Probabil unele rezutlate apar de doua sau mai multe ori, avand ordinea nodurilor
-# diferita, dar mai trebuie sa verific. Nu cred ca sunt rezultate omise.
-#
-# 14 IAN 2021:
-# Apelez bine metoda cu criteriile de validare al solutiilor partiale?
-# A pus "!!!" in metoda consumatorilor ca sa investighez.
-#
-# Trebuie sa ma uit din nou la criteriile de validare - MERG BINE IN GNS2v1 (recursiv si nonrecursiv?):
-# !!! Cred ca totul e vorba de utilizarea metodei "is_isomorphic()", si anume verificarea egalitatii
-# adiacentei intre graful query si solutiei partiale in prag de a fi declarata solutie completa.
-# !!! Pentru graful query
-#     query_graph_edges = [[2871, 9857], [9857, 212]]
-#     node_attr = ["1", "18", "19"]
-#         apare cate un nod in plus in rezultate.
-#
-# !!! Pentru graful query
-#     query_graph_edges = [[3276,4212], [4212,3538], [3538,12006]]
-#     node_attr = ["19", "30", "9", "26"]
-#         apar doua noduri in plus? Pentru graf query cu trei muchii, si in lucrul cu un proces cu
-# rol de producator si doua cu rol de consumator.
-#
-#
-# DE MENTIONAT IN ARTICOL: ca GNS2v1 si GR2 Algorihm poate lucra si cu grafuri query (indiferent de adiacenta) ale carui cel putin doua noduri au acelasi label.
-#
-# Nu lucrez cu urmatoarele cazuri de grafuri query:
-# 1) cele ale caror noduri, oricare cel putin doua noduri au
-# acelasi label
-# 2)cele care desi au labeluri diferite, au si toate id-urile diferite, astfel incat un graf query sa fie neconex,adica sa aiba parti care sa nu fie legate intre ele prin muchii.
-# Adica urmatorul desen graf query:
-# 2871 -------- 9857
-# 212  -------- 114
 
 # De folosit mai multe tipuri de grafuri data - altul pentru human, si inca
 # doua de la animale.
 #
-# 15 IAN 2021:
-# GR2 Algorithm afiseaza in consola rezultatele corecte (testat cu
-# query_graph_edges = [[2871, 9857], [9857, 212]]
-# node_attr = ["1", "18", "19"])
-# si cu
-# query_graph_edges = [[3276,4212], [4212,3538], [3538,12006]]
-# node_attr = ["19", "30", "9", "26"] ), dar in fisierul text care ar contine
-# rezultatele, nu apar corect.
-#
+
+# 8 IAN 2021:
+# OK  - De instalat dask.distributed pentru interpretorul Python 3.9. Din cate imi aduc aminte, trebuie sa descarc si sa instalez separat
+# dask.distributed? Mai demult nu am reusit din managerul de pachete din meniul interpretorului.
+# L-am descarcat de la ei:
+# https://github.com/dask/distributed
+# distributed.readthedocs.io/en/latest/install.html
+# in folder-ul distributed-master unde se afla setup.py am
+# deschis o fereastra cmd si am rulat comanda
+# python setup.py install
+# fiind conectat la internet pentru ca sa descarce si
+# celelalte dependencies.
+
 # 13 IAN 2021:
 # DE VERIFICAT: validitatea muchiilor gasite de primul consumator privind
 # adiacenta nodurilor fiecarei muchii si daca labelurile nodurilor respective
@@ -97,19 +71,62 @@
 # al GR2 Algorithm si GNS2v1(rec, non rec, =XDS, dar trebuie testat si aici).
 # Pentru GR2 Algorithm a fost obtinut code 0 ceea ce este foarte bine.
 
-# TREBUIE DAT CITARE LA GR1 ALGORITHM !!!
+# 14 IAN 2021:
+# Apelez bine metoda cu criteriile de validare al solutiilor partiale?
+# A pus "!!!" in metoda consumatorilor ca sa investighez.
+#
+# Trebuie sa ma uit din nou la criteriile de validare - MERG BINE IN GNS2v1 (recursiv si nonrecursiv?):
+# !!! Cred ca totul e vorba de utilizarea metodei "is_isomorphic()", si anume verificarea egalitatii
+# adiacentei intre graful query si solutiei partiale in prag de a fi declarata solutie completa.
+# !!! Pentru graful query
+#     query_graph_edges = [[2871, 9857], [9857, 212]]
+#     node_attr = ["1", "18", "19"]
+#         apare cate un nod in plus in rezultate.
+#
+# !!! Pentru graful query
+#     query_graph_edges = [[3276,4212], [4212,3538], [3538,12006]]
+#     node_attr = ["19", "30", "9", "26"]
+#         apar doua noduri in plus? Pentru graf query cu trei muchii, si in lucrul cu un proces cu
+# rol de producator si doua cu rol de consumator.
+#
+#
+# DE MENTIONAT IN ARTICOL: ca GNS2v1 si GR2 Algorihm poate lucra si cu grafuri query (indiferent de adiacenta) ale carui cel putin doua noduri au acelasi label.
+#
+# Nu lucrez cu urmatoarele cazuri de grafuri query:
+# 1) cele ale caror noduri, oricare cel putin doua noduri au
+# acelasi label
+# 2)cele care desi au labeluri diferite, au si toate id-urile diferite, astfel incat un graf query sa fie neconex,adica sa aiba parti care sa nu fie legate intre ele prin muchii.
+# Adica urmatorul desen graf query:
+# 2871 -------- 9857
+# 212  -------- 114
 
-# 8 IAN 2021:
-# OK  - De instalat dask.distributed pentru interpretorul Python 3.9. Din cate imi aduc aminte, trebuie sa descarc si sa instalez separat
-# dask.distributed? Mai demult nu am reusit din managerul de pachete din meniul interpretorului.
-# L-am descarcat de la ei:
-# https://github.com/dask/distributed
-# distributed.readthedocs.io/en/latest/install.html
-# in folder-ul distributed-master unde se afla setup.py am
-# deschis o fereastra cmd si am rulat comanda
-# python setup.py install
-# fiind conectat la internet pentru ca sa descarce si
-# celelalte dependencies.
+# 15 IAN 2021:
+# GR2 Algorithm afiseaza in consola rezultatele corecte (testat cu
+# query_graph_edges = [[2871, 9857], [9857, 212]]
+# node_attr = ["1", "18", "19"])
+# si cu
+# query_graph_edges = [[3276,4212], [4212,3538], [3538,12006]]
+# node_attr = ["19", "30", "9", "26"] ), dar in fisierul text care ar contine
+# rezultatele, nu apar corect.
+#
+
+# 16 IAN 2021:
+# Probabil unele rezutlate apar de doua sau mai multe ori, avand ordinea nodurilor
+# diferita, dar mai trebuie sa verific. Nu cred ca sunt rezultate omise.
+#
+# # nr 3, GR2 Algorithm
+#         # Ca sa fiu sigur de atribuirea corecta al labelurilor pentru ID-uri,
+#         # am pus ID-urile in ordinea urmatoare,
+#         # iar urmand ordinea aceea, am scris labelurile mai jos.
+#         query_graph_edges = [[8585,11353], [8585,4341],
+#                              [8585,7271], [11353,7272], ]
+#         node_attr = ["12", "1", "3", "10", "19"]
+#
+
+
+
+
+
 
 
 # # EXERCITIUL 3 de la Exercitii_Dask_Distributed, aici adaptat la lucrul cu grafuri - un producator si mai multi consumatori,
