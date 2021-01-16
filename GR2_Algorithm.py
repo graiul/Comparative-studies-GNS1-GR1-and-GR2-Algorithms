@@ -631,7 +631,7 @@ class GR2_Algorithm(object):
                               query_stwig_length, self.data_graph[0], self.data_graph[1],
                               queue_for_printing, self.query_graph)
 
-            query_stwig_leaf_node4 = self.query_graph[4]
+            # query_stwig_leaf_node4 = self.query_graph[4]
             # query_stwig_leaf_node_label4 = self.query_graph[4][1]
             # big_consumer_4 = client.scatter(data_graph_edges)
             # e = client.submit(consumer, big_consumer_4, queue_of_finished_products_3, queue_of_finished_products_4, query_stwig_leaf_node_label4, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
