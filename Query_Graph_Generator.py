@@ -601,17 +601,37 @@ class Query_Graph_Generator(object):
         # 212  -------- 114
         # Acest tip de graf query nu se incadreaza in problema cautarilor de motifuri. Nicaieri nu am citit de motifuri neconexe.
 
-        # GR2 Algorithm
+        # nr 1, GR2 Algorithm
         # Graf query pentru procesul cu rol de producator si un
         # proces cu rol de consumator din GR2 Algorithm.
         # Coincidental este cu forma STwig, dar nu conteaza.
-        query_graph_edges = [[2871, 9857], [9857, 212]]
-        node_attr = ["1", "18", "19"]
+        # query_graph_edges = [[2871, 9857], [9857, 212]]
+        # node_attr = ["1", "18", "19"]
 
+        # nr 2, GR2 Algorithm
         # GR2 Algorithm
         # query_graph_edges = [[3276,4212], [4212,3538], [3538,12006]]
         # node_attr = ["19", "30", "9", "26"]
 
+        # nr 3, GR2 Algorithm
+        # Ca sa fiu sigur de atribuirea corecta al labelurilor pentru ID-uri,
+        # am pus ID-urile in ordinea urmatoare,
+        # iar urmand ordinea aceea, am scris labelurile mai jos.
+        # query_graph_edges = [[8585,11353], [8585,4341],
+        #                      [8585,7271], [11353,7272], ]
+        # node_attr = ["12", "1", "3", "10", "19"]
+
+        # nr 4, GR2 Algorithm
+        query_graph_edges = [[8821,5139], [8821,8401],
+                             [5139,4878], [8401,10071],
+                             [4878,9837]]
+        node_attr = ["13", "21", "29", "30", "3", "5"]
+        #8821,5139; 13, 21
+        #8821,8401; 13, 29
+        #5139,4878; 21, 30
+        #8401,10071; 29, 3
+        #4878,9837; 30, 5
+        # Dar fara sa dea nici macar un rezultat?
 
         query_graph.add_edges_from(query_graph_edges)
 
