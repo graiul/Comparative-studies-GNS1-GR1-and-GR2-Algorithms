@@ -273,22 +273,25 @@ class GR2_Algorithm(object):
 
                 # !!! SAU AICI?
                 # !!! MAI ESTE NECESARA URMATOAREA SECTIUNE DE COD?
-                if len(partial_solution) == query_stwig_length:
-                    # La acest nivel, consumatorul va mai crea o solutie partiala validata care a mai fost creata deja.
-                    # Cand acest lucru se intampla, mai jos algoritmul isi va opri executia.
-                    # print("Consumer " + str(os.getpid()) + ": Partial solution: " + str(partial_solution))
+                # ## DIN GR1 Algorithm ####
+                # if len(partial_solution) == query_stwig_length:
+                #     # La acest nivel, consumatorul va mai crea o solutie partiala validata care a mai fost creata deja.
+                #     # Cand acest lucru se intampla, mai jos algoritmul isi va opri executia.
+                #     # print("Consumer " + str(os.getpid()) + ": Partial solution: " + str(partial_solution))
+                #
+                #     if partial_solution not in aux_partial_solutions_list:
+                #         # !!! Mai este necesara variabila "queue_for_printing"?
+                #         # Pentru grafurile query non-STwig variabila "self.complete_solutions"
+                #         # ar fi mai la indemana de pus in fisierul text de output, din moment ce
+                #         # contine rezultatele valide?
+                #         queue_for_printing.put(partial_solution)
+                #         # print("Consumer " + str(os.getpid()) + ": Partial solution: " + str(partial_solution))
+                #
+                #         aux_ps = copy.deepcopy(partial_solution)
+                #         aux_partial_solutions_list.append(aux_ps)
+                # ## DIN GR1 Algorithm ####
 
-                    if partial_solution not in aux_partial_solutions_list:
-                        # !!! Mai este necesara variabila "queue_for_printing"?
-                        # Pentru grafurile query non-STwig variabila "self.complete_solutions"
-                        # ar fi mai la indemana de pus in fisierul text de output, din moment ce
-                        # contine rezultatele valide?
-                        queue_for_printing.put(partial_solution)
-                        # print("Consumer " + str(os.getpid()) + ": Partial solution: " + str(partial_solution))
-
-                        aux_ps = copy.deepcopy(partial_solution)
-                        aux_partial_solutions_list.append(aux_ps)
-
+                # ## DIN GR1 Algorithm, dar nefolosite nici acolo ####
 
                         # print(aux_partial_solutions_list)
                     # elif partial_solution in aux_partial_solutions_list:
@@ -317,11 +320,14 @@ class GR2_Algorithm(object):
                     #         print("!!!")
                     #         root_node = 'STOP'
                     #         break
+                # ## DIN GR1 Algorithm, dar nefolosite nici acolo ####
 
                 output_queue.put(partial_solution)
                 partial_solution.remove(partial_solution[-1])
 
                 data_edge = copy.deepcopy(self.next_data_edge(partial_solution, dataGraph, query_graph_dict))
+
+                # ## DIN GR1 Algorithm, dar nefolosite nici acolo ####
 
             # if len(partial_solution) == query_stwig_length:
             #     queue_for_printing.put(partial_solution)
@@ -331,6 +337,8 @@ class GR2_Algorithm(object):
             #     root_node = 'STOP'
             #     print(root_node)
             #     # break
+
+                # ## DIN GR1 Algorithm, dar nefolosite nici acolo ####
 
             # docs.dask.org/en/latest/futures.html?highlight=queue#distributed.Queue.qsize
             if input_queue.qsize() > 0:
@@ -343,353 +351,6 @@ class GR2_Algorithm(object):
                 # output_queue.put(['STOP'])
                 root_node = 'STOP'
         output_queue.put(['STOP'])
-
-    # FOARTE IMPORTANT! TOATE COMPARARILE CU M SE FAC CU ULTIMA INTRARE, ADICA ULTIMA ASOCIERE. ASTFEL< PE RAND TOATA LISTA VA FI VERIFICATA O SINGURA DATA. DACA REIAU VERIFICAREA CU FIECARE ASOCIERE DIN LISTA
-    # DUPA SELECAREA FIECARUI CANDIDAT, VA REZULTA O LISTA GOALA A CANDIDATILOR RAFINATI.
-    # DAR, cateodata este nevoie doar de ultima intrare. Pentru o posibila rezolvare, am notat in comentarii deasupra metodei subgraphSearch.
-    # def refineCandidates(self, M, query_node, query_node_candidates):
-    #     Mq = []  # Set of matched query vertices
-    #     Mg = []  # Set of matched data vertices
-    #     Cq = []  # Set of adjacent and not-yet-matched query vertices connected from Mq
-    #     Cg = []  # Set of adjacent and not-yet-matched data vertices connected from Mg
-    #
-    #     # Conditia (1): Prune out v belonging to c(u) such that a vertex v is not connected from already matched data vertices.
-    #     # query_node = self.nextQueryVertex(query_graph)
-    #     # query_node_candidates = self.filterCandidates(query_node, query_graph, data_graph)
-    #     # print("------------INCEPUT EXECUTIE RAFINARE CANDIDATI-----------")
-    #     # print("QUERY NODE: " + str(query_node))
-    #     # print("CANDIDATES: " + str(query_node_candidates))
-    #
-    #     # print()
-    #     # print(M)
-    #     if len(M) == 0:
-    #         # print("\nNu avem valori pt Mq si Mg pentru ca nu avem o prima asociere inca.")
-    #         # print("Astfel, Cq si Cg vor avea toate nodurile din grafurile query, respectiv cel data.")
-    #         Cq = list(self.queryGraph.nodes())
-    #         Cg = list(self.dataGraph.nodes())
-    #
-    #     if len(M) > 0:
-    #         Mq.append(M[-1][0]) # Ce are a face cu ultima asociere?
-    #         Mg.append(M[-1][1]) # Folosesc -1 pentru a returna ultimul element din lista (https://stackoverflow.com/questions/930397/getting-the-last-element-of-a-list-in-python).
-    #         # Este necesar ca lista sa nu fie niciodata goala, ceea ce se rezolva foarte bine prin faptul ca lista va fi tot
-    #         # timpul initializata cu o asociere.
-    #         Cq.append(list(self.adj(M[-1][0], self.queryGraph)))
-    #         Cg.append(list(self.adj(M[-1][1], self.dataGraph)))
-    #         # print("Mq = " + str(Mq))
-    #         # print("Mg = " + str(Mg))
-    #         # print("Cq = " + str(Cq))
-    #         # print("Cg = " + str(Cg))
-    #         # Pentru fiecare candidat verificam conditia (1)
-    #
-    #     query_nodes_candidates_for_deletion = copy.deepcopy(query_node_candidates)
-    #     self.respectare_conditie_1 = False
-    #     self.respectare_conditie_2 = False
-    #     self.respectare_conditie_3 = False
-    #
-    #     # Conditia (1): Prune out candidate such that candidate is not connected from already matched data vertices.
-    #                     # Prune out candidate such that candidate is connected
-    #     # from not matched data vertices.
-    #
-    #     # print("\n     Conditia(1): ")
-    #     for candidate in query_node_candidates:
-    #         # print("\nCandidatul selectat: " + str(candidate))
-    #         # print("     Conditia(1):")
-    #         # for matching in M:
-    #         # last_matching = M[-1]
-    #         # print("     Matching (trebuie verificat pentru fiecare matching / asociere): " + str(matching))
-    #         # print("M: " + str(M))
-    #         # print(candidate)
-    #
-    #         delete_indicator = False
-    #         occurence_list = []
-    #
-    #         if len(M) == 0:
-    #             # Cateva detalii despre prima iteratie a rularii:
-    #             # print("Inca nu avem nici un matching, deci nu putem verifica 'such that candidate is not connected from already matched data vertices' ")
-    #             # print("Dar verificam daca exista muchie intre nodul candidat si celelalte noduri data. Facem acest lucru pentru a verifica si urmatoarele doua conditii.")
-    #             # print(
-    #             #     "Pentru ca nu avem inca asocieri in lista M, nu avem Mq si Mg. De aceea nu putem verifica Conditia(2) sau Conditia(3) pentru ca are nevoie de aceleasi doua liste Mq si Mg.")
-    #             # print(
-    #             #     "Conform p133han pentru rularea algoritmului este nevoie deja de o asociere existenta in lista M.")
-    #             # print(
-    #             #     "Din articolul p133han, http://www.vldb.org/pvldb/vol6/p133-han.pdf, sectiunea 3.3 VF2 Algorithm, explicatii pentru metoda NextQueryVertex: ")
-    #             # print(
-    #             #     "NextQueryVertex: Unlike Ullmann, VF2 starts with the first vertex and selects a vertex connected from the already matched query vertices. Note that the original VF2 algorithm does not define any order in which query vertices are selected.")
-    #             # print("'already matched query vertices.'")
-    #             # print("Deci avem nevoie de un matching la inceputul executarii algoritmului.")
-    #             # print(
-    #             #     "Astfel returnam candidatii cu care putem face asocierea primului nod al grafului query. Cu alte cuvinte, radacinile-candidat.")
-    #
-    #             return query_node_candidates
-    #
-    #         if len(M) > 0:
-    #
-    #             for data_node in self.dataGraph.nodes():
-    #                 # print("Nod data selectat pentru verificare: " + str(data_node))
-    #                 # Daca nodul data selectat a mai fost folosit
-    #                 if self.dataGraph.nodes[data_node]['matched'] == True:
-    #                     # print("Nodul " + str(data_node) + " este deja marcat ca fiind 'matched' ")
-    #                     # Atunci verificam sa nu fie adiacent lui
-    #                     # print("Lipseste in graful data muchia " + str([candidate, data_node]) + " ?")
-    #                     if self.dataGraph.has_edge(data_node, candidate) == False:
-    #                         if candidate in query_nodes_candidates_for_deletion:
-    #                             delete_indicator = True
-    #                             # print("Lipseste.")
-    #                             occurence_list.append("Lipseste")
-    #
-    #                     else:
-    #                         delete_indicator = False
-    #                         # print("Exista.")
-    #                         # print("Edge " + str([data_node, candidate]) + " exists.")
-    #                         occurence_list.append("Exista")
-    #                             # print("Nu exista muchie. Eliminam candidatul conform Conditiei 1.")
-    #                             # print("Muchia care nu exista: " + str([candidate, data_node]))
-    #                             # query_nodes_candidates_for_deletion.remove(candidate)
-    #                             # self.respectare_conditie_1 = False
-    #                             # break
-    #             # # A DOUA VARIANTA VECHE: foloseste lista M inversata.
-    #             # for matching in reversed(M):
-    #             #     print("Candidate: " + str(candidate))
-    #             #     print("Refinement: " + str(matching))
-    #             #     # # PRIMA VARIANTA VECHE: cautarea in lista M care contine elementele in ordinea inserarii.
-    #             #     # if self.data_graph.has_edge(candidate, matching[1]) is False:
-    #             #     #     # print("         Conditia(1) intra in vigoare, astfel avem:")
-    #             #     #     # print("         *Nu exista muchie intre " + str(candidate) + " si " + str(matching[1]) + ". Se va sterge candidatul " + str(candidate) + ".")
-    #             #     #     # print("         *Nu se mai verifica pentru Conditia(2), ci verificam Conditia(2) pentru candidatii care au trecut.")
-    #             #     #     for neighbor in self.data_graph.neighbors(matching[1]):
-    #             #     #         if neighbor is matching[1]:
-    #             #     #             if self.data_graph.has_edge(candidate, neighbor) is True:
-    #             #     #                 print("Has edge. Trece regula 1.\n")
-    #             #     #                 self.respectare_conditie_1 = True
-    #             #     #                 break
-    #             #     # else:
-    #             #     #     break
-    #             #
-    #             #     if self.data_graph.has_edge(candidate, matching[1]) is False:
-    #             #         if candidate in query_nodes_candidates_for_deletion:
-    #             #             query_nodes_candidates_for_deletion.remove(candidate) # Am putut sa fac remove unui element din lista direct in bucla foreach. NU SE FAC STERGERI DIN LISTA IN ACELASI TIMP CU ITERAREA!
-    #             #             self.respectare_conditie_1 = False
-    #
-    #         # print(occurence_list)
-    #         # exit(0)
-    #
-    #         if len(occurence_list) == 0:
-    #             return query_node_candidates
-    #
-    #         if len(occurence_list) == 1:
-    #             if occurence_list[0] == "Lipseste":
-    #                 # print("Nu exista muchie. Eliminam candidatul conform Conditiei 1.")
-    #                 # print("Muchia care nu exista: " + str([candidate, data_node]))
-    #                 query_nodes_candidates_for_deletion.remove(candidate)
-    #                 self.respectare_conditie_1 = False
-    #
-    #         if len(occurence_list) == 1:
-    #             if occurence_list[0] == "Exista":
-    #                 # print("Exista muchia. Trece Conditia (1).")
-    #                 # print()
-    #                 self.respectare_conditie_1 = True
-    #
-    #
-    #         if len(occurence_list) > 1:
-    #             if occurence_list[-1] == "Lipseste":
-    #                 if occurence_list[-2] == "Lipseste":
-    #                     # print("Nu exista muchie. Eliminam candidatul conform Conditiei 1.")
-    #                     # print("Muchia care nu exista: " + str([candidate, data_node]))
-    #                     query_nodes_candidates_for_deletion.remove(candidate)
-    #                     self.respectare_conditie_1 = False
-    #
-    #                 if occurence_list[-2] == "Exista":
-    #                     # print("Exista muchia. Trece Conditia (1).")
-    #                     # print()
-    #                     self.respectare_conditie_1 = True
-    #
-    #             if occurence_list[-1] == "Exista":
-    #                 # print("Exista muchia. Trece Conditia (1).")
-    #                 # print()
-    #                 self.respectare_conditie_1 = True
-    #             # if occurence_list.count("Exista") > occurence_list.count("Lipseste"):
-    #             #     print("Exista muchia. Trece Conditia (1).")
-    #             #     print()
-    #             #     self.respectare_conditie_1 = True
-    #             # if occurence_list.count("Exista") < occurence_list.count("Lipseste"):
-    #             #     if candidate in query_nodes_candidates_for_deletion:
-    #             #
-    #             #         print("Nu exista muchie. Eliminam candidatul conform Conditiei 1.")
-    #             #         print("Muchia care nu exista: " + str([candidate, data_node]))
-    #             #         query_nodes_candidates_for_deletion.remove(candidate)
-    #             #         self.respectare_conditie_1 = False
-    #
-    #         # print("         Candidatii lui " + str(query_node) + " dupa Conditia(1)")# + " actualizati in functie de conditia (1) al VF2: ")
-    #         # print("         " + str(query_nodes_candidates_for_deletion))
-    #         # print()
-    #
-    #         # Pentru fiecare candidat trebuie verificata si Conditia (2): Prune out any vertex v in c(u) such that |Cq intersected with adj(u)| > |Cg intersected with adj(v)|
-    #         if self.respectare_conditie_1:
-    #             # print("     Conditia(2):")
-    #
-    #             first_intersection = []
-    #             adjQueryNode = list(self.adj(query_node, self.queryGraph)) # Retin candidatii in ordine lexicografic crescatoare.
-    #             for xx in adjQueryNode:
-    #                 for yy in Cq[-1]: # Aici e lista in lista.
-    #                     if xx == yy:
-    #                         first_intersection.append(xx)
-    #             second_intersection = []
-    #             adjCandidate = list(self.adj(candidate, self.dataGraph))
-    #             for xx in adjCandidate:
-    #                 for yy in Cg[-1]:
-    #                     if xx == yy:
-    #                         second_intersection.append(xx)
-    #             # print("         Facut intersectiile de la Conditia (2)")
-    #             # print("         " + str(len(first_intersection)))
-    #             # print("         " + str(len(second_intersection)))
-    #             # print("For breakpoint.")
-    #             # print("Cardinalul primei intersectii > decat celei de a doua?")
-    #             if len(first_intersection) > len(second_intersection):
-    #                 # print("         Conditia(2) intra in vigoare, astfel avem:")
-    #                 # print("         Cardinalul primei intersectii este mai mare decat cea de-a doua. Se va sterge candidatul " + str(candidate) + ".")
-    #                 if candidate in query_nodes_candidates_for_deletion:
-    #                     query_nodes_candidates_for_deletion.remove(candidate)
-    #                     # print("         Candidatii lui " + str(query_node))
-    #                     # print("         " + str(query_nodes_candidates_for_deletion))
-    #                     # print()
-    #                     self.respectare_conditie_2 = False
-    #             else:
-    #                 # print("         Nu. Trece Conditia (2).")
-    #                 # print()
-    #                 self.respectare_conditie_2 = True
-    #
-    #             # print("         Candidatii lui " + str(query_node) + " dupa Conditia (2):")
-    #             # print("         " + str(query_nodes_candidates_for_deletion))
-    #             # print()
-    #             if self.respectare_conditie_2 is True:
-    #                 # print("     Conditia(3):")
-    #
-    #                 for cq_elem in Cq:
-    #                     for cq_elem_node in cq_elem:
-    #                         if cq_elem_node in adjQueryNode:
-    #                             adjQueryNode.remove(cq_elem_node)
-    #                 for mq_elem_node in Mq:
-    #                     if mq_elem_node in adjQueryNode:
-    #                         adjQueryNode.remove(mq_elem_node)
-    #
-    #                 for cg_elem in Cg:
-    #                     for cg_elem_node in cg_elem:
-    #                         if cg_elem_node in adjCandidate:
-    #                             adjCandidate.remove(cg_elem_node)
-    #                 for mg_elem_node in Mg:
-    #                     if mg_elem_node in adjCandidate:
-    #                         adjCandidate.remove(mg_elem_node)
-    #
-    #                 # print("Este primul cardinal mai mare decat al doilea?")
-    #                 if len(adjQueryNode) > len(adjCandidate):
-    #                     # print("         Facut intersectiile si scaderile de la c3")
-    #                     # print("         " + str(len(adjQueryNode)))
-    #                     # print("         " + str(len(adjCandidate)))
-    #                     # print("         Conditia(3) intra in vigoare, astfel avem:")
-    #                     # print("         *Cardinalul primei intersectii cu scaderi este mai mare decat cea de-a doua. Se va sterge candidatul " + str(candidate) + ".")
-    #                     if candidate in query_nodes_candidates_for_deletion:
-    #                         query_nodes_candidates_for_deletion.remove(candidate)
-    #                         self.respectare_conditie_3 = False
-    #                         # print("         Candidatii lui " + str(query_node))
-    #                         # print("         " + str(query_nodes_candidates_for_deletion))
-    #                         # print()
-    #                         # self.respectare_conditie_2 = False
-    #                 else:
-    #                     self.respectare_conditie_3 = True
-    #                     # print("         Nu. Candidatul " + str(candidate) + " a trecut de toate cele 3 filtre / conditii.")
-    #                 # print("         Candidatii finali ai lui " + str(query_node))
-    #                 # print("         " + str(query_nodes_candidates_for_deletion))
-    #                 # print()
-    #     if len(query_nodes_candidates_for_deletion) == 0:
-    #         return None
-    #     # VECHI: Conditia 1 am adaptat-o pe loc mai sus.
-    #     # Mai jos se afla si Conditia 2 si 3 functionale, dar fara blocari(trecerea la candidatul urmator) daca un candidat nu a trecut de o conditie, si fara verificari daca exista candidatul care trebuie eliminat.
-    #     # De asemenea, nu folosesc o copie din care voi fi facut eliminarea de candidati, avand astfel un rezultat eronat.
-    #     # print()
-    #     # # for candidate in query_node_candidates:
-    #     # # |Cq intersected with adj(u)| > |Cg intersected with adj(v)|
-    #     # # print("Prima intersectie din conditia (2): ")
-    #     # first_intersection = []
-    #     # # print("adj(queryNode):")
-    #     # adjQueryNode = sorted(list(self.adj(query_node, self.query_graph))) # Retin candidatii in ordine lexicografic crescatoare.
-    #     # # print(adjQueryNode)
-    #     # # print("Cq: ")
-    #     # # print(Cq)
-    #     # for xx in adjQueryNode:
-    #     #     for yy in Cq[-1]:
-    #     #         if xx == yy:
-    #     #             first_intersection.append(xx)
-    #     #
-    #     # # print("A doua intersectie din conditia (2): ")
-    #     # second_intersection = []
-    #     # # print("adj(candidate):")
-    #     # adjCandidate = sorted(list(self.adj(candidate, self.data_graph)))
-    #     # # print(adjCandidate)
-    #     # # print("Cg: ")
-    #     # # print(Cg)
-    #     #
-    #     # for xx in adjCandidate:
-    #     #     for yy in Cg[-1]:
-    #     #         if xx == yy:
-    #     #             second_intersection.append(xx)
-    #     # # print("|Cq intersected with adj(u)| > |Cg intersected with adj(v)| ?")
-    #     # # print(str(len(first_intersection)) + " > " + str(len(second_intersection)) + " ?")
-    #     # if len(first_intersection) > len(second_intersection):
-    #     #     print("     Se va sterge candidatul " + str(candidate) + ".")
-    #     #     if candidate in query_node_candidates:
-    #     #         query_node_candidates.remove(candidate)
-    #     # print()
-    #     #
-    #     # print("Candidatii lui u2 actualizati in functie de conditia (1) si (2) al VF2: ")
-    #     # print(query_node_candidates)
-    #
-    #     # # Pentru fiecare candidat verificam si Conditia(3): prune out any vertex v in C(u) such that |adj(u) \ Cq \Mq| > |adj(v) \ Cg \Mg|
-    #     # print()
-    #     # print("Conditia(3): ")
-    #     # # for candidate in query_node_candidates:
-    #     # # print("|adj(u) \ Cq \Mq|:")
-    #     # # print("adjQueryNode = " + str(adjQueryNode))
-    #     # # print("Cq = " + str(Cq))
-    #     # # print("Mq = " + str(Mq))
-    #     # # print(type(adjQueryNode))
-    #     # for cq_elem in Cq:
-    #     #     for cq_elem_node in cq_elem:
-    #     #         if cq_elem_node in adjQueryNode:
-    #     #             adjQueryNode.remove(cq_elem_node)
-    #     # for mq_elem_node in Mq:
-    #     #     if mq_elem_node in adjQueryNode:
-    #     #         adjQueryNode.remove(mq_elem_node)
-    #     # # print("adjQueryNode = " + str(adjQueryNode))
-    #     # # print("len(adjQueryNode) = " + str(len(adjQueryNode)))
-    #     #
-    #     # # print()
-    #     # # print("|adj(v) \ Cg \Mg|:")
-    #     # # print("adjCandidate = " + str(adjCandidate))
-    #     # # print("Cg = " + str(Cg))
-    #     # # print("Mg = " + str(Mg))
-    #     # # print(type(adjCandidate))
-    #     # for cg_elem in Cg:
-    #     #     for cg_elem_node in cg_elem:
-    #     #         if cg_elem_node in adjCandidate:
-    #     #             adjCandidate.remove(cg_elem_node)
-    #     # for mg_elem_node in Mg:
-    #     #     if mg_elem_node in adjCandidate:
-    #     #         adjCandidate.remove(mg_elem_node)
-    #     # # print("adjCandidate = " + str(adjCandidate))
-    #     # # print("len(adjCandidate) = " + str(len(adjCandidate)))
-    #     # # print("|adj(u) \ Cq \Mq| > |adj(v) \ Cg \Mg| ?")
-    #     # if len(adjQueryNode) > len(adjCandidate):
-    #     #     if candidate in query_node_candidates:
-    #     #         query_node_candidates.remove(candidate) # De pus si conditii in cazul in care nodul respectiv nu mai exista, daca a fost eliminat deja de una din primele doua conditii.
-    #     # # print("Candidatii lui u2 actualizati in functie de conditia (1) si (2) al VF2: ")
-    #     # # print(query_node_candidates)
-    #     # print("---------------------\n")
-    #     # print("------------SFARSIT EXECUTIE RAFINARE CANDIDATI-----------")
-    #     return query_nodes_candidates_for_deletion
-    #
-    #     # Adaug in M o noua asociere. Voi alege doar primul candidat din lista de candidati care au ramas dupa regulile de refinement.
-    #     # self.M.append([query_node, query_node_candidates[0]])
-
 
     # Pentru ca un consumator sa preia nume noi de la consumatorul precedent treb folosita o bucla infinita care sa
     # caute intr-o coada si sa prelucreze in continuare. Acea coada va trebui sa fie:
@@ -1055,9 +716,9 @@ class GR2_Algorithm(object):
 
         total_time = timer() - start_time
         # total_time = time.clock() - start_time
-        print("Total execution time: " + str(total_time) + " seconds.")
-        print("Solutii complete de pus in fisier scris: ")
-        print(self.complete_solutions)
+        # print("Total execution time: " + str(total_time) + " seconds.")
+        # print("Solutii complete de pus in fisier scris: ")
+        # print(self.complete_solutions)
 
         # stackoverflow.com/questions/11700593/creating-files-and-directories-via-python
         import os
@@ -1537,7 +1198,7 @@ class GR2_Algorithm(object):
                 c_sol = copy.deepcopy(partial_solution)
                 # print(is_joinable(3, [1,2], data_graph, query_graph_dict))
                 # self.complete_solutions.append(c_sol)
-                print(c_sol)
+                # print(c_sol)
                 # print(self.complete_solutions)
                 return True
                 # for c_sol_elem in c_sol:
