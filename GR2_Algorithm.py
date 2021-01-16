@@ -22,6 +22,10 @@
 # sau cel putin sa coincida cu numarul maxim de procese al GR2 Algorithm
 # (producator + consumatori)
 #
+# 16 IAN 2021:
+# Probabil unele rezutlate apar de doua sau mai multe ori, avand ordinea nodurilor
+# diferita, dar mai trebuie sa verific. Nu cred ca sunt rezultate omise.
+#
 # 14 IAN 2021:
 # Apelez bine metoda cu criteriile de validare al solutiilor partiale?
 # A pus "!!!" in metoda consumatorilor ca sa investighez.
