@@ -285,7 +285,12 @@ class Toolbox_Gheorghica_Radu_Iulian(object):
         # # print(edge_list_integer_ids)
 
         dataGraph = nx.Graph()
-        dataGraph.add_edges_from(sorted(edge_list_integer_ids))
+        # dataGraph = nx.DiGraph()
+
+        # dataGraph.add_edges_from(sorted(edge_list_integer_ids))
+        dataGraph.add_edges_from(edge_list_integer_ids)
+
+
         cqlQuery2 = "MATCH (n) return n.node_id, n.node_label"
         result2 = neograph_data.run(cqlQuery2).to_ndarray()
         # # print("result2: ")
