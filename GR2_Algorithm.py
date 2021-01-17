@@ -564,9 +564,10 @@ class GR2_Algorithm(object):
         print("Number of consumers: ")
         print(number_of_consumers)
         print()
-        if number_of_consumers == 0:
-            print(a.result())
+
         # simplifiedpython.net/python-switch-case-statement/
+        # if number_of_consumers == 0:
+        #     print(a.result())
         if number_of_consumers == 1:
             # query_stwig_leaf_node1 = self.query_graph[1]
             # query_stwig_leaf_node_label1 = self.query_graph[1][1]
