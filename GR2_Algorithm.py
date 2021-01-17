@@ -122,7 +122,14 @@
 #                              [8585,7271], [11353,7272], ]
 #         node_attr = ["12", "1", "3", "10", "19"]
 #
-
+# 17 IAN 2021: Secretul este alegerea grafurilor query
+# din graful data convertit la a fi neorientat.
+# Daca se alege graf query din graful data orientat,
+# si se cauta dupa aparitii in acelasi graf data facut
+# neorientat, acest graf data neorientat poate sa aiba
+# muchii lipsa. De aceea in unele cazuri lipseau
+# rezultate, chiar si cateodata aparitia garantata
+# al grafului query.
 
 
 
