@@ -208,7 +208,10 @@ class GR2_Algorithm(object):
         # print(query_stwig_root_node_id)
         # print(query_stwig_root_node_label)
         # print()
+
         dataGraph = nx.Graph()
+        # dataGraph = nx.DiGraph()
+
         dataGraph.add_edges_from(data_graph_edges)
         nx.set_node_attributes(dataGraph, node_attributes_dictionary, 'label')
         print(len(data_graph_edges))
@@ -427,6 +430,9 @@ class GR2_Algorithm(object):
         queue_of_finished_products_7 = Queue()
         partial_solutions = Queue()
         queue_for_printing = Queue()
+
+        # data_edges_for_debugger = list(self.data_graph.edges())
+
 
     # ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
     #     # Aici cream un obiect graf query:
