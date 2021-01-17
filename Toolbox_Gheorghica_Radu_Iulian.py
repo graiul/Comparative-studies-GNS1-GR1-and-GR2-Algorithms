@@ -266,6 +266,14 @@ class Toolbox_Gheorghica_Radu_Iulian(object):
     def get_query_graph_as_dict_with_edges_as_keys_and_node_label_values_non_stwig(self):
         pass
 
+    # Metoda "obtain_data_graph"
+    # are acum graful data de tip
+    # "nx.DiGraph()", pentru a fi
+    # folosita la GR2 Algorithm.
+    # Pentru GR1 Algorithm, graful
+    # respectiv avea tipul
+    # "nx.Graph()", adica
+    # neorientat.
     def obtain_data_graph(self):
         ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
         # GRAFUL DATA DIN NEO4J
@@ -284,8 +292,8 @@ class Toolbox_Gheorghica_Radu_Iulian(object):
         # # print("edge_list_integer_ids: ")
         # # print(edge_list_integer_ids)
 
-        dataGraph = nx.Graph()
-        # dataGraph = nx.DiGraph()
+        # dataGraph = nx.Graph()
+        dataGraph = nx.DiGraph()
 
         # dataGraph.add_edges_from(sorted(edge_list_integer_ids))
         dataGraph.add_edges_from(edge_list_integer_ids)
