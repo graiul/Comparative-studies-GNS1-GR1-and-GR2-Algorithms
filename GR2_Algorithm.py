@@ -216,8 +216,8 @@ class GR2_Algorithm(object):
         # print(query_stwig_root_node_label)
         # print()
 
-        dataGraph = nx.Graph()
-        # dataGraph = nx.DiGraph()
+        # dataGraph = nx.Graph()
+        dataGraph = nx.DiGraph()
 
         dataGraph.add_edges_from(data_graph_edges)
         nx.set_node_attributes(dataGraph, node_attributes_dictionary, 'label')
@@ -243,7 +243,7 @@ class GR2_Algorithm(object):
                     # if query_stwig_root_node_label == dataGraph.nodes[node]['label']:
     ################ AICI APELEZ FILTRELE SI CONDITIILE DIN GNS2 NonRecursiv ( = XDS NonRecursiv).
                 # data_edge = copy.deepcopy(self.next_data_edge([], dataGraph, query_graph_dict))
-                # print(data_edge)
+                print(data_edge)
                 # print("Positions[0]: ")
                 # print(self.positions[0])
                 # Instructiunea originala din GR1 Algorithm
@@ -267,7 +267,10 @@ class GR2_Algorithm(object):
     def consumer(self, input_queue, output_queue, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing, query_graph_dict):
         print("\nStarting consumer " + str(os.getpid()))
 
-        dataGraph = nx.Graph()
+        # dataGraph = nx.Graph()
+        dataGraph = nx.DiGraph()
+
+
         dataGraph.add_edges_from(data_graph_edges)
         nx.set_node_attributes(dataGraph, node_attributes_dictionary, 'label')
 
@@ -306,7 +309,9 @@ class GR2_Algorithm(object):
                 #     self.complete_solutions.append(partial_solution)
                     # queue_for_printing.put(partial_solution)
 
-                self.validate_partial_solution(partial_solution, query_graph_nx_obj, self.complete_solutions)
+                # self.validate_partial_solution(partial_solution, query_graph_nx_obj, self.complete_solutions)
+                if len(partial_solution) == len(list(query_graph_nx_obj.edges())):
+                    print(partial_solution)
 
                 # !!! 14 IAN 2021, 22:30
                 # CE TREBUIE FACUT DUPA CE AM VALIDAT SOLUTIA?
@@ -559,6 +564,8 @@ class GR2_Algorithm(object):
         print("Number of consumers: ")
         print(number_of_consumers)
         print()
+        if number_of_consumers == 0:
+            print(a.result())
         # simplifiedpython.net/python-switch-case-statement/
         if number_of_consumers == 1:
             # query_stwig_leaf_node1 = self.query_graph[1]
@@ -835,11 +842,7 @@ class GR2_Algorithm(object):
 
         # 812,4133 DE GASIT PENTRU PRODUCATOR
         for edge in sorted(list(data_graph.edges())):
-            # if edge == (812, 4133):
-            #     print("Edge: ")
-            #     print(edge)
-                # exit(0)
-                # break
+
             if self.is_joinable(edge, partial_solution, data_graph, query_edges_dict):
                 return edge
         return None
@@ -978,6 +981,19 @@ class GR2_Algorithm(object):
                 #     [data_graph.nodes[data_edge_to_be_joined[0]]['label'],
                 #      data_graph.nodes[data_edge_to_be_joined[1]]['label']]))
                 # print("     Candidate data graph edge nodes id: " + str(data_edge_to_be_joined))
+
+                # Pentru primul IF.
+                # label_1 = list(query_edges_dict.items())[0][1][0]
+                # label_2 = data_edge_to_be_joined_node_0_label
+                # label_3 = list(query_edges_dict.items())[0][1][0]
+                # label_4 = data_edge_to_be_joined_node_1_label
+
+                label_1 = list(query_edges_dict.items())[0][1][1]
+                label_2 = data_edge_to_be_joined_node_1_label
+                label_3 = list(query_edges_dict.items())[0][1][1]
+                label_4 = data_edge_to_be_joined_node_0_label
+
+                # Primul IF e bun
                 if list(query_edges_dict.items())[0][1][0] == data_edge_to_be_joined_node_0_label or \
                         list(query_edges_dict.items())[0][1][0] == data_edge_to_be_joined_node_1_label:
                     # print("YES")
@@ -990,28 +1006,14 @@ class GR2_Algorithm(object):
                         finder = EdgeFinderTool(data_edge_to_be_joined, self.positions[0])
                         found = finder.edge_found()
                         if found is False:
-                            # if data_edge_to_be_joined not in positions[0]:
-                            found_valid_data_edge = True
+                        #     found_valid_data_edge = True
                             aux = copy.deepcopy(partial_solution)
                             aux.append(data_edge_to_be_joined)
-                            # print("Appended data edge: ")
-                            # print(data_edge_to_be_joined)
-                            # print("Reversed data edge to avoid final results duplicates: ")
-                            # reversed_data_edge = (data_edge_to_be_joined[1], data_edge_to_be_joined[0])
-                            # print(reversed_data_edge)
-                            # print()
+
                             pos = aux.index(aux[-1])
                             self.positions[pos].append(data_edge_to_be_joined)
-                            # positions[pos].append(reversed_data_edge)
-                            # print("Log for position 0: ")
-                            # print(positions[pos])
+                            return True
 
-                            #####################################################################
-                            #             matched_true_false_data_nodes_pos_0_dict[data_node_to_be_joined] = True
-                            #             break
-                            #####################################################################
-                            # print("     " + Fore.GREEN + Style.BRIGHT + "Positions log after appending first position data edge: " + str(list(positions.items())) + Style.RESET_ALL)
-                            # print()
                     else:
                         # print("     Data edge is not valid for this.")
                         pass
@@ -1236,7 +1238,10 @@ class GR2_Algorithm(object):
     # Pentru verificare folosind metoda "is_isomorphic" nu este nevoie de
     # labeluri ale nodurilor ci doar de adiacenta celor doua grafuri.
     def validate_partial_solution(self, partial_solution, query_graph, complete_solutions):
-        partial_solution_data_subgraph = nx.Graph()
+        # partial_solution_data_subgraph = nx.Graph()
+        partial_solution_data_subgraph = nx.DiGraph()
+
+
         partial_solution_data_subgraph.add_edges_from(partial_solution)
 
         # print()
