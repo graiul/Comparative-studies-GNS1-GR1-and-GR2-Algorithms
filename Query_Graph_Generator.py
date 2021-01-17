@@ -625,7 +625,10 @@ class Query_Graph_Generator(object):
         # nu apare ca si solutie partiala DE LOC graful query
         # care este el insusi de fapt O APARITIE GARANTATA.
         query_graph_edges = [[812,4133], [812,7707], [812,8161]]#, [812,9831], [812,12067]]
+        # query_graph_edges = [[4133,812], [812,7707], [812,8161]]#, [812,9831], [812,12067]]
         node_attr = ["16", "28", "24", "25"]#, "30", "9"]
+        # node_attr = ["28", "16", "24", "25"]#, "30", "9"]
+
         # 812,4133
         # 812,7707
         # 812,8161
