@@ -1273,7 +1273,7 @@ class GR2_Algorithm(object):
                     c_sol = copy.deepcopy(partial_solution)
                     # print(is_joinable(3, [1,2], data_graph, query_graph_dict))
                     # self.complete_solutions.append(c_sol)
-                    # print(c_sol)
+                    print(c_sol)
                     # print(self.complete_solutions)
                     return True
                     # for c_sol_elem in c_sol:
