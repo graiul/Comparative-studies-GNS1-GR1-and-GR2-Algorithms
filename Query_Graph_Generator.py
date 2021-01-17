@@ -13,7 +13,9 @@ class Query_Graph_Generator(object):
         return query_graph
 
     def gen_RI_query_graph(self):
-        query_graph = nx.Graph()
+        # query_graph = nx.Graph()
+        query_graph = nx.DiGraph()
+
 
         # query_graph_edges = [[1773, 1488]]
         # node_attr = ["25", "28"]
@@ -617,23 +619,21 @@ class Query_Graph_Generator(object):
         # Ca sa fiu sigur de atribuirea corecta al labelurilor pentru ID-uri,
         # am pus ID-urile in ordinea urmatoare,
         # iar urmand ordinea aceea, am scris labelurile mai jos.
-        # query_graph_edges = [[8585,11353], [8585,4341],
-        #                      [8585,7271], [11353,7272], ]
-        # node_attr = ["12", "1", "3", "10", "19"]
+        query_graph_edges = [[8585,11353], [8585,4341]] #,
+                             #[8585,7271], [11353,7272], ]
+        node_attr = ["12", "1", "3"]#, "10", "19"]
 
         # nr 4, GR2 Algorithm, pb este ca
         # nu apare ca si solutie partiala DE LOC graful query
         # care este el insusi de fapt O APARITIE GARANTATA.
-        query_graph_edges = [[812,4133], [812,7707], [812,8161]]#, [812,9831], [812,12067]]
+        # query_graph_edges = [[812,4133], [812,7707], [812,8161]]#, [812,9831], [812,12067]]
         # query_graph_edges = [[4133,812], [812,7707], [812,8161]]#, [812,9831], [812,12067]]
-        node_attr = ["16", "28", "24", "25"]#, "30", "9"]
+        # node_attr = ["16", "28", "24", "25"]#, "30", "9"]
         # node_attr = ["28", "16", "24", "25"]#, "30", "9"]
 
-        # 812,4133
-        # 812,7707
-        # 812,8161
-        # 812,9831
-        # 812,12067
+        # nr 5, GR2 Algorithm
+        # query_graph_edges = [[812, 7707], [812, 8161], [812, 9831]]
+        # node_attr = ["16", "24", "25", "30"]
 
         query_graph.add_edges_from(query_graph_edges)
 
