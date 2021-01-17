@@ -211,7 +211,13 @@ class GR2_Algorithm(object):
         dataGraph = nx.Graph()
         dataGraph.add_edges_from(data_graph_edges)
         nx.set_node_attributes(dataGraph, node_attributes_dictionary, 'label')
+        print(len(data_graph_edges))
+        print(len(dataGraph.edges()))
 
+    # for edge in list(dataGraph.edges()):
+            # if edge == (812, 4133):
+            # print("Edge: ")
+            # print(edge)
 
         # ACEASTA E RAMURA CARE AM FOLOSIT-O SI IN GR1_Algorithm.
         # Si anume in clasa Main-Menu optiunea 13.
@@ -808,14 +814,14 @@ class GR2_Algorithm(object):
     # Se poate sa fie datorita partitionarii grafului data pe procese
     # de catre DASK, chiar daca imi afiseaza nr complet de muchii, len(data_graph.edges()).
     def next_data_edge(self, partial_solution, data_graph, query_edges_dict):
-        print("EXECUTIE METODA next_data_edge: ")
+        # print("EXECUTIE METODA next_data_edge: ")
         # print(len(data_graph.edges()))
 
         # 812,4133 DE GASIT PENTRU PRODUCATOR
         for edge in sorted(list(data_graph.edges())):
-            print("Edge: ")
-            print(edge)
             # if edge == (812, 4133):
+            #     print("Edge: ")
+            #     print(edge)
                 # exit(0)
                 # break
             if self.is_joinable(edge, partial_solution, data_graph, query_edges_dict):
