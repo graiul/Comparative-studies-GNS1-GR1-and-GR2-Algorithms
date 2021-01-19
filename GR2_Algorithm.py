@@ -221,8 +221,8 @@ class GR2_Algorithm(object):
 
         dataGraph.add_edges_from(data_graph_edges)
         nx.set_node_attributes(dataGraph, node_attributes_dictionary, 'label')
-        print(len(data_graph_edges))
-        print(len(dataGraph.edges()))
+        # print(len(data_graph_edges))
+        # print(len(dataGraph.edges()))
 
     # for edge in list(dataGraph.edges()):
             # if edge == (812, 4133):
@@ -243,7 +243,7 @@ class GR2_Algorithm(object):
                     # if query_stwig_root_node_label == dataGraph.nodes[node]['label']:
     ################ AICI APELEZ FILTRELE SI CONDITIILE DIN GNS2 NonRecursiv ( = XDS NonRecursiv).
                 # data_edge = copy.deepcopy(self.next_data_edge([], dataGraph, query_graph_dict))
-                print(data_edge)
+                # print(data_edge)
                 # print("Positions[0]: ")
                 # print(self.positions[0])
                 # Instructiunea originala din GR1 Algorithm
@@ -843,7 +843,8 @@ class GR2_Algorithm(object):
 
         # 812,4133 DE GASIT PENTRU PRODUCATOR
         for edge in sorted(list(data_graph.edges())):
-
+            # if edge == (8585,11353):
+            #     print("GASIT")
             if self.is_joinable(edge, partial_solution, data_graph, query_edges_dict):
                 return edge
         return None
@@ -1023,6 +1024,7 @@ class GR2_Algorithm(object):
                     pass
 
         if len(partial_solution) == 1:
+            nod_comun = False
             # print("\nWe entered the execution for the second element: ")
             ########################################################
             # Pentru VF2
@@ -1049,34 +1051,34 @@ class GR2_Algorithm(object):
                             aux.append(data_edge_to_be_joined)
 
                             pos = aux.index(aux[-1])
-                            if aux not in self.complete_solutions:
+                            # if aux not in self.complete_solutions:
                                 # Verificam daca label-ul primei frunze al STwig-ului query are aceeasi valoare ca si label-ul nodului data primit ca si parametru
                                 # si care sa cauta pentru pozitia primei frunze.
 
                                 # Trebuie sa existe muchie intre nodul de pe prima poz a sol partiale actuale(radacina), deci tot timpul ultimul nod
                                 # din log-ul nodurilor care se afla pe prima pozitie
-                                for e in partial_solution:
-                                    # if data_graph.has_edge(positions[0][len(positions[0]) - 1], data_node_to_be_joined):
-                                    if data_graph.has_edge(e[0], data_edge_to_be_joined[0]) or \
-                                            data_graph.has_edge(e[0], data_edge_to_be_joined[1]) or \
-                                            data_graph.has_edge(e[1], data_edge_to_be_joined[0]) or \
-                                            data_graph.has_edge(e[1], data_edge_to_be_joined[1]):
-                                        # print("     Has edge with previous position(s)")
+                            for e in partial_solution:
+                                # if data_graph.has_edge(positions[0][len(positions[0]) - 1], data_node_to_be_joined):
+                                if data_graph.has_edge(e[0], data_edge_to_be_joined[0]) or \
+                                        data_graph.has_edge(e[0], data_edge_to_be_joined[1]) or \
+                                        data_graph.has_edge(e[1], data_edge_to_be_joined[0]) or \
+                                        data_graph.has_edge(e[1], data_edge_to_be_joined[1]):
+                                    # print("     Has edge with previous position(s)")
 
-                                        # print("Label of the first leaf of the query STwig: " + str(list(query_stwig_as_dict.items())[1][1]))
-                                        # print("Label of data node verified: " + str(data_node_label))
-                                        # if list(query_stwig_as_dict.items())[1][1] == data_node_label:
+                                    # print("Label of the first leaf of the query STwig: " + str(list(query_stwig_as_dict.items())[1][1]))
+                                    # print("Label of data node verified: " + str(data_node_label))
+                                    # if list(query_stwig_as_dict.items())[1][1] == data_node_label:
 
-                                        #####################################################################
-                                        # if matched_true_false_data_nodes_pos_1_dict[data_node_to_be_joined] == False:
-                                        ######################################################################
+                                    #####################################################################
+                                    # if matched_true_false_data_nodes_pos_1_dict[data_node_to_be_joined] == False:
+                                    ######################################################################
 
-                                        found_valid_data_edge = True
-                                        finder2 = EdgeFinderTool(aux[-1], self.positions[pos])
-                                        found2 = finder2.edge_found()
-                                        if found2 is False:
-                                            # if aux[-1] not in positions[pos]:
-                                            self.positions[pos].append(aux[-1])  # aux[-1] e data_edge_to_be_joined
+                                    # found_valid_data_edge = True
+                                    finder2 = EdgeFinderTool(aux[-1], self.positions[pos])
+                                    found2 = finder2.edge_found()
+                                    if found2 is False:
+                                        # if aux[-1] not in positions[pos]:
+                                        self.positions[pos].append(aux[-1])  # aux[-1] e data_edge_to_be_joined
                                             # print("Appended data edge: ")
                                             # print(aux[-1])
                                             # print("Reversed data edge to avoid final results duplicates: ")
@@ -1084,8 +1086,18 @@ class GR2_Algorithm(object):
                                             # print(reversed_data_edge)
                                             # print()
                                             # positions[pos].append(reversed_data_edge)
-
-                                    #####################################################################
+                                        return True
+                                elif data_edge_to_be_joined[0] in e:
+                                    nod_comun = True
+                                elif data_edge_to_be_joined[1] in e:
+                                    nod_comun = True
+                                if nod_comun:
+                                    finder2 = EdgeFinderTool(aux[-1], self.positions[pos])
+                                    found2 = finder2.edge_found()
+                                    if found2 is False:
+                                        self.positions[pos].append(aux[-1])
+                                        return True
+                            #####################################################################
                                     #     matched_true_false_data_nodes_pos_1_dict[data_node_to_be_joined] = True
                                     #     break
                                     #####################################################################
