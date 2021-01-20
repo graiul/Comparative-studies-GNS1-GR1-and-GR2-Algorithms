@@ -131,6 +131,9 @@
 # rezultate, chiar si cateodata aparitia garantata
 # al grafului query.
 
+# 20 IAN 2021:
+# De mentionat in articol ca numarul de muchii poate fi
+# ridicat foarte mult.
 
 
 
