@@ -16,6 +16,10 @@ class Toolbox_Gheorghica_Radu_Iulian(object):
     # https://stackoverflow.com/questions/7368789/convert-all-strings-in-a-list-to-int
     # https://stackoverflow.com/questions/1720421/how-do-i-concatenate-two-lists-in-python
 
+    def __init__(self, logs_directory=''):
+        self.logs_directory = logs_directory
+
+
     def reunion_of_query_STwig_parts_results(self, list_of_paths): # De generalizat.
         intermediary_results = []
         reunited_results = []
@@ -140,7 +144,6 @@ class Toolbox_Gheorghica_Radu_Iulian(object):
         # f_exec_times_and_avg.write(str(result))
         f_exec_times_and_avg.write("\nAverage time: " +str(result))
         f_exec_times_and_avg.close()
-
 
     def obtain_query_graph_stwig(self, wanted_parts=1): # Foloseste si data graful din Neo4J pentru label-urile nodurilor
         ############################ Din GNS1_Backtracking_STwig_Matching_with_txt_file_printing ##########################################################
@@ -316,5 +319,29 @@ class Toolbox_Gheorghica_Radu_Iulian(object):
         data_graph_edges = copy.deepcopy(sorted(edge_list_integer_ids))
         node_attributes_dictionary = OrderedDict(sorted(node_ids_as_integers_with_string_labels))
         return [data_graph_edges, node_attributes_dictionary]
+
+    def create_CSV_directed_edges_file_from_existing_edges_txt_file(self, source_path_and_input_filename_with_filetype, destiny_path_with_output_filename_only):
+        """PLEASE READ:
+        Uses text file with directed edges, for example
+        node1 node2
+        node3 node4
+        etc,
+        and a blank line at the end.
+        Call example: create_CSV_directed_edges_file_from_existing_edges_txt_file("Source Drive Partition Letter:/folder1/folder2/[...]/filename.txt" GIVE FILE TYPE (example here has .txt), "Destination Drive Partition Letter:/folder1/folder2/[...]/filename" DO NOT GIVE FILE TYPE, .CSV WILL BE ASSIGNED BY THE METHOD)"""
+
+        # stackoverflow.com/questions/8024248/telling-python-to-save-a-txt-file-to-a-certain-directory-on-windows-and-mac
+        save_path = self.logs_directory
+        name_of_file = destiny_path_with_output_filename_only
+        completeName = os.path.join(save_path, name_of_file + ".csv")
+
+        with open(source_path_and_input_filename_with_filetype) as f:
+            lines = f.readlines()
+        f = open(completeName, "w+")
+        f.write("from,to\n")
+        for line in lines:
+            new_line = line.split(" ")
+            # print(new_line)
+            # print(str(new_line[0]) + "," + str(new_line[1]))
+            f.write(str(new_line[0]) + "," + str(new_line[1]))
 
 
