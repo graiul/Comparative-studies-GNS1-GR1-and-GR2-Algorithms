@@ -323,8 +323,8 @@ class Toolbox_Gheorghica_Radu_Iulian(object):
     def create_CSV_directed_edges_file_from_existing_edges_txt_file(self, source_path_and_input_filename_with_filetype, destiny_path_with_output_filename_only):
         """PLEASE READ:
         Uses text file with directed edges, for example
-        node1 node2
-        node3 node4
+        node1 node2\n
+        node3 node4\n
         etc,
         and a blank line at the end.
         Call example: create_CSV_directed_edges_file_from_existing_edges_txt_file("Source Drive Partition Letter:/folder1/folder2/[...]/filename.txt" GIVE FILE TYPE (example here has .txt), "Destination Drive Partition Letter:/folder1/folder2/[...]/filename" DO NOT GIVE FILE TYPE, .CSV WILL BE ASSIGNED BY THE METHOD)"""
