@@ -329,10 +329,12 @@ class Toolbox_Gheorghica_Radu_Iulian(object):
         and a blank line at the end.
         Call example: create_CSV_directed_edges_file_from_existing_edges_txt_file("Source Drive Partition Letter:/folder1/folder2/[...]/filename.txt" GIVE FILE TYPE (example here has .txt), "Destination Drive Partition Letter:/folder1/folder2/[...]/filename" DO NOT GIVE FILE TYPE, .CSV WILL BE ASSIGNED BY THE METHOD)"""
 
+        ### For destination file. ####
         # stackoverflow.com/questions/8024248/telling-python-to-save-a-txt-file-to-a-certain-directory-on-windows-and-mac
         save_path = self.logs_directory
         name_of_file = destiny_path_with_output_filename_only
         completeName = os.path.join(save_path, name_of_file + ".csv")
+        ### For destination file. ####
 
         with open(source_path_and_input_filename_with_filetype) as f:
             lines = f.readlines()
@@ -344,4 +346,51 @@ class Toolbox_Gheorghica_Radu_Iulian(object):
             # print(str(new_line[0]) + "," + str(new_line[1]))
             f.write(str(new_line[0]) + "," + str(new_line[1]))
 
+    def create_CSV_nodes_files_with_label_and_nodeID_pairs_from_labels_and_edges_text_files(self, source_path_and_input_filename_with_filetype_of_edges_txt_file, source_path_and_input_filename_with_filetype_of_node_labels_file, destiny_path_with_output_filename_only):
+        """
+        Uses text file with directed edges, for example
+        node1 node2\n
+        node3 node4\n
+        etc,
+        and a blank line at the end.
+        Also uses text file with node labels, for example
+        label1\n
+        label2\n
+        etc.
+        Labels in this file can occur multiple times for multiple different nodes, in the
+        order they appear in the edge list. NetworkX takes into account this ordering.
+        Call example:
+        create_CSV_nodes_files_with_label_and_nodeID_pairs_from_labels_and_edges_text_files
+        ("Source Drive Partition Letter:/folder1/folder2/[...]/filename.txt" GIVE FILE TYPE (example here has .txt),
+        Source Drive Partition Letter:/folder1/folder2/[...]/filename.txt" GIVE FILE TYPE (example here has .txt),
+        "Destination Drive Partition Letter:/folder1/folder2/[...]/filename" DO NOT GIVE FILE TYPE, .CSV WILL BE ASSIGNED BY THE METHOD)
+        """
 
+        ### For destination file. ####
+        # stackoverflow.com/questions/8024248/telling-python-to-save-a-txt-file-to-a-certain-directory-on-windows-and-mac
+        save_path = self.logs_directory
+        name_of_file = destiny_path_with_output_filename_only
+        completeName = os.path.join(save_path, name_of_file + ".csv")
+        ### For destination file. ####
+
+        with open(source_path_and_input_filename_with_filetype_of_edges_txt_file) as f:
+            lines = f.readlines()
+        f = open(completeName, "w+")
+        lines_as_int_id_pairs = []
+        for line in lines:
+            new_line = line.split(" ")
+            # realpython.com/convert-python-string-to-int/
+            new_line_int_ids = [int(new_line[0]), int(new_line[1].split("\n")[0])]
+            lines_as_int_id_pairs.append(new_line_int_ids)
+            # print(new_line_int_ids)
+        # exit(0)
+        nx_RI_data_graph = nx.DiGraph()
+        # print(lines[1])
+        nx_RI_data_graph.add_edges_from(lines_as_int_id_pairs)
+        f.write("node_label,node_id\n")
+        node_list = list(nx_RI_data_graph.nodes())
+        with open(source_path_and_input_filename_with_filetype_of_node_labels_file) as g:
+            label_list = g.readlines()
+            for i in range(len(label_list) - 1):
+                label_and_id_line = [label_list[i].split("\n")[0], node_list[i]]
+                f.write(label_and_id_line[0] + "," + str(label_and_id_line[1]) + "\n")
