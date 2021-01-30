@@ -619,21 +619,131 @@ class Query_Graph_Generator(object):
         # Ca sa fiu sigur de atribuirea corecta al labelurilor pentru ID-uri,
         # am pus ID-urile in ordinea urmatoare,
         # iar urmand ordinea aceea, am scris labelurile mai jos.
-        query_graph_edges = [[8585,11353], [8585,4341]] #,
-                             #[8585,7271], [11353,7272], ]
-        node_attr = ["12", "1", "3"]#, "10", "19"]
+        # query_graph_edges = [[8585,11353], [8585,4341],
+        #                      [8585,7271], [11353,7272]]
+        # node_attr = ["12", "1", "3", "10", "19"]
 
         # nr 4, GR2 Algorithm, pb este ca
         # nu apare ca si solutie partiala DE LOC graful query
         # care este el insusi de fapt O APARITIE GARANTATA.
-        # query_graph_edges = [[812,4133], [812,7707], [812,8161]]#, [812,9831], [812,12067]]
+        # query_graph_edges = [[812,4133], [812,7707], [812,8161], [812,9831], [812,12067]]
         # query_graph_edges = [[4133,812], [812,7707], [812,8161]]#, [812,9831], [812,12067]]
-        # node_attr = ["16", "28", "24", "25"]#, "30", "9"]
+        # node_attr = ["16", "28", "24", "25", "30", "9"]
         # node_attr = ["28", "16", "24", "25"]#, "30", "9"]
 
-        # nr 5, GR2 Algorithm
-        # query_graph_edges = [[812, 7707], [812, 8161], [812, 9831]]
-        # node_attr = ["16", "24", "25", "30"]
+        # nr 5, GR2 Algorithm, inca nu am lucrat cu el pt articol.
+        # Sase muchii. Va fi executat prin impartirea listei
+        # de muchii in doua parti.
+        # Prima bucata
+        # query_graph_edges = [[15,2070], [15,3366], [3366,1817]]#,
+                             #[3366,1825], [1817,4878], [1817,5569]]
+        # node_attr = ["6", "18", "8", "19"]#, "2", "30", "21"]
+        # A doua bucata
+        # query_graph_edges = [[3366,1825], [1817,4878], [1817,5569]]
+        # node_attr = ["8", "2", "19", "30", "21"]
+        # 15,2070
+        # 15,3366
+        # 3366,1817
+        # 3366,1825
+        # 1817,4878
+        # 1817,5569
+
+        # GRAFURI QUERY PENTRU RI Caenorhabditis_elegans_PPI_udistr_32
+        # nr 1
+        # query_graph_edges = [[1293,1176], [1293,1486]]
+        # node_attr = ["1", "4", "29"]
+
+        # nr 2
+        # query_graph_edges = [[1888,1259], [1888,3316], [3316,2314]]
+        # node_attr = ["32", "12", "26", "13"]
+
+        # nr 3
+        # query_graph_edges = [[3344,193], [3344,352], [193,4453], [4453,2741]]
+        # node_attr = ["4", "8", "1", "14", "21"]
+
+        # nr 4
+        # query_graph_edges = [[5004,1913],
+        #                      [5004,2175],
+        #                      [5004,3151],
+        #                      [1913,3170],
+        #                      [3151,1216]]
+        # node_attr = ["25", "28", "15", "20", "9", "14"]
+
+        # nr 5
+        # query_graph_edges = [[3161,1271],
+        #                      [3161,1315],
+        #                      [1271,162],
+        #                      [1271,491],
+        #                      [1315,1905],
+        #                      [1315,2727]]
+        # node_attr = ["18", "30", "7", "11", "1", "14", "25"]
+
+        # Prima bucata query
+        # query_graph_edges = [[3161,1271],
+        #                      [1271, 162],
+        #                      [1271, 491]]
+        # node_attr = ["18", "30",
+        #              "11", "1"]
+
+        # A doua bucata query
+        # query_graph_edges = [[3161,1315],
+        #                      [1315, 1905],
+        #                      [1315, 2727]]
+        # node_attr = ["18", "7",
+        #              "14", "25"]
+
+        # GRAFURI QUERY PENTRU RI Bos_taurus_PPI_udistr_32
+
+        # nr 1
+        # query_graph_edges = [[1485,2873], [1485,3246]]
+        # node_attr = ["21", "20", "11"]
+
+        # nr 2
+        # query_graph_edges = [[1557,2772],
+        #                      [1557,3108],
+        #                      [1557,3271]]
+        # node_attr = ["8", "12", "14", "4"]
+
+        # nr 3
+        # query_graph_edges = [[2372,2500],
+        #                      [2372,2507],
+        #                      [2500,798],
+        #                      [2507,974]]
+        # node_attr = ["26", "6", "15", "29", "25"]
+
+        # nr 4
+        # query_graph_edges = [[2728,5346],
+        #                      [2728,5487],
+        #                      [2728,5752],
+        #                      [5752,852],
+        #                      [5752,1432]]
+        # node_attr = ["7", "23", "4", "31", "14", "10"]
+
+        # nr 5
+        # query_graph_edges = [[7107,1765],
+        #                      [7107,1821],
+        #                      [7107,1874],
+        #                      [1765,1584],
+        #                      [1821,1760],
+        #                      [1874,8153]]
+        # node_attr = ["31", "24", "20",
+        #              "22", "32", "11",
+        #              "10"]
+
+        # Prima bucata query
+        # query_graph_edges = [[7107,1765],
+        #                      [1765,1584]]
+        # node_attr = ["31", "24", "32"]
+
+        # A doua bucata query
+        # query_graph_edges = [[7107,1821],
+        #                      [1821,1760]]
+        # node_attr = ["31", "20", "11"]
+
+        # A treia bucata query
+        query_graph_edges = [[7107,1874],
+                             [1874,8153]]
+        node_attr = ["31", "22", "10"]
 
         query_graph.add_edges_from(query_graph_edges)
 
