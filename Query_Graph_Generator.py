@@ -746,9 +746,26 @@ class Query_Graph_Generator(object):
         #                      [1874,8153]]
         # node_attr = ["31", "22", "10"]
 
-        # Grafuri query pentru algoritmul XDS, in varianta recursiva si non-recursiva
-        # Functioneaza cu query-uri cu 3-4 muchii, si cu adiacenta non-STwig.
-        # nr 1
+        # Grafuri query pentru algoritmul XDS, in varianta non-recursiva.
+        # Functioneaza cu query-uri cu pana la 4 muchii, si cu adiacenta non-STwig.
+
+        # Grafuri query pentru Homo_sapiens_udistr_32
+        # nr 1,
+        # 25-30 min fara cod 0 si inca parea sa ruleze, fara faca solicitari
+        # la Neo4j.
+        # 16 min pana incepe sa nu mai afiseze nimic.
+        # query_graph_edges = [[1518,1970],
+        #                      [1518,2043]]#,
+                             # [1970,831]]
+        # node_attr = ["10", "9", "21"]#, "17"]
+
+        # nr 2
+        # 16:18 start time
+        # La ora 16:50 nu mai afiseaza nici rezultate, nici cod 0
+        # La ora 17:01 am oprit eu rularea.
+        query_graph_edges = [[1518, 1970],
+                             [1970, 831]]
+        node_attr = ["10", "9", "17"]
 
         query_graph.add_edges_from(query_graph_edges)
 
