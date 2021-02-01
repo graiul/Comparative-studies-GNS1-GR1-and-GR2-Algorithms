@@ -282,7 +282,7 @@ class Query_Graph_Generator(object):
 
 
         # Grafuri query pentru testarea GR1_Algorithm
-
+        # Grafuri query pentru Homo_sapiens_udistr_32
         # nr 1
         # ok - graf data RI 12,575 nodes si 86,890 relationships, un producator si doi consumatori
         # Cinci rulari
@@ -604,6 +604,7 @@ class Query_Graph_Generator(object):
         # Acest tip de graf query nu se incadreaza in problema cautarilor de motifuri. Nicaieri nu am citit de motifuri neconexe.
 
         # nr 1, GR2 Algorithm
+        # Grafuri query pentru Homo_sapiens_udistr_32
         # Graf query pentru procesul cu rol de producator si un
         # proces cu rol de consumator din GR2 Algorithm.
         # Coincidental este cu forma STwig, dar nu conteaza.
@@ -741,9 +742,13 @@ class Query_Graph_Generator(object):
         # node_attr = ["31", "20", "11"]
 
         # A treia bucata query
-        query_graph_edges = [[7107,1874],
-                             [1874,8153]]
-        node_attr = ["31", "22", "10"]
+        # query_graph_edges = [[7107,1874],
+        #                      [1874,8153]]
+        # node_attr = ["31", "22", "10"]
+
+        # Grafuri query pentru algoritmul XDS, in varianta recursiva si non-recursiva
+        # Functioneaza cu query-uri cu 3-4 muchii, si cu adiacenta non-STwig.
+        # nr 1
 
         query_graph.add_edges_from(query_graph_edges)
 
