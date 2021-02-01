@@ -833,7 +833,7 @@ def subgraph_search_non_recursive_ver_2(partial_solution, query_graph_dict, curr
                 # print(partial_solution)
 
                 gr_isomorphic = False
-                partial_solution_data_subgraph = nx.Graph()
+                partial_solution_data_subgraph = nx.DiGraph()
                 partial_solution_data_subgraph.add_edges_from(partial_solution)
                 if nx.is_isomorphic(query_graph, partial_solution_data_subgraph):
                     duplicate_occurence_list = []
@@ -865,9 +865,9 @@ def subgraph_search_non_recursive_ver_2(partial_solution, query_graph_dict, curr
                         # print(is_joinable(3, [1,2], data_graph, query_graph_dict))
                         complete_solutions.append(c_sol)
                         print(c_sol)
-                        # for c_sol_elem in c_sol:
-                        #     f1.write(str(c_sol_elem) + " ")
-                        # f1.write("\n")
+                        for c_sol_elem in c_sol:
+                            f1.write(str(c_sol_elem) + " ")
+                        f1.write("\n")
                         # print("\nOne complete solution found!")
                         # print()
                         # print(Fore.GREEN + Style.BRIGHT + "List of complete solutions: ")
@@ -949,10 +949,7 @@ def subgraph_search_non_recursive_ver_2(partial_solution, query_graph_dict, curr
                 if partial_solution == []:
                     # i = False
 
-                    # f2 = open("file_Backtracking Algorithm execution times.txt", "a")
-                    # f2.write(str(total_time) + " ")
-                    # f2.write("\n")
-                    # f2.close()
+
 
                     # print("\n" + Fore.GREEN + Style.BRIGHT + "Backtracking results: ")
                     print("Backtracking results: ")
@@ -964,6 +961,10 @@ def subgraph_search_non_recursive_ver_2(partial_solution, query_graph_dict, curr
                     print("Execution time for Backtracking Algorithm (seconds): ")
                     total_time = timer() - start_time
                     print(total_time)
+                    f2 = open("file_XDS_Algorithm_Non-Recursive execution times.txt", "a")
+                    f2.write(str(total_time) + " ")
+                    f2.write("\n")
+                    f2.close()
 
                     exit(0)
 
@@ -1070,7 +1071,7 @@ def subgraph_search(partial_solution, query_graph_dict, current_node, data_graph
             # print(partial_solution)
 
             gr_isomorphic = False
-            partial_solution_data_subgraph = nx.Graph()
+            partial_solution_data_subgraph = nx.DiGraph()
             partial_solution_data_subgraph.add_edges_from(partial_solution)
             if nx.is_isomorphic(query_graph, partial_solution_data_subgraph):
                 duplicate_occurence_list = []
@@ -1384,7 +1385,7 @@ for string_edge in edge_list:
 # print("edge_list_integer_ids: ")
 # print(edge_list_integer_ids)
 
-dataGraph = nx.Graph()
+dataGraph = nx.DiGraph()
 # Muchiile grafului data sortate dupa id noduri. Nu e ok.
 # dataGraph.add_edges_from(sorted(edge_list_integer_ids))
 # RASPUNS: Muchiile grafului data nesortate dupa id noduri. Ordinea corecta al nodurilor din muchii, si anume ordinea originala din fisierul CSV si Neo4J.
@@ -1394,8 +1395,8 @@ for edge in edge_list_integer_ids:
 
 data_edges = dataGraph.edges()
 
-dataGraph_undirected = nx.Graph() # Problema
-dataGraph_undirected.add_edges_from(dataGraph.edges())
+# dataGraph_undirected = nx.Graph() # Problema
+# dataGraph_undirected.add_edges_from(dataGraph.edges())
 
 cqlQuery2 = "MATCH (n) return n.node_id, n.node_label"
 result2 = neograph_data.run(cqlQuery2).to_ndarray()
@@ -1517,12 +1518,13 @@ node_list_aux = copy.deepcopy(list(dataGraph.nodes()))
 ####################################################################################
 
 # Fisier text:
-# f1 = open("file_Backtracking Algorithm output.txt", "w+")
+f1 = open("file_XDS_Algorithm_Non-Recursive output.txt", "w+")
 
 # Executia algoritmului Backtracking:
 try:
     # subgraph_search(p_solution, query_edges_dict, [], small_graph)
     start_time = timer()
+    print(start_time)
     subgraph_search(p_solution, query_edges_dict, [], dataGraph)
 
     # Pentru non recursiv:
