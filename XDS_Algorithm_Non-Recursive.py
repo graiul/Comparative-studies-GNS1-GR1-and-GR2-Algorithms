@@ -1,5 +1,5 @@
 # NUME VECHI:
-GNS2v1_Backtracking_Graph_Search_Imbunatatiri_Originale_Non-Recursiv.py
+# GNS2v1_Backtracking_Graph_Search_Imbunatatiri_Originale_Non-Recursiv.py
 
 # 29 DEC 2020:
 # Idee pentru a elimina recursivitatea:
