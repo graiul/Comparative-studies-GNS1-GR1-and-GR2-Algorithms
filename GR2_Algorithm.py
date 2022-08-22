@@ -202,8 +202,10 @@ class GR2_Algorithm(object):
         print("\nStarting producer " + str(os.getpid()))
 
         # query_stwig = list(query_stwig_1_dict.items())
-        print("Query graph non-STwig received by the producer: ")
+        # print("Query graph non-STwig received by the producer: ")
+        print("Query graph received by the producer: ")
         print(query_graph_dict)
+        # print("query_graph_dict type: " + str(type(query_graph_dict)))
         # print("The STwig query graf split into parts: ")
         # query_stwig_parts = split_list(query_stwig, wanted_parts=2)
         # for part in query_stwig_parts:
@@ -522,7 +524,8 @@ class GR2_Algorithm(object):
 
         # !!! TREBUIE SA REDENUMESC IN ACEASA CLASA "query_stwig_length" IN "query_graph_number_of_edges".
         # query_graph_number_of_edges = len(self.query_graph.items())
-        query_stwig_length = len(self.query_graph.items())
+        # query_stwig_length = len(self.query_graph.items())
+        query_stwig_length = len(self.query_graph)
 
         # parts = split_list(query_stwig, wanted_parts=2)
         # print("Query graph parts: ")
@@ -554,7 +557,7 @@ class GR2_Algorithm(object):
         # big_producer = client.scatter(data_graph_edges)
 
         # a = client.submit(self.producer, queue_of_the_producer, query_stwig_1_dict, data_graph_edges, node_attributes_dictionary)  # Producer-ul creaza coada cu nume.
-        a = client.submit(self.producer, queue_of_the_producer, self.query_graph, self.data_graph[0], self.data_graph[1])  # Producer-ul creaza coada cu nume.
+        a = client.submit(self.producer, queue_of_the_producer, dict(self.query_graph), self.data_graph[0], self.data_graph[1])  # Producer-ul creaza coada cu nume.
 
         # Urmatorul rand contine crearea unui producer folosind signatura ce contine o lista de parti ale grafului query
         # a = client.submit(producer, queue_of_the_producer, l_parts, query_stwig_1_dict, data_graph_edges, node_attributes_dictionary) # Producer-ul creaza coada cu nume.
@@ -580,7 +583,7 @@ class GR2_Algorithm(object):
             # b = client.submit(consumer, queue_of_the_producer, queue_of_finished_products_1, query_stwig_leaf_node_label1, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
             b = client.submit(self.consumer, queue_of_the_producer, queue_of_finished_products_1,
                               query_stwig_length, self.data_graph[0], self.data_graph[1],
-                              queue_for_printing, self.query_graph)
+                              queue_for_printing, dict(self.query_graph))
 
             print(b.result())
         elif number_of_consumers == 2:
@@ -592,7 +595,7 @@ class GR2_Algorithm(object):
             # b = client.submit(consumer, queue_of_the_producer, queue_of_finished_products_1, query_stwig_leaf_node_label1, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
             b = client.submit(self.consumer, queue_of_the_producer, queue_of_finished_products_1,
                               query_stwig_length, self.data_graph[0], self.data_graph[1],
-                              queue_for_printing, self.query_graph)
+                              queue_for_printing, dict(self.query_graph))
 
             # query_stwig_leaf_node2 = self.query_graph[2]
             # query_stwig_leaf_node_label2 = self.query_graph[2][1]
@@ -602,7 +605,7 @@ class GR2_Algorithm(object):
             # c = client.submit(consumer, queue_of_finished_products_1, queue_of_finished_products_2, query_stwig_leaf_node_label2, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
             c = client.submit(self.consumer, queue_of_finished_products_1, queue_of_finished_products_2,
                               query_stwig_length, self.data_graph[0], self.data_graph[1],
-                              queue_for_printing, self.query_graph)
+                              queue_for_printing, dict(self.query_graph))
             c.result()
 
         elif number_of_consumers == 3:
@@ -614,7 +617,7 @@ class GR2_Algorithm(object):
             # b = client.submit(consumer, queue_of_the_producer, queue_of_finished_products_1, query_stwig_leaf_node_label1, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
             b = client.submit(self.consumer, queue_of_the_producer, queue_of_finished_products_1,
                               query_stwig_length, self.data_graph[0], self.data_graph[1],
-                              queue_for_printing, self.query_graph)
+                              queue_for_printing, dict(self.query_graph))
 
             # query_stwig_leaf_node2 = self.query_graph[2]
             # query_stwig_leaf_node_label2 = self.query_graph[2][1]
@@ -624,7 +627,7 @@ class GR2_Algorithm(object):
             # c = client.submit(consumer, queue_of_finished_products_1, queue_of_finished_products_2, query_stwig_leaf_node_label2, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
             c = client.submit(self.consumer, queue_of_finished_products_1, queue_of_finished_products_2,
                               query_stwig_length, self.data_graph[0], self.data_graph[1],
-                              queue_for_printing, self.query_graph)
+                              queue_for_printing, dict(self.query_graph))
 
             # query_stwig_leaf_node3 = self.query_graph[3]
             # query_stwig_leaf_node_label3 = self.query_graph[3][1]
@@ -632,7 +635,7 @@ class GR2_Algorithm(object):
             # d = client.submit(consumer, big_consumer_3, queue_of_finished_products_2, queue_of_finished_products_3, query_stwig_leaf_node_label3, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
             d = client.submit(self.consumer, queue_of_finished_products_2, queue_of_finished_products_3,
                               query_stwig_length, self.data_graph[0], self.data_graph[1],
-                              queue_for_printing, self.query_graph)
+                              queue_for_printing, dict(self.query_graph))
             d.result()
 
         elif number_of_consumers == 4:
@@ -644,7 +647,7 @@ class GR2_Algorithm(object):
             # b = client.submit(consumer, queue_of_the_producer, queue_of_finished_products_1, query_stwig_leaf_node_label1, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
             b = client.submit(self.consumer, queue_of_the_producer, queue_of_finished_products_1,
                               query_stwig_length, self.data_graph[0], self.data_graph[1],
-                              queue_for_printing, self.query_graph)
+                              queue_for_printing, dict(self.query_graph))
 
             # query_stwig_leaf_node2 = self.query_graph[2]
             # query_stwig_leaf_node_label2 = self.query_graph[2][1]
@@ -654,7 +657,7 @@ class GR2_Algorithm(object):
             # c = client.submit(consumer, queue_of_finished_products_1, queue_of_finished_products_2, query_stwig_leaf_node_label2, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
             c = client.submit(self.consumer, queue_of_finished_products_1, queue_of_finished_products_2,
                               query_stwig_length, self.data_graph[0], self.data_graph[1],
-                              queue_for_printing, self.query_graph)
+                              queue_for_printing, dict(self.query_graph))
 
             # query_stwig_leaf_node3 = self.query_graph[3]
             # query_stwig_leaf_node_label3 = self.query_graph[3][1]
@@ -662,7 +665,7 @@ class GR2_Algorithm(object):
             # d = client.submit(consumer, big_consumer_3, queue_of_finished_products_2, queue_of_finished_products_3, query_stwig_leaf_node_label3, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
             d = client.submit(self.consumer, queue_of_finished_products_2, queue_of_finished_products_3,
                               query_stwig_length, self.data_graph[0], self.data_graph[1],
-                              queue_for_printing, self.query_graph)
+                              queue_for_printing, dict(self.query_graph))
 
             # query_stwig_leaf_node4 = self.query_graph[4]
             # query_stwig_leaf_node_label4 = self.query_graph[4][1]
@@ -670,7 +673,7 @@ class GR2_Algorithm(object):
             # e = client.submit(consumer, big_consumer_4, queue_of_finished_products_3, queue_of_finished_products_4, query_stwig_leaf_node_label4, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
             e = client.submit(self.consumer, queue_of_finished_products_3, queue_of_finished_products_4,
                               query_stwig_length, self.data_graph[0], self.data_graph[1],
-                              queue_for_printing, self.query_graph)
+                              queue_for_printing, dict(self.query_graph))
             # print(e)
             # print(e.result())
             # queue_of_futures.put(e)
@@ -993,6 +996,7 @@ class GR2_Algorithm(object):
                 # label_3 = list(query_edges_dict.items())[0][1][0]
                 # label_4 = data_edge_to_be_joined_node_1_label
 
+                # print("query_edges_dict type: " + str(type(query_edges_dict)))
                 label_1 = list(query_edges_dict.items())[0][1][1]
                 label_2 = data_edge_to_be_joined_node_1_label
                 label_3 = list(query_edges_dict.items())[0][1][1]
