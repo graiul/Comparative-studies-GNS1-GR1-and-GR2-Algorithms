@@ -658,8 +658,14 @@ class GR1_Algorithm(object):
         # data_graph_edges = copy.deepcopy(sorted(edge_list_integer_ids))
         # node_attributes_dictionary = OrderedDict(sorted(node_ids_as_integers_with_string_labels))
 
+        # Pentru GR1 Algorithm cu datele lui
         query_stwig_root_node = self.query_graph[0]
         query_stwig_root_node_label = self.query_graph[0][1]
+
+        # Pentru GR1 Algorithm cu datele de la GR2 Algorithm
+        # query_stwig_root_node = self.query_graph
+        # query_stwig_root_node_label = self.query_graph[1]
+
         query_stwig_length = len(self.query_graph) # Pentru grafuri STwig, e nr nodurilor. Pentru grafuri care nu au forma STwig, va fi nr muchiilor, adica al perechilor de noduri,
                                               # datorita faptului ca am pus o muchie pe cate o pozitie al solutiei partiale in cazul respectiv.
 
@@ -844,6 +850,58 @@ class GR1_Algorithm(object):
             f = client.submit(self.consumer, queue_of_finished_products_4, queue_of_finished_products_5, query_stwig_leaf_node_label5, query_stwig_length, self.data_graph[0], self.data_graph[1], queue_for_printing)
             f.result()
 
+        elif number_of_consumers == 6:
+            query_stwig_leaf_node1 = self.query_graph[1]
+            query_stwig_leaf_node_label1 = self.query_graph[1][1]
+            # big_consumer_1 = client.scatter(data_graph_edges)
+            # b = client.submit(consumer, big_consumer_1, queue_of_the_producer, queue_of_finished_products_1, query_stwig_leaf_node_label1, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
+
+            # b = client.submit(consumer, queue_of_the_producer, queue_of_finished_products_1, query_stwig_leaf_node_label1, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
+            b = client.submit(self.consumer, queue_of_the_producer, queue_of_finished_products_1,
+                              query_stwig_leaf_node_label1, query_stwig_length, self.data_graph[0], self.data_graph[1],
+                              queue_for_printing)
+
+            query_stwig_leaf_node2 = self.query_graph[2]
+            query_stwig_leaf_node_label2 = self.query_graph[2][1]
+            # big_consumer_2 = client.scatter(data_graph_edges)
+            # c = client.submit(consumer, big_consumer_2, queue_of_finished_products_1, queue_of_finished_products_2, query_stwig_leaf_node_label2, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
+
+            # c = client.submit(consumer, queue_of_finished_products_1, queue_of_finished_products_2, query_stwig_leaf_node_label2, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
+            c = client.submit(self.consumer, queue_of_finished_products_1, queue_of_finished_products_2,
+                              query_stwig_leaf_node_label2, query_stwig_length, self.data_graph[0], self.data_graph[1],
+                              queue_for_printing)
+
+            query_stwig_leaf_node3 = self.query_graph[3]
+            query_stwig_leaf_node_label3 = self.query_graph[3][1]
+            # big_consumer_3 = client.scatter(data_graph_edges)
+            # d = client.submit(consumer, big_consumer_3, queue_of_finished_products_2, queue_of_finished_products_3, query_stwig_leaf_node_label3, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
+            d = client.submit(self.consumer, queue_of_finished_products_2, queue_of_finished_products_3,
+                              query_stwig_leaf_node_label3, query_stwig_length, self.data_graph[0], self.data_graph[1],
+                              queue_for_printing)
+
+            query_stwig_leaf_node4 = self.query_graph[4]
+            query_stwig_leaf_node_label4 = self.query_graph[4][1]
+            # big_consumer_4 = client.scatter(data_graph_edges)
+            # e = client.submit(consumer, big_consumer_4, queue_of_finished_products_3, queue_of_finished_products_4, query_stwig_leaf_node_label4, query_stwig_length, data_graph_edges, node_attributes_dictionary, queue_for_printing)
+            e = client.submit(self.consumer, queue_of_finished_products_3, queue_of_finished_products_4,
+                              query_stwig_leaf_node_label4, query_stwig_length, self.data_graph[0], self.data_graph[1],
+                              queue_for_printing)
+            # print(e)
+            # print(e.result())
+            # queue_of_futures.put(e)
+
+            query_stwig_leaf_node5 = self.query_graph[5]
+            query_stwig_leaf_node_label5 = self.query_graph[5][1]
+            f = client.submit(self.consumer, queue_of_finished_products_4, queue_of_finished_products_5,
+                              query_stwig_leaf_node_label5, query_stwig_length, self.data_graph[0], self.data_graph[1],
+                              queue_for_printing)
+
+            query_stwig_leaf_node6 = self.query_graph[6]
+            query_stwig_leaf_node_label6 = self.query_graph[6][1]
+            g = client.submit(self.consumer, queue_of_finished_products_5, queue_of_finished_products_6,
+                              query_stwig_leaf_node_label6, query_stwig_length, self.data_graph[0], self.data_graph[1],
+                              queue_for_printing)
+            g.result()
         else:
             print("Not enough consumer processes.")
 
