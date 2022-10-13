@@ -315,8 +315,10 @@ class GR2_Algorithm(object):
                     # queue_for_printing.put(partial_solution)
 
                 # self.validate_partial_solution(partial_solution, query_graph_nx_obj, self.complete_solutions)
-                if len(partial_solution) == len(list(query_graph_nx_obj.edges())):
-                    print(partial_solution)
+
+                # Afisare solutie la consola
+                # if len(partial_solution) == len(list(query_graph_nx_obj.edges())):
+                #     print(partial_solution)
 
                 # !!! 14 IAN 2021, 22:30
                 # CE TREBUIE FACUT DUPA CE AM VALIDAT SOLUTIA?
