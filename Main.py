@@ -1,7 +1,7 @@
 from neo4j_test import neo4j_test
 import networkx as nx
 
-with open('Homo_sapiens_udistr_32.gfd') as f:
+with open('DATASET RI Human PPI/Homo_sapiens_udistr_32.gfd') as f:
     lines = f.readlines()
 # for line in lines:
 #     print(line)
