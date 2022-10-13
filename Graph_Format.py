@@ -274,7 +274,7 @@ class Graph_Format:
         # Grafurile din RI nu au etichete pentru muchii, doar pentru noduri. Dar pentru ca gSpan by betterenvi are nevoie de etichete si pentru muchii, vom atribui eticheta "0" pentru fiecare muchie.
         graph_counter = 0
         # f = open("gSpan-master by betterenvi/gSpan-master/graphdata/input_for_gSpan.txt", "w+")
-        f = open('dataset_RI\gSpan_input\input_for_gSpan.txt', "w+")
+        f = open('DATASET RI Human PPI/VECHII. dataset_RI\gSpan_input\input_for_gSpan.txt', "w+")
 
         for subgraph in subgraph_database:
             # f = open("reformated_graf_for_gSpan_number_%d.txt" % graph_counter, "w+")
@@ -390,7 +390,7 @@ class Graph_Format:
         return self.graph
 
     def create_RI_data_graph_nodes_csv_file(self, nx_RI_data_graph):
-        f = open('RI_data_graph_nodes.csv', "w+")
+        f = open('DATASET RI Human PPI/RI_data_graph_nodes.csv', "w+")
         f.write("RI_node_label,RI_node_id\n")
         node_list = list(nx_RI_data_graph.nodes(data=True))
         node_list_without_last_element = node_list[:-1]
@@ -407,7 +407,7 @@ class Graph_Format:
         f.write(RI_node_label + "," + str(last_node[0]))
 
     def create_RI_data_graph_edges_csv_file(self, nx_RI_data_graph):
-        f = open('RI_data_graph_edges.csv', "w+")
+        f = open('DATASET RI Human PPI/RI_data_graph_edges.csv', "w+")
         f.write("RI_from,RI_to\n")
         edge_list = list(nx_RI_data_graph.edges())
         edge_list_without_last_elem = edge_list[:-1]
@@ -423,7 +423,7 @@ class Graph_Format:
         # Adaugam label-urile nodurilor
 
         # Inseram in graful nx graful RI
-        graph_format = Graph_Format("Homo_sapiens_udistr_32.gfd")
+        graph_format = Graph_Format("DATASET RI Human PPI/Homo_sapiens_udistr_32.gfd")
         graph_format.create_graph_from_RI_file()
         nx_ri_graph = graph_format.get_graph()
         # print(nx_ri_graph.nodes())
@@ -448,7 +448,7 @@ class Graph_Format:
         print(aux_graph.nodes(data=True))
         print(len(aux_graph.nodes(data=True)))
 
-        f = open('RI_1000_edge_data_graph_nodes.csv', "w+")
+        f = open('DATASET RI Human PPI/RI_1000_edge_data_graph_nodes.csv', "w+")
         f.write("RI_node_label,RI_node_id\n")
         node_list = list(aux_graph.nodes(data=True))
         node_list_without_last_element = node_list[:-1]
@@ -464,7 +464,7 @@ class Graph_Format:
         RI_node_label = RI_node_label_aux.split("'}")[0]
         f.write(RI_node_label + "," + str(last_node[0]))
 
-        f = open('RI_1000_edge_data_graph_edges.csv', "w+")
+        f = open('DATASET RI Human PPI/RI_1000_edge_data_graph_edges.csv', "w+")
         f.write("RI_from,RI_to\n")
         edge_list = list(aux_graph.edges())
         edge_list_without_last_elem = edge_list[:-1]
@@ -480,7 +480,7 @@ class Graph_Format:
         # Adaugam label-urile nodurilor
 
         # Inseram in graful nx graful RI
-        graph_format = Graph_Format("Homo_sapiens_udistr_32.gfd")
+        graph_format = Graph_Format("DATASET RI Human PPI/Homo_sapiens_udistr_32.gfd")
         graph_format.create_graph_from_RI_file()
         nx_ri_graph = graph_format.get_graph()
         # print(nx_ri_graph.nodes())
@@ -505,7 +505,7 @@ class Graph_Format:
         print(aux_graph.nodes(data=True))
         print(len(aux_graph.nodes(data=True)))
 
-        f = open('RI_10000_edge_data_graph_nodes.csv', "w+")
+        f = open('DATASET RI Human PPI/RI_10000_edge_data_graph_nodes.csv', "w+")
         f.write("node_label,node_id\n")
         node_list = list(aux_graph.nodes(data=True))
         node_list_without_last_element = node_list[:-1]
@@ -521,7 +521,7 @@ class Graph_Format:
         RI_node_label = RI_node_label_aux.split("'}")[0]
         f.write(RI_node_label + "," + str(last_node[0]))
 
-        f = open('RI_10000_edge_data_graph_edges.csv', "w+")
+        f = open('DATASET RI Human PPI/RI_10000_edge_data_graph_edges.csv', "w+")
         f.write("from,to\n")
         edge_list = list(aux_graph.edges())
         edge_list_without_last_elem = edge_list[:-1]
@@ -538,7 +538,7 @@ class Graph_Format:
         # Adaugam label-urile nodurilor
 
         # Inseram in graful nx graful RI
-        graph_format = Graph_Format("Homo_sapiens_udistr_32.gfd")
+        graph_format = Graph_Format("DATASET RI Human PPI/Homo_sapiens_udistr_32.gfd")
         graph_format.create_graph_from_RI_file()
         nx_ri_graph = graph_format.get_graph()
         # print(nx_ri_graph.nodes())
@@ -563,7 +563,7 @@ class Graph_Format:
         print(aux_graph.nodes(data=True))
         print(len(aux_graph.nodes(data=True)))
 
-        f = open('RI_5000_edge_data_graph_nodes.csv', "w+")
+        f = open('DATASET RI Human PPI/RI_5000_edge_data_graph_nodes.csv', "w+")
         f.write("node_label,node_id\n")
         node_list = list(aux_graph.nodes(data=True))
         node_list_without_last_element = node_list[:-1]
@@ -579,7 +579,7 @@ class Graph_Format:
         RI_node_label = RI_node_label_aux.split("'}")[0]
         f.write(RI_node_label + "," + str(last_node[0]))
 
-        f = open('RI_5000_edge_data_graph_edges.csv', "w+")
+        f = open('DATASET RI Human PPI/RI_5000_edge_data_graph_edges.csv', "w+")
         f.write("from,to\n")
         edge_list = list(aux_graph.edges())
         edge_list_without_last_elem = edge_list[:-1]
