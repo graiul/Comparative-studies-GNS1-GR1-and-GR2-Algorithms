@@ -277,8 +277,8 @@ class Query_Graph_Generator(object):
         # Ruleaza ok GNS1 si VF2.
         # GNS1 ruleaza fara bucla infinita
         # Ruleaza ok si cu STwig Algorithm.
-        # query_graph_edges = [[3842, 7591], [3842, 7596]]
-        # node_attr = ["31", "6", "20"]
+        query_graph_edges = [[3842, 7591], [3842, 7596]]
+        node_attr = ["31", "6", "20"]
 
 
         # Grafuri query pentru testarea GR1_Algorithm
@@ -763,9 +763,9 @@ class Query_Graph_Generator(object):
         # 16:18 start time
         # La ora 16:50 nu mai afiseaza nici rezultate, nici cod 0
         # La ora 17:01 am oprit eu rularea.
-        query_graph_edges = [[1518, 1970],
-                             [1970, 831]]
-        node_attr = ["10", "9", "17"]
+        # query_graph_edges = [[1518, 1970],
+        #                      [1970, 831]]
+        # node_attr = ["10", "9", "17"]
 
         query_graph.add_edges_from(query_graph_edges)
 
