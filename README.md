@@ -15,3 +15,7 @@ Aici se afla codurile sursa pentru:
 
     * GR2 (https://ieeexplore.ieee.org/document/9559130)
 
+      Abstract:
+
+      In this paper is presented the GR2 Algorithm in the context of a study that encompassed elements of Parallel Programming and pruning techniques. Also there were executed circuits having 5, 10 and 15 qubits on quantum computers. For these circuits were used classical and quantum gates along with oracles and Grover’s Algorithm. The original contribution consists in highlighting the importance of Parallel Programming in classiscal computing as well as in quantum computing.
+
